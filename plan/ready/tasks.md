@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component compiles; skip link, nav, and mobile toggle logic are present
   - **Brief ref**: Scope → "Header component"; Approach → "Header" section; Verification → Header checks
 
-- [ ] TASK-10: Create Footer component
+- [x] TASK-10: Create Footer component
   - **Goal**: Site footer with logo, tagline, navigation links, and copyright
   - **Details**: Create `src/components/Footer.tsx`. Structure: `<footer>` containing `Logo` (sm size), tagline text, navigation links (Home/About/Contact using React Router `Link` or plain anchors), and copyright text (e.g. `© {new Date().getFullYear()} Launchfire`). Use token-based colours for bg and text. Import Logo from `./ui/Logo`.
   - **Files**: `src/components/Footer.tsx`

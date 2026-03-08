@@ -74,7 +74,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `src/index.css` contains a `@theme { }` block with at least 10 custom property mappings; `npm run build` succeeds
   - **Brief ref**: TASK-05 — @theme block
 
-- [ ] TASK-09: Add global base styles and reset in src/index.css
+- [x] TASK-09: Add global base styles and reset in src/index.css
   - **Goal**: Apply sensible global defaults using the design tokens
   - **Details**: In `src/index.css`, after the `@theme` block, add a `@layer base { }` block containing:
     - `*, *::before, *::after { box-sizing: border-box; }`

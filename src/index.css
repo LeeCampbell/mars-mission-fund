@@ -45,3 +45,41 @@
   --radius-pill: var(--radius-pill);
   --radius-circle: var(--radius-circle);
 }
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background: var(--color-bg-page);
+    color: var(--color-text-secondary);
+    font-family: var(--font-body);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-text-primary);
+    font-family: var(--font-display);
+  }
+
+  a {
+    color: var(--color-action-primary);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--color-action-primary-hover);
+  }
+}

@@ -149,8 +149,7 @@ Upstream repo: ${UPSTREAM_REPO}" \
 
     timeout "$TIMEOUT" claude \
       --dangerously-skip-permissions \
-      --print \
-      --verbose \
+      --print --output-format stream-json --verbose \
       -p "$(cat "${PROMPTS_DIR}/execute-tasks.md")" \
       2>&1 | tee "$LOG_FILE" || true
 

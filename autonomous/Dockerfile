@@ -29,6 +29,7 @@ RUN useradd -m -s /bin/bash agent \
   && echo "agent ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 WORKDIR /workspace
+RUN chown agent:agent /workspace
 
 # Copy scripts
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh

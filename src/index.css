@@ -1,3 +1,41 @@
 @import "tailwindcss";
 @import "./fonts.css";
 @import "./tokens.css";
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: var(--color-bg-page);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  line-height: 1.1;
+  margin: 0 0 0.5em;
+}
+
+a {
+  color: var(--color-action-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-action-primary-hover);
+  text-decoration: underline;
+}

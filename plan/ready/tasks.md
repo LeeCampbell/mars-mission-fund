@@ -121,7 +121,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; browser DevTools on `:root` in the dev server shows `--void`, `--launchfire`, `--color-bg-page`, `--color-action-primary`, `--motion-enter`, `--radius-button`, and all other tokens defined above.
   - **Brief ref**: Approach step 5; Scope bullets on tokens and reduced-motion; Verification bullets for Tokens and Dark background.
 
-- [ ] TASK-06: Add global base styles to `src/index.css`
+- [x] TASK-06: Add global base styles to `src/index.css`
   - **Goal**: Apply the foundational CSS rules (reset, body, headings, links, scroll behaviour) using the design tokens.
   - **Details**:
     - After the three `@import` lines in `src/index.css`, add the following base style blocks:

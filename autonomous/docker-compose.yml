@@ -11,5 +11,6 @@ services:
       - BRANCH=${BRANCH}
     volumes:
       - ./screenshots:/screenshots
+      - ./logs/${ISSUE_NUMBER:-default}:/workspace/repo/.logs
     mem_limit: 4g
     cpus: 2

@@ -188,6 +188,12 @@ Upstream repo: ${UPSTREAM_REPO}" \
       echo "!!! Push failed — branch may have diverged"
     fi
 
+    # Save fork token before overriding for PR creation
+    GH_TOKEN_FORK="$GH_TOKEN"
+
+    # Claude will run `gh pr create --repo UPSTREAM_REPO` which needs upstream token
+    export GH_TOKEN="$GH_TOKEN_UPSTREAM"
+
     # Let Claude create the PR with a proper description
     timeout "$TIMEOUT" claude \
       --dangerously-skip-permissions \
@@ -202,6 +208,35 @@ Base branch: ${UPSTREAM_BASE_BRANCH}
 Head: ${FORK_OWNER}:${BRANCH}
 Branch: ${BRANCH}" \
       2>&1 | tee "$LOG_FILE" || true
+
+    # Upload screenshots as a PR comment
+    if ls /screenshots/TASK-*.png 1>/dev/null 2>&1; then
+      PR_NUMBER=$(grep -oE 'https://github.com/[^ ]+/pull/[0-9]+' "$LOG_FILE" | head -1 | grep -oE '[0-9]+$')
+
+      if [ -n "$PR_NUMBER" ]; then
+        COMMENT_BODY="## Screenshots\n\n"
+        FORK_REPO=$(echo "$FORK_URL" | sed 's|.*github.com/||;s|\.git$||')
+
+        for img in /screenshots/TASK-*.png; do
+          FNAME=$(basename "$img")
+          # Upload to fork repo via contents API (uses fork token)
+          BASE64=$(base64 -w0 "$img" 2>/dev/null || base64 "$img")
+          GH_TOKEN="$GH_TOKEN_FORK" gh api \
+            "repos/${FORK_REPO}/contents/screenshots/${FNAME}" \
+            -X PUT \
+            -f message="chore: add screenshot ${FNAME}" \
+            -f content="$BASE64" \
+            -f branch="$BRANCH" 2>/dev/null || true
+
+          RAW_URL="https://raw.githubusercontent.com/${FORK_REPO}/${BRANCH}/screenshots/${FNAME}"
+          COMMENT_BODY="${COMMENT_BODY}### ${FNAME}\n![${FNAME}](${RAW_URL})\n\n"
+        done
+
+        # Post comment on upstream PR with screenshots (uses upstream token)
+        echo -e "$COMMENT_BODY" | GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr comment "$PR_NUMBER" \
+          --repo "$UPSTREAM_REPO" --body-file - || true
+      fi
+    fi
 
     # Archive plan (script owns this, not the prompt)
     mkdir -p plan/done

@@ -41,7 +41,7 @@ Read `plan/ready/brief.md` and `plan/ready/tasks.md` to create a PR summary:
 
 ## Screenshots
 
-<list any screenshots taken during task execution>
+Screenshots will be attached automatically after PR creation.
 
 Closes #<ISSUE_NUMBER>
 ```

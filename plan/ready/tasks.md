@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: List of confirmed existing files and token names is known; any gaps are noted
   - **Brief ref**: Approach → "Issue #2 will have produced the following files"
 
-- [ ] TASK-02: Create Logo component
+- [x] TASK-02: Create Logo component
   - **Goal**: Inline SVG React component rendering `assets/logo.svg` at three controlled sizes
   - **Details**: Create `src/components/ui/Logo.tsx`. Accept `size` prop typed as `'sm' | 'md' | 'lg'` mapping to heights 32/72/120px. Inline the SVG markup from `assets/logo.svg` directly (no `<img>` tag). Set `height` from the size map; set `width` to `auto` or derive proportionally from the `0 0 120 120` viewBox. Accept a `className` prop. Add `aria-label="Logo"` and `role="img"` on the SVG.
   - **Files**: `src/components/ui/Logo.tsx`

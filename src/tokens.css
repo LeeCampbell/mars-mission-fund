@@ -1,0 +1,139 @@
+/* =============================================================
+   Tier 1 — Identity Tokens (brand vocabulary, never used directly in components)
+   ============================================================= */
+:root {
+  /* Deep Space */
+  --void: #060A14;
+  --deep-space: #0B1628;
+  --nebula: #0E2040;
+  --orbit: #1A3A6E;
+
+  /* Launch Fire */
+  --launchfire: #FF5C1A;
+  --ignition: #FF8C42;
+  --afterburn: #FFB347;
+  --red-planet: #C1440E;
+
+  /* Metallic Silver */
+  --chrome: #E8EDF5;
+  --silver: #C8D0DC;
+  --stardust: #8A96A8;
+  --white: #F5F8FF;
+
+  /* Mission Outcomes */
+  --success: #2FE8A2;
+  --success-deep: #1AB878;
+  --signal-blue: #5B8FD8;
+
+  /* Typography */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  /* Motion durations */
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-medium: 500ms;
+  --duration-slow: 800ms;
+  --easing-out: cubic-bezier(0.25, 1, 0.5, 1);
+  --easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 100px;
+
+  /* Breakpoints */
+  --breakpoint-md: 768px;
+}
+
+/* =============================================================
+   Tier 2 — Semantic Tokens (sole consumption layer for components)
+   ============================================================= */
+:root {
+  /* Actions */
+  --color-action-primary: var(--launchfire);
+  --color-action-primary-hover: var(--ignition);
+  --color-action-primary-text: var(--white);
+  --color-action-primary-shadow: rgba(255, 92, 26, 0.35);
+  --color-action-secondary-bg: rgba(245, 248, 255, 0.06);
+  --color-action-secondary-text: var(--silver);
+  --color-action-secondary-border: rgba(245, 248, 255, 0.12);
+  --color-action-ghost-text: var(--ignition);
+  --color-action-ghost-border: rgba(255, 92, 26, 0.30);
+  --color-action-disabled: rgba(138, 150, 168, 0.50);
+
+  /* Status */
+  --color-status-success: var(--success);
+  --color-status-success-bg: rgba(47, 232, 162, 0.12);
+  --color-status-success-border: rgba(47, 232, 162, 0.20);
+  --color-status-error: var(--red-planet);
+  --color-status-warning: var(--afterburn);
+  --color-status-info: var(--orbit);
+  --color-status-active: var(--launchfire);
+  --color-status-active-bg: rgba(255, 92, 26, 0.12);
+  --color-status-active-border: rgba(255, 92, 26, 0.20);
+  --color-status-new: var(--signal-blue);
+  --color-status-new-bg: rgba(26, 58, 110, 0.40);
+  --color-status-new-border: rgba(26, 58, 110, 0.60);
+
+  /* Surfaces */
+  --color-bg-page: var(--void);
+  --color-bg-surface: var(--deep-space);
+  --color-bg-elevated: var(--nebula);
+  --color-bg-overlay: rgba(6, 10, 20, 0.90);
+  --color-bg-input: rgba(245, 248, 255, 0.04);
+  --color-bg-accent: var(--orbit);
+
+  /* Text */
+  --color-text-primary: var(--chrome);
+  --color-text-secondary: var(--silver);
+  --color-text-tertiary: var(--stardust);
+  --color-text-accent: var(--launchfire);
+  --color-text-on-action: var(--white);
+  --color-text-success: var(--success);
+  --color-text-error: var(--red-planet);
+  --color-text-warning: var(--afterburn);
+
+  /* Borders */
+  --color-border-subtle: rgba(245, 248, 255, 0.06);
+  --color-border-emphasis: var(--orbit);
+  --color-border-input: rgba(245, 248, 255, 0.10);
+  --color-border-accent: var(--launchfire);
+
+  /* Progress */
+  --color-progress-fill: linear-gradient(90deg, var(--launchfire), var(--afterburn));
+  --color-progress-complete: linear-gradient(90deg, var(--success), var(--success-deep));
+  --color-progress-track: rgba(245, 248, 255, 0.06);
+  --color-progress-indicator: var(--afterburn);
+  --color-data-positive: var(--success);
+  --color-data-neutral: var(--stardust);
+
+  /* Gradients */
+  --gradient-action-primary: linear-gradient(135deg, #FF5C1A, #FF8C42, #FFB347);
+  --gradient-surface-card: linear-gradient(135deg, #060A14, #0E2040, #1A3A6E);
+  --gradient-surface-stat: linear-gradient(135deg, var(--nebula), var(--deep-space));
+  --gradient-hero: linear-gradient(135deg, #060A14 0%, #0B1628 50%, rgba(255,92,26,0.15) 100%);
+  --gradient-campaign-hero: linear-gradient(135deg, #C1440E, #FF5C1A, #FF8C42);
+  --gradient-celebration: linear-gradient(135deg, #0B1628, rgba(47,232,162,0.2), #0B1628);
+  --gradient-achievement: linear-gradient(135deg, #E8EDF5, #C8D0DC, #8A96A8);
+
+  /* Layout radii */
+  --radius-button: var(--radius-full);
+  --radius-badge: var(--radius-sm);
+  --radius-input: var(--radius-md);
+  --radius-card: var(--radius-xl);
+  --radius-card-large: var(--radius-2xl);
+  --radius-stat: var(--radius-lg);
+  --radius-progress: var(--radius-full);
+
+  /* Motion semantic */
+  --motion-enter: var(--duration-base) var(--easing-out);
+  --motion-enter-emphasis: var(--duration-medium) var(--easing-spring);
+  --motion-hover: var(--duration-fast) var(--easing-out);
+  --motion-panel: var(--duration-medium) var(--easing-out);
+  --motion-page: var(--duration-slow) var(--easing-out);
+}

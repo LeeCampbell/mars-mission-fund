@@ -1,0 +1,9 @@
+services:
+  agent:
+    build: .
+    env_file: .env
+    volumes:
+      - ./.mcp.json:/home/agent/.mcp.json:ro
+      - ./screenshots:/screenshots
+    mem_limit: 4g
+    cpus: 2

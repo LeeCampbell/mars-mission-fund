@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component compiles; all three variants map to distinct token-based colour sets
   - **Brief ref**: Scope → "Badge component"; Verification → "All three badge variants render…"
 
-- [ ] TASK-08: Create ProgressBar component
+- [x] TASK-08: Create ProgressBar component
   - **Goal**: Accessible progress bar with track, fill, endpoint dot, and reduced-motion support
   - **Details**: Create `src/components/ui/ProgressBar.tsx`. Props: `value: number` (0–100), `max?: number` (default 100), `variant?: 'default' | 'complete'`, `className?: string`. ARIA: `role="progressbar"`, `aria-valuenow`, `aria-valuemin={0}`, `aria-valuemax`. Structure: track div containing fill div with percentage width. Endpoint: small circle at the right edge of the fill. Complete variant: green gradient fill. `prefers-reduced-motion`: apply `transition: none` when reduced motion is active (use a CSS class or inline media query via a hook).
   - **Files**: `src/components/ui/ProgressBar.tsx`

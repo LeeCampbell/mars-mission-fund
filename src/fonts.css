@@ -1,0 +1,50 @@
+/* Bebas Neue — display font, optional loading (non-critical) */
+@font-face {
+  font-family: "Bebas Neue";
+  font-weight: 400;
+  font-style: normal;
+  font-display: optional;
+  src: url('./assets/fonts/bebas-neue-400.woff2') format('woff2');
+}
+
+/* DM Sans — body font, swap loading (text visible during load) */
+@font-face {
+  font-family: "DM Sans";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('./assets/fonts/dm-sans-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('./assets/fonts/dm-sans-500.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url('./assets/fonts/dm-sans-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('./assets/fonts/dm-sans-700.woff2') format('woff2');
+}
+
+/* Space Mono — monospace font, swap loading */
+@font-face {
+  font-family: "Space Mono";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('./assets/fonts/space-mono-400.woff2') format('woff2');
+}

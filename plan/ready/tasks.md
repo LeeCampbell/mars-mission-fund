@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All 6 WOFF2 files exist in `src/assets/fonts/` and are non-zero bytes; `ls -lh src/assets/fonts/` confirms this
   - **Brief ref**: TASK-04 — Self-hosted fonts
 
-- [ ] TASK-06: Create src/fonts.css with @font-face declarations
+- [x] TASK-06: Create src/fonts.css with @font-face declarations
   - **Goal**: Declare all font families so the browser loads them from local files
   - **Details**: Create `src/fonts.css`. Add one `@font-face` block per font file (6 total). Use `font-display: optional` for Bebas Neue; `font-display: swap` for DM Sans (all 4 weights) and Space Mono 400. Each block must set `font-family`, `font-weight`, `font-style: normal`, `src: url('./assets/fonts/<filename>.woff2') format('woff2')`. Add `@import "./fonts.css";` at the top of `src/index.css` (after `@import "tailwindcss"` or as a separate import — order: tailwindcss → fonts.css → tokens.css).
   - **Files**: `src/fonts.css`, `src/index.css`

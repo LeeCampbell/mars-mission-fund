@@ -28,7 +28,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes. Dev server renders the placeholder text in red (Tailwind utility applied).
   - **Brief ref**: Approach step 2 — "Tailwind"
 
-- [ ] TASK-03: Install React Router v7 and define placeholder routes
+- [x] TASK-03: Install React Router v7 and define placeholder routes
   - **Goal**: Set up client-side routing with three routes (`/`, `/about`, `/contact`), each showing distinct placeholder text.
   - **Details**:
     - `npm install react-router@7`

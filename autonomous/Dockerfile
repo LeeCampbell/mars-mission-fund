@@ -28,6 +28,10 @@ RUN npx playwright install chromium
 RUN useradd -m -s /bin/bash agent \
   && echo "agent ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+# Fix ownership: global npm installs (claude-code) may create dirs under /home/agent
+# owned by root, which blocks Claude Code's Bash tool (session-env) and MCP config.
+RUN chown -R agent:agent /home/agent
+
 WORKDIR /workspace
 RUN chown agent:agent /workspace
 

@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Open `index.html` source and confirm all five elements (charset, viewport, dark bg on `<html>`, noscript, preload link) are present
   - **Brief ref**: TASK-01 — index.html requirements
 
-- [ ] TASK-03: Install and configure Tailwind CSS v4
+- [x] TASK-03: Install and configure Tailwind CSS v4
   - **Goal**: Wire Tailwind CSS v4 into the Vite build pipeline
   - **Details**: Run `npm install -D tailwindcss@4 @tailwindcss/vite`. Add `tailwindcss()` from `@tailwindcss/vite` to the plugins array in `vite.config.ts`. Create `src/index.css` with `@import "tailwindcss";` as the first line. Import `./index.css` in `src/main.tsx` (replace any existing CSS import).
   - **Files**: `vite.config.ts`, `src/index.css`, `src/main.tsx`

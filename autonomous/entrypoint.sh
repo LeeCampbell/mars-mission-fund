@@ -73,6 +73,7 @@ while IFS=$'\t' read -r ISSUE_NUMBER ISSUE_TITLE; do
   export ISSUE_NUMBER
   export ISSUE_TITLE
   export BRANCH
+  export FORK_URL
 
   # Clean any leftover plan state from a previous issue
   rm -rf plan/planning plan/ready plan/done
@@ -95,6 +96,13 @@ while IFS=$'\t' read -r ISSUE_NUMBER ISSUE_TITLE; do
       break
     elif [ "$exit_code" -eq 2 ]; then
       echo "!!! Issue #${ISSUE_NUMBER} — agent stuck, moving to next issue"
+      # Comment on the issue so the stuck state is visible in GitHub
+      LAST_LOG=$(ls -t "${REPO_DIR}/.logs/issue-${ISSUE_NUMBER}-"* 2>/dev/null | head -1)
+      STUCK_STATE=$(basename "${LAST_LOG:-unknown}" | sed 's/issue-[0-9]*-//;s/-[0-9]*\.log//')
+      GH_TOKEN="${GH_TOKEN_UPSTREAM}" gh issue comment "${ISSUE_NUMBER}" \
+        --repo "${UPSTREAM_REPO}" \
+        --body "Agent stuck at stage \`${STUCK_STATE}\` after ${iteration} iterations. Manual intervention needed." \
+        2>/dev/null || echo "!!! Failed to comment on issue"
       break
     fi
 

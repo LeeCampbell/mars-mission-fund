@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Start the autonomous agent in Docker for a given milestone.
-# Usage: ./scripts/run.sh [milestone-title]
+# Usage: ./scripts/implement-milestone.sh [milestone-title]
 
 SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPTS_DIR/.." && pwd)"

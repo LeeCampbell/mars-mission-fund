@@ -7,6 +7,7 @@ services:
       - ISSUE_NUMBER=${ISSUE_NUMBER}
       - ISSUE_TITLE=${ISSUE_TITLE}
       - BASE_BRANCH=${BASE_BRANCH}
+      - BRANCH=${BRANCH}
     volumes:
       - ./.mcp.json:/home/agent/.mcp.json:ro
       - ./screenshots:/screenshots

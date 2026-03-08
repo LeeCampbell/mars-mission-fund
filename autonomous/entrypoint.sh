@@ -5,7 +5,7 @@ set -euo pipefail
 # Receives from environment: ISSUE_NUMBER, ISSUE_TITLE, BASE_BRANCH, MILESTONE_NUMBER
 
 # ── Validate required env vars ──────────────────────────────
-for var in ISSUE_NUMBER ISSUE_TITLE BASE_BRANCH FORK_URL UPSTREAM_REPO GH_TOKEN GH_TOKEN_UPSTREAM GIT_USER_NAME GIT_USER_EMAIL; do
+for var in ISSUE_NUMBER ISSUE_TITLE BASE_BRANCH BRANCH FORK_URL UPSTREAM_REPO GH_TOKEN GH_TOKEN_UPSTREAM GIT_USER_NAME GIT_USER_EMAIL; do
   if [ -z "${!var:-}" ]; then
     echo "!!! Missing required env var: ${var}"
     exit 1
@@ -37,8 +37,7 @@ git fetch upstream
 git fetch origin
 
 # ── Checkout feature branch from BASE_BRANCH ────────────────
-SLUG=$(echo "$ISSUE_TITLE" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]' '-' | sed 's/^-//;s/-$//' | head -c 40)
-BRANCH="feat/issue-${ISSUE_NUMBER}-${SLUG}"
+# BRANCH is passed from implement-milestone.sh to avoid drift
 
 # Determine the base ref to branch from
 if [ "$BASE_BRANCH" = "main" ]; then
@@ -50,7 +49,12 @@ fi
 
 if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
   git checkout "$BRANCH"
-  git merge "$BASE_REF" --no-edit || true
+  if ! git merge "$BASE_REF" --no-edit; then
+    echo "!!! Merge conflict with base branch ${BASE_BRANCH}"
+    echo "!!! Aborting merge — manual conflict resolution needed"
+    git merge --abort
+    exit 1
+  fi
 else
   git checkout -b "$BRANCH" "$BASE_REF"
 fi

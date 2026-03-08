@@ -22,6 +22,7 @@ set +a
 
 # ── Milestone selection ──────────────────────────────────────
 if [ -n "${1:-}" ]; then
+  # Title provided — look up its number
   MILESTONE_NUMBER=$(gh api "repos/${UPSTREAM_REPO}/milestones" --jq ".[] | select(.title == \"$1\") | .number")
   if [ -z "$MILESTONE_NUMBER" ]; then
     echo "ERROR: No milestone found with title: $1"
@@ -29,6 +30,7 @@ if [ -n "${1:-}" ]; then
   fi
   echo ">>> Milestone: $1 (#${MILESTONE_NUMBER})"
 else
+  # No arg — query open milestones
   MILESTONES=$(gh api "repos/${UPSTREAM_REPO}/milestones?state=open" --jq '.[] | "\(.number)\t\(.title)"')
 
   if [ -z "$MILESTONES" ]; then
@@ -39,10 +41,12 @@ else
   COUNT=$(echo "$MILESTONES" | wc -l | tr -d ' ')
 
   if [ "$COUNT" -eq 1 ]; then
+    # Auto-select the only milestone
     MILESTONE_NUMBER=$(echo "$MILESTONES" | cut -f1)
     MILESTONE_TITLE=$(echo "$MILESTONES" | cut -f2)
     echo ">>> Auto-selected milestone: ${MILESTONE_TITLE} (#${MILESTONE_NUMBER})"
   else
+    # Prompt user to choose
     echo "Multiple open milestones found:"
     echo ""
     i=1
@@ -216,7 +220,10 @@ while read -r ISSUE_NUMBER; do
     continue
   fi
 
-  # Determine base branch
+  # Determine base branch.
+  # For diamond dependencies (issue depends on multiple parents), we use the
+  # first parent found in the deps file. This is deterministic since deps are
+  # written in issue-body parse order. Only one parent can be the base branch.
   BASE_BRANCH="main"
   if [ -s "$DEPS_FILE" ]; then
     while read -r child parent; do
@@ -233,8 +240,9 @@ while read -r ISSUE_NUMBER; do
   BRANCH="feat/issue-${ISSUE_NUMBER}-${SLUG}"
   ISSUE_BRANCHES[$ISSUE_NUMBER]="$BRANCH"
 
-  # Check if a PR already exists for this issue (restart-safe)
-  EXISTING_PR=$(gh pr list --repo "${UPSTREAM_REPO}" --search "closes #${ISSUE_NUMBER}" --state open --json number,url --jq '.[0].url // empty' 2>/dev/null || true)
+  # Check if a PR already exists for this branch (restart-safe)
+  FORK_OWNER=$(echo "$FORK_URL" | sed 's|github.com/||;s|/.*||')
+  EXISTING_PR=$(gh pr list --repo "${UPSTREAM_REPO}" --head "${FORK_OWNER}:${BRANCH}" --state open --json url --jq '.[0].url // empty' 2>/dev/null || true)
   if [ -n "$EXISTING_PR" ]; then
     echo ">>> Skipping #${ISSUE_NUMBER} — PR already exists: ${EXISTING_PR}"
     continue
@@ -245,6 +253,7 @@ while read -r ISSUE_NUMBER; do
   export ISSUE_NUMBER
   export ISSUE_TITLE
   export BASE_BRANCH
+  export BRANCH
 
   echo ">>> Launching container for issue #${ISSUE_NUMBER} (base: ${BASE_BRANCH})"
 

@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component compiles; accent and non-accent renders are handled
   - **Brief ref**: Scope → "Card component"; Verification → "Card renders with dark surface background…"
 
-- [ ] TASK-05: Create StatCard component
+- [x] TASK-05: Create StatCard component
   - **Goal**: Stat display card with gradient background, Bebas Neue value, label, and optional sub text
   - **Details**: Create `src/components/ui/StatCard.tsx`. Props: `label: string`, `value: string | number`, `subText?: string`, `variant?: 'positive' | 'neutral'`. Background: deep-field gradient (use `--gradient-deep-field` or compose from tokens). Value: large Bebas Neue font (`--font-display`). Sub text colour varies by variant. Accept `className` prop.
   - **Files**: `src/components/ui/StatCard.tsx`

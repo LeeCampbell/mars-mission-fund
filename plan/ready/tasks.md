@@ -68,7 +68,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; built output in `dist/assets/` includes the WOFF2 files; no references to `fonts.googleapis.com` or `fonts.gstatic.com` appear in the output.
   - **Brief ref**: Approach step 4; Scope bullets on fonts; Files table rows for font assets.
 
-- [ ] TASK-05: Define all CSS design tokens in `src/tokens.css`
+- [x] TASK-05: Define all CSS design tokens in `src/tokens.css`
   - **Goal**: Populate `src/tokens.css` with every Tier 1 identity token and Tier 2 semantic token from L2-001, plus breakpoint tokens, reduced-motion overrides, and a Tailwind `@theme` block.
   - **Details**:
     - Replace the stub `src/tokens.css` with content structured as follows:

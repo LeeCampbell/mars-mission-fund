@@ -1,1 +1,116 @@
-/* Design tokens — populated in TASK-05 */
+/* ============================================================
+   Design Tokens — Mars Mission Fund
+   Tier 1 (Identity) + Tier 2 (Semantic) — L2-001 §1–2
+   Breakpoints — L3-005 §5.2
+   ============================================================ */
+
+:root {
+  /* ----------------------------------------------------------
+     Tier 1 — Identity tokens
+     ---------------------------------------------------------- */
+
+  /* Colour palette */
+  --void: #060A14;
+  --launchfire: #FF4500;
+  --launchfire-dim: #CC3700;
+  --launchfire-glow: rgba(255, 69, 0, 0.25);
+  --stardust: #E8E0D0;
+  --stardust-dim: #B0A898;
+  --nebula: #1A2744;
+  --orbit: #2D4A8A;
+  --orbit-bright: #4169C8;
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --error: #EF4444;
+
+  /* Gradients */
+  --gradient-hero: linear-gradient(135deg, var(--void) 0%, var(--nebula) 60%, var(--orbit) 100%);
+  --gradient-card: linear-gradient(180deg, var(--nebula) 0%, var(--void) 100%);
+  --gradient-glow: radial-gradient(ellipse at center, var(--launchfire-glow) 0%, transparent 70%);
+
+  /* Typography */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  /* Motion */
+  --motion-enter: 0.3s ease-out;
+  --motion-exit: 0.2s ease-in;
+  --motion-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --radius-button: 6px;
+  --radius-card: 12px;
+
+  /* ----------------------------------------------------------
+     Tier 2 — Semantic tokens
+     ---------------------------------------------------------- */
+
+  /* Background */
+  --color-bg-page: var(--void);
+  --color-bg-surface: var(--nebula);
+  --color-bg-elevated: var(--orbit);
+
+  /* Text */
+  --color-text-primary: var(--stardust);
+  --color-text-secondary: var(--stardust-dim);
+  --color-text-inverse: var(--void);
+
+  /* Action */
+  --color-action-primary: var(--launchfire);
+  --color-action-primary-hover: var(--launchfire-dim);
+  --color-action-primary-glow: var(--launchfire-glow);
+
+  /* Border */
+  --color-border-default: var(--orbit);
+  --color-border-subtle: var(--nebula);
+
+  /* Status */
+  --color-status-success: var(--success);
+  --color-status-warning: var(--warning);
+  --color-status-error: var(--error);
+
+  /* Motion semantic aliases */
+  --motion-transition-enter: var(--motion-enter);
+  --motion-transition-exit: var(--motion-exit);
+  --motion-transition-bounce: var(--motion-bounce);
+
+  /* ----------------------------------------------------------
+     Breakpoints — L3-005 §5.2
+     ---------------------------------------------------------- */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+}
+
+/* ----------------------------------------------------------
+   Reduced-motion overrides — L2-001 §5.2
+   ---------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-enter: 0s;
+    --motion-exit: 0s;
+    --motion-bounce: 0s;
+    --motion-transition-enter: 0s;
+    --motion-transition-exit: 0s;
+    --motion-transition-bounce: 0s;
+  }
+}
+
+/* ----------------------------------------------------------
+   Tailwind @theme — expose key semantic tokens as utilities
+   ---------------------------------------------------------- */
+@theme {
+  --color-bg-page: var(--color-bg-page);
+  --color-bg-surface: var(--color-bg-surface);
+  --color-text-primary: var(--color-text-primary);
+  --color-action-primary: var(--color-action-primary);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}

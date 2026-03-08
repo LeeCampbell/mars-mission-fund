@@ -4,6 +4,8 @@ set -euo pipefail
 # Start the autonomous agent in Docker for a given milestone.
 # Launches one container per issue, processing them in dependency order.
 # Usage: ./scripts/implement-milestone.sh [milestone-title]
+#
+# Compatible with Bash 3.2+ (macOS default). No associative arrays.
 
 SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPTS_DIR/.." && pwd)"
@@ -87,10 +89,12 @@ echo ">>> Found ${ISSUE_COUNT} issues"
 # Parse each issue body for dependency patterns (case-insensitive):
 #   "depends on #N", "blocked by #N", "requires #N"
 
-# Create temp files for the graph
+# Create temp files for the graph and state tracking
 DEPS_FILE=$(mktemp)
 ALL_ISSUES_FILE=$(mktemp)
-trap 'rm -f "$DEPS_FILE" "$ALL_ISSUES_FILE"' EXIT
+BRANCHES_FILE=$(mktemp)   # "issue_number branch_name" per line
+FAILED_FILE=$(mktemp)     # one failed issue number per line
+trap 'rm -f "$DEPS_FILE" "$ALL_ISSUES_FILE" "$BRANCHES_FILE" "$FAILED_FILE"' EXIT
 
 # Extract issue numbers and their dependencies
 echo "$ISSUES_JSON" | jq -r '.[] | .number | tostring' | sort -n > "$ALL_ISSUES_FILE"
@@ -119,63 +123,87 @@ else
 fi
 
 # ── Topological sort ─────────────────────────────────────────
-# Simple Kahn's algorithm for topological sort
+# Kahn's algorithm using temp files (Bash 3.2 compatible — no associative arrays).
+# Uses an in-degree file ("issue in_degree") and an adjacency file ("parent child").
 topological_sort() {
   local all_issues_file="$1"
   local deps_file="$2"
 
-  # Build in-degree map
-  declare -A in_degree
-  declare -A adj_list
+  local indeg_file adj_file queue_file
+  indeg_file=$(mktemp)
+  adj_file=$(mktemp)
+  queue_file=$(mktemp)
+
+  # Initialise in-degree to 0 for all issues
   while read -r issue; do
-    in_degree[$issue]=0
-    adj_list[$issue]=""
+    echo "$issue 0" >> "$indeg_file"
   done < "$all_issues_file"
 
   # Process edges: "child parent" means parent -> child
-  while read -r child parent; do
-    in_degree[$child]=$(( ${in_degree[$child]} + 1 ))
-    if [ -n "${adj_list[$parent]}" ]; then
-      adj_list[$parent]="${adj_list[$parent]} ${child}"
+  if [ -s "$deps_file" ]; then
+    while read -r child parent; do
+      # Increment in-degree for child
+      local old_deg new_deg
+      old_deg=$(grep "^${child} " "$indeg_file" | awk '{print $2}')
+      new_deg=$(( old_deg + 1 ))
+      # Use a temp file for sed -i portability (macOS vs Linux)
+      sed "s/^${child} ${old_deg}$/${child} ${new_deg}/" "$indeg_file" > "${indeg_file}.tmp"
+      mv "${indeg_file}.tmp" "$indeg_file"
+      # Record adjacency: parent -> child
+      echo "$parent $child" >> "$adj_file"
+    done < "$deps_file"
+  fi
+  touch "$adj_file"
+
+  # Seed queue with in-degree 0 nodes (sorted by issue number)
+  grep ' 0$' "$indeg_file" | awk '{print $1}' | sort -n > "$queue_file"
+
+  local result=""
+  local result_count=0
+
+  while [ -s "$queue_file" ]; do
+    # Take first (lowest issue number)
+    local current
+    current=$(head -1 "$queue_file")
+    sed '1d' "$queue_file" > "${queue_file}.tmp"
+    mv "${queue_file}.tmp" "$queue_file"
+
+    if [ -n "$result" ]; then
+      result="${result}
+${current}"
     else
-      adj_list[$parent]="$child"
+      result="$current"
     fi
-  done < "$deps_file"
+    result_count=$((result_count + 1))
 
-  # Collect nodes with in-degree 0, sorted by issue number
-  local queue=()
-  for issue in $(sort -n <<< "$(printf '%s\n' "${!in_degree[@]}")"); do
-    if [ "${in_degree[$issue]}" -eq 0 ]; then
-      queue+=("$issue")
-    fi
-  done
-
-  local result=()
-  while [ ${#queue[@]} -gt 0 ]; do
-    # Take first element (lowest issue number among ready nodes)
-    local current="${queue[0]}"
-    queue=("${queue[@]:1}")
-    result+=("$current")
-
-    # Reduce in-degree for dependents
-    for dependent in ${adj_list[$current]:-}; do
-      in_degree[$dependent]=$(( ${in_degree[$dependent]} - 1 ))
-      if [ "${in_degree[$dependent]}" -eq 0 ]; then
-        queue+=("$dependent")
-        # Re-sort queue to maintain issue-number order
-        IFS=$'\n' read -r -d '' -a queue <<< "$(printf '%s\n' "${queue[@]}" | sort -n)" || true
+    # Reduce in-degree for dependents of current
+    grep "^${current} " "$adj_file" | awk '{print $2}' | while read -r dependent; do
+      local old_deg new_deg
+      old_deg=$(grep "^${dependent} " "$indeg_file" | awk '{print $2}')
+      new_deg=$(( old_deg - 1 ))
+      sed "s/^${dependent} ${old_deg}$/${dependent} ${new_deg}/" "$indeg_file" > "${indeg_file}.tmp"
+      mv "${indeg_file}.tmp" "$indeg_file"
+      if [ "$new_deg" -eq 0 ]; then
+        echo "$dependent" >> "$queue_file"
+        # Re-sort to maintain issue-number order
+        sort -n "$queue_file" > "${queue_file}.tmp"
+        mv "${queue_file}.tmp" "$queue_file"
       fi
     done
   done
 
+  local total
+  total=$(wc -l < "$all_issues_file" | tr -d ' ')
+
   # Cycle detection
-  if [ ${#result[@]} -ne "$(wc -l < "$all_issues_file" | tr -d ' ')" ]; then
+  if [ "$result_count" -ne "$total" ]; then
     echo "WARNING: Dependency cycle detected! Falling back to issue-number order." >&2
-    sort -n "$all_issues_file"
-    return
+    cat "$all_issues_file"
+  else
+    echo "$result"
   fi
 
-  printf '%s\n' "${result[@]}"
+  rm -f "$indeg_file" "$adj_file" "$queue_file"
 }
 
 SORTED_ISSUES=$(topological_sort "$ALL_ISSUES_FILE" "$DEPS_FILE")
@@ -186,11 +214,12 @@ while read -r num; do
   echo "    #${num}: ${title}"
 done <<< "$SORTED_ISSUES"
 
-# ── Process each issue ───────────────────────────────────────
-# Track branch names for dependency resolution
-declare -A ISSUE_BRANCHES
-FAILED_ISSUES=()
+# ── Helper: look up branch for an issue number ───────────────
+get_issue_branch() {
+  grep "^${1} " "$BRANCHES_FILE" | awk '{print $2}' | head -1
+}
 
+# ── Process each issue ───────────────────────────────────────
 while read -r ISSUE_NUMBER; do
   ISSUE_TITLE=$(echo "$ISSUES_JSON" | jq -r ".[] | select(.number == ${ISSUE_NUMBER}) | .title")
 
@@ -203,20 +232,16 @@ while read -r ISSUE_NUMBER; do
   skip=false
   if [ -s "$DEPS_FILE" ]; then
     while read -r child parent; do
-      if [ "$child" = "$ISSUE_NUMBER" ]; then
-        for failed in "${FAILED_ISSUES[@]+"${FAILED_ISSUES[@]}"}"; do
-          if [ "$failed" = "$parent" ]; then
-            echo ">>> Skipping #${ISSUE_NUMBER} — depends on failed #${parent}"
-            skip=true
-            break 2
-          fi
-        done
+      if [ "$child" = "$ISSUE_NUMBER" ] && grep -qx "$parent" "$FAILED_FILE"; then
+        echo ">>> Skipping #${ISSUE_NUMBER} — depends on failed #${parent}"
+        skip=true
+        break
       fi
     done < "$DEPS_FILE"
   fi
 
   if [ "$skip" = true ]; then
-    FAILED_ISSUES+=("$ISSUE_NUMBER")
+    echo "$ISSUE_NUMBER" >> "$FAILED_FILE"
     continue
   fi
 
@@ -227,18 +252,21 @@ while read -r ISSUE_NUMBER; do
   BASE_BRANCH="main"
   if [ -s "$DEPS_FILE" ]; then
     while read -r child parent; do
-      if [ "$child" = "$ISSUE_NUMBER" ] && [ -n "${ISSUE_BRANCHES[$parent]:-}" ]; then
-        BASE_BRANCH="${ISSUE_BRANCHES[$parent]}"
-        echo ">>> Stacking on #${parent}'s branch: ${BASE_BRANCH}"
-        break
+      if [ "$child" = "$ISSUE_NUMBER" ]; then
+        parent_branch=$(get_issue_branch "$parent")
+        if [ -n "$parent_branch" ]; then
+          BASE_BRANCH="$parent_branch"
+          echo ">>> Stacking on #${parent}'s branch: ${BASE_BRANCH}"
+          break
+        fi
       fi
     done < "$DEPS_FILE"
   fi
 
-  # Compute branch name (same logic as entrypoint.sh will use)
+  # Compute branch name
   SLUG=$(echo "$ISSUE_TITLE" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]' '-' | sed 's/^-//;s/-$//' | head -c 40)
   BRANCH="feat/issue-${ISSUE_NUMBER}-${SLUG}"
-  ISSUE_BRANCHES[$ISSUE_NUMBER]="$BRANCH"
+  echo "${ISSUE_NUMBER} ${BRANCH}" >> "$BRANCHES_FILE"
 
   # Check if a PR already exists for this branch (restart-safe)
   FORK_OWNER=$(echo "$FORK_URL" | sed 's|github.com/||;s|/.*||')
@@ -262,7 +290,7 @@ while read -r ISSUE_NUMBER; do
     echo ">>> Container completed successfully for issue #${ISSUE_NUMBER}"
   else
     echo "!!! Container failed for issue #${ISSUE_NUMBER}"
-    FAILED_ISSUES+=("$ISSUE_NUMBER")
+    echo "$ISSUE_NUMBER" >> "$FAILED_FILE"
   fi
 
 done <<< "$SORTED_ISSUES"
@@ -270,6 +298,6 @@ done <<< "$SORTED_ISSUES"
 # ── Summary ──────────────────────────────────────────────────
 echo ""
 echo "=== All milestone issues processed ==="
-if [ ${#FAILED_ISSUES[@]} -gt 0 ]; then
-  echo ">>> Failed issues: ${FAILED_ISSUES[*]}"
+if [ -s "$FAILED_FILE" ]; then
+  echo ">>> Failed issues: $(tr '\n' ' ' < "$FAILED_FILE")"
 fi

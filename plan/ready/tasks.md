@@ -168,7 +168,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run dev` — page background is `#060A14`; body text uses DM Sans; headings would use Bebas Neue (visible in DevTools computed styles).
   - **Brief ref**: Approach step 6; Scope bullet on base styles.
 
-- [ ] TASK-07: Final verification — install, build, dev server, and route smoke test
+- [x] TASK-07: Final verification — install, build, dev server, and route smoke test
   - **Goal**: Confirm the entire scaffold works end-to-end: clean install, production build, dev server routing, font self-hosting, token presence, and dark background.
   - **Details**:
     - Run `npm install` and confirm zero errors.

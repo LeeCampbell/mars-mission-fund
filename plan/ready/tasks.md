@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component compiles; both variants handle the optional subText
   - **Brief ref**: Scope → "StatCard component"; Verification → "StatCard renders with deep-field gradient…"
 
-- [ ] TASK-06: Create SectionLabel component
+- [x] TASK-06: Create SectionLabel component
   - **Goal**: Numbered section header in Space Mono uppercase with launchfire accent colour
   - **Details**: Create `src/components/ui/SectionLabel.tsx`. Props: `number: string | number`, `title: string`, optional `className`. Render formatted text: `"01 — TITLE"` pattern. Font: Space Mono (`--font-mono`). Colour: launchfire accent (`--color-accent-launchfire` or equivalent). Uppercase transform. Keep markup minimal — a single styled element or `<span>`.
   - **Files**: `src/components/ui/SectionLabel.tsx`

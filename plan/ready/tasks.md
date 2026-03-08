@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `src/fonts.css` contains 6 `@font-face` blocks; `src/index.css` imports it; `npm run build` succeeds
   - **Brief ref**: TASK-04 — Self-hosted fonts / fonts.css
 
-- [ ] TASK-07: Create src/tokens.css with all design tokens
+- [x] TASK-07: Create src/tokens.css with all design tokens
   - **Goal**: Define all Tier 1 identity tokens, Tier 2 semantic tokens, breakpoints, and reduced-motion overrides as CSS custom properties
   - **Details**: Create `src/tokens.css` with clearly commented sections:
     - **Section 1.1 — Colour palette (Tier 1)**: `--void`, `--obsidian`, `--graphite`, `--mist`, `--white`, `--electric-cyan`, `--plasma-green`, `--solar-amber`, `--crimson-alert`, `--neutral-*` scale

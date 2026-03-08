@@ -116,7 +116,7 @@ while [ "$iteration" -lt "$max_iterations" ]; do
     break
   elif [ "$exit_code" -eq 2 ]; then
     echo "!!! Issue #${ISSUE_NUMBER} — agent stuck, exiting"
-    LAST_LOG=$(ls -t "${REPO_DIR}/.logs/issue-${ISSUE_NUMBER}-"* 2>/dev/null | head -1)
+    LAST_LOG=$(ls -t "/workspace/logs/issue-${ISSUE_NUMBER}-"* 2>/dev/null | head -1)
     STUCK_STATE=$(basename "${LAST_LOG:-unknown}" | sed 's/issue-[0-9]*-//;s/-[0-9]*\.log//')
     GH_TOKEN="${GH_TOKEN_UPSTREAM}" gh issue comment "${ISSUE_NUMBER}" \
       --repo "${UPSTREAM_REPO}" \

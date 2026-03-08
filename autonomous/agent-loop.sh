@@ -7,7 +7,7 @@ set -euo pipefail
 
 REPO_DIR="/workspace/repo"
 PROMPTS_DIR="/usr/local/share/prompts"
-LOG_DIR="${REPO_DIR}/.logs"
+LOG_DIR="/workspace/logs"
 SCREENSHOT_DIR="/screenshots"
 
 mkdir -p "$LOG_DIR" "$SCREENSHOT_DIR"

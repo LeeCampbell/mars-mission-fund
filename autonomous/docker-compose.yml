@@ -4,6 +4,9 @@ services:
     env_file: .env
     environment:
       - MILESTONE_NUMBER=${MILESTONE_NUMBER}
+      - ISSUE_NUMBER=${ISSUE_NUMBER}
+      - ISSUE_TITLE=${ISSUE_TITLE}
+      - BASE_BRANCH=${BASE_BRANCH}
     volumes:
       - ./.mcp.json:/home/agent/.mcp.json:ro
       - ./screenshots:/screenshots

@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component compiles with no TypeScript errors (`npm run build` or `tsc --noEmit`)
   - **Brief ref**: Scope → "Logo component"; Approach → "Logo component" section
 
-- [ ] TASK-03: Create Button component
+- [x] TASK-03: Create Button component
   - **Goal**: Polymorphic button/anchor component with primary, secondary, and ghost variants
   - **Details**: Create `src/components/ui/Button.tsx`. When `href` prop is provided render `<a>`; otherwise render `<button>`. Variants: `primary` (filled `--color-action-primary` bg, dark text), `secondary` (border `--color-border-accent`, transparent bg), `ghost` (no border, transparent, hover bg). Disabled state: `--color-action-disabled` colour, `cursor-not-allowed`. Hover transition duration from `--motion-hover`. Focus outline: 2px solid `--color-action-primary-hover`, offset 2px. Accept `className`, `disabled`, `onClick`, standard anchor/button HTML attributes.
   - **Files**: `src/components/ui/Button.tsx`

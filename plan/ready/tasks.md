@@ -74,7 +74,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component compiles; logo, tagline, links, and copyright are rendered
   - **Brief ref**: Scope → "Footer component"; Verification → "Footer appears on all routes…"
 
-- [ ] TASK-11: Create Layout component
+- [x] TASK-11: Create Layout component
   - **Goal**: Route wrapper that composes Header, main content area, and Footer for all routes
   - **Details**: Create `src/components/Layout.tsx`. Render: `<Header />`, `<main id="main-content">` containing `<Outlet />` from `react-router`, `<Footer />`. Add top padding to `<main>` to clear the fixed (or sticky) header height if the header is position-fixed. Import `Header` and `Footer` from the same directory.
   - **Files**: `src/components/Layout.tsx`

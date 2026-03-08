@@ -35,7 +35,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds (Tailwind classes are processed, no import errors).
   - **Brief ref**: Approach step 2; Import order section.
 
-- [ ] TASK-03: Add React Router with three placeholder routes
+- [x] TASK-03: Add React Router with three placeholder routes
   - **Goal**: Replace the bare `App.tsx` placeholder with a `BrowserRouter` + `Routes` tree exposing `/`, `/about`, and `/contact`.
   - **Details**:
     - Update `src/App.tsx` to import `BrowserRouter`, `Routes`, `Route` from `react-router`.

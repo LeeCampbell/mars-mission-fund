@@ -48,7 +48,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; `npm run dev` + manual navigation to each route shows the correct placeholder text.
   - **Brief ref**: Approach step 3; Scope bullet on React Router.
 
-- [ ] TASK-04: Download and register self-hosted WOFF2 fonts
+- [x] TASK-04: Download and register self-hosted WOFF2 fonts
   - **Goal**: Place all required WOFF2 font files under `src/assets/fonts/` and write `src/fonts.css` with complete `@font-face` declarations.
   - **Details**:
     - Create directory `src/assets/fonts/`.

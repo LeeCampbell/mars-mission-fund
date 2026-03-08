@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component compiles; all three variants, hover, disabled, and both element modes are handled
   - **Brief ref**: Scope → "Button component"; Verification → button variant checks
 
-- [ ] TASK-04: Create Card component
+- [x] TASK-04: Create Card component
   - **Goal**: Surface card with dark background, subtle border, and optional top accent gradient bar
   - **Details**: Create `src/components/ui/Card.tsx`. Default: surface background (`--color-surface-card` or equivalent token), subtle border (`--color-border-subtle`), rounded corners, padding. Optional `accent` boolean prop: when true, render a thin top bar with orange-to-amber gradient (use `--color-accent-*` tokens or equivalent). Accept `className` and `children` props.
   - **Files**: `src/components/ui/Card.tsx`

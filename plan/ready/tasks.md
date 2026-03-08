@@ -88,7 +88,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds with no errors; dev server shows Header and Footer on all three routes
   - **Brief ref**: Scope → "Update `src/App.tsx`"; Approach → "Layout" and page title sections
 
-- [ ] TASK-13: Final build and visual verification
+- [x] TASK-13: Final build and visual verification
   - **Goal**: Confirm the complete implementation builds cleanly and meets all visual acceptance criteria
   - **Details**: Run `npm run build` and confirm zero TypeScript and Vite errors. Start dev server (`npm run dev`) and verify each criterion from the brief's Verification section: all routes show Header + Footer, active nav link is styled, skip-to-content link works, mobile hamburger collapses nav at ≤768px, all Button variants and states are correct, Card accent bar renders, StatCard gradient renders, SectionLabel format is correct, all Badge variants render, ProgressBar ARIA and reduced-motion are correct, Logo renders at all three sizes. Fix any issues found.
   - **Files**: Any files requiring fixes identified during verification

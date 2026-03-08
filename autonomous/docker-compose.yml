@@ -2,6 +2,8 @@ services:
   agent:
     build: .
     env_file: .env
+    environment:
+      - MILESTONE_NUMBER=${MILESTONE_NUMBER}
     volumes:
       - ./.mcp.json:/home/agent/.mcp.json:ro
       - ./screenshots:/screenshots

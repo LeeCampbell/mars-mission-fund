@@ -28,9 +28,12 @@ RUN npx playwright install chromium
 RUN useradd -m -s /bin/bash agent \
   && echo "agent ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Fix ownership: global npm installs (claude-code) may create dirs under /home/agent
-# owned by root, which blocks Claude Code's Bash tool (session-env) and MCP config.
-RUN chown -R agent:agent /home/agent
+# Pre-create ~/.claude so Docker volume mounts don't create it as root.
+# Without this, mounting .mcp.json to /home/agent/.claude/.mcp.json causes
+# Docker to create the .claude/ directory owned by root, which blocks
+# Claude Code's Bash tool (session-env) and MCP config reads.
+RUN mkdir -p /home/agent/.claude \
+  && chown -R agent:agent /home/agent
 
 WORKDIR /workspace
 RUN chown agent:agent /workspace

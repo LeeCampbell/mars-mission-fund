@@ -1,4 +1,20 @@
-import { BrowserRouter, Routes, Route } from 'react-router'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router'
+import { useEffect } from 'react'
+import { Layout } from './components/Layout'
+
+const PAGE_TITLES: Record<string, string> = {
+  '/': 'Home — Launchfire',
+  '/about': 'About — Launchfire',
+  '/contact': 'Contact — Launchfire',
+}
+
+function TitleUpdater() {
+  const location = useLocation()
+  useEffect(() => {
+    document.title = PAGE_TITLES[location.pathname] ?? 'Launchfire'
+  }, [location.pathname])
+  return null
+}
 
 function HomePage() {
   return <div style={{ padding: '2rem' }}>Home</div>
@@ -15,10 +31,13 @@ function ContactPage() {
 export default function App() {
   return (
     <BrowserRouter>
+      <TitleUpdater />
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

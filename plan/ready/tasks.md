@@ -81,7 +81,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component compiles; uses `Outlet`, wraps with Header and Footer
   - **Brief ref**: Scope → "Layout component"; Approach → "Layout" section
 
-- [ ] TASK-12: Update App.tsx to use Layout as route wrapper
+- [x] TASK-12: Update App.tsx to use Layout as route wrapper
   - **Goal**: Wire Layout into the React Router tree so all routes render inside the shell
   - **Details**: Modify `src/App.tsx`. Wrap the existing three route elements (`/`, `/about`, `/contact`) under a parent route that renders `<Layout />` using React Router v7's nested route pattern (parent route with `element={<Layout />}` and child routes as `<Outlet>`). Add page title updates on route change: use `useEffect` + `useLocation` to update `document.title` based on the current path (simple switch or map from path to title string).
   - **Files**: `src/App.tsx`

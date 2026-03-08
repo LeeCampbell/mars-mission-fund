@@ -233,6 +233,13 @@ while read -r ISSUE_NUMBER; do
   BRANCH="feat/issue-${ISSUE_NUMBER}-${SLUG}"
   ISSUE_BRANCHES[$ISSUE_NUMBER]="$BRANCH"
 
+  # Check if a PR already exists for this issue (restart-safe)
+  EXISTING_PR=$(gh pr list --repo "${UPSTREAM_REPO}" --search "closes #${ISSUE_NUMBER}" --state open --json number,url --jq '.[0].url // empty' 2>/dev/null || true)
+  if [ -n "$EXISTING_PR" ]; then
+    echo ">>> Skipping #${ISSUE_NUMBER} — PR already exists: ${EXISTING_PR}"
+    continue
+  fi
+
   # Export env vars for Docker
   export MILESTONE_NUMBER
   export ISSUE_NUMBER

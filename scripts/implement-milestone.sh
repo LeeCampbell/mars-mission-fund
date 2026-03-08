@@ -282,8 +282,10 @@ while read -r ISSUE_NUMBER; do
   export ISSUE_TITLE
   export BASE_BRANCH
   export BRANCH
+  RUN_ID=$(date +%Y%m%d-%H%M%S)
+  export CONTAINER_NAME="agent-iss${ISSUE_NUMBER}-${RUN_ID}"
 
-  echo ">>> Launching container for issue #${ISSUE_NUMBER} (base: ${BASE_BRANCH})"
+  echo ">>> Launching container ${CONTAINER_NAME} for issue #${ISSUE_NUMBER} (base: ${BASE_BRANCH})"
 
   cd "$REPO_ROOT/autonomous"
   if docker compose up --build --abort-on-container-exit; then

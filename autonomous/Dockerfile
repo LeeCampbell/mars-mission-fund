@@ -35,6 +35,9 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY agent-loop.sh /usr/local/bin/agent-loop.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/agent-loop.sh
 
+# Copy prompts into container
+COPY prompts/ /usr/local/share/prompts/
+
 USER agent
 
 ENTRYPOINT ["entrypoint.sh"]

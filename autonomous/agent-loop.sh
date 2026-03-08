@@ -1,118 +1,175 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Agent loop state machine for a single GitHub issue.
+# Receives: ISSUE_NUMBER, ISSUE_TITLE, BRANCH, UPSTREAM_REPO, UPSTREAM_BASE_BRANCH
+# Exit codes: 0 = issue complete (PR created), 1 = needs another iteration, 2 = stuck
+
 REPO_DIR="/workspace/repo"
-SCRIPTS_DIR="${REPO_DIR}/scripts"
+PROMPTS_DIR="/usr/local/share/prompts"
 LOG_DIR="${REPO_DIR}/.logs"
 SCREENSHOT_DIR="/screenshots"
 
 mkdir -p "$LOG_DIR" "$SCREENSHOT_DIR"
 cd "$REPO_DIR"
 
-iteration=0
+TIMEOUT="${TIMEOUT_SECONDS:-1800}"
 
-while [ "$iteration" -lt "${MAX_ITERATIONS}" ]; do
-  iteration=$((iteration + 1))
-  echo "=== Iteration ${iteration}/${MAX_ITERATIONS} — $(date -Iseconds) ==="
-
-  # ── State: pick-issue ──────────────────────────────────────
-  # Find first task file with unchecked boxes
-  TASK_FILE=""
-  for f in plan/*/tasks/*.tasks.md; do
-    [ -f "$f" ] || continue
-    if grep -q '^\- \[ \]' "$f"; then
-      TASK_FILE="$f"
-      break
+# ── State detection ──────────────────────────────────────────
+determine_state() {
+  if [ -d "plan/done" ]; then
+    echo "done"
+  elif [ -f "plan/ready/tasks.md" ]; then
+    # Check if all tasks are checked
+    if grep -q '^\- \[ \]' "plan/ready/tasks.md"; then
+      echo "execute-tasks"
+    else
+      echo "create-pr"
     fi
-  done
-
-  if [ -z "$TASK_FILE" ]; then
-    echo ">>> All tasks complete. Nothing left to do."
-    break
-  fi
-
-  echo ">>> Picked task file: ${TASK_FILE}"
-
-  # Derive branch name from task file
-  MILESTONE_DIR=$(basename "$(dirname "$(dirname "$TASK_FILE")")")
-  ISSUE_NAME=$(basename "$TASK_FILE" .tasks.md)
-  BRANCH="feat/${MILESTONE_DIR}/${ISSUE_NAME}"
-
-  # ── State: execute-tasks ───────────────────────────────────
-  # Checkout or create feature branch
-  git fetch upstream
-  if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
-    git checkout "$BRANCH"
-    git merge "upstream/${UPSTREAM_BASE_BRANCH}" --no-edit || true
+  elif [ -f "plan/ready/brief.md" ]; then
+    echo "create-tasks"
+  elif [ -f "plan/planning/brief-review.md" ]; then
+    echo "apply-review"
   else
-    git checkout -b "$BRANCH" "upstream/${UPSTREAM_BASE_BRANCH}"
+    echo "review-brief"
   fi
+}
 
-  TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-  LOG_FILE="${LOG_DIR}/${ISSUE_NAME}-${TIMESTAMP}.log"
+STATE=$(determine_state)
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+LOG_FILE="${LOG_DIR}/issue-${ISSUE_NUMBER}-${STATE}-${TIMESTAMP}.log"
 
-  echo ">>> Executing tasks in ${TASK_FILE} on branch ${BRANCH}"
-  echo ">>> Log: ${LOG_FILE}"
+echo ">>> State: ${STATE} for issue #${ISSUE_NUMBER}"
+echo ">>> Log: ${LOG_FILE}"
 
-  # Count unchecked before
-  BEFORE=$(grep -c '^\- \[ \]' "$TASK_FILE" || echo 0)
+case "$STATE" in
 
-  # Invoke Claude to execute one task
-  timeout "${TIMEOUT_SECONDS}" claude \
-    --dangerously-skip-permissions \
-    --print \
-    --verbose \
-    -p "Follow ./prompts/EXECUTE.md for ${TASK_FILE}" \
-    2>&1 | tee "$LOG_FILE" || true
+  review-brief)
+    mkdir -p plan/planning
+    timeout "$TIMEOUT" claude \
+      --dangerously-skip-permissions \
+      --print \
+      --verbose \
+      -p "$(cat "${PROMPTS_DIR}/review-brief.md")
 
-  # Count unchecked after
-  AFTER=$(grep -c '^\- \[ \]' "$TASK_FILE" || echo 0)
+Issue number: #${ISSUE_NUMBER}
+Issue title: ${ISSUE_TITLE}
+Upstream repo: ${UPSTREAM_REPO}" \
+      2>&1 | tee "$LOG_FILE" || true
 
-  echo ">>> Tasks remaining: ${BEFORE} → ${AFTER}"
+    # Check if brief was created and approved (moved to ready)
+    if [ -f "plan/ready/brief.md" ]; then
+      echo ">>> Brief approved, ready for task creation"
+    elif [ -f "plan/planning/brief.md" ]; then
+      echo ">>> Brief written, needs review"
+    else
+      echo "!!! No brief produced"
+      exit 2
+    fi
+    exit 1
+    ;;
 
-  # Stuck detection
-  if [ "$BEFORE" -eq "$AFTER" ]; then
-    echo "!!! No progress made — agent may be stuck. Skipping to next iteration."
-  fi
+  apply-review)
+    timeout "$TIMEOUT" claude \
+      --dangerously-skip-permissions \
+      --print \
+      --verbose \
+      -p "$(cat "${PROMPTS_DIR}/apply-review.md")" \
+      2>&1 | tee "$LOG_FILE" || true
 
-  # Push progress
-  git push origin "$BRANCH" --force-with-lease 2>/dev/null || true
+    if [ -f "plan/ready/brief.md" ]; then
+      echo ">>> Review applied, brief approved"
+    else
+      echo "!!! Review not applied"
+      exit 2
+    fi
+    exit 1
+    ;;
 
-  # ── State: create-pr ───────────────────────────────────────
-  # If all tasks in this file are done, verify build and create PR
-  REMAINING=$(grep -c '^\- \[ \]' "$TASK_FILE" || echo 0)
-  if [ "$REMAINING" -eq 0 ]; then
-    echo ">>> All tasks done in ${TASK_FILE}. Running build verification..."
+  create-tasks)
+    timeout "$TIMEOUT" claude \
+      --dangerously-skip-permissions \
+      --print \
+      --verbose \
+      -p "$(cat "${PROMPTS_DIR}/create-tasks.md")" \
+      2>&1 | tee "$LOG_FILE" || true
 
-    # Build verification
-    if [ -f package.json ]; then
-      npm run build 2>&1 | tee -a "$LOG_FILE" || echo "!!! Build failed"
+    if [ -f "plan/ready/tasks.md" ]; then
+      echo ">>> Tasks created"
+    else
+      echo "!!! No tasks produced"
+      exit 2
+    fi
+    exit 1
+    ;;
+
+  execute-tasks)
+    # Count unchecked before
+    BEFORE=$(grep -c '^\- \[ \]' "plan/ready/tasks.md" || echo 0)
+
+    timeout "$TIMEOUT" claude \
+      --dangerously-skip-permissions \
+      --print \
+      --verbose \
+      -p "$(cat "${PROMPTS_DIR}/execute-tasks.md")" \
+      2>&1 | tee "$LOG_FILE" || true
+
+    # Count unchecked after
+    AFTER=$(grep -c '^\- \[ \]' "plan/ready/tasks.md" || echo 0)
+    echo ">>> Tasks remaining: ${BEFORE} → ${AFTER}"
+
+    # Stuck detection
+    if [ "$BEFORE" -eq "$AFTER" ]; then
+      echo "!!! No progress made — agent may be stuck"
+      exit 2
     fi
 
-    # Screenshot capture (Playwright MCP handles this in Claude session)
-    echo ">>> Creating PR for ${BRANCH}"
+    # Push progress
+    git push origin "$BRANCH" --force-with-lease 2>/dev/null || true
 
-    # Extract issue number from task file header
-    ISSUE_NUM=$(grep -oP '(?<=Issue:\s#)\d+' "$TASK_FILE" || echo "")
-    PR_BODY="Automated PR for ${TASK_FILE}"
-    if [ -n "$ISSUE_NUM" ]; then
-      PR_BODY="${PR_BODY}\n\nCloses #${ISSUE_NUM}"
+    # Check if more tasks remain
+    if [ "$AFTER" -gt 0 ]; then
+      exit 1
     fi
 
-    GH_TOKEN="${GH_TOKEN_UPSTREAM}" gh pr create \
-      --repo "${UPSTREAM_REPO}" \
-      --base "${UPSTREAM_BASE_BRANCH}" \
-      --head "$(echo "$FORK_URL" | sed 's|github.com/||;s|/.*||'):${BRANCH}" \
-      --title "feat: ${ISSUE_NAME}" \
-      --body "$(echo -e "$PR_BODY")" \
-      2>&1 | tee -a "$LOG_FILE" || echo "!!! PR creation failed (may already exist)"
-  fi
+    # All tasks done — fall through to next iteration for create-pr
+    exit 1
+    ;;
 
-  # Cooldown
-  if [ "$iteration" -lt "${MAX_ITERATIONS}" ]; then
-    echo ">>> Cooling down for ${COOLDOWN_SECONDS}s..."
-    sleep "${COOLDOWN_SECONDS}"
-  fi
-done
+  create-pr)
+    # Push the branch
+    git push origin "$BRANCH" --force-with-lease || true
 
-echo "=== Agent loop finished after ${iteration} iterations ==="
+    # Let Claude create the PR with a proper description
+    FORK_OWNER=$(echo "$FORK_URL" | sed 's|github.com/||;s|/.*||')
+
+    timeout "$TIMEOUT" claude \
+      --dangerously-skip-permissions \
+      --print \
+      --verbose \
+      -p "$(cat "${PROMPTS_DIR}/create-pr.md")
+
+Issue number: #${ISSUE_NUMBER}
+Issue title: ${ISSUE_TITLE}
+Upstream repo: ${UPSTREAM_REPO}
+Base branch: ${UPSTREAM_BASE_BRANCH}
+Head: ${FORK_OWNER}:${BRANCH}
+Branch: ${BRANCH}" \
+      2>&1 | tee "$LOG_FILE" || true
+
+    # Archive plan
+    mkdir -p plan/done
+    if [ -d "plan/ready" ]; then
+      mv plan/ready/* plan/done/ 2>/dev/null || true
+    fi
+
+    echo ">>> PR created for issue #${ISSUE_NUMBER}"
+    exit 0
+    ;;
+
+  done)
+    echo ">>> Issue #${ISSUE_NUMBER} already completed"
+    exit 0
+    ;;
+
+esac

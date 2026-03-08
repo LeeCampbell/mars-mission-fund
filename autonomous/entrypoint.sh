@@ -29,6 +29,83 @@ if [ -f package.json ]; then
   npm install
 fi
 
-# ── Run agent loop ───────────────────────────────────────────
-echo ">>> Starting agent loop (max ${MAX_ITERATIONS} iterations, ${COOLDOWN_SECONDS}s cooldown)"
-exec agent-loop.sh
+# ── Fetch milestone issues ───────────────────────────────────
+echo ">>> Fetching issues for milestone #${MILESTONE_NUMBER}"
+
+ISSUES=$(GH_TOKEN="${GH_TOKEN_UPSTREAM}" gh issue list \
+  --repo "${UPSTREAM_REPO}" \
+  --milestone "${MILESTONE_NUMBER}" \
+  --state open \
+  --json number,title \
+  --jq 'sort_by(.number) | .[] | "\(.number)\t\(.title)"')
+
+if [ -z "$ISSUES" ]; then
+  echo ">>> No open issues in milestone #${MILESTONE_NUMBER}. Done."
+  exit 0
+fi
+
+echo ">>> Issues to process:"
+echo "$ISSUES" | while IFS=$'\t' read -r num title; do
+  echo "    #${num}: ${title}"
+done
+
+# ── Iterate issues ───────────────────────────────────────────
+while IFS=$'\t' read -r ISSUE_NUMBER ISSUE_TITLE; do
+  echo ""
+  echo "=========================================="
+  echo "  Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}"
+  echo "=========================================="
+
+  # Create a URL-safe slug from the title
+  SLUG=$(echo "$ISSUE_TITLE" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]' '-' | sed 's/^-//;s/-$//' | head -c 40)
+  BRANCH="feat/issue-${ISSUE_NUMBER}-${SLUG}"
+
+  # Checkout or create feature branch
+  git fetch upstream
+  if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
+    git checkout "$BRANCH"
+    git merge "upstream/${UPSTREAM_BASE_BRANCH}" --no-edit || true
+  else
+    git checkout -b "$BRANCH" "upstream/${UPSTREAM_BASE_BRANCH}"
+  fi
+
+  # Export for agent-loop.sh
+  export ISSUE_NUMBER
+  export ISSUE_TITLE
+  export BRANCH
+
+  # Clean any leftover plan state from a previous issue
+  rm -rf plan/planning plan/ready plan/done
+
+  # Run the agent loop for this issue
+  echo ">>> Starting agent loop for issue #${ISSUE_NUMBER}"
+  iteration=0
+  max_iterations="${MAX_ITERATIONS:-10}"
+  cooldown="${COOLDOWN_SECONDS:-30}"
+
+  while [ "$iteration" -lt "$max_iterations" ]; do
+    iteration=$((iteration + 1))
+    echo "--- Iteration ${iteration}/${max_iterations} for issue #${ISSUE_NUMBER} ---"
+
+    exit_code=0
+    agent-loop.sh || exit_code=$?
+
+    if [ "$exit_code" -eq 0 ]; then
+      echo ">>> Issue #${ISSUE_NUMBER} completed successfully"
+      break
+    elif [ "$exit_code" -eq 2 ]; then
+      echo "!!! Issue #${ISSUE_NUMBER} — agent stuck, moving to next issue"
+      break
+    fi
+
+    # Cooldown between iterations
+    if [ "$iteration" -lt "$max_iterations" ]; then
+      echo ">>> Cooling down for ${cooldown}s..."
+      sleep "$cooldown"
+    fi
+  done
+
+done <<< "$ISSUES"
+
+echo ""
+echo "=== All milestone issues processed ==="

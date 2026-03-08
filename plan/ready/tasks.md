@@ -86,7 +86,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `src/index.css` contains a `@layer base` block with all rules listed; `npm run build` succeeds
   - **Brief ref**: TASK-06 — Base styles and global reset
 
-- [ ] TASK-10: Final build verification
+- [x] TASK-10: Final build verification
   - **Goal**: Confirm the complete scaffold meets every acceptance criterion from the brief
   - **Details**: Run `npm run build` and verify it exits 0 with no TypeScript or Vite errors. Check the following by inspecting files/output:
     1. `dist/` directory produced with `index.html` and assets

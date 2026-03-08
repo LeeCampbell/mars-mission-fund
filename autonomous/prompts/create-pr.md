@@ -8,7 +8,7 @@ The branch has already been pushed. Plan archival is handled by the calling scri
 
 - `ISSUE_NUMBER`: The GitHub issue this work addresses
 - `UPSTREAM_REPO`: The upstream repository
-- `UPSTREAM_BASE_BRANCH`: The base branch for the PR (usually `main`)
+- `UPSTREAM_BASE_BRANCH`: The base branch for the PR (e.g. `main`, or a parent feature branch for stacked PRs)
 - `BRANCH`: The current feature branch name
 - `Head`: The fork-owner:branch ref for the PR head
 - `plan/ready/brief.md`: The implementation brief

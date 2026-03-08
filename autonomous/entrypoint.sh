@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Process a single issue inside Docker.
+# Receives from environment: ISSUE_NUMBER, ISSUE_TITLE, BASE_BRANCH, MILESTONE_NUMBER
+
+# ── Validate required env vars ──────────────────────────────
+for var in ISSUE_NUMBER ISSUE_TITLE BASE_BRANCH FORK_URL UPSTREAM_REPO GH_TOKEN GH_TOKEN_UPSTREAM GIT_USER_NAME GIT_USER_EMAIL; do
+  if [ -z "${!var:-}" ]; then
+    echo "!!! Missing required env var: ${var}"
+    exit 1
+  fi
+done
+
+UPSTREAM_BASE_BRANCH="${BASE_BRANCH}"
+export UPSTREAM_BASE_BRANCH
+
 # ── Git identity ──────────────────────────────────────────────
 git config --global user.name  "${GIT_USER_NAME}"
 git config --global user.email "${GIT_USER_EMAIL}"
@@ -20,8 +34,26 @@ if ! git remote get-url upstream &>/dev/null; then
 fi
 
 git fetch upstream
-git checkout "${UPSTREAM_BASE_BRANCH}"
-git merge "upstream/${UPSTREAM_BASE_BRANCH}" --no-edit
+git fetch origin
+
+# ── Checkout feature branch from BASE_BRANCH ────────────────
+SLUG=$(echo "$ISSUE_TITLE" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]' '-' | sed 's/^-//;s/-$//' | head -c 40)
+BRANCH="feat/issue-${ISSUE_NUMBER}-${SLUG}"
+
+# Determine the base ref to branch from
+if [ "$BASE_BRANCH" = "main" ]; then
+  BASE_REF="upstream/${BASE_BRANCH}"
+else
+  # For stacked PRs, the base is another feature branch on origin
+  BASE_REF="origin/${BASE_BRANCH}"
+fi
+
+if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
+  git checkout "$BRANCH"
+  git merge "$BASE_REF" --no-edit || true
+else
+  git checkout -b "$BRANCH" "$BASE_REF"
+fi
 
 # ── Warm dependency cache ────────────────────────────────────
 if [ -f package.json ]; then
@@ -29,91 +61,51 @@ if [ -f package.json ]; then
   npm install
 fi
 
-# ── Fetch milestone issues ───────────────────────────────────
-echo ">>> Fetching issues for milestone #${MILESTONE_NUMBER}"
+# ── Run agent loop for this single issue ─────────────────────
+echo ""
+echo "=========================================="
+echo "  Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}"
+echo "=========================================="
 
-ISSUES=$(GH_TOKEN="${GH_TOKEN_UPSTREAM}" gh issue list \
-  --repo "${UPSTREAM_REPO}" \
-  --milestone "${MILESTONE_NUMBER}" \
-  --state open \
-  --json number,title \
-  --jq 'sort_by(.number) | .[] | "\(.number)\t\(.title)"')
+export ISSUE_NUMBER
+export ISSUE_TITLE
+export BRANCH
+export FORK_URL
 
-if [ -z "$ISSUES" ]; then
-  echo ">>> No open issues in milestone #${MILESTONE_NUMBER}. Done."
-  exit 0
-fi
+# Clean any leftover plan state
+rm -rf plan/planning plan/ready plan/done
 
-echo ">>> Issues to process:"
-echo "$ISSUES" | while IFS=$'\t' read -r num title; do
-  echo "    #${num}: ${title}"
-done
+echo ">>> Starting agent loop for issue #${ISSUE_NUMBER}"
+iteration=0
+max_iterations="${MAX_ITERATIONS:-10}"
+cooldown="${COOLDOWN_SECONDS:-30}"
 
-# ── Iterate issues ───────────────────────────────────────────
-while IFS=$'\t' read -r ISSUE_NUMBER ISSUE_TITLE; do
-  echo ""
-  echo "=========================================="
-  echo "  Issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}"
-  echo "=========================================="
+while [ "$iteration" -lt "$max_iterations" ]; do
+  iteration=$((iteration + 1))
+  echo "--- Iteration ${iteration}/${max_iterations} for issue #${ISSUE_NUMBER} ---"
 
-  # Create a URL-safe slug from the title
-  SLUG=$(echo "$ISSUE_TITLE" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]' '-' | sed 's/^-//;s/-$//' | head -c 40)
-  BRANCH="feat/issue-${ISSUE_NUMBER}-${SLUG}"
+  exit_code=0
+  agent-loop.sh || exit_code=$?
 
-  # Checkout or create feature branch
-  git fetch upstream
-  if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
-    git checkout "$BRANCH"
-    git merge "upstream/${UPSTREAM_BASE_BRANCH}" --no-edit || true
-  else
-    git checkout -b "$BRANCH" "upstream/${UPSTREAM_BASE_BRANCH}"
+  if [ "$exit_code" -eq 0 ]; then
+    echo ">>> Issue #${ISSUE_NUMBER} completed successfully"
+    break
+  elif [ "$exit_code" -eq 2 ]; then
+    echo "!!! Issue #${ISSUE_NUMBER} — agent stuck, exiting"
+    LAST_LOG=$(ls -t "${REPO_DIR}/.logs/issue-${ISSUE_NUMBER}-"* 2>/dev/null | head -1)
+    STUCK_STATE=$(basename "${LAST_LOG:-unknown}" | sed 's/issue-[0-9]*-//;s/-[0-9]*\.log//')
+    GH_TOKEN="${GH_TOKEN_UPSTREAM}" gh issue comment "${ISSUE_NUMBER}" \
+      --repo "${UPSTREAM_REPO}" \
+      --body "Agent stuck at stage \`${STUCK_STATE}\` after ${iteration} iterations. Manual intervention needed." \
+      2>/dev/null || echo "!!! Failed to comment on issue"
+    exit 1
   fi
 
-  # Export for agent-loop.sh
-  export ISSUE_NUMBER
-  export ISSUE_TITLE
-  export BRANCH
-  export FORK_URL
+  # Cooldown between iterations
+  if [ "$iteration" -lt "$max_iterations" ]; then
+    echo ">>> Cooling down for ${cooldown}s..."
+    sleep "$cooldown"
+  fi
+done
 
-  # Clean any leftover plan state from a previous issue
-  rm -rf plan/planning plan/ready plan/done
-
-  # Run the agent loop for this issue
-  echo ">>> Starting agent loop for issue #${ISSUE_NUMBER}"
-  iteration=0
-  max_iterations="${MAX_ITERATIONS:-10}"
-  cooldown="${COOLDOWN_SECONDS:-30}"
-
-  while [ "$iteration" -lt "$max_iterations" ]; do
-    iteration=$((iteration + 1))
-    echo "--- Iteration ${iteration}/${max_iterations} for issue #${ISSUE_NUMBER} ---"
-
-    exit_code=0
-    agent-loop.sh || exit_code=$?
-
-    if [ "$exit_code" -eq 0 ]; then
-      echo ">>> Issue #${ISSUE_NUMBER} completed successfully"
-      break
-    elif [ "$exit_code" -eq 2 ]; then
-      echo "!!! Issue #${ISSUE_NUMBER} — agent stuck, moving to next issue"
-      # Comment on the issue so the stuck state is visible in GitHub
-      LAST_LOG=$(ls -t "${REPO_DIR}/.logs/issue-${ISSUE_NUMBER}-"* 2>/dev/null | head -1)
-      STUCK_STATE=$(basename "${LAST_LOG:-unknown}" | sed 's/issue-[0-9]*-//;s/-[0-9]*\.log//')
-      GH_TOKEN="${GH_TOKEN_UPSTREAM}" gh issue comment "${ISSUE_NUMBER}" \
-        --repo "${UPSTREAM_REPO}" \
-        --body "Agent stuck at stage \`${STUCK_STATE}\` after ${iteration} iterations. Manual intervention needed." \
-        2>/dev/null || echo "!!! Failed to comment on issue"
-      break
-    fi
-
-    # Cooldown between iterations
-    if [ "$iteration" -lt "$max_iterations" ]; then
-      echo ">>> Cooling down for ${cooldown}s..."
-      sleep "$cooldown"
-    fi
-  done
-
-done <<< "$ISSUES"
-
-echo ""
-echo "=== All milestone issues processed ==="
+echo "=== Issue #${ISSUE_NUMBER} processing complete ==="

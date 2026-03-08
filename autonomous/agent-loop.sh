@@ -210,6 +210,13 @@ Branch: ${BRANCH}" \
       mv plan/ready/* plan/done/ 2>/dev/null || true
     fi
 
+    # Remove plan directory and commit the deletion
+    # Plans are preserved in git history but kept out of the current tree
+    rm -rf plan/
+    git add plan/ 2>/dev/null || true
+    git commit -m "chore: remove plan files after PR creation" 2>/dev/null || true
+    git push origin "$BRANCH" --force-with-lease 2>/dev/null || true
+
     clear_state
     echo ">>> PR created for issue #${ISSUE_NUMBER}"
     exit 0

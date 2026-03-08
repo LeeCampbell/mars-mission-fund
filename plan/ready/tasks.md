@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component compiles; outputs correct formatted string at runtime
   - **Brief ref**: Scope → "SectionLabel component"; Verification → "SectionLabel renders in Space Mono…"
 
-- [ ] TASK-07: Create Badge component
+- [x] TASK-07: Create Badge component
   - **Goal**: Status badge with funded/active/new variants, each with a decorative dot indicator
   - **Details**: Create `src/components/ui/Badge.tsx`. Prop: `variant: 'funded' | 'active' | 'new'`. Each variant has its own bg, text, border, and dot colour from design tokens. Structure: `<span>` containing a `<span>` dot (small circle, `inline-block`) and the `children` text. Accept `className` prop.
   - **Files**: `src/components/ui/Badge.tsx`

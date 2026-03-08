@@ -42,7 +42,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` and `npm run typecheck` both pass. Dev server at `/`, `/about`, `/contact` each shows distinct text.
   - **Brief ref**: Approach step 3 — "React Router"; Scope — "React Router v7"
 
-- [ ] TASK-04: Download and place self-hosted WOFF2 font files
+- [x] TASK-04: Download and place self-hosted WOFF2 font files
   - **Goal**: Obtain all required WOFF2 font files and store them in `src/assets/fonts/`.
   - **Details**:
     - Create directory `src/assets/fonts/`.

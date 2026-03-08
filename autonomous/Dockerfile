@@ -21,8 +21,8 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
 # Claude Code CLI + Playwright MCP server (global)
 RUN npm install -g @anthropic-ai/claude-code @playwright/mcp
 
-# Install Chrome for Playwright
-RUN npx playwright install chrome
+# Install Chromium for Playwright (Chrome is not available on ARM64)
+RUN npx playwright install chromium
 
 # Non-root user — Claude Code refuses --dangerously-skip-permissions as root
 RUN useradd -m -s /bin/bash agent \

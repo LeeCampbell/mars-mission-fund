@@ -10,7 +10,6 @@ services:
       - BASE_BRANCH=${BASE_BRANCH}
       - BRANCH=${BRANCH}
     volumes:
-      - ./.mcp.json:/home/agent/.claude/.mcp.json:ro
       - ./screenshots:/screenshots
     mem_limit: 4g
     cpus: 2

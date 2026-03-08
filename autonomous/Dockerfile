@@ -21,9 +21,6 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
 # Claude Code CLI + Playwright MCP server (global)
 RUN npm install -g @anthropic-ai/claude-code @playwright/mcp
 
-# Install Chromium for Playwright (Chrome is not available on ARM64)
-RUN npx playwright install chromium
-
 # Non-root user — Claude Code refuses --dangerously-skip-permissions as root
 RUN useradd -m -s /bin/bash agent \
   && echo "agent ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
@@ -47,5 +44,11 @@ RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/agent-loop.sh
 COPY prompts/ /usr/local/share/prompts/
 
 USER agent
+
+# Install Chromium using the MCP server's bundled Playwright, not the system one.
+# @playwright/mcp bundles its own playwright-core which may expect a different
+# browser revision than the system Playwright. Using its bundled copy ensures
+# the installed browser matches what the MCP server will look for at runtime.
+RUN node /usr/lib/node_modules/@playwright/mcp/node_modules/playwright-core/cli.js install chromium
 
 ENTRYPOINT ["entrypoint.sh"]

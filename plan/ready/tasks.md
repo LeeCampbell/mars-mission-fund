@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `src/tokens.css` contains all sections listed; `src/index.css` imports it; `npm run build` succeeds
   - **Brief ref**: TASK-05 — Design token CSS
 
-- [ ] TASK-08: Add Tailwind @theme block to src/index.css
+- [x] TASK-08: Add Tailwind @theme block to src/index.css
   - **Goal**: Expose key semantic tokens as Tailwind utility classes
   - **Details**: In `src/index.css`, after all `@import` lines, add a `@theme { }` block mapping key design tokens. Include at minimum: colours (`--color-bg-page`, `--color-bg-surface`, `--color-bg-elevated`, `--color-text-primary`, `--color-text-secondary`, `--color-action-primary`, `--color-action-primary-hover`, `--color-status-*`), font families (`--font-display`, `--font-body`, `--font-mono`), and border-radius tokens (`--radius-sm` through `--radius-pill`). Use the Tailwind v4 CSS-variable syntax: `--color-bg-page: var(--color-bg-page)` inside `@theme { }`.
   - **Files**: `src/index.css`

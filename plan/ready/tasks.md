@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds and the output CSS includes Tailwind reset/base styles; `src/index.css` starts with `@import "tailwindcss"`
   - **Brief ref**: TASK-02 — Tailwind CSS v4
 
-- [ ] TASK-04: Install React Router v7 and set up three placeholder routes
+- [x] TASK-04: Install React Router v7 and set up three placeholder routes
   - **Goal**: Enable client-side routing with placeholder pages for `/`, `/about`, `/contact`
   - **Details**: Run `npm install react-router`. Replace `src/App.tsx` with a component that uses `BrowserRouter` (from `react-router`) wrapping a `Routes` element containing three `Route` entries: path `/` → `<HomePage>`, path `/about` → `<AboutPage>`, path `/contact` → `<ContactPage>`. Define each page as a minimal functional component returning a single `<p>` with its name (e.g., `<p>Home page — coming soon</p>`). These can be co-located in `src/App.tsx` or in separate files in `src/pages/`.
   - **Files**: `src/App.tsx`, `src/pages/HomePage.tsx` (optional), `src/pages/AboutPage.tsx` (optional), `src/pages/ContactPage.tsx` (optional)

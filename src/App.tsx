@@ -1,6 +1,6 @@
 function App() {
   return (
-    <div>Mars Mission Fund</div>
+    <div className="text-red-500">Mars Mission Fund</div>
   )
 }
 

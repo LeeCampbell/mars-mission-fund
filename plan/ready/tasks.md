@@ -16,7 +16,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` completes without errors. `npm run typecheck` (or `tsc --noEmit`) exits 0.
   - **Brief ref**: Approach step 1 — "Project init"
 
-- [ ] TASK-02: Install and configure Tailwind CSS v4
+- [x] TASK-02: Install and configure Tailwind CSS v4
   - **Goal**: Wire Tailwind CSS v4 into the Vite build via the `@tailwindcss/vite` plugin and CSS-first import.
   - **Details**:
     - `npm install -D tailwindcss @tailwindcss/vite`

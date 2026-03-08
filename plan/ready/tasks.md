@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds with no TypeScript errors; `src/App.tsx` uses `BrowserRouter` and has routes for `/`, `/about`, and `/contact`
   - **Brief ref**: TASK-03 — React Router v7
 
-- [ ] TASK-05: Download and place self-hosted WOFF2 font files
+- [x] TASK-05: Download and place self-hosted WOFF2 font files
   - **Goal**: Add all required font files to the repo so no runtime CDN is needed
   - **Details**: Download Latin-subset WOFF2 files for: Bebas Neue 400, DM Sans 400, DM Sans 500, DM Sans 600, DM Sans 700, Space Mono 400. Use google-webfonts-helper (https://gwfh.mranftl.com/fonts) or the Google Fonts download ZIP. Name files with the convention `<family-kebab>-<weight>.woff2` (e.g., `bebas-neue-400.woff2`, `dm-sans-400.woff2`, `dm-sans-500.woff2`, `dm-sans-600.woff2`, `dm-sans-700.woff2`, `space-mono-400.woff2`). Place all files in `src/assets/fonts/`.
   - **Files**: `src/assets/fonts/bebas-neue-400.woff2`, `src/assets/fonts/dm-sans-400.woff2`, `src/assets/fonts/dm-sans-500.woff2`, `src/assets/fonts/dm-sans-600.woff2`, `src/assets/fonts/dm-sans-700.woff2`, `src/assets/fonts/space-mono-400.woff2`

@@ -287,11 +287,17 @@ while read -r ISSUE_NUMBER; do
 
   echo ">>> Launching container ${CONTAINER_NAME} for issue #${ISSUE_NUMBER} (base: ${BASE_BRANCH})"
 
+  # Ensure log directory exists for this issue
+  DOCKER_LOG_DIR="$REPO_ROOT/autonomous/logs/${ISSUE_NUMBER}"
+  mkdir -p "$DOCKER_LOG_DIR"
+  DOCKER_LOG_FILE="${DOCKER_LOG_DIR}/docker-${RUN_ID}.log"
+
   cd "$REPO_ROOT/autonomous"
-  if docker compose up --build --abort-on-container-exit; then
+  if docker compose up --build --abort-on-container-exit 2>&1 | tee "$DOCKER_LOG_FILE"; then
     echo ">>> Container completed successfully for issue #${ISSUE_NUMBER}"
   else
     echo "!!! Container failed for issue #${ISSUE_NUMBER}"
+    echo ">>> Docker logs saved to: ${DOCKER_LOG_FILE}"
     echo "$ISSUE_NUMBER" >> "$FAILED_FILE"
   fi
 

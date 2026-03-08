@@ -1,13 +1,25 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="background:#060A14">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/src/assets/fonts/dm-sans-400.woff2"
+      crossorigin
+    />
     <title>Vite + React + TS</title>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#060A14;color:#f0f2f5;font-family:'DM Sans',sans-serif;text-align:center;padding:2rem;">
+        <p>This site requires JavaScript to run. Please enable JavaScript in your browser settings.</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

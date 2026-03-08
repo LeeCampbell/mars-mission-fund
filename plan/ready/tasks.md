@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; `src/main.tsx` and `src/App.tsx` exist; `tsconfig.app.json` has `"strict": true`
   - **Brief ref**: TASK-01 — Vite + React + TypeScript
 
-- [ ] TASK-02: Update index.html with meta tags, dark background, and noscript fallback
+- [x] TASK-02: Update index.html with meta tags, dark background, and noscript fallback
   - **Goal**: Produce a production-ready `index.html` entry point
   - **Details**: Edit `index.html` to include: `<meta charset="UTF-8">`, `<meta name="viewport" content="width=device-width, initial-scale=1.0">`, `style="background:#060A14"` on the `<html>` element, a `<noscript>` block with a branded message using system-font fallbacks (DM Sans, sans-serif), and a `<link rel="preload" as="font" type="font/woff2" crossorigin>` tag pointing to `DM Sans 400` WOFF2 path (`/src/assets/fonts/dm-sans-400.woff2`).
   - **Files**: `index.html`

@@ -72,8 +72,8 @@ export ISSUE_TITLE
 export BRANCH
 export FORK_URL
 
-# Clean any leftover plan state
-rm -rf plan/planning plan/ready plan/done
+# Plan state is preserved on the branch for restart-safety.
+# The agent-loop state machine will detect the current stage and resume.
 
 echo ">>> Starting agent loop for issue #${ISSUE_NUMBER}"
 iteration=0

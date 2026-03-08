@@ -50,8 +50,9 @@ Run the verification steps listed in the task:
    - Start the dev server: `npm run dev &`
    - Use Playwright MCP to navigate to `http://localhost:5173`
    - Verify the expected content renders correctly
-   - Take a screenshot: save to `/screenshots/TASK-{NN}.png`
+   - Take screenshots of relevant changes: save to `/screenshots/ISSUE-{issueId}-TASK-{NN}.png`
    - Stop the dev server: kill the background process
+   - If you are unable to take a screenshot, report that, then fail with a critical error.
 
 ### Step 5: Mark Done
 

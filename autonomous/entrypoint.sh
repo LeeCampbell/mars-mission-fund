@@ -19,6 +19,26 @@ export UPSTREAM_BASE_BRANCH
 git config --global user.name  "${GIT_USER_NAME}"
 git config --global user.email "${GIT_USER_EMAIL}"
 
+# ── Verify Playwright MCP server works ──────────────────────
+# The MCP server is stdio-based (reads JSON-RPC from stdin), so we can't just
+# background it — it exits immediately when stdin closes. Instead, we verify:
+#   1. The CLI entry point loads without error
+#   2. Chromium is installed for the correct playwright-core version
+echo ">>> Smoke-testing Playwright MCP server..."
+
+node -e "require('/usr/lib/node_modules/@playwright/mcp/cli.js')" 2>/dev/null \
+  && echo ">>> MCP server module loads OK" \
+  || { echo "!!! Playwright MCP cli.js failed to load"; exit 1; }
+
+CHROMIUM_STATUS=$(node /usr/lib/node_modules/@playwright/mcp/node_modules/playwright-core/cli.js install --list 2>&1)
+if echo "$CHROMIUM_STATUS" | grep -q "chromium-"; then
+  echo ">>> Chromium installed: $(echo "$CHROMIUM_STATUS" | grep chromium- | head -1 | xargs)"
+else
+  echo "!!! Chromium not found for MCP's playwright-core"
+  echo "$CHROMIUM_STATUS"
+  exit 1
+fi
+
 # ── Clone agent's fork ───────────────────────────────────────
 REPO_DIR="/workspace/repo"
 if [ ! -d "$REPO_DIR/.git" ]; then

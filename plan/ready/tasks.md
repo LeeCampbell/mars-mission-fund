@@ -20,7 +20,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm install` completes without errors; `npx tsc --noEmit` passes (or produces only expected missing-module errors that will be resolved in later tasks).
   - **Brief ref**: Approach step 1; Files table rows for these files.
 
-- [ ] TASK-02: Create CSS entry file with Tailwind import
+- [x] TASK-02: Create CSS entry file with Tailwind import
   - **Goal**: Wire up `src/index.css` as the single CSS entry point so Tailwind is active and the file is imported in `src/main.tsx`.
   - **Details**:
     - Create `src/index.css` with the following import order (stubs for files not yet created are acceptable):

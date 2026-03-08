@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component compiles; ARIA attributes present; reduced-motion handling in place
   - **Brief ref**: Scope → "ProgressBar component"; Verification → ProgressBar checks including reduced-motion
 
-- [ ] TASK-09: Create Header component
+- [x] TASK-09: Create Header component
   - **Goal**: Site header with skip link, logo, wordmark, main nav with active link styling, and mobile collapse
   - **Details**: Create `src/components/Header.tsx`. Structure: `<header>` containing: (1) skip-to-content `<a href="#main-content">` visually hidden until focused (use clip/absolute positioning pattern); (2) `<nav aria-label="Main navigation">` with `Logo` (sm size), wordmark text, and `NavLink` items for Home `/`, About `/about`, Contact `/contact`. Active `NavLink` gets accent colour underline via `--color-action-primary` / `--color-border-accent`. Mobile collapse: `useState` toggle, hide nav links below `768px`, show hamburger `<button aria-expanded aria-controls>`. Import Logo from `./ui/Logo`.
   - **Files**: `src/components/Header.tsx`

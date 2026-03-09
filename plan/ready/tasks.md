@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; compiles; renders "01 — EXAMPLE" format; Space Mono token applied; no hardcoded values
   - **Brief ref**: Scope → SectionLabel; Files table; Verification → SectionLabel
 
-- [ ] TASK-06: Badge component
+- [x] TASK-06: Badge component
   - **Goal**: Implement the `Badge` primitive with `funded`, `active`, and `new` variants and a decorative dot indicator
   - **Details**: Create `src/components/ui/Badge.tsx`. Props: `variant: 'funded' | 'active' | 'new'`, `children: React.ReactNode`, `className?: string`. Each variant maps to a distinct semantic colour token: funded → green (`--color-status-success-*`), active → orange (`--color-status-warning-*` or `--color-action-primary`), new → blue (`--color-status-info-*`). Renders a small coloured dot `<span aria-hidden="true">` before the text label. Dot is decorative; status conveyed by visible text. All colours via tokens.
   - **Files**: `src/components/ui/Badge.tsx`

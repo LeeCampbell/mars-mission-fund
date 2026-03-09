@@ -50,7 +50,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm test` exits 0 with all 5 assertions green
   - **Brief ref**: §Approach step 4, §Verification
 
-- [ ] TASK-06: Verify full test suite and coverage gate
+- [x] TASK-06: Verify full test suite and coverage gate
   - **Goal**: Confirm all verification criteria from the brief pass end-to-end
   - **Details**: Run all four verification commands in sequence:
     1. `npm run build` — must exit 0

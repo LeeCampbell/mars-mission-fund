@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `diff server/tsconfig.json packages/server/tsconfig.json` and `diff server/vitest.config.ts packages/server/vitest.config.ts` both produce no output
   - **Brief ref**: Step 2 — Move config files
 
-- [ ] TASK-03: Move source files (excluding `campaigns/types.ts`)
+- [x] TASK-03: Move source files (excluding `campaigns/types.ts`)
   - **Goal**: Copy all `server/src/` files except `campaigns/types.ts` to `packages/server/src/`, and copy `server/db/` to `packages/server/db/`
   - **Details**: Copy the following files verbatim:
     - `server/src/index.ts` → `packages/server/src/index.ts`

@@ -72,7 +72,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component exists; `npm run build` passes; 4 sections render with correct headings
   - **Brief ref**: "AboutPage structure" and Files table
 
-- [ ] TASK-10: Create ContactPage page component
+- [x] TASK-10: Create ContactPage page component
   - **Goal**: Build the static contact information page (no form)
   - **Details**: Create `src/pages/ContactPage.tsx`. Two sections:
     1. **Contact Details** — SectionLabel "GET IN TOUCH", heading "WE'D LOVE TO HEAR FROM YOU", Card-based layout with: email (`missions@marsmissionfund.com`), address (placeholder), hours ("Monday–Friday, 09:00–18:00 UTC"). Single column mobile, two columns at `md`.

@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: 3 step cards visible with numbers, titles, descriptions; responsive layout; `npm run build` passes
   - **Brief ref**: Homepage structure — HowItWorksSection
 
-- [ ] TASK-06: Create FeaturedMissionsSection composite component
+- [x] TASK-06: Create FeaturedMissionsSection composite component
   - **Goal**: Build the `FeaturedMissionsSection` composite with SectionLabel and 3 MissionCard instances
   - **Details**: Create `src/components/FeaturedMissionsSection.tsx`. Use `SectionLabel` with text `"03 — ACTIVE MISSIONS"`. Render 3× `MissionCard` with distinct placeholder data (different mission names, badges like "Lunar", "Mars", "Orbital", varied progress values 30–85%). Responsive grid: 1 col mobile, 2 cols at 768px, 3 cols at 1024px. Tier 2 tokens only.
   - **Files**: `src/components/FeaturedMissionsSection.tsx` (create)

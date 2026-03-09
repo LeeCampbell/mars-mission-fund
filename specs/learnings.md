@@ -14,6 +14,12 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
   - `vite.config.ts`, `tsconfig*.json`, `index.html`, `src/main.tsx`, `src/App.tsx`
 - The `@fontsource` npm approach satisfies self-hosted font requirement (no Google CDN at runtime).
 
+## Issue #3: Prettier and markdownlint MD049 conflict
+
+- Prettier (default) normalises Markdown emphasis to `_text_` (underscores), but markdownlint MD049 (configured to "asterisk") requires `*text*`.
+- Running `prettier --write .` on `.md` files after fixing MD049 violations will silently revert them.
+- Resolution: add `**/*.md` to `.prettierignore` so Prettier never touches Markdown files. Markdownlint is the single source of truth for `.md` style.
+
 ## Issue #2: Vite rejects `<noscript>` inside `<head>`
 
 - Placing `<noscript>` in the `<head>` of `index.html` causes a parse5 build error: "disallowed-content-in-noscript-in-head".

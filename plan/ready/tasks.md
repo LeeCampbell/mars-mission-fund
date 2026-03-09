@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File created. `npm run build` passes. Three variants render with correct green/orange/blue colour sets and hidden dot.
   - **Brief ref**: §Approach step 5
 
-- [ ] TASK-07: ProgressBar primitive
+- [x] TASK-07: ProgressBar primitive
   - **Goal**: Implement `src/components/ui/ProgressBar.tsx` — an accessible progress bar with ARIA, gradient fill, endpoint dot, and `prefers-reduced-motion` support.
   - **Details**: Props: `value: number` (0–100), `max?: number` (default 100), `label: string`, `complete?: boolean`. Root element: `<div role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={max} aria-label={label}>`. Track: 8px height, `--color-surface-subtle` background, `--radius-full`. Fill: width `${value/max*100}%`, gradient `--gradient-progress-active`; when `complete` is true use `--gradient-progress-complete`. Transition: `width var(--motion-progress, 300ms) ease` — suppressed to `none` when `prefers-reduced-motion: reduce` (both via CSS media query and via `window.matchMedia` check in component). Endpoint dot: small circle at right edge of fill, same gradient stop colour. Token names may need adjustment to match what exists in `tokens.css`.
   - **Files**: `src/components/ui/ProgressBar.tsx`

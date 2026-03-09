@@ -38,7 +38,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` exits 0 and the output `dist/assets/*.css` contains Tailwind's reset/base rules.
   - **Brief ref**: Approach — Step 2 (Tailwind CSS v4).
 
-- [ ] TASK-04: Install React Router v7 and set up placeholder routes
+- [x] TASK-04: Install React Router v7 and set up placeholder routes
   - **Goal**: Add client-side routing with three placeholder routes: `/`, `/about`, `/contact`.
   - **Details**:
     - Run `npm install react-router` (installs v7).

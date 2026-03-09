@@ -49,7 +49,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `tsconfig.app.json` and `tsconfig.node.json` no longer exist at root; `packages/client/tsconfig.json` exists; root `tsconfig.json` references `./packages/client`
   - **Brief ref**: Step 4 — tsconfig wiring
 
-- [ ] TASK-05: Update Campaign type imports in campaigns.ts
+- [x] TASK-05: Update Campaign type imports in campaigns.ts
   - **Goal**: Replace inline type definitions with imports from `@mmf/shared`
   - **Details**:
     - In `packages/client/src/api/campaigns.ts`, remove the inline `interface` definitions for `Campaign`, `Milestone`, `StretchGoal`, `TeamMember`, `CampaignUpdate`

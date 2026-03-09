@@ -81,7 +81,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes. Dev server shows Header + Footer on `/`, `/about`, and `/contact`. Active nav link highlights. Skip link Tab-focuses `#main-content`. `document.title` updates on route change.
   - **Brief ref**: §Approach step 10
 
-- [ ] TASK-12: Final verification and token audit
+- [x] TASK-12: Final verification and token audit
   - **Goal**: Confirm the full implementation satisfies all brief requirements: build clean, all tokens Tier 2 only, accessibility checks, reduced-motion behaviour, mobile responsiveness.
   - **Details**: Run `npm run build` and confirm zero errors. Scan all created files with grep/read to verify no hardcoded hex colours, pixel font sizes, or raw font-family strings appear outside of `tokens.css`. Confirm each component file uses only `var(--…)` references. Check `ProgressBar.tsx` has both CSS media query and `matchMedia` reduced-motion handling. Check `Header.tsx` has `aria-expanded` on hamburger and skip link. Check `Logo.tsx` has `role="img"`. Review `App.tsx` for layout route structure and `document.title` update. Fix any issues found.
   - **Files**: All previously created files (read + patch as needed)

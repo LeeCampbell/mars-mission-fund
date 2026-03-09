@@ -61,7 +61,7 @@ export function ProgressBar({ value, max = 100, label, complete = false }: Progr
               width: '10px',
               height: '10px',
               borderRadius: 'var(--radius-full)',
-              background: complete ? 'var(--success)' : 'var(--afterburn)',
+              background: complete ? 'var(--color-status-success)' : 'var(--color-progress-indicator)',
               display: 'block',
             }}
           />

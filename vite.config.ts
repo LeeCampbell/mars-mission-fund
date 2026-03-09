@@ -8,6 +8,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   test: {
     environment: 'jsdom',
+    exclude: ['server/**', 'node_modules/**'],
     setupFiles: ['src/test/setup.ts'],
     coverage: {
       provider: 'v8',

@@ -45,7 +45,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; StatCard renders with gradient bg, large value, small label, sub text in correct colour per variant
   - **Brief ref**: Brief "Scope" — StatCard; "Approach" — TASK-03
 
-- [ ] TASK-04: Create SectionLabel component
+- [x] TASK-04: Create SectionLabel component
   - **Goal**: Implement the SectionLabel design system primitive for numbered section headers
   - **Details**:
     - Create `src/components/ui/SectionLabel.tsx`

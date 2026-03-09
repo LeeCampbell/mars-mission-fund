@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import { Button } from './components/ui/Button'
 import { Card } from './components/ui/Card'
 import { StatCard } from './components/ui/StatCard'
+import { SectionLabel } from './components/ui/SectionLabel'
 
 function HomePage() {
   return (
@@ -37,6 +38,9 @@ function HomePage() {
         <StatCard label="Active Missions" value="18" subText="Steady" subVariant="neutral" />
         <StatCard label="Backers" value="9,342" />
       </div>
+      <h2>SectionLabel Component — TASK-04</h2>
+      <SectionLabel number="01" title="IDENTITY" />
+      <SectionLabel number="02" title="MISSION" />
     </main>
   )
 }

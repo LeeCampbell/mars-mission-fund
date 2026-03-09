@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: 4 StatCards render; grid collapses/expands at the correct breakpoints (visual check or snapshot)
   - **Brief ref**: Implementation note 2
 
-- [ ] TASK-05: Create `HowItWorksSection` component
+- [x] TASK-05: Create `HowItWorksSection` component
   - **Goal**: Three-step explainer section using `Card accent` components
   - **Details**: Create `src/components/HowItWorksSection.tsx`. Use `SectionLabel number={2} label="HOW IT WORKS"` + section heading + 3× `Card accent`. Each card: step number styled with `var(--font-size-stat-value-compact)` and `var(--color-text-accent)`, step title in `var(--font-size-card-title)`, body in `var(--font-size-body)`. Grid: 1-col → 3-col at 1024px. Use `<style>` tag for breakpoints.
   - **Files**: `src/components/HowItWorksSection.tsx`

@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; all 5 section imports resolve; `npm run build` succeeds
   - **Brief ref**: Scope — "HomePage.tsx page component with five sections"
 
-- [ ] TASK-09: Create `AboutPage.tsx` page component
+- [x] TASK-09: Create `AboutPage.tsx` page component
   - **Goal**: About page with four labelled sections: mission statement, problem/solution, principles grid, persona cards
   - **Details**: Create `src/pages/AboutPage.tsx`. Four sections each prefixed with `SectionLabel` (01–04): (1) mission statement — heading + body drawn from `specs/product-vision-and-mission.md` §1.1–1.2; (2) problem/solution — two-column layout at lg with problem on left and solution on right (use `<style>` for breakpoint); (3) principles — 5× `Card accent` in grid (2-col at 640px, 3-col at 1024px, last card centred on 3-col row); (4) personas — 4× `Card` in grid (1-col → 2-col at 768px → 4-col at 1024px). All copy from L1-001 §1.1–1.4. All styles use `var(--...)` tokens only.
   - **Files**: `src/pages/AboutPage.tsx`

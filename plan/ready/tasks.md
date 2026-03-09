@@ -16,7 +16,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` exits 0 with no TypeScript errors.
   - **Brief ref**: Approach — Step 1 (Vite project init); Dependencies section.
 
-- [ ] TASK-02: Update index.html with brand metadata and preload hints
+- [x] TASK-02: Update index.html with brand metadata and preload hints
   - **Goal**: Configure `index.html` with dark background colour, dark colour-scheme, branded noscript fallback, and DM Sans WOFF2 preload hint.
   - **Details**:
     - Set `<meta name="color-scheme" content="dark">` in `<head>`.

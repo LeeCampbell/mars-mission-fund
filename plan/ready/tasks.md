@@ -130,7 +130,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` exits 0. In `npm run dev`, DevTools Elements panel on `:root` shows all tokens (e.g. `--color-bg-page`, `--color-action-primary`, `--font-body`, `--motion-enter`). DevTools emulate `prefers-reduced-motion: reduce` and the motion token values change.
   - **Brief ref**: Approach — Step 5 (Design tokens); brand.md Sections 1.1–1.5, 2.1–2.10, 5.2.
 
-- [ ] TASK-07: Add Tailwind @theme integration and base global styles
+- [x] TASK-07: Add Tailwind @theme integration and base global styles
   - **Goal**: Expose key semantic tokens to Tailwind via `@theme`, and add the base global CSS rules for box-sizing, body, headings, links, and scroll behaviour.
   - **Details**:
     - In `src/index.css`, after the token and font imports, add a Tailwind `@theme` block that maps key semantic colour tokens as Tailwind CSS variables, for example:

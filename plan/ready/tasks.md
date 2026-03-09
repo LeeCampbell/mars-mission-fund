@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component exists; `npm run build` passes; glow element present in markup with reduced-motion CSS
   - **Brief ref**: "Homepage structure — HeroSection"
 
-- [ ] TASK-04: Create StatsSection component
+- [x] TASK-04: Create StatsSection component
   - **Goal**: Build the stats/platform-impact section with 4 StatCards
   - **Details**: Create `src/components/StatsSection.tsx`. Include SectionLabel with text "01 — PLATFORM IMPACT" and section `<h2>` "THE NUMBERS SO FAR". Render 4 StatCards in a responsive grid: 1 column default → 2 columns at `sm` (640px) → 4 columns at `lg` (1024px). Use placeholder stat data: e.g. "$4.2M Funded", "127 Missions", "18,400 Backers", "94% Success Rate". Section padding via semantic spacing tokens.
   - **Files**: `src/components/StatsSection.tsx`

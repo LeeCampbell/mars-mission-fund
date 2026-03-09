@@ -100,7 +100,7 @@ export function HeroSection() {
         <h1 className={heroHeadingClass}>Crowdfunding the Next Giant Leap</h1>
         <p style={subtextStyle}>
           Mars Mission Fund connects visionary space projects with the backers who believe in
-          humanity's multiplanetary future. Every pledge moves the launch window closer.
+          humanity&apos;s multiplanetary future. Every pledge moves the launch window closer.
         </p>
         <Button variant="primary" href="#">
           Explore Missions

@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The exact definition from the brief is present. One sentence per line.
   - **Brief ref**: Step 4
 
-- [ ] TASK-08: Bump change log to v0.4
+- [x] TASK-08: Bump change log to v0.4
   - **Goal**: Record a version bump in the change log of `specs/tech/frontend.md` reflecting the additions made in TASK-02 through TASK-07.
   - **Details**: In the change log section of `specs/tech/frontend.md`, add a v0.4 entry summarising: directory structure added to Section 1.2; Tailwind v4 CSS-first pattern documented; CSS file organisation note added; font-display rationale added; Success variant deferral note added; layout shell defined. Follow one-sentence-per-line rule.
   - **Files**: `specs/tech/frontend.md`

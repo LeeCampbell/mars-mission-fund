@@ -1,7 +1,7 @@
 # Frontend Standards
 
 > **Spec ID**: L3-005
-> **Version**: 0.3
+> **Version**: 0.4
 > **Status**: Approved
 > **Rate of Change**: Sprint-level / tech decisions
 > **Depends On**: L2-001 (Brand Application Standard), L2-002 (Engineering Standard), L3-001 (Architecture)
@@ -550,6 +550,7 @@ Domain specs may not introduce visual properties that bypass this spec's token a
 | March 2026 | 0.1 | — | Initial stub. Frontend architecture constraints, component library standards, performance budgets, accessibility implementation, responsive design, animation constraints, browser support, dark mode implementation, asset optimisation, and testing strategy. Framework selection and specific breakpoints deferred as open decisions. |
 | March 2026 | 0.2 | — | Resolved OQ-1: React 19.x selected as frontend framework per L3-008. |
 | March 2026 | 0.3 | — | Resolved OQ-2 through OQ-9: Mobile-first responsive strategy with breakpoints at 640/768/1024/1280px. Bundle size budgets established. TanStack Query + React built-in state for state management. Inline SVG React components for icons. Vitest + React Testing Library + Playwright + MSW + Supertest for testing (with Playwright MCP for AI agent integration). SPA with selective static pre-rendering for SEO pages. Graceful degradation for no-JS with branded noscript fallback. |
+| March 2026 | 0.4 | — | Milestone close — Public Marketing Pages: concrete directory structure added to Section 1.2 (`src/components/ui/`, `src/components/`, `src/pages/`); Tailwind v4 CSS-first configuration pattern documented in Section 2.4; CSS file organisation note added to Section 9.1 (`src/tokens.css`, `src/fonts.css`, `src/index.css`); font-display rationale added to Section 9.1; Success button variant phased rollout note added in Section 2.5; layout shell term defined in Glossary. |
 
 ---
 

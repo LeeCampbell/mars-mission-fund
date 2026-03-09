@@ -66,7 +66,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; component renders goals when present and renders nothing when array is empty
   - **Brief ref**: `StretchGoalsSection` row in Files table
 
-- [ ] TASK-06: Create `CampaignUpdatesSection` and `TeamSection` components
+- [x] TASK-06: Create `CampaignUpdatesSection` and `TeamSection` components
   - **Goal**: Two smaller components — creator updates list and team member cards
   - **Details**:
     - Create `src/components/campaigns/CampaignUpdatesSection.tsx`

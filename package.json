@@ -1,6 +1,7 @@
 {
   "name": "mars-mission-fund",
   "private": true,
+  "workspaces": ["packages/*"],
   "version": "0.0.1",
   "type": "module",
   "scripts": {

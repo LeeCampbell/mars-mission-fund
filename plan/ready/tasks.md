@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The new subsection is present with all four documented items; version header reads `0.2.0`; change log has a new entry; `npm run lint` (markdownlint) passes on the file.
   - **Brief ref**: Scope section, Update L3-008 bullet; Approach step 2.
 
-- [ ] TASK-03: Update specs/tech/frontend.md — API/hooks layer, Vite proxy, lazy routes
+- [x] TASK-03: Update specs/tech/frontend.md — API/hooks layer, Vite proxy, lazy routes
   - **Goal**: Document the frontend patterns introduced during issues #40–#43: the api/hooks layering convention, Vite dev-server proxy, and route-level lazy loading.
   - **Details**: Extend **Section 1.5 (API Communication)** to document: (a) `src/api/<domain>.ts` contains plain fetch functions with TypeScript types inferred from Zod schemas; (b) `src/hooks/use<Domain>.ts` contains TanStack Query `useQuery` hooks wrapping the API layer; (c) page components import hooks only — never call fetch functions directly. Add a note that `vite.config.ts` has a `server.proxy` entry proxying `/v1` to `http://localhost:3000` in development so the frontend can call `/v1/campaigns` without CORS issues. Extend **Section 1.4 (Routing)** to record that non-marketing routes (campaign detail, contribute) use `React.lazy` + `Suspense` for route-level code splitting, and that a root `<Suspense>` wraps the `<Routes>` tree. Bump version from `0.3` to `0.4` and add a change-log entry dated 2026-03-09 summarising all three additions.
   - **Files**: `specs/tech/frontend.md` (modify)

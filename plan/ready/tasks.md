@@ -28,7 +28,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Open `index.html` source and confirm the meta tag, inline body style, noscript, preload link, and title are present.
   - **Brief ref**: Approach — Step 1 (Update index.html).
 
-- [ ] TASK-03: Install and configure Tailwind CSS v4
+- [x] TASK-03: Install and configure Tailwind CSS v4
   - **Goal**: Add Tailwind CSS v4 as a dev dependency and wire it into the Vite build pipeline.
   - **Details**:
     - Run `npm install -D tailwindcss @tailwindcss/vite`.

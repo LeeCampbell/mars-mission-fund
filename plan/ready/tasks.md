@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File has `<meta charset>`, `<meta viewport>`, preload link for DM Sans woff2, `<noscript>` tag, `<div id="root">`
   - **Brief ref**: Scope — `index.html` (L3-005 §9.1)
 
-- [ ] TASK-07: Create `src/main.tsx` and `src/vite-env.d.ts`
+- [x] TASK-07: Create `src/main.tsx` and `src/vite-env.d.ts`
   - **Goal**: React entry point that mounts the app and the Vite environment type reference
   - **Details**: `src/main.tsx` — `import './index.css'`; `import React from 'react'`; `import { createRoot } from 'react-dom/client'`; `import App from './App'`; `createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>)`. `src/vite-env.d.ts` — standard `/// <reference types="vite/client" />` triple-slash directive.
   - **Files**: `src/main.tsx`, `src/vite-env.d.ts`

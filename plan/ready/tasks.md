@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File imports from `react-router`; has three `<Route>` definitions for `/`, `/about`, `/contact`
   - **Brief ref**: Scope — React Router v7; Approach — Routing
 
-- [ ] TASK-09: Verify production build succeeds
+- [x] TASK-09: Verify production build succeeds
   - **Goal**: Confirm the full project compiles cleanly with no TypeScript or Vite errors
   - **Details**: Run `npm run build` from the repo root. Inspect output — `dist/` directory should be created with `index.html` and hashed JS/CSS assets. Check for any TypeScript type errors or missing module errors. Fix any errors found (missing types, incorrect imports, etc.).
   - **Files**: No new files; fixes to any file as needed

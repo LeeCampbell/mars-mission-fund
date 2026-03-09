@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All four bullet points from the brief are present. One sentence per line. No contradiction with existing content.
   - **Brief ref**: Step 1, paragraph 3
 
-- [ ] TASK-04: Add CSS file organisation note to Section 9.1
+- [x] TASK-04: Add CSS file organisation note to Section 9.1
   - **Goal**: Document that `src/tokens.css`, `src/fonts.css`, and `src/index.css` are the three CSS files and how they relate.
   - **Details**: In `specs/tech/frontend.md` Section 9.1 (Font Loading), add a note on CSS file organisation: design tokens live in `src/tokens.css`; `@font-face` declarations in `src/fonts.css`; both are imported into `src/index.css` alongside the Tailwind import. Follow one-sentence-per-line rule.
   - **Files**: `specs/tech/frontend.md`

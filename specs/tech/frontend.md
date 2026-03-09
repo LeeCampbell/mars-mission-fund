@@ -409,6 +409,12 @@ Font loading strategy:
 - Font files served in WOFF2 format with appropriate subset (Latin + extended Latin).
 - Font preload hints (`<link rel="preload">`) for DM Sans (critical text rendering).
 
+CSS file organisation:
+
+- Design tokens are defined in `src/tokens.css`.
+- `@font-face` declarations are defined in `src/fonts.css`.
+- Both files are imported into `src/index.css` alongside the `@import "tailwindcss"` directive.
+
 ### 9.2 Image Optimisation
 
 | Requirement | Implementation |

@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component exists; `npm run build` passes; 3 MissionCards render in grid
   - **Brief ref**: "Homepage structure — FeaturedMissionsSection"
 
-- [ ] TASK-07: Create ClosingCtaSection component
+- [x] TASK-07: Create ClosingCtaSection component
   - **Goal**: Build the closing call-to-action section for the Homepage
   - **Details**: Create `src/components/ClosingCtaSection.tsx`. Background uses `var(--gradient-surface-card)`. Centered content: `<h2>` "EVERY DOLLAR MOVES THE LAUNCH WINDOW CLOSER", brief subtext copy, secondary variant Button "Browse All Missions" (`href="#"`). Generous vertical padding. Use only semantic tokens.
   - **Files**: `src/components/ClosingCtaSection.tsx`

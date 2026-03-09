@@ -87,7 +87,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; track/fill render correctly; endpoint dot visible; ARIA attributes present in DOM; with `prefers-reduced-motion: reduce` media query active, fill transitions instantly
   - **Brief ref**: Brief "Scope" — ProgressBar; "Approach" — TASK-06; "Key token constraints"
 
-- [ ] TASK-07: Create Logo component
+- [x] TASK-07: Create Logo component
   - **Goal**: Create inline SVG React Logo component from `assets/logo.svg` with sm/md/lg size variants
   - **Details**:
     - Read `/workspace/repo/assets/logo.svg` and embed its SVG markup directly in `src/components/ui/Logo.tsx`

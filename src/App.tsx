@@ -5,6 +5,7 @@ import { StatCard } from './components/ui/StatCard'
 import { SectionLabel } from './components/ui/SectionLabel'
 import { Badge } from './components/ui/Badge'
 import { ProgressBar } from './components/ui/ProgressBar'
+import { Logo } from './components/ui/Logo'
 
 function HomePage() {
   return (
@@ -55,6 +56,12 @@ function HomePage() {
         <ProgressBar value={50} label="50% funded" />
         <ProgressBar value={75} label="75% funded" />
         <ProgressBar value={100} complete label="100% funded" />
+      </div>
+      <h2>Logo Component — TASK-07</h2>
+      <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-end' }}>
+        <Logo size="sm" />
+        <Logo size="md" />
+        <Logo size="lg" />
       </div>
     </main>
   )

@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File created. `npm run build` passes. Import Button in App.tsx temporarily and confirm all three variants render without TS errors (revert import after check).
   - **Brief ref**: §Approach step 1
 
-- [ ] TASK-03: Card primitive
+- [x] TASK-03: Card primitive
   - **Goal**: Implement `src/components/ui/Card.tsx` — a wrapper `<div>` with optional gradient accent bar at the top.
   - **Details**: Props: `accent?: boolean`, `children`, `className?: string`. Background uses `--color-surface-card` (or equivalent surface token). Border uses `--color-border-subtle` with `--radius-card` rounding. When `accent` is `true`, render a 2px-height top bar with a CSS gradient from `--color-border-accent` to `--color-status-warning`. No hardcoded colours or sizes outside of the 2px bar height which is a structural constant.
   - **Files**: `src/components/ui/Card.tsx`

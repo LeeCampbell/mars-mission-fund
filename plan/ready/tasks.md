@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; TypeScript compiles (`npm run build`); three variants, href, disabled props are typed; no `#`, `rgb`, `rgba`, `hsl`, hardcoded `px` font-size, or `ms` literals in the file
   - **Brief ref**: Scope → primitives; Files table; Token discipline; Verification → Button
 
-- [ ] TASK-03: Card component
+- [x] TASK-03: Card component
   - **Goal**: Implement the `Card` primitive with optional top accent gradient bar
   - **Details**: Create `src/components/ui/Card.tsx`. Props: `accent?: boolean`, `className?: string`, `children: React.ReactNode`. Renders a `<div>` with dark surface background (`--color-surface-*`), subtle border (`--color-border-*`), border-radius (`--radius-*`). When `accent` is true, render a thin top bar element with gradient using action/accent tokens. All values via semantic tokens.
   - **Files**: `src/components/ui/Card.tsx`

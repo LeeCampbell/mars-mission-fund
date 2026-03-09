@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Section 9.1 mentions all three CSS files and their roles. One sentence per line.
   - **Brief ref**: Step 1, paragraph 2
 
-- [ ] TASK-05: Add font-display rationale to Section 9.1
+- [x] TASK-05: Add font-display rationale to Section 9.1
   - **Goal**: Explain why each `font-display` value was chosen for each font.
   - **Details**: In `specs/tech/frontend.md` Section 9.1, add rationale for each font after the existing table: Bebas Neue uses `optional` (display-only large headings; system fallback acceptable; avoids layout shift); DM Sans uses `swap` (body text; FOIT worse than FOUT); Space Mono uses `swap` (label/data font; flash of fallback preferable to invisible labels). Follow one-sentence-per-line rule.
   - **Files**: `specs/tech/frontend.md`

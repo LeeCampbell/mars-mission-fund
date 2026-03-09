@@ -415,6 +415,12 @@ CSS file organisation:
 - `@font-face` declarations are defined in `src/fonts.css`.
 - Both files are imported into `src/index.css` alongside the `@import "tailwindcss"` directive.
 
+Font-display rationale:
+
+- `font-display: optional` for Bebas Neue: it is a display-only font used for large headings only, where a system font fallback at those sizes is visually acceptable for one paint cycle; `optional` avoids a layout shift while preserving the brand font once loaded.
+- `font-display: swap` for DM Sans: it is the body text font where invisible text (FOIT) is a worse experience than a layout shift (FOUT) for reading; `swap` ensures text is always visible.
+- `font-display: swap` for Space Mono: it is a label and data font used at small sizes where a momentary flash of a system fallback is preferable to invisible labels.
+
 ### 9.2 Image Optimisation
 
 | Requirement | Implementation |

@@ -46,7 +46,7 @@ determine_state() {
     elif [ -f "plan/.pr-url" ]; then
       echo "await-ci"
     else
-      echo "create-pr"
+      echo "finalize-pr"
     fi
   elif [ -f "plan/ready/brief.md" ]; then
     echo "create-tasks"
@@ -213,12 +213,12 @@ Upstream repo: ${UPSTREAM_REPO}" \
       exit 1
     fi
 
-    # All tasks done — fall through to next iteration for create-pr
+    # All tasks done — fall through to next iteration for finalize-pr
     exit 1
     ;;
 
-  create-pr)
-    set_state "create-pr"
+  finalize-pr)
+    set_state "finalize-pr"
 
     # Push the branch — fail loudly
     if ! git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE"; then
@@ -254,7 +254,7 @@ Upstream repo: ${UPSTREAM_REPO}" \
       --dangerously-skip-permissions \
       --print \
       --verbose \
-      -p "$(cat "${PROMPTS_DIR}/create-pr.md")
+      -p "$(cat "${PROMPTS_DIR}/finalize-pr.md")
 
 Issue number: #${ISSUE_NUMBER}
 Issue title: ${ISSUE_TITLE}

@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component exists and imports all five sections; `npm run build` passes
   - **Brief ref**: "Homepage structure" and Files table
 
-- [ ] TASK-09: Create AboutPage page component
+- [x] TASK-09: Create AboutPage page component
   - **Goal**: Build the four-section About page
   - **Details**: Create `src/pages/AboutPage.tsx`. Four sections, each using SectionLabel + `<h2>` + content:
     1. **Mission Statement** — SectionLabel "OUR MISSION", heading "WE EXIST TO FUND THE FUTURE OF SPACE", narrative paragraph about democratizing space investment.

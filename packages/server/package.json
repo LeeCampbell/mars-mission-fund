@@ -1,0 +1,37 @@
+{
+  "name": "@mmf/server",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@mmf/shared": "*",
+    "cors": "^2",
+    "dotenv": "^16.4.5",
+    "express": "^5",
+    "helmet": "^8",
+    "pg": "^8",
+    "pino": "^9",
+    "pino-http": "^10",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2",
+    "@types/express": "^5",
+    "@types/node": "^22",
+    "@types/pg": "^8",
+    "@types/supertest": "^6",
+    "@vitest/coverage-v8": "^3",
+    "pino-pretty": "^13",
+    "supertest": "^7",
+    "tsx": "^4",
+    "typescript": "^5",
+    "vitest": "^3"
+  }
+}

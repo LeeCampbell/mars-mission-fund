@@ -21,7 +21,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cat packages/shared/package.json` shows all required fields including exports and zod dependency
   - **Brief ref**: Implementation step 2 / Files table row 2
 
-- [ ] TASK-03: Create `packages/shared/tsconfig.json`
+- [x] TASK-03: Create `packages/shared/tsconfig.json`
   - **Goal**: Provide a TypeScript config for type-checking the shared package source in isolation.
   - **Details**: Create `packages/shared/tsconfig.json` with:
     - `"compilerOptions"`: `"module": "ESNext"`, `"moduleResolution": "Bundler"`, `"strict": true`, `"noEmit": true`

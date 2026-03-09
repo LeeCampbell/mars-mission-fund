@@ -302,22 +302,31 @@ Branch: ${BRANCH}" \
     PR_NUMBER=$(cat plan/.pr-url)
     echo ">>> Monitoring CI for PR #${PR_NUMBER}"
 
-    # Poll CI status (using upstream token since PR is on upstream)
-    # Map check states to pending/passing/failing
-    CI_RAW=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr checks "$PR_NUMBER" \
-      --repo "$UPSTREAM_REPO" --json state --jq '.[].state' 2>&1) || true
+    # Check for merge conflicts first (separate from CI checks)
+    MERGEABLE=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr view "$PR_NUMBER" \
+      --repo "$UPSTREAM_REPO" --json mergeable --jq '.mergeable' 2>/dev/null) || true
 
-    if echo "$CI_RAW" | grep -qiE 'IN_PROGRESS|QUEUED|PENDING'; then
-      CI_STATUS="pending"
-    elif echo "$CI_RAW" | grep -qiE 'FAILURE|ERROR|CANCELLED|ACTION_REQUIRED|TIMED_OUT|STARTUP_FAILURE'; then
-      # Only failing if nothing is still pending
-      CI_STATUS="failing"
-    elif echo "$CI_RAW" | grep -qiE 'SUCCESS|SKIPPED|NEUTRAL'; then
-      CI_STATUS="passing"
+    if [ "$MERGEABLE" = "CONFLICTING" ]; then
+      echo ">>> PR has merge conflicts"
+      CI_STATUS="conflicting"
     else
-      # No checks found yet or unexpected output — treat as pending
-      echo ">>> CI status unclear (raw: ${CI_RAW}), treating as pending"
-      CI_STATUS="pending"
+      # Poll CI status (using upstream token since PR is on upstream)
+      # Map check states to pending/passing/failing
+      CI_RAW=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr checks "$PR_NUMBER" \
+        --repo "$UPSTREAM_REPO" --json state --jq '.[].state' 2>&1) || true
+
+      if echo "$CI_RAW" | grep -qiE 'IN_PROGRESS|QUEUED|PENDING'; then
+        CI_STATUS="pending"
+      elif echo "$CI_RAW" | grep -qiE 'FAILURE|ERROR|CANCELLED|ACTION_REQUIRED|TIMED_OUT|STARTUP_FAILURE'; then
+        # Only failing if nothing is still pending
+        CI_STATUS="failing"
+      elif echo "$CI_RAW" | grep -qiE 'SUCCESS|SKIPPED|NEUTRAL'; then
+        CI_STATUS="passing"
+      else
+        # No checks found yet or unexpected output — treat as pending
+        echo ">>> CI status unclear (raw: ${CI_RAW}), treating as pending"
+        CI_STATUS="pending"
+      fi
     fi
 
     echo ">>> CI status: ${CI_STATUS}"
@@ -334,6 +343,47 @@ Branch: ${BRANCH}" \
         archive_plan
         echo ">>> Issue #${ISSUE_NUMBER} complete"
         exit 0
+        ;;
+      conflicting)
+        # Track remediation attempts (shared counter with CI failures)
+        ATTEMPTS_FILE="plan/.ci-attempts"
+        ATTEMPTS=$(cat "$ATTEMPTS_FILE" 2>/dev/null || echo 0)
+        MAX_CI_ATTEMPTS=3
+
+        if [ "$ATTEMPTS" -ge "$MAX_CI_ATTEMPTS" ]; then
+          echo "!!! Merge conflict remediation failed after ${MAX_CI_ATTEMPTS} attempts"
+          exit 2  # stuck
+        fi
+
+        echo $((ATTEMPTS + 1)) > "$ATTEMPTS_FILE"
+        echo ">>> Merge conflict — remediation attempt $((ATTEMPTS + 1))/${MAX_CI_ATTEMPTS}"
+
+        # Fetch latest base branch so rebase has up-to-date refs
+        git fetch origin "$UPSTREAM_BASE_BRANCH" 2>&1 | tee -a "$LOG_FILE" || true
+
+        # Invoke Claude with remediate-ci prompt (merge conflict mode)
+        REMEDIATE_PROMPT=$(cat "${PROMPTS_DIR}/remediate-ci.md")
+        timeout "$TIMEOUT" claude \
+          --dangerously-skip-permissions \
+          --print \
+          --verbose \
+          -p "${REMEDIATE_PROMPT}
+
+PR number: #${PR_NUMBER}
+Issue number: #${ISSUE_NUMBER}
+Branch: ${BRANCH}
+Base branch: ${UPSTREAM_BASE_BRANCH}
+
+Failure type: MERGE_CONFLICT
+The PR has merge conflicts with the base branch (${UPSTREAM_BASE_BRANCH}). The base branch has already been fetched. Rebase onto origin/${UPSTREAM_BASE_BRANCH} and resolve all conflicts." \
+          2>&1 | tee "$LOG_FILE" || true
+
+        # Push rebased branch (force required after rebase)
+        git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE" || true
+
+        clear_state
+        echo ">>> Conflict resolution pushed, will re-check after cooldown"
+        exit 1  # re-enter await-ci after cooldown
         ;;
       failing)
         # Track remediation attempts
@@ -374,6 +424,7 @@ PR number: #${PR_NUMBER}
 Issue number: #${ISSUE_NUMBER}
 Branch: ${BRANCH}
 
+Failure type: CI_FAILURE
 CI failure logs:
 \`\`\`
 ${FAILED_LOG}

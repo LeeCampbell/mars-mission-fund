@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component exists; `npm run build` passes
   - **Brief ref**: "Homepage structure — ClosingCtaSection"
 
-- [ ] TASK-08: Create HomePage page component
+- [x] TASK-08: Create HomePage page component
   - **Goal**: Assemble all five homepage sections into the HomePage page component
   - **Details**: Create `src/pages/HomePage.tsx`. Import and render in order: `HeroSection`, `StatsSection`, `HowItWorksSection`, `FeaturedMissionsSection`, `ClosingCtaSection`. Wrap in a `<main>` element with `id="main-content"` to support skip-to-content (the Layout shell may already provide this — check and coordinate). No additional styling needed at the page level beyond what each section provides.
   - **Files**: `src/pages/HomePage.tsx`

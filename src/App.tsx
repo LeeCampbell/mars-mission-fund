@@ -28,10 +28,7 @@ export default function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/campaigns" element={<CampaignsPage />} />
             <Route path="/campaigns/:id" element={<CampaignDetailPage />} />
-            <Route
-              path="/contribute/:id"
-              element={<ContributePlaceholderPage />}
-            />
+            <Route path="/contribute/:id" element={<ContributePlaceholderPage />} />
           </Route>
         </Routes>
       </Suspense>

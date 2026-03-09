@@ -176,12 +176,7 @@ export function CampaignDetailPage() {
         <div style={heroWrapperStyle}>
           <div style={heroBgStyle} />
           {campaign.heroImageUrl && (
-            <img
-              src={campaign.heroImageUrl}
-              alt=""
-              aria-hidden="true"
-              style={heroImgStyle}
-            />
+            <img src={campaign.heroImageUrl} alt="" aria-hidden="true" style={heroImgStyle} />
           )}
           <div style={heroOverlayStyle} />
         </div>

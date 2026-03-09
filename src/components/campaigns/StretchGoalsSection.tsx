@@ -6,7 +6,11 @@ interface StretchGoalsSectionProps {
 }
 
 function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount)
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(amount)
 }
 
 const sectionStyle: React.CSSProperties = {

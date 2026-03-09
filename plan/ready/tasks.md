@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; compiles; `accent` prop toggles gradient bar; no hardcoded values
   - **Brief ref**: Scope → Card; Files table; Verification → Card
 
-- [ ] TASK-04: StatCard component
+- [x] TASK-04: StatCard component
   - **Goal**: Implement the `StatCard` primitive — a gradient-background stat block with label, value, and optional subtext
   - **Details**: Create `src/components/ui/StatCard.tsx`. Props: `label: string`, `value: string | number`, `subtext?: string`, `className?: string`. Renders a block with gradient background (using action/brand token family), large display `value` (using `--font-size-display-*` or equivalent), small tertiary `label` above, and optional `subtext` below. Typography uses DM Sans for value, Space Mono or DM Sans for label per token. All via `var(--semantic-token)`.
   - **Files**: `src/components/ui/StatCard.tsx`

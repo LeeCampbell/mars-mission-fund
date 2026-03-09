@@ -131,7 +131,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; navigating to `/campaigns/1` and `/contribute/1` renders the correct pages
   - **Brief ref**: Routing section, `src/App.tsx` row in Files table, L3-005 §1.4 code-splitting requirement
 
-- [ ] TASK-10: Write smoke tests for new components and pages
+- [x] TASK-10: Write smoke tests for new components and pages
   - **Goal**: Ensure all new components have basic render tests following the Button test pattern
   - **Details**:
     - Create test files alongside each new component/page using Vitest + React Testing Library (same setup as `src/components/ui/Button.test.tsx`)

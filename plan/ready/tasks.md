@@ -64,7 +64,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` exits 0 with no TypeScript errors. `npm run dev` starts; navigating to `/`, `/about`, `/contact` renders distinct placeholder text.
   - **Brief ref**: Approach — Step 3 (React Router v7).
 
-- [ ] TASK-05: Download and configure self-hosted WOFF2 fonts
+- [x] TASK-05: Download and configure self-hosted WOFF2 fonts
   - **Goal**: Self-host all three brand fonts (Bebas Neue, DM Sans, Space Mono) as WOFF2 files and declare them via `@font-face`.
   - **Details**:
     - Create directory `src/assets/fonts/`.

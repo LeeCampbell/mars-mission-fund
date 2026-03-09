@@ -17,7 +17,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cd server && npx tsc --version` exits 0; `ls server/node_modules/express` exists.
   - **Brief ref**: Dependencies section; Scripts section; Files table rows for `server/package.json` and `package.json`.
 
-- [ ] TASK-02: Create db/pool.ts — pg connection pool singleton
+- [x] TASK-02: Create db/pool.ts — pg connection pool singleton
   - **Goal**: Provide a single `pg.Pool` instance exported from `server/src/db/pool.ts`, reading `DATABASE_URL` from the environment.
   - **Details**:
     - Create `server/src/db/pool.ts`.

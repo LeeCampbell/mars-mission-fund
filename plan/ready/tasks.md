@@ -31,7 +31,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; Card renders with dark surface bg, subtle border, correct radius; accent variant shows top gradient bar
   - **Brief ref**: Brief "Scope" — Card; "Approach" — TASK-02
 
-- [ ] TASK-03: Create StatCard component
+- [x] TASK-03: Create StatCard component
   - **Goal**: Implement the StatCard design system primitive with gradient background, label, value, and optional sub text
   - **Details**:
     - Create `src/components/ui/StatCard.tsx`

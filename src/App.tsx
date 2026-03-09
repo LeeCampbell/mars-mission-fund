@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
 import { Button } from './components/ui/Button'
 import { Card } from './components/ui/Card'
+import { StatCard } from './components/ui/StatCard'
 
 function HomePage() {
   return (
@@ -29,6 +30,12 @@ function HomePage() {
           <h3 style={{ margin: 0 }}>Card with accent</h3>
           <p style={{ margin: '0.5rem 0 0' }}>Top gradient accent bar visible above.</p>
         </Card>
+      </div>
+      <h2>StatCard Component — TASK-03</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', maxWidth: '800px' }}>
+        <StatCard label="Total Raised" value="$2.4M" subText="+12% this month" subVariant="positive" />
+        <StatCard label="Active Missions" value="18" subText="Steady" subVariant="neutral" />
+        <StatCard label="Backers" value="9,342" />
       </div>
     </main>
   )

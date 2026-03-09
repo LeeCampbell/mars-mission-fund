@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component exists; `npm run build` passes; 3 step Cards in grid
   - **Brief ref**: "Homepage structure — HowItWorksSection"
 
-- [ ] TASK-06: Create FeaturedMissionsSection component
+- [x] TASK-06: Create FeaturedMissionsSection component
   - **Goal**: Build the featured missions grid section for the Homepage
   - **Details**: Create `src/components/FeaturedMissionsSection.tsx`. SectionLabel "03 — ACTIVE MISSIONS", `<h2>` "MISSIONS SEEKING BACKERS". Three `MissionCard` components in a responsive grid: 1 column → 2 columns at `md` (768px) → 3 columns at `lg` (1024px). Use placeholder mission data for the three cards: e.g. "Lunar Regolith Harvester", "Deep Space Comms Array", "Mars Atmospheric Processor" with realistic badge labels (e.g. "PROPULSION", "COMMS", "LIFE SUPPORT"), progress values, and funding amounts.
   - **Files**: `src/components/FeaturedMissionsSection.tsx`

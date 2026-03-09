@@ -13,7 +13,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Both files exist and are syntactically valid YAML/env format. The `docker-compose.dev.yml` can be parsed with `docker compose -f docker-compose.dev.yml config`.
   - **Brief ref**: §7 `.env.example`, §1 Local developer Docker Compose
 
-- [ ] TASK-02: Update `autonomous/docker-compose.yml` with `db` and `migrate` services
+- [x] TASK-02: Update `autonomous/docker-compose.yml` with `db` and `migrate` services
   - **Goal**: Add PostgreSQL and DBMate migration runner services to the autonomous agent compose file so migrations run before the agent starts.
   - **Details**: Add two new services to `autonomous/docker-compose.yml`:
     - `db`: `postgres:16-alpine`, same env vars as dev compose, named volume `pgdata`, healthcheck `pg_isready -U mmf`, port `5432:5432`.

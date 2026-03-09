@@ -75,7 +75,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `node_modules/@mmf/shared` exists as a symlink; `dist/index.js` and `dist/index.d.ts` exist after compilation
   - **Brief ref**: "Run `npm install` at the repo root to link the workspace package" / Verification section
 
-- [ ] TASK-08: Verify no regressions in frontend build and server tests
+- [x] TASK-08: Verify no regressions in frontend build and server tests
   - **Goal**: Confirm that adding workspaces to root `package.json` and installing does not break existing workflows
   - **Details**:
     - Run `npm run build` (frontend Vite build) and confirm it succeeds

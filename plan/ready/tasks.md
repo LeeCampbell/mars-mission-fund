@@ -183,7 +183,7 @@ Brief: plan/ready/brief.md
   - **Verify**: HTML validates (no obvious errors). Dev server page source shows all new tags. Background is dark on initial load (before JS hydrates).
   - **Brief ref**: Scope — "`index.html`"; Approach step 7 — "`index.html`"
 
-- [ ] TASK-09: Final build verification and smoke test
+- [x] TASK-09: Final build verification and smoke test
   - **Goal**: Confirm all commands pass and the scaffold meets every verification criterion in the brief.
   - **Details**:
     - Run `npm install` (ensure clean install).

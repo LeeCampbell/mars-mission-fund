@@ -87,6 +87,12 @@ The UI is built from a hierarchy of composable components.
 | **Composite components** | Form groups, navigation, campaign cards, stat dashboards — assembled from primitives | Feature teams; must only use primitives from the design system |
 | **Page components** | Full page layouts — assembled from composites; manage data fetching and state | Feature teams; defined by L4 domain specs |
 
+Directory mapping:
+
+- Design system primitives → `src/components/ui/`
+- Composite components → `src/components/`
+- Page components → `src/pages/`
+
 **Rule**: No component may define its own colours, font sizes, spacing, or animation timings.
 All visual properties are consumed from semantic tokens.
 Hardcoded visual values in component code are a spec violation.

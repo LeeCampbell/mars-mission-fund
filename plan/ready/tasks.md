@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: You can cite the current text of each section targeted for modification and know the exact line numbers.
   - **Brief ref**: Approach — all steps (prerequisite)
 
-- [ ] TASK-02: Add directory structure to Section 1.2 of frontend.md
+- [x] TASK-02: Add directory structure to Section 1.2 of frontend.md
   - **Goal**: Document the concrete three-tier directory mapping under the Component-Based Architecture section.
   - **Details**: In `specs/tech/frontend.md` Section 1.2, after the existing component tier description, add the directory mapping: design system primitives → `src/components/ui/`; composite components → `src/components/`; page components → `src/pages/`. Follow one-sentence-per-line rule (L3-007). Do not alter surrounding text beyond what is needed.
   - **Files**: `specs/tech/frontend.md`

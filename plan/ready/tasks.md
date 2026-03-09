@@ -88,7 +88,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; `npm run dev` serves the app; navigating to `/`, `/about`, `/contact` all show Header and Footer; no TypeScript errors
   - **Brief ref**: Approach → App.tsx update; Scope → Layout wired into App.tsx; Files table
 
-- [ ] TASK-13: Build verification and token audit
+- [x] TASK-13: Build verification and token audit
   - **Goal**: Confirm the complete implementation builds cleanly, passes a token-discipline audit, and meets the visual/accessibility checklist from the brief
   - **Details**: (1) Run `npm run build` — zero TypeScript errors, zero Vite errors. (2) Grep all new component files for forbidden patterns: `#[0-9a-fA-F]`, `rgb(`, `rgba(`, `hsl(`, hardcoded font-size `px` values, and `ms` duration literals — none should appear. (3) Start `npm run dev` and manually verify via Playwright or browser: all three routes show Header+Footer; skip link works on Tab; hamburger works at mobile width; Button variants render; Badge variants render; ProgressBar ARIA attrs in DOM; Logo gradient IDs are unique per instance; document.title updates on route change. (4) Fix any issues found before marking complete.
   - **Files**: No new files; fixes to any component files if issues are found

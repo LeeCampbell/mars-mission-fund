@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run lint` exits 0 with no errors or warnings
   - **Brief ref**: Section "6. Fix existing violations"
 
-- [ ] TASK-08: Fix markdownlint violations in all .md files
+- [x] TASK-08: Fix markdownlint violations in all .md files
   - **Goal**: Bring all Markdown files into compliance with L3-007
   - **Details**: Run `npm run lint:md` and fix all violations in `specs/**/*.md`, `README.md`, and any other `.md` files. Common fixes: one sentence per line (split multi-sentence lines), heading hierarchy, blank lines around headings/lists/tables, list marker style (`-`), fenced code blocks with language identifiers, no bare URLs, no trailing spaces, single blank lines only. Do not break content, only reformat
   - **Files**: `README.md`, `specs/**/*.md` (any files with violations)

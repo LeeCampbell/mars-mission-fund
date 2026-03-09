@@ -216,4 +216,4 @@ All specs in this ecosystem follow these conventions:
 
 ---
 
-_This index is the entry point for all agents and contributors. Keep it current._
+*This index is the entry point for all agents and contributors. Keep it current.*

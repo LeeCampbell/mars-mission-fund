@@ -536,7 +536,7 @@ Domain specs may not introduce visual properties that bypass this spec's token a
 
 ---
 
-_This spec governs how the Mars Mission Fund frontend is built.
+*This spec governs how the Mars Mission Fund frontend is built.
 For brand identity and token definitions, see the [Brand Application Standard](L2-001).
 For engineering constraints inherited by this spec, see the [Engineering Standard](L2-002).
-For system architecture and API contracts, see [Architecture](L3-001)._
+For system architecture and API contracts, see [Architecture](L3-001).*

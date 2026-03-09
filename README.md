@@ -1,8 +1,6 @@
 # Mars Mission Fund
 
-<div align="center">
-
-<img src="assets/logo.svg" alt="Mars Mission Fund coin logo" width="160">
+![Mars Mission Fund coin logo](assets/logo.svg)
 
 ![Mars Mission Fund](https://img.shields.io/badge/MARS_MISSION_FUND-FF5C1A?style=for-the-badge&labelColor=0B1628)
 
@@ -16,8 +14,6 @@ The project is designed to teach software engineering practices using production
 ![Node.js](https://img.shields.io/badge/Node_22_LTS-FF8C42?style=flat-square&labelColor=0E2040&logo=node.js&logoColor=FF8C42)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-FF8C42?style=flat-square&labelColor=0E2040&logo=postgresql&logoColor=FF8C42)
 ![Docker](https://img.shields.io/badge/Docker-FF8C42?style=flat-square&labelColor=0E2040&logo=docker&logoColor=FF8C42)
-
-</div>
 
 ---
 
@@ -135,8 +131,4 @@ This project is for educational purposes as part of a coding workshop.
 
 ---
 
-<div align="center">
-
 ![Mars Mission Fund](https://img.shields.io/badge/EVERY_DOLLAR_MOVES_THE_LAUNCH_WINDOW_CLOSER-0B1628?style=for-the-badge&labelColor=FF5C1A)
-
-</div>

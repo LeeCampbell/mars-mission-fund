@@ -292,5 +292,5 @@ The configuration matching this spec:
 
 ---
 
-_This standard governs all Markdown authorship in the Mars Mission Fund project.
-For the engineering quality principles that motivate these rules, see L2-002 (standards/engineering.md)._
+*This standard governs all Markdown authorship in the Mars Mission Fund project.
+For the engineering quality principles that motivate these rules, see L2-002 (standards/engineering.md).*

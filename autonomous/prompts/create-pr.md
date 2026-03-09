@@ -19,8 +19,8 @@ The branch has already been pushed. Plan archival is handled by the calling scri
 ### Step 1: Final Verification
 
 1. Run `npm run build` to ensure the build passes
-2. Run any configured linters/tests
-3. Verify all tasks in `plan/ready/tasks.md` are checked `[x]`
+1. Run any configured linters/tests
+1. Verify all tasks in `plan/ready/tasks.md` are checked `[x]`
 
 ### Step 2: Prepare PR Description
 
@@ -50,7 +50,7 @@ Closes #<ISSUE_NUMBER>
 
 Create the PR (do NOT push — the branch is already pushed):
 
-```
+```sh
 gh pr create \
   --repo ${UPSTREAM_REPO} \
   --base ${UPSTREAM_BASE_BRANCH} \
@@ -63,7 +63,7 @@ Do NOT archive plan files — the calling script handles that.
 
 ## Output Format
 
-```
+```text
 PR_STATUS=created|failed
 PR_URL=<url>
 ISSUE_NUMBER=<number>

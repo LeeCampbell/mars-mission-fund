@@ -54,7 +54,7 @@ Brief: plan/ready/brief.md
 
 ## Output Format
 
-```
+```text
 TASKS_CREATED=<count>
 TASKS_PATH=plan/ready/tasks.md
 ```

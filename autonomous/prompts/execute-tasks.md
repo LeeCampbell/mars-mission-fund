@@ -17,17 +17,17 @@ You are the **Implementation Agent** — you execute one task at a time from the
 ### Step 1: Load Context
 
 1. Read `./specs/learnings.md` if it exists — these are tips from previous agents that may save you time
-2. Read `./specs/README.md` for project standards (follow references as needed)
-3. Read `./plan/ready/brief.md` for the implementation goals
-4. Read `./plan/ready/tasks.md` for the task checklist
-5. Find the **first unchecked task** (`- [ ]`) — this is your assignment
-6. Read any specs referenced in the task's **Brief ref** field
+1. Read `./specs/README.md` for project standards (follow references as needed)
+1. Read `./plan/ready/brief.md` for the implementation goals
+1. Read `./plan/ready/tasks.md` for the task checklist
+1. Find the **first unchecked task** (`- [ ]`) — this is your assignment
+1. Read any specs referenced in the task's **Brief ref** field
 
 ### Step 2: Prepare
 
 1. Verify predecessor tasks (above yours) are all checked `- [x]`
-2. If the task references files that should already exist, verify they do
-3. If dependencies (npm packages) are needed, install them first
+1. If the task references files that should already exist, verify they do
+1. If dependencies (npm packages) are needed, install them first
 
 ### Step 3: Execute
 
@@ -47,8 +47,8 @@ Follow project standards:
 Run the verification steps listed in the task:
 
 1. **Build check**: `npm run build` must succeed with no errors
-2. **Lint check**: If eslint/prettier are configured, run them
-3. **Visual verification**: If the task involves UI changes:
+1. **Lint check**: If eslint/prettier are configured, run them
+1. **Visual verification**: If the task involves UI changes:
    - Start the dev server: `npm run dev &`
    - Use Playwright MCP to navigate to `http://localhost:5173`
    - Verify the expected content renders correctly
@@ -59,22 +59,22 @@ Run the verification steps listed in the task:
 ### Step 5: Mark Done
 
 1. Edit `plan/ready/tasks.md`: change `- [ ]` to `- [x]` for the completed task
-2. Stage all changed files (including the task file)
-3. Commit with a descriptive message:
+1. Stage all changed files (including the task file)
+1. Commit with a descriptive message:
 
-   ```
+   ```text
    feat({scope}): {what was done}
 
    TASK-{NN}: {task name}
    ```
 
-4. **STOP** — do not continue to the next task
+1. **STOP** — do not continue to the next task
 
 ## Reporting
 
 After completing the task, output a summary:
 
-```
+```text
 TASK_COMPLETED=TASK-{NN}
 TASK_NAME={task name}
 VERIFICATION={pass|fail}

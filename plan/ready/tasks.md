@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run lint` exits 0 (or has only non-auto-fixable errors remaining); `npm run format:check` exits 0
   - **Brief ref**: Section "6. Fix existing violations"
 
-- [ ] TASK-07: Manually fix remaining ESLint errors
+- [x] TASK-07: Manually fix remaining ESLint errors
   - **Goal**: Resolve any ESLint violations that could not be auto-fixed
   - **Details**: Run `npm run lint` and inspect output. For each remaining error in `src/`: fix type errors, unused variables, or other violations by editing the source files directly. Do not use `// eslint-disable` comments unless the violation is a false positive with clear justification
   - **Files**: `src/**/*.{ts,tsx}` (whichever files have violations)

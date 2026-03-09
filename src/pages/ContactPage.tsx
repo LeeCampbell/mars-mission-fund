@@ -96,7 +96,7 @@ export function ContactPage() {
         <div style={innerStyle}>
           <SectionLabel number="01" title="GET IN TOUCH" />
           <h2 id="contact-heading" style={headingStyle}>
-            WE'D LOVE TO HEAR FROM YOU
+            WE&apos;D LOVE TO HEAR FROM YOU
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card accent>
@@ -141,8 +141,8 @@ export function ContactPage() {
                   marginBottom: '16px',
                 }}
               >
-                Whether you're a mission team looking for capital, an investor seeking
-                opportunities, or simply a believer in humanity's multi-planetary future — we want
+                Whether you&apos;re a mission team looking for capital, an investor seeking
+                opportunities, or simply a believer in humanity&apos;s multi-planetary future — we want
                 to hear from you.
               </p>
               <p
@@ -154,7 +154,7 @@ export function ContactPage() {
                 }}
               >
                 Our team responds to all enquiries within two business days. For urgent
-                mission-critical matters, please mark your subject line with "PRIORITY".
+                mission-critical matters, please mark your subject line with &quot;PRIORITY&quot;.
               </p>
             </Card>
           </div>

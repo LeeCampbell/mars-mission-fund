@@ -113,7 +113,7 @@ export function AboutPage() {
           <p style={bodyStyle}>
             For too long, space exploration has been the exclusive domain of governments and
             billionaires. Mars Mission Fund exists to change that. We connect mission teams with a
-            global community of backers who believe humanity's future extends beyond Earth — and who
+            global community of backers who believe humanity&apos;s future extends beyond Earth — and who
             are willing to put their money where that belief is. Every dollar on this platform is a
             vote for a multi-planetary civilisation.
           </p>

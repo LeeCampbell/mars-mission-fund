@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Sections 1.4 and 1.5 contain the documented patterns; version header reads `0.4`; change log has a new entry; markdownlint passes.
   - **Brief ref**: Scope section, Update L3-005 bullets; Approach step 3.
 
-- [ ] TASK-04: Update specs/tech/architecture.md — local Docker Compose topology
+- [x] TASK-04: Update specs/tech/architecture.md — local Docker Compose topology
   - **Goal**: Correct the local demo scope note in Section 1 to accurately reflect the Docker Compose setup implemented in issues #40–#43.
   - **Details**: Amend the **Local demo scope** note in Section 1 (Purpose) to state that `docker-compose.dev.yml` starts the PostgreSQL database only; the Express server (`server/`) is run separately with `npm run dev` inside the `server/` directory — it is not part of the Docker Compose stack. The existing note says "The local demo runs as a single Docker Compose stack" which is no longer accurate. Also check Section 5.4 (Container & Orchestration Strategy) for any similar wording and update if needed. Bump version from `0.3` to `0.4` and add a change-log entry dated 2026-03-09 describing the topology clarification.
   - **Files**: `specs/tech/architecture.md` (modify)

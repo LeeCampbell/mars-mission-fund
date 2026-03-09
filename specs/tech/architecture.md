@@ -1,7 +1,7 @@
 # Architecture
 
 > **Spec ID**: L3-001
-> **Version**: 0.3
+> **Version**: 0.4
 > **Status**: Approved
 > **Rate of Change**: Sprint-level / tech decisions
 > **Depends On**: L1-001 (Product Vision & Mission), L2-002 (Engineering Standard), L3-008 (Tech Stack)
@@ -11,7 +11,7 @@
 
 ## 1. Purpose
 
-> **Local demo scope**: Service boundaries, CQRS/Event Sourcing pattern, REST API design, feature flag framework, and the hexagonal architecture pattern are **real** — they drive the local demo's implementation. Multi-environment deployment, infrastructure topology diagrams, and service discovery are theatre. The local demo runs as a single Docker Compose stack.
+> **Local demo scope**: Service boundaries, CQRS/Event Sourcing pattern, REST API design, feature flag framework, and the hexagonal architecture pattern are **real** — they drive the local demo's implementation. Multi-environment deployment, infrastructure topology diagrams, and service discovery are theatre. The local demo uses `docker-compose.dev.yml` to start the PostgreSQL database only; the Express server (`server/`) is run separately with `npm run dev` inside the `server/` directory — it is not part of the Docker Compose stack.
 
 This spec defines the system architecture for Mars Mission Fund: service boundaries, data model overview, inter-service communication patterns, infrastructure topology, deployment strategy, and cross-cutting technical frameworks (ADRs, feature flags, linting).
 
@@ -424,3 +424,4 @@ This spec shares boundaries with every other L3 spec and several L4 specs.
 | March 2026 | 0.1     | —      | Initial stub. Service boundaries, communication patterns, infrastructure topology, ADR process, technology registry, feature flags, linting.                                                                                                                                                                                                                                                                                                                                                                                 |
 | March 2026 | 0.2     | —      | Backfilled Technology Selection Registry with resolved choices from L3-008 (TypeScript, Express 5, pg, Docker, ECS Fargate, GitHub Actions, Aurora PostgreSQL). Resolved Open Questions 1, 7, 8, 9. Added L3-008 dependency.                                                                                                                                                                                                                                                                                                 |
 | March 2026 | 0.3     | —      | Resolved all remaining open questions (2–6, 10–12). Established CQRS/Event Sourcing as core pattern (Section 6.2). Selected REST over HTTPS with URL-path versioning (Section 6.1). Selected PostHog for feature flags, product analytics, and web analytics (Sections 3.2, 8, 9). CloudWatch + Pino for developer observability (Section 8). Service discovery and service-to-service auth noted as not applicable for single deployment unit (Sections 6.1, 6.3). Filled container & orchestration strategy (Section 5.4). |
+| 2026-03-09 | 0.4     | —      | Clarified local demo topology in Section 1: `docker-compose.dev.yml` starts PostgreSQL only; the Express server (`server/`) is run separately via `npm run dev` — it is not part of the Docker Compose stack.                                                                                                                                                                                                                                                                                                                  |

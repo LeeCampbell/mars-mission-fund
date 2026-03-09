@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm install` exits 0; `src/components/ui/Button.tsx`, `src/tokens.css`, `src/components/Layout.tsx` all exist
   - **Brief ref**: Approach — "Issue #3 must be merged before implementation begins"
 
-- [ ] TASK-02: Create `MissionCard` composite component
+- [x] TASK-02: Create `MissionCard` composite component
   - **Goal**: Build the reusable `MissionCard` component that composes `Card accent`, `Badge`, title, description, `ProgressBar`, funding status text, and a ghost `Button`
   - **Details**: Create `src/components/MissionCard.tsx`. Props: `badge` (variant: `funded | active | new`), `title`, `description`, `progress` (0–100), `fundingText`, `ctaLabel`. Use `var(--...)` semantic tokens only for inline styles. Include a `<style>` tag with `href` + `precedence` per the existing React 19 pattern for any layout-specific CSS.
   - **Files**: `src/components/MissionCard.tsx`

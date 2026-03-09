@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists and contains correct name, all required deps with correct versions
   - **Brief ref**: Step 2 — Create packages/client
 
-- [ ] TASK-03: Move src/, index.html, and vite.config.ts into packages/client
+- [x] TASK-03: Move src/, index.html, and vite.config.ts into packages/client
   - **Goal**: Physically relocate all frontend source files using `git mv` to preserve history
   - **Details**:
     - `git mv src packages/client/src`

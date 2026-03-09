@@ -99,7 +99,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; Logo renders at all three sizes; `role="img"` and `aria-label` present in DOM
   - **Brief ref**: Brief "Scope" — Logo; "Approach" — TASK-07; "Key token constraints"
 
-- [ ] TASK-08: Create Header component
+- [x] TASK-08: Create Header component
   - **Goal**: Build the shared site header with logo, wordmark, navigation, skip-to-content link, and mobile collapse
   - **Details**:
     - Create `src/components/Header.tsx`

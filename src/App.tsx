@@ -6,6 +6,7 @@ import { SectionLabel } from './components/ui/SectionLabel'
 import { Badge } from './components/ui/Badge'
 import { ProgressBar } from './components/ui/ProgressBar'
 import { Logo } from './components/ui/Logo'
+import { Header } from './components/Header'
 
 function HomePage() {
   return (
@@ -78,6 +79,7 @@ function ContactPage() {
 export default function App() {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />

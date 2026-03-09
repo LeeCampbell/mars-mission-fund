@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Section renders with heading and button; gradient background visible; `npm run build` passes
   - **Brief ref**: Homepage structure — ClosingCtaSection
 
-- [ ] TASK-08: Implement full Home page
+- [x] TASK-08: Implement full Home page
   - **Goal**: Replace the `Home.tsx` stub with the full homepage assembling all 5 section composites
   - **Details**: Modify `src/pages/Home.tsx`. Import and render in order: `HeroSection`, `StatsSection`, `HowItWorksSection`, `FeaturedMissionsSection`, `ClosingCtaSection`. No additional logic needed — each section is self-contained. Wrap in a single `<main>` or fragment. Verify no TypeScript errors.
   - **Files**: `src/pages/Home.tsx` (modify)

@@ -1,0 +1,97 @@
+@import "tailwindcss";
+@import "./fonts.css";
+@import "./tokens.css";
+
+/* ============================================================
+   TAILWIND THEME INTEGRATION
+   Map semantic tokens to Tailwind utilities where useful.
+   Per L2-001: primary consumption is via var() in components.
+   ============================================================ */
+@theme {
+  --color-action-primary: var(--color-action-primary);
+  --color-bg-page: var(--color-bg-page);
+  --color-bg-surface: var(--color-bg-surface);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --font-display: var(--font-family-display);
+  --font-body: var(--font-family-body);
+  --font-mono: var(--font-family-mono);
+  --breakpoint-sm: var(--breakpoint-sm);
+  --breakpoint-md: var(--breakpoint-md);
+  --breakpoint-lg: var(--breakpoint-lg);
+  --breakpoint-xl: var(--breakpoint-xl);
+}
+
+/* ============================================================
+   GLOBAL BASE STYLES
+   Per L2-001 Section 2.3 and L3-005 Section 8.
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: var(--color-bg-page);
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+a {
+  color: var(--color-action-primary);
+  text-decoration: none;
+  transition: color var(--motion-hover);
+}
+
+a:hover {
+  color: var(--color-action-primary-hover);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-action-primary-hover);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}

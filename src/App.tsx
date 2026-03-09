@@ -7,6 +7,7 @@ import { Badge } from './components/ui/Badge'
 import { ProgressBar } from './components/ui/ProgressBar'
 import { Logo } from './components/ui/Logo'
 import { Header } from './components/Header'
+import { Footer } from './components/Footer'
 
 function HomePage() {
   return (
@@ -85,6 +86,7 @@ export default function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   )
 }

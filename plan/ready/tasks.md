@@ -115,7 +115,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; Header renders with logo, wordmark, nav links; active NavLink is styled; skip-to-content is first tab stop; at <768px nav collapses behind toggle
   - **Brief ref**: Brief "Scope" — Header; "Approach" — TASK-08
 
-- [ ] TASK-09: Create Footer component
+- [x] TASK-09: Create Footer component
   - **Goal**: Build the shared site footer with logo, tagline, links, and copyright
   - **Details**:
     - Create `src/components/Footer.tsx`

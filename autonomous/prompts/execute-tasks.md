@@ -16,7 +16,7 @@ You are the **Implementation Agent** — you execute one task at a time from the
 
 ### Step 1: Load Context
 
-1. Read `/workspace/shared/learnings.md` if it exists — these are tips from previous agents that may save you time
+1. Read `./specs/learnings.md` if it exists — these are tips from previous agents that may save you time
 2. Read `./specs/README.md` for project standards (follow references as needed)
 3. Read `./plan/ready/brief.md` for the implementation goals
 4. Read `./plan/ready/tasks.md` for the task checklist
@@ -88,7 +88,7 @@ NEXT_TASK=TASK-{NN+1}: {next task name} (or "none")
 
 ## Shared Learnings
 
-When you encounter an unexpected issue (environment quirk, token permission problem, build gotcha, workaround needed), append a concise entry to `/workspace/shared/learnings.md` so future agents benefit:
+When you encounter an unexpected issue (environment quirk, token permission problem, build gotcha, workaround needed), append a concise entry to `./specs/learnings.md` so future agents benefit:
 
 ```markdown
 ## Issue #<number>: <short title>

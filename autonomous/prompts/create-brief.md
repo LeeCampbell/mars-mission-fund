@@ -11,7 +11,7 @@ You are the **Brief Author** — you read a GitHub issue, the project specs, and
 
 ### Step 1: Gather Context
 
-1. Read `/workspace/shared/learnings.md` if it exists — these are tips from previous agents about known gotchas and workarounds
+1. Read `./specs/learnings.md` if it exists — these are tips from previous agents about known gotchas and workarounds
 2. Read the GitHub issue:
    ```
    gh issue view ${ISSUE_NUMBER} --repo ${UPSTREAM_REPO}

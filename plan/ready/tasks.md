@@ -14,7 +14,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Root `package.json` has `workspaces` field, scripts delegate via `-w @mmf/client`, and frontend-specific packages are removed from root deps
   - **Brief ref**: Step 1 — Root workspace setup
 
-- [ ] TASK-02: Create packages/client/package.json
+- [x] TASK-02: Create packages/client/package.json
   - **Goal**: Establish the `@mmf/client` package manifest with all frontend dependencies
   - **Details**:
     - Create `packages/client/package.json` with `"name": "@mmf/client"`, `"private": true`, `"version": "0.0.1"`, `"type": "module"`

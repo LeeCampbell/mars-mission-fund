@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File created. `npm run build` passes. Component renders visually dark surface with subtle border; `accent` prop shows orange→amber gradient top strip.
   - **Brief ref**: §Approach step 2
 
-- [ ] TASK-04: StatCard primitive
+- [x] TASK-04: StatCard primitive
   - **Goal**: Implement `src/components/ui/StatCard.tsx` — a stat display card with gradient background, large Bebas Neue value, Space Mono label, and optional sub text.
   - **Details**: Props: `label: string`, `value: string`, `subtext?: string`, `subtextVariant?: 'positive' | 'neutral'`. Background: `--gradient-surface-stat`. Value typography: Bebas Neue, large size from `--text-*` scale. Label typography: Space Mono, small, uppercase, `--color-text-muted`. Sub text colour: `positive` → `--color-status-success`, `neutral` → `--color-text-muted`. All font families and colours via tokens only.
   - **Files**: `src/components/ui/StatCard.tsx`

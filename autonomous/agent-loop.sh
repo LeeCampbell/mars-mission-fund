@@ -229,13 +229,18 @@ Branch: ${BRANCH}" \
         for img in /screenshots/ISSUE-${ISSUE_NUMBER}-*.png; do
           FNAME=$(basename "$img")
           # Upload to fork repo screenshots branch via contents API (uses fork token)
-          BASE64=$(base64 -w0 "$img" 2>/dev/null || base64 "$img")
-          GH_TOKEN="$GH_TOKEN_FORK" gh api \
+          # Pipe base64 via stdin to jq, then pipe JSON to gh api, to avoid
+          # Linux MAX_ARG_STRLEN (128KB) limit on individual command-line args.
+          (base64 -w0 "$img" 2>/dev/null || base64 "$img") \
+          | tr -d '\n' \
+          | jq -Rs \
+            --arg msg "chore: add screenshot ${FNAME}" \
+            --arg branch "screenshots" \
+            '{message: $msg, content: ., branch: $branch}' \
+          | GH_TOKEN="$GH_TOKEN_FORK" gh api \
             "repos/${FORK_REPO}/contents/screenshots/PR-${PR_NUMBER}/${FNAME}" \
-            -X PUT \
-            -f message="chore: add screenshot ${FNAME}" \
-            -f content="$BASE64" \
-            -f branch="screenshots" 2>/dev/null || true
+            -X PUT --input - \
+          || echo "!!! Failed to upload screenshot: ${FNAME}"
 
           RAW_URL="https://raw.githubusercontent.com/${FORK_REPO}/screenshots/screenshots/PR-${PR_NUMBER}/${FNAME}"
           COMMENT_BODY="${COMMENT_BODY}### ${FNAME}\n![${FNAME}](${RAW_URL})\n\n"

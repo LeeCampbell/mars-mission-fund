@@ -18,6 +18,11 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
   && apt-get update && apt-get install -y gh \
   && rm -rf /var/lib/apt/lists/*
 
+# DBMate — database migration tool
+RUN curl -fsSL https://github.com/amacneil/dbmate/releases/latest/download/dbmate-linux-amd64 \
+      -o /usr/local/bin/dbmate \
+  && chmod +x /usr/local/bin/dbmate
+
 # Claude Code CLI + Playwright MCP server (global)
 RUN npm install -g @anthropic-ai/claude-code @playwright/mcp
 

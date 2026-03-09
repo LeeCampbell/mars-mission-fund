@@ -142,7 +142,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; navigating to `/`, `/about`, `/contact` all show Header and Footer wrapping page content; `id="main-content"` present on `<main>`; skip-to-content `href="#main-content"` jumps correctly
   - **Brief ref**: Brief "Scope" — Layout / App.tsx; "Approach" — TASK-10
 
-- [ ] TASK-11: Final verification — build, visual checks, and accessibility audit
+- [x] TASK-11: Final verification — build, visual checks, and accessibility audit
   - **Goal**: Confirm all components are complete, token-compliant, and the dev server renders them correctly
   - **Details**:
     - Run `npm run build` — must succeed with zero TypeScript errors

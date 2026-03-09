@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Both files exist at repo root with correct contents
   - **Brief ref**: Section "3. Prettier config"
 
-- [ ] TASK-04: Create .markdownlint.jsonc
+- [x] TASK-04: Create .markdownlint.jsonc
   - **Goal**: Configure markdownlint to enforce L3-007 spec rules
   - **Details**: Copy the exact configuration from L3-007 Section 11.3 (`specs/tech/markdown.md`). Include all rules: MD013 disabled, MD004 dash, MD029 one, MD007 indent 2, MD003 atx, MD046 fenced, MD048 backtick, MD049/MD050 asterisk, MD035 `---`, MD033 true, MD026 `".,;:!"`, MD060 padded. Do not deviate from the spec
   - **Files**: `.markdownlint.jsonc`

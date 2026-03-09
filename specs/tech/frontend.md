@@ -149,6 +149,11 @@ The rule must flag:
 - Hardcoded colour values (hex, rgb, rgba, hsl) in component stylesheets.
 - Hardcoded font-family, font-size, or animation-duration values in component stylesheets.
 
+**Implementation pattern — inline `React.CSSProperties`.**
+Design system primitives and composite components define a `const xyzStyle: React.CSSProperties` object per visual state and apply it via the `style` prop.
+Tailwind is not used for component-level styles; it is imported for CSS reset and global normalisation only.
+Rationale: inline style objects are co-located with the component, are type-safe through `React.CSSProperties`, and structurally enforce the semantic token rule — the TypeScript type does not accept arbitrary string values that could be hardcoded colours.
+
 ### 2.2 Component Documentation
 
 Every design system primitive must include:

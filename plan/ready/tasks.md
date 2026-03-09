@@ -41,7 +41,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exports all four schemas and four inferred types; no server-specific schemas present
   - **Brief ref**: Implementation step 4 / Files table row 4
 
-- [ ] TASK-05: Create `packages/shared/src/api.ts` with `ApiResponse<T>`
+- [x] TASK-05: Create `packages/shared/src/api.ts` with `ApiResponse<T>`
   - **Goal**: Define the generic API response envelope type matching the server's existing HTTP response shape.
   - **Details**: Create `packages/shared/src/api.ts` containing:
 

@@ -37,7 +37,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists at `src/test/setup.ts` with the import; `tsc -b` passes
   - **Brief ref**: §Approach step 3
 
-- [ ] TASK-05: Write Button component smoke tests
+- [x] TASK-05: Write Button component smoke tests
   - **Goal**: Create passing tests covering all Button variants and edge cases
   - **Details**: Create `src/components/ui/Button.test.tsx` with explicit Vitest imports (`import { describe, it, expect } from 'vitest'`). Cover:
     1. Renders a `<button>` element with children (default `primary` variant)

@@ -36,7 +36,7 @@ It serves as the single source of truth for languages, frameworks, libraries, in
 | Vite | Latest stable | Build tool and dev server |
 | TanStack Query (React Query) | v5 | Server state management (data fetching, caching, mutations) |
 | React Router | v7 | Client-side routing |
-| Tailwind CSS | v4 | Utility-first CSS framework |
+| Tailwind CSS | v4 | CSS reset and global normalisation layer; Tailwind v4 is used for CSS reset and normalisation only — component-level styling is done via inline `React.CSSProperties` objects with `var()` references on Tier 2 semantic tokens, not Tailwind utility classes |
 | PostHog (posthog-js) | Latest stable | Feature flags, product analytics, and web analytics |
 
 ---
@@ -248,3 +248,4 @@ No external search provider is required.
 | 2026-03-04 | — | Promoted to Review status. Content complete; decisions backfilled into dependent specs. |
 | 2026-03-04 | — | Expanded PostHog role to cover feature flags, product analytics, and web analytics. Added posthog-node for backend feature flag evaluation. Added Feature Flags & Product Operations and Developer Observability sections. |
 | 2026-03-04 | — | Added Stripe as payment gateway (Stripe Elements, stripe Node SDK). |
+| 2026-03-09 | Claude | Clarified Tailwind CSS actual usage: CSS reset and normalisation layer only; component-level styling uses inline `React.CSSProperties` with `var()` semantic token references. |

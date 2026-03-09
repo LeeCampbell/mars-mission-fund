@@ -186,7 +186,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` exits 0. In `npm run dev`, the page background is `#060A14`, body text is light (`#C8D0DC`), and the DM Sans font is applied to body text.
   - **Brief ref**: Approach — Step 5 (@theme block) and Step 6 (Base styles).
 
-- [ ] TASK-08: Final verification — build, dev server, and visual checks
+- [x] TASK-08: Final verification — build, dev server, and visual checks
   - **Goal**: Confirm the complete scaffold builds without errors, the dev server runs, all routes are reachable, fonts are self-hosted, all tokens are visible in DevTools, and base styles are applied correctly.
   - **Details**:
     - Run `npm run build` — must complete with exit code 0 and no errors or warnings (TypeScript strict errors, missing imports, etc.).

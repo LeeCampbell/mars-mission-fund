@@ -59,7 +59,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; SectionLabel renders in Space Mono, uppercase, with accent colour and correct number–title format
   - **Brief ref**: Brief "Scope" — SectionLabel; "Approach" — TASK-04
 
-- [ ] TASK-05: Create Badge component
+- [x] TASK-05: Create Badge component
   - **Goal**: Implement the Badge design system primitive with funded, active, and new variants
   - **Details**:
     - Create `src/components/ui/Badge.tsx`

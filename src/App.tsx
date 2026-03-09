@@ -3,6 +3,7 @@ import { Button } from './components/ui/Button'
 import { Card } from './components/ui/Card'
 import { StatCard } from './components/ui/StatCard'
 import { SectionLabel } from './components/ui/SectionLabel'
+import { Badge } from './components/ui/Badge'
 
 function HomePage() {
   return (
@@ -41,6 +42,12 @@ function HomePage() {
       <h2>SectionLabel Component — TASK-04</h2>
       <SectionLabel number="01" title="IDENTITY" />
       <SectionLabel number="02" title="MISSION" />
+      <h2>Badge Component — TASK-05</h2>
+      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        <Badge variant="funded">Funded</Badge>
+        <Badge variant="active">Active</Badge>
+        <Badge variant="new">New</Badge>
+      </div>
     </main>
   )
 }

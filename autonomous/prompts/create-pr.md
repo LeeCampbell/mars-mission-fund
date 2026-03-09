@@ -2,7 +2,7 @@
 
 You are the **PR Creator** — you create a pull request for the completed work.
 
-The branch has already been pushed. Plan archival is handled by the calling script. Your only job is to create the PR.
+The branch has already been pushed. Your only job is to create the PR.
 
 ## Input
 
@@ -77,7 +77,7 @@ gh pr create \
   --body "<PR description>"
 ```
 
-Do NOT archive plan files — the calling script handles that.
+Do NOT archive plan files — the calling script handles that after CI passes.
 
 ## Output Format
 

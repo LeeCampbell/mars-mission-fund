@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Agent loop state machine for a single GitHub issue.
 # Receives: ISSUE_NUMBER, ISSUE_TITLE, BRANCH, FORK_URL, UPSTREAM_REPO, UPSTREAM_BASE_BRANCH
-# Exit codes: 0 = issue complete (PR created), 1 = needs another iteration, 2 = stuck
+# Exit codes: 0 = issue complete (PR merged-ready), 1 = needs another iteration, 2 = stuck
 
 REPO_DIR="/workspace/repo"
 PROMPTS_DIR="/usr/local/share/prompts"
@@ -43,6 +43,8 @@ determine_state() {
   elif [ -f "plan/ready/tasks.md" ]; then
     if grep -q '^\- \[ \]' "plan/ready/tasks.md"; then
       echo "execute-tasks"
+    elif [ -f "plan/.pr-url" ]; then
+      echo "await-ci"
     else
       echo "create-pr"
     fi
@@ -62,6 +64,19 @@ set_state() {
 
 clear_state() {
   rm -f plan/.state
+}
+
+archive_plan() {
+  # Archive plan: move ready → done, then remove plan dir entirely.
+  # Plans are preserved in git history but kept out of the current tree.
+  mkdir -p plan/done
+  if [ -d "plan/ready" ]; then
+    mv plan/ready/* plan/done/ 2>/dev/null || true
+  fi
+  rm -rf plan/
+  git add plan/ 2>/dev/null || true
+  git commit -m "chore: remove plan files after PR creation" 2>/dev/null || true
+  git push origin "$BRANCH" --force-with-lease 2>/dev/null || true
 }
 
 STATE=$(determine_state)
@@ -222,10 +237,11 @@ Head: ${FORK_OWNER}:${BRANCH}
 Branch: ${BRANCH}" \
       2>&1 | tee "$LOG_FILE" || true
 
+    # Extract PR number from Claude's output log
+    PR_NUMBER=$(grep -oE 'https://github.com/[^ ]+/pull/[0-9]+' "$LOG_FILE" | head -1 | grep -oE '[0-9]+$')
+
     # Upload screenshots as a PR comment
     if ls /screenshots/ISSUE-${ISSUE_NUMBER}-*.png 1>/dev/null 2>&1; then
-      PR_NUMBER=$(grep -oE 'https://github.com/[^ ]+/pull/[0-9]+' "$LOG_FILE" | head -1 | grep -oE '[0-9]+$')
-
       if [ -n "$PR_NUMBER" ]; then
         COMMENT_BODY="## Screenshots\n\n"
         FORK_REPO=$(echo "$FORK_URL" | sed 's|.*github.com/||;s|\.git$||')
@@ -263,22 +279,111 @@ Branch: ${BRANCH}" \
       fi
     fi
 
-    # Archive plan (script owns this, not the prompt)
-    mkdir -p plan/done
-    if [ -d "plan/ready" ]; then
-      mv plan/ready/* plan/done/ 2>/dev/null || true
+    # Write PR number for await-ci state (do NOT archive plan yet — needed for remediation)
+    if [ -n "$PR_NUMBER" ]; then
+      echo "$PR_NUMBER" > plan/.pr-url
+      clear_state
+      echo ">>> PR created (#${PR_NUMBER}) for issue #${ISSUE_NUMBER}, transitioning to await-ci"
+      exit 1  # iterate again into await-ci
+    else
+      echo "!!! Could not extract PR number from log"
+      clear_state
+      exit 2
+    fi
+    ;;
+
+  await-ci)
+    set_state "await-ci"
+
+    PR_NUMBER=$(cat plan/.pr-url)
+    echo ">>> Monitoring CI for PR #${PR_NUMBER}"
+
+    # Poll CI status (using upstream token since PR is on upstream)
+    # Map check states to pending/passing/failing
+    CI_RAW=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr checks "$PR_NUMBER" \
+      --repo "$UPSTREAM_REPO" --json state --jq '.[].state' 2>&1) || true
+
+    if echo "$CI_RAW" | grep -qiE 'IN_PROGRESS|QUEUED|PENDING'; then
+      CI_STATUS="pending"
+    elif echo "$CI_RAW" | grep -qiE 'FAILURE|ERROR|CANCELLED|ACTION_REQUIRED|TIMED_OUT|STARTUP_FAILURE'; then
+      # Only failing if nothing is still pending
+      CI_STATUS="failing"
+    elif echo "$CI_RAW" | grep -qiE 'SUCCESS|SKIPPED|NEUTRAL'; then
+      CI_STATUS="passing"
+    else
+      # No checks found yet or unexpected output — treat as pending
+      echo ">>> CI status unclear (raw: ${CI_RAW}), treating as pending"
+      CI_STATUS="pending"
     fi
 
-    # Remove plan directory and commit the deletion
-    # Plans are preserved in git history but kept out of the current tree
-    rm -rf plan/
-    git add plan/ 2>/dev/null || true
-    git commit -m "chore: remove plan files after PR creation" 2>/dev/null || true
-    git push origin "$BRANCH" --force-with-lease 2>/dev/null || true
+    echo ">>> CI status: ${CI_STATUS}"
 
-    clear_state
-    echo ">>> PR created for issue #${ISSUE_NUMBER}"
-    exit 0
+    case "$CI_STATUS" in
+      pending)
+        # CI still running — exit 1, outer loop retries after cooldown
+        echo ">>> CI still running, will retry after cooldown"
+        exit 1
+        ;;
+      passing)
+        # CI passed — archive plan and exit 0
+        echo ">>> CI passed! Archiving plan."
+        archive_plan
+        clear_state
+        echo ">>> Issue #${ISSUE_NUMBER} complete"
+        exit 0
+        ;;
+      failing)
+        # Track remediation attempts
+        ATTEMPTS_FILE="plan/.ci-attempts"
+        ATTEMPTS=$(cat "$ATTEMPTS_FILE" 2>/dev/null || echo 0)
+        MAX_CI_ATTEMPTS=3
+
+        if [ "$ATTEMPTS" -ge "$MAX_CI_ATTEMPTS" ]; then
+          echo "!!! CI remediation failed after ${MAX_CI_ATTEMPTS} attempts"
+          exit 2  # stuck
+        fi
+
+        echo $((ATTEMPTS + 1)) > "$ATTEMPTS_FILE"
+        echo ">>> CI failing — remediation attempt $((ATTEMPTS + 1))/${MAX_CI_ATTEMPTS}"
+
+        # Get the failed run ID
+        RUN_ID=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr checks "$PR_NUMBER" \
+          --repo "$UPSTREAM_REPO" --json link --jq '.[0].link' \
+          | grep -oE '[0-9]+$') || true
+
+        # Get failure logs
+        FAILED_LOG=""
+        if [ -n "$RUN_ID" ]; then
+          FAILED_LOG=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh run view "$RUN_ID" \
+            --repo "$UPSTREAM_REPO" --log-failed 2>&1 | tail -200) || true
+        fi
+
+        # Invoke Claude with remediate-ci prompt
+        REMEDIATE_PROMPT=$(cat "${PROMPTS_DIR}/remediate-ci.md")
+        timeout "$TIMEOUT" claude \
+          --dangerously-skip-permissions \
+          --print \
+          --verbose \
+          -p "${REMEDIATE_PROMPT}
+
+PR number: #${PR_NUMBER}
+Issue number: #${ISSUE_NUMBER}
+Branch: ${BRANCH}
+
+CI failure logs:
+\`\`\`
+${FAILED_LOG}
+\`\`\`" \
+          2>&1 | tee "$LOG_FILE" || true
+
+        # Push fix
+        git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE" || true
+
+        clear_state
+        echo ">>> Remediation pushed, will re-check CI after cooldown"
+        exit 1  # re-enter await-ci after cooldown
+        ;;
+    esac
     ;;
 
   done)

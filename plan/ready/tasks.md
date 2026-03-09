@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: 3 step cards render with correct typography tokens; grid is responsive; no raw colours
   - **Brief ref**: Implementation note 3
 
-- [ ] TASK-06: Create `FeaturedMissionsSection` component
+- [x] TASK-06: Create `FeaturedMissionsSection` component
   - **Goal**: Active missions grid with `SectionLabel` and 3 `MissionCard` components
   - **Details**: Create `src/components/FeaturedMissionsSection.tsx`. Use `SectionLabel number={3} label="ACTIVE MISSIONS"` + section heading + 3× `MissionCard` with varied badge variants (`active`, `funded`, `new`), realistic mission titles/descriptions, varied progress values. Grid: 1-col → 2-col at 768px → 3-col at 1024px. Use `<style>` tag for breakpoints.
   - **Files**: `src/components/FeaturedMissionsSection.tsx`

@@ -83,11 +83,7 @@ export function CampaignsPage() {
       )}
 
       {campaigns && (
-        <div
-          className="mmf-campaigns-grid"
-          style={gridStyle}
-          aria-label="Campaign listings"
-        >
+        <div className="mmf-campaigns-grid" style={gridStyle} aria-label="Campaign listings">
           {campaigns.map((campaign) => (
             <CampaignCard key={campaign.id} campaign={campaign} />
           ))}

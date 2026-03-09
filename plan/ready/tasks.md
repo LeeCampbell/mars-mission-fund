@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; `src/components/ui/Button.tsx`, `src/components/ui/Card.tsx`, `src/components/ui/StatCard.tsx`, `src/components/ui/SectionLabel.tsx`, `src/components/ui/Badge.tsx`, `src/components/ui/ProgressBar.tsx` all exist; `src/tokens.css` exists
   - **Brief ref**: "Dependencies" section
 
-- [ ] TASK-02: Create MissionCard composite component
+- [x] TASK-02: Create MissionCard composite component
   - **Goal**: Build the `MissionCard` reusable composite used in `FeaturedMissionsSection`
   - **Details**: Create `src/components/MissionCard.tsx`. Accept props: `title`, `description`, `badge` (label string), `progress` (0–100 number), `raised` (string), `goal` (string). Render: Card wrapper with a top accent bar (using `--color-accent` border or pseudo-element), Badge, title in `--type-heading-sm`, description, ProgressBar with ARIA attributes (`aria-label`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`), funding status text ("Raised X of Y"), ghost variant Button "View Mission" (`href="#"`). Use only `var(--semantic-token)` for colours and sizes.
   - **Files**: `src/components/MissionCard.tsx`

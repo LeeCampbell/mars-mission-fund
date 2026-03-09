@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Both files exist; `main.tsx` imports `index.css` and renders `<App />`
   - **Brief ref**: Files table — `src/main.tsx`, `src/vite-env.d.ts`
 
-- [ ] TASK-08: Create `src/App.tsx` with React Router v7 routes
+- [x] TASK-08: Create `src/App.tsx` with React Router v7 routes
   - **Goal**: Set up client-side routing with BrowserRouter and three placeholder routes
   - **Details**: Import `BrowserRouter`, `Routes`, `Route` from `react-router`. Define inline placeholder components: `HomePage` returning `<main><h1>Home</h1></main>`, `AboutPage` returning `<main><h1>About</h1></main>`, `ContactPage` returning `<main><h1>Contact</h1></main>`. `App` component returns `<BrowserRouter><Routes><Route path="/" element={<HomePage />} /><Route path="/about" element={<AboutPage />} /><Route path="/contact" element={<ContactPage />} /></Routes></BrowserRouter>`. Export `App` as default.
   - **Files**: `src/App.tsx`

@@ -72,7 +72,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; all three badge variants render with correct colours, dot indicator, and border; dot has `aria-hidden`
   - **Brief ref**: Brief "Scope" — Badge; "Approach" — TASK-05
 
-- [ ] TASK-06: Create ProgressBar component
+- [x] TASK-06: Create ProgressBar component
   - **Goal**: Implement the ProgressBar design system primitive with ARIA attributes and reduced-motion support
   - **Details**:
     - Create `src/components/ui/ProgressBar.tsx`

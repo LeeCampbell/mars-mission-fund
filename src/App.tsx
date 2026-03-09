@@ -4,6 +4,7 @@ import { Card } from './components/ui/Card'
 import { StatCard } from './components/ui/StatCard'
 import { SectionLabel } from './components/ui/SectionLabel'
 import { Badge } from './components/ui/Badge'
+import { ProgressBar } from './components/ui/ProgressBar'
 
 function HomePage() {
   return (
@@ -47,6 +48,13 @@ function HomePage() {
         <Badge variant="funded">Funded</Badge>
         <Badge variant="active">Active</Badge>
         <Badge variant="new">New</Badge>
+      </div>
+      <h2>ProgressBar Component — TASK-06</h2>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '600px' }}>
+        <ProgressBar value={0} label="0% funded" />
+        <ProgressBar value={50} label="50% funded" />
+        <ProgressBar value={75} label="75% funded" />
+        <ProgressBar value={100} complete label="100% funded" />
       </div>
     </main>
   )

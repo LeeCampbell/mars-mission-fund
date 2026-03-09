@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Runs the same checks as .github/workflows/ci.yml (minus npm audit).
+# Exit 0 = all pass, non-zero = failure.
+# Usage: ./scripts/ci-check.sh
+
+echo "=== Type-check ==="
+npx tsc -b --noEmit
+
+echo "=== Lint ==="
+npm run lint
+
+echo "=== Format check ==="
+npm run format:check
+
+echo "=== Markdown lint ==="
+npm run lint:md
+
+echo "=== Build ==="
+npm run build
+
+echo "=== Test coverage ==="
+npm run test:coverage
+
+echo "=== All CI checks passed ==="

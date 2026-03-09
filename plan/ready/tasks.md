@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `docker compose -f autonomous/docker-compose.yml config` parses without errors. The agent service lists `migrate` in `depends_on`.
   - **Brief ref**: §2 Autonomous agent Docker Compose
 
-- [ ] TASK-03: Install DBMate binary in `autonomous/Dockerfile`
+- [x] TASK-03: Install DBMate binary in `autonomous/Dockerfile`
   - **Goal**: Make the `dbmate` CLI available inside the agent container so it can run migrations directly if needed.
   - **Details**: Add a `RUN` step (as root, before `USER agent`) that downloads `https://github.com/amacneil/dbmate/releases/latest/download/dbmate-linux-amd64` using `curl -fsSL`, writes it to `/usr/local/bin/dbmate`, and runs `chmod +x /usr/local/bin/dbmate`. Insert this step after the GitHub CLI installation and before the Claude Code install.
   - **Files**:

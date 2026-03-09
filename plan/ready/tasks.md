@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component renders; ambient glow present; `prefers-reduced-motion` path does not animate; `npm run build` passes
   - **Brief ref**: Homepage structure — HeroSection; Verification — ambient hero glow
 
-- [ ] TASK-04: Create StatsSection composite component
+- [x] TASK-04: Create StatsSection composite component
   - **Goal**: Build the `StatsSection` composite with SectionLabel and 4 StatCards in a responsive grid
   - **Details**: Create `src/components/StatsSection.tsx`. Use `SectionLabel` with text `"01 — PLATFORM IMPACT"`. Render 4× `StatCard` with static placeholder data (e.g., `$24M Funded`, `1,200 Backers`, `18 Missions`, `3 Launches`). Responsive grid: 1 col on mobile, 2 cols at 640px, 4 cols at 1024px (use Tailwind responsive utilities or inline style with CSS grid). All styling via Tier 2 tokens only.
   - **Files**: `src/components/StatsSection.tsx` (create)

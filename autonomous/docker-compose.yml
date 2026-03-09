@@ -8,9 +8,9 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - '5432:5432'
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U mmf"]
+      test: ['CMD-SHELL', 'pg_isready -U mmf']
       interval: 5s
       timeout: 5s
       retries: 10

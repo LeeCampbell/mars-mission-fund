@@ -51,7 +51,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Each file contains `-- migrate:up` and `-- migrate:down` markers. `CREATE TABLE` statements match the column definitions in the brief. FK references to `campaigns(id)` use `ON DELETE CASCADE`.
   - **Brief ref**: §4 DBMate migrations (migrations 1–5)
 
-- [ ] TASK-05: Create seed data migration
+- [x] TASK-05: Create seed data migration
   - **Goal**: Populate the database with 8–10 realistic campaigns covering multiple categories and statuses, each with milestones, some with stretch goals and updates.
   - **Details**: Create `server/db/migrations/20260309000006_seed_campaigns.sql` with `-- migrate:up` that inserts:
     - 8–10 campaigns spanning at least 5 different categories (e.g. Technology, Environment, Education, Health, Arts) and statuses including `Live`, `Funded`, and `Complete`.

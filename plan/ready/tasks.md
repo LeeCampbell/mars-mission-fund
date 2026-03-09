@@ -88,7 +88,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cd server && npx tsc --noEmit` passes; `createApp` exported and importable.
   - **Brief ref**: Directory structure — `app.ts`; Key design decisions — App factory pattern.
 
-- [ ] TASK-08: Create index.ts — server entry point
+- [x] TASK-08: Create index.ts — server entry point
   - **Goal**: Wire pool, app factory, and HTTP listen into the server entry point.
   - **Details**:
     - Create `server/src/index.ts`.

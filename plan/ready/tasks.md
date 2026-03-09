@@ -54,7 +54,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; component renders milestone items with title, date, progress, and status
   - **Brief ref**: `MilestonesSection` row in Files table
 
-- [ ] TASK-05: Create `StretchGoalsSection` component
+- [x] TASK-05: Create `StretchGoalsSection` component
   - **Goal**: Render stretch goal tiers; component must render nothing when no stretch goals exist
   - **Details**:
     - Create `src/components/campaigns/StretchGoalsSection.tsx`

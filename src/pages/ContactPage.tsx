@@ -142,8 +142,8 @@ export function ContactPage() {
                 }}
               >
                 Whether you&apos;re a mission team looking for capital, an investor seeking
-                opportunities, or simply a believer in humanity&apos;s multi-planetary future — we want
-                to hear from you.
+                opportunities, or simply a believer in humanity&apos;s multi-planetary future — we
+                want to hear from you.
               </p>
               <p
                 style={{

@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component renders without errors; heading font resolves to Bebas Neue; glow animation is present in CSS; no Tier 1 token refs or raw hex values
   - **Brief ref**: Implementation note 1
 
-- [ ] TASK-04: Create `StatsSection` component
+- [x] TASK-04: Create `StatsSection` component
   - **Goal**: Platform impact stats section with a `SectionLabel` and 4 `StatCard` components in a responsive grid
   - **Details**: Create `src/components/StatsSection.tsx`. Use `SectionLabel number={1} label="PLATFORM IMPACT"` + a section heading + 4× `StatCard` with realistic copy (e.g., missions funded, total raised, active researchers, success rate). Grid: 1-col default → 2-col at 640px → 4-col at 1024px. Use `<style>` tag for breakpoint CSS.
   - **Files**: `src/components/StatsSection.tsx`

@@ -1,96 +1,82 @@
-# Tasks: Issue #3 — Create design system primitives and layout shell
+# Tasks: Issue #4 — Build Homepage, About, and Contact pages
 
 Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [x] TASK-01: Verify scaffold and create ui/ directory structure
-  - **Goal**: Confirm Issue #2 outputs exist and create the `src/components/ui/` directory so subsequent tasks have a known-good baseline
-  - **Details**: Read `src/App.tsx`, `src/index.css`, `src/tokens.css`, `src/fonts.css`, and `vite.config.ts` to confirm the scaffold is in place. Create `src/components/ui/.gitkeep` (or any placeholder) so the directory exists. Note all available Tier 2 semantic token names for reference by later tasks.
-  - **Files**: `src/components/ui/` (directory)
-  - **Verify**: Directory `src/components/ui/` exists; `src/tokens.css` contains Tier 2 `--color-*`, `--font-*`, `--radius-*`, `--transition-*` custom properties
-  - **Brief ref**: Prerequisites section; Files to Create/Modify table
+- [x] TASK-01: Merge issue #3 branch onto current branch
+  - **Goal**: Get the frontend project files (Vite + React 19 + Tailwind v4 + React Router v7, all primitives, layout shell) onto this branch so subsequent tasks can build on them
+  - **Details**: Run `git fetch origin` then merge or rebase `origin/feat/issue-3-create-design-system-primitives-and-layo` onto the current branch. Confirm that `src/components/ui/`, `src/components/Layout.tsx`, `src/tokens.css`, `App.tsx`, and `package.json` are all present and `npm install` succeeds.
+  - **Files**: No new files — just git history changes + whatever issue #3 added
+  - **Verify**: `npm install` exits 0; `src/components/ui/Button.tsx`, `src/tokens.css`, `src/components/Layout.tsx` all exist
+  - **Brief ref**: Approach — "Issue #3 must be merged before implementation begins"
 
-- [x] TASK-02: Button component
-  - **Goal**: Implement the `Button` primitive with `primary`, `secondary`, and `ghost` variants, polymorphic `href` rendering, disabled state, and focus/hover/transition states
-  - **Details**: Create `src/components/ui/Button.tsx`. Props: `variant: 'primary' | 'secondary' | 'ghost'` (default `primary`), `href?: string`, `disabled?: boolean`, plus standard button/anchor HTML attrs. When `href` is set render an `<a>` element, otherwise `<button>`. Primary: gradient background using `--color-action-primary` token family. Secondary: surface background with border. Ghost: transparent with border. Hover darkens via token. Focus ring uses `--color-border-accent` (orange outline). Disabled: reduced opacity, `cursor: not-allowed`, `pointer-events: none`. All colours, radii, font, transitions via `var(--semantic-token)` only — no hardcoded values.
-  - **Files**: `src/components/ui/Button.tsx`
-  - **Verify**: File exists; TypeScript compiles (`npm run build`); three variants, href, disabled props are typed; no `#`, `rgb`, `rgba`, `hsl`, hardcoded `px` font-size, or `ms` literals in the file
-  - **Brief ref**: Scope → primitives; Files table; Token discipline; Verification → Button
+- [ ] TASK-02: Create `MissionCard` composite component
+  - **Goal**: Build the reusable `MissionCard` component that composes `Card accent`, `Badge`, title, description, `ProgressBar`, funding status text, and a ghost `Button`
+  - **Details**: Create `src/components/MissionCard.tsx`. Props: `badge` (variant: `funded | active | new`), `title`, `description`, `progress` (0–100), `fundingText`, `ctaLabel`. Use `var(--...)` semantic tokens only for inline styles. Include a `<style>` tag with `href` + `precedence` per the existing React 19 pattern for any layout-specific CSS.
+  - **Files**: `src/components/MissionCard.tsx`
+  - **Verify**: File exists; no TypeScript errors (`npm run build` or `tsc --noEmit`); imports resolve correctly
+  - **Brief ref**: Scope — "One composite component for mission cards: MissionCard"; Implementation note 4
 
-- [x] TASK-03: Card component
-  - **Goal**: Implement the `Card` primitive with optional top accent gradient bar
-  - **Details**: Create `src/components/ui/Card.tsx`. Props: `accent?: boolean`, `className?: string`, `children: React.ReactNode`. Renders a `<div>` with dark surface background (`--color-surface-*`), subtle border (`--color-border-*`), border-radius (`--radius-*`). When `accent` is true, render a thin top bar element with gradient using action/accent tokens. All values via semantic tokens.
-  - **Files**: `src/components/ui/Card.tsx`
-  - **Verify**: File exists; compiles; `accent` prop toggles gradient bar; no hardcoded values
-  - **Brief ref**: Scope → Card; Files table; Verification → Card
+- [ ] TASK-03: Create `HeroSection` component
+  - **Goal**: Full-viewport hero with display heading, subtext, primary CTA button, and ambient glow animation
+  - **Details**: Create `src/components/HeroSection.tsx`. Background: `var(--gradient-hero)`. Heading: `font-family: var(--font-family-display)`, uppercase, 48px mobile / 72px md / 96px xl. Ambient glow: absolutely positioned div with `animation: ... var(--motion-ambient)` wrapped in `@media (prefers-reduced-motion: no-preference)` (use a `<style>` tag). CTA: `Button variant="primary"` with text "Explore Missions". `min-height: 100dvh`.
+  - **Files**: `src/components/HeroSection.tsx`
+  - **Verify**: Component renders without errors; heading font resolves to Bebas Neue; glow animation is present in CSS; no Tier 1 token refs or raw hex values
+  - **Brief ref**: Implementation note 1
 
-- [x] TASK-04: StatCard component
-  - **Goal**: Implement the `StatCard` primitive — a gradient-background stat block with label, value, and optional subtext
-  - **Details**: Create `src/components/ui/StatCard.tsx`. Props: `label: string`, `value: string | number`, `subtext?: string`, `className?: string`. Renders a block with gradient background (using action/brand token family), large display `value` (using `--font-size-display-*` or equivalent), small tertiary `label` above, and optional `subtext` below. Typography uses DM Sans for value, Space Mono or DM Sans for label per token. All via `var(--semantic-token)`.
-  - **Files**: `src/components/ui/StatCard.tsx`
-  - **Verify**: File exists; compiles; all three text areas render; no hardcoded values
-  - **Brief ref**: Scope → StatCard; Files table; Verification → StatCard
+- [ ] TASK-04: Create `StatsSection` component
+  - **Goal**: Platform impact stats section with a `SectionLabel` and 4 `StatCard` components in a responsive grid
+  - **Details**: Create `src/components/StatsSection.tsx`. Use `SectionLabel number={1} label="PLATFORM IMPACT"` + a section heading + 4× `StatCard` with realistic copy (e.g., missions funded, total raised, active researchers, success rate). Grid: 1-col default → 2-col at 640px → 4-col at 1024px. Use `<style>` tag for breakpoint CSS.
+  - **Files**: `src/components/StatsSection.tsx`
+  - **Verify**: 4 StatCards render; grid collapses/expands at the correct breakpoints (visual check or snapshot)
+  - **Brief ref**: Implementation note 2
 
-- [x] TASK-05: SectionLabel component
-  - **Goal**: Implement the `SectionLabel` primitive — a numbered section header in Space Mono uppercase
-  - **Details**: Create `src/components/ui/SectionLabel.tsx`. Props: `number: number | string`, `label: string`, `className?: string`. Renders text in the format `01 — LABEL` (zero-padded two-digit number). Font family: Space Mono via `--font-family-mono` token. Text transform: uppercase. Colour: accent/orange via `--color-text-accent` or equivalent token. Font size via token. Rendered as a `<p>` or `<span>` (not a heading — callers decide heading semantics).
-  - **Files**: `src/components/ui/SectionLabel.tsx`
-  - **Verify**: File exists; compiles; renders "01 — EXAMPLE" format; Space Mono token applied; no hardcoded values
-  - **Brief ref**: Scope → SectionLabel; Files table; Verification → SectionLabel
+- [ ] TASK-05: Create `HowItWorksSection` component
+  - **Goal**: Three-step explainer section using `Card accent` components
+  - **Details**: Create `src/components/HowItWorksSection.tsx`. Use `SectionLabel number={2} label="HOW IT WORKS"` + section heading + 3× `Card accent`. Each card: step number styled with `var(--font-size-stat-value-compact)` and `var(--color-text-accent)`, step title in `var(--font-size-card-title)`, body in `var(--font-size-body)`. Grid: 1-col → 3-col at 1024px. Use `<style>` tag for breakpoints.
+  - **Files**: `src/components/HowItWorksSection.tsx`
+  - **Verify**: 3 step cards render with correct typography tokens; grid is responsive; no raw colours
+  - **Brief ref**: Implementation note 3
 
-- [x] TASK-06: Badge component
-  - **Goal**: Implement the `Badge` primitive with `funded`, `active`, and `new` variants and a decorative dot indicator
-  - **Details**: Create `src/components/ui/Badge.tsx`. Props: `variant: 'funded' | 'active' | 'new'`, `children: React.ReactNode`, `className?: string`. Each variant maps to a distinct semantic colour token: funded → green (`--color-status-success-*`), active → orange (`--color-status-warning-*` or `--color-action-primary`), new → blue (`--color-status-info-*`). Renders a small coloured dot `<span aria-hidden="true">` before the text label. Dot is decorative; status conveyed by visible text. All colours via tokens.
-  - **Files**: `src/components/ui/Badge.tsx`
-  - **Verify**: File exists; compiles; three variants type-check; dot has `aria-hidden="true"`; no hardcoded colour values
-  - **Brief ref**: Scope → Badge; Accessibility notes → Badge; Verification → Badge
+- [ ] TASK-06: Create `FeaturedMissionsSection` component
+  - **Goal**: Active missions grid with `SectionLabel` and 3 `MissionCard` components
+  - **Details**: Create `src/components/FeaturedMissionsSection.tsx`. Use `SectionLabel number={3} label="ACTIVE MISSIONS"` + section heading + 3× `MissionCard` with varied badge variants (`active`, `funded`, `new`), realistic mission titles/descriptions, varied progress values. Grid: 1-col → 2-col at 768px → 3-col at 1024px. Use `<style>` tag for breakpoints.
+  - **Files**: `src/components/FeaturedMissionsSection.tsx`
+  - **Verify**: 3 MissionCards render with different badge variants, visible progress bars, and CTA buttons
+  - **Brief ref**: Implementation note 4
 
-- [x] TASK-07: ProgressBar component
-  - **Goal**: Implement the fully accessible `ProgressBar` with track, fill, endpoint dot, complete ARIA attributes, and `prefers-reduced-motion` support
-  - **Details**: Create `src/components/ui/ProgressBar.tsx`. Props: `value: number` (0–100), `aria-label: string`, `className?: string`. Renders: outer track div, inner fill div (width = `${value}%`), and a small circle dot at the right end of the fill. Add `role="progressbar"`, `aria-valuenow={value}`, `aria-valuemin={0}`, `aria-valuemax={100}`, `aria-label` on the track element. Fill colour: orange (`--color-action-primary` or `--color-progress-fill`) for in-progress; green (`--color-status-success-*`) when `value === 100`. Fill transition via `var(--transition-duration-*)` token. Under `@media (prefers-reduced-motion: reduce)`, set `transition: none` (use a CSS class or inline style with the media query). All visual values via tokens.
-  - **Files**: `src/components/ui/ProgressBar.tsx`
-  - **Verify**: File exists; compiles; ARIA attrs present in rendered output; `prefers-reduced-motion` handled; endpoint dot visible; no hardcoded values
-  - **Brief ref**: Scope → ProgressBar; Accessibility notes → ProgressBar; Verification → ProgressBar
+- [ ] TASK-07: Create `ClosingCtaSection` component
+  - **Goal**: Closing call-to-action section with gradient background, centred content, and secondary button
+  - **Details**: Create `src/components/ClosingCtaSection.tsx`. Background: `var(--gradient-surface-card)`. Centred heading + body paragraph + `Button variant="secondary"`. Adequate vertical padding (`var(--space-section-y)` or equivalent token).
+  - **Files**: `src/components/ClosingCtaSection.tsx`
+  - **Verify**: Section renders with correct gradient background and secondary button; no raw hex or Tier 1 tokens
+  - **Brief ref**: Implementation note 5
 
-- [x] TASK-08: Logo component
-  - **Goal**: Implement the `Logo` inline SVG component with `sm`/`md`/`lg` size variants and instance-unique gradient IDs
-  - **Details**: Create `src/components/ui/Logo.tsx`. Props: `size?: 'sm' | 'md' | 'lg'` (default `md`), `aria-label?: string` (default `"Mars Mission Fund"`), `className?: string`. Size maps: `sm` → 32px height, `md` → 72px height, `lg` → 120px height (width scales proportionally). Inline the SVG coin logo from `assets/logo.svg` (read that file first). Because SVG `linearGradient` / `radialGradient` `id` attributes are global in the DOM, generate a unique suffix per component instance using `useId()` (React 18+) or a module-level counter, and suffix all gradient `id` and `xlink:href`/`href` references with that suffix. Add `role="img"` and `aria-label` to the `<svg>` element.
-  - **Files**: `src/components/ui/Logo.tsx`
-  - **Verify**: File exists; compiles; three sizes render correctly; gradient IDs are unique when two `<Logo>` instances appear in the DOM simultaneously (inspect rendered HTML); `role="img"` and `aria-label` present
-  - **Brief ref**: Approach → Logo; Accessibility notes → Logo; Verification → Logo
+- [ ] TASK-08: Create `HomePage.tsx` page component
+  - **Goal**: Assemble all five homepage section components into a single page
+  - **Details**: Create `src/pages/HomePage.tsx`. Import and render in order: `HeroSection`, `StatsSection`, `HowItWorksSection`, `FeaturedMissionsSection`, `ClosingCtaSection`. No additional markup beyond the fragment wrapper. Page `<title>` is already handled by `Layout.tsx`.
+  - **Files**: `src/pages/HomePage.tsx`
+  - **Verify**: File exists; all 5 section imports resolve; `npm run build` succeeds
+  - **Brief ref**: Scope — "HomePage.tsx page component with five sections"
 
-- [x] TASK-09: Header component
-  - **Goal**: Implement the responsive `Header` with skip-to-content link, Logo, wordmark, NavLink navigation, and mobile hamburger toggle
-  - **Details**: Create `src/components/Header.tsx`. Structure: `<header>` containing — (1) `<a href="#main-content" className="skip-link">Skip to content</a>` as the first child; (2) Logo (`size="sm"`, 32px); (3) wordmark "MARS MISSION FUND" in Bebas Neue via `--font-family-display` token; (4) `<nav aria-label="Main navigation">` with React Router `<NavLink>` links for `/`, `/about`, `/contact` — active link gets distinct styling via `--color-border-accent` or `--color-action-primary`; (5) hamburger `<button>` visible only below `--breakpoint-md` (768px), toggling a `useState` boolean that shows/hides the nav. Skip link is visually hidden until focused (standard `sr-only` + `focus:not-sr-only` pattern using tokens for position/background). All colours, fonts, spacing via semantic tokens.
-  - **Files**: `src/components/Header.tsx`
-  - **Verify**: File exists; compiles; skip link is the first focusable element; hamburger toggles nav on small viewports; NavLink active class applies; no hardcoded values
-  - **Brief ref**: Approach → Header; Accessibility notes → Header; Verification → Header
+- [ ] TASK-09: Create `AboutPage.tsx` page component
+  - **Goal**: About page with four labelled sections: mission statement, problem/solution, principles grid, persona cards
+  - **Details**: Create `src/pages/AboutPage.tsx`. Four sections each prefixed with `SectionLabel` (01–04): (1) mission statement — heading + body drawn from `specs/product-vision-and-mission.md` §1.1–1.2; (2) problem/solution — two-column layout at lg with problem on left and solution on right (use `<style>` for breakpoint); (3) principles — 5× `Card accent` in grid (2-col at 640px, 3-col at 1024px, last card centred on 3-col row); (4) personas — 4× `Card` in grid (1-col → 2-col at 768px → 4-col at 1024px). All copy from L1-001 §1.1–1.4. All styles use `var(--...)` tokens only.
+  - **Files**: `src/pages/AboutPage.tsx`
+  - **Verify**: All 4 sections render; principles shows 5 cards; personas shows 4 cards; `npm run build` succeeds
+  - **Brief ref**: Implementation note 6; Scope — "AboutPage.tsx page component with four sections"
 
-- [x] TASK-10: Footer component
-  - **Goal**: Implement the `Footer` with Logo (72px), tagline, navigation links, and copyright — responsive vertical stack on mobile
-  - **Details**: Create `src/components/Footer.tsx`. Renders a `<footer>` semantic element containing: Logo (`size="md"`, 72px), a tagline string (e.g. "Funding humanity's multiplanetary future"), nav links (`/`, `/about`, `/contact`), and copyright text (e.g. "© 2026 Mars Mission Fund"). On mobile (below `--breakpoint-md`): stack all sections vertically. On desktop: horizontal layout. All spacing, colour, font via semantic tokens. No React Router NavLink required (plain `<a>` or Link is fine).
-  - **Files**: `src/components/Footer.tsx`
-  - **Verify**: File exists; compiles; `<footer>` element present; Logo renders at md size; responsive layout applies; no hardcoded values
-  - **Brief ref**: Approach → Footer; Files table; Verification → Footer
+- [ ] TASK-10: Create `ContactPage.tsx` page component
+  - **Goal**: Contact page with static contact info and social links — no form
+  - **Details**: Create `src/pages/ContactPage.tsx`. Two sections: (01) GET IN TOUCH — contact details (email, GitHub org, general inquiry address) inside `Card` components; (02) FOLLOW THE MISSION — social/community links rendered as `Button variant="ghost"` or styled anchors. No `<form>` element anywhere. Each section prefixed with `SectionLabel`.
+  - **Files**: `src/pages/ContactPage.tsx`
+  - **Verify**: Two sections render; no form element; all links are real anchor elements; `npm run build` succeeds
+  - **Brief ref**: Implementation note 7; Scope — "ContactPage.tsx … contact info and social links (no form)"
 
-- [x] TASK-11: Layout component
-  - **Goal**: Implement the `Layout` wrapper that composes Header + `<main id="main-content">` + Footer and updates `document.title` on route change
-  - **Details**: Create `src/components/Layout.tsx`. Uses React Router v7's `<Outlet>` to render child routes inside `<main id="main-content">`. Imports and renders `<Header />` above and `<Footer />` below. On each route change, update `document.title` using `useLocation()` from `react-router` — map pathnames to human-readable titles, e.g. `/` → `"Mars Mission Fund"`, `/about` → `"About — Mars Mission Fund"`, `/contact` → `"Contact — Mars Mission Fund"`. Use a `useEffect` that fires on `location.pathname` change. The `<main>` element is the skip-link target: `id="main-content"`, `tabIndex={-1}` to allow programmatic focus.
-  - **Files**: `src/components/Layout.tsx`
-  - **Verify**: File exists; compiles; `<main id="main-content">` present in rendered DOM; `document.title` updates on navigation; Header and Footer appear on all routes
-  - **Brief ref**: Approach → Layout; Files table; Verification → all three routes show Header/Footer
-
-- [x] TASK-12: Wire Layout into App.tsx
-  - **Goal**: Replace the existing placeholder routes in `src/App.tsx` with the `Layout` component as a React Router v7 layout route wrapping all three page routes
-  - **Details**: Read current `src/App.tsx`. Replace the route structure so `Layout` is the parent route (using `<Outlet>`) and `/`, `/about`, `/contact` are child routes rendering placeholder `<div>` elements (actual page components are Issue #4). Use React Router v7 `createBrowserRouter` + `RouterProvider` or the JSX `<Routes>`/`<Route>` pattern — match whichever pattern is already in the file. Add `<Suspense>` wrapper if lazy-loading is used. Ensure all three routes are accessible.
+- [ ] TASK-11: Wire pages into `App.tsx` and verify full build
+  - **Goal**: Replace stub page components in `App.tsx` with real imports from `src/pages/` and confirm everything builds and runs
+  - **Details**: Modify `src/App.tsx` — remove the inline stub components (or inline JSX) for `/`, `/about`, `/contact` routes and replace with `import HomePage from './pages/HomePage'`, `import AboutPage from './pages/AboutPage'`, `import ContactPage from './pages/ContactPage'`. Run `npm run build` to confirm zero TypeScript or Vite errors.
   - **Files**: `src/App.tsx`
-  - **Verify**: `npm run build` succeeds; `npm run dev` serves the app; navigating to `/`, `/about`, `/contact` all show Header and Footer; no TypeScript errors
-  - **Brief ref**: Approach → App.tsx update; Scope → Layout wired into App.tsx; Files table
-
-- [x] TASK-13: Build verification and token audit
-  - **Goal**: Confirm the complete implementation builds cleanly, passes a token-discipline audit, and meets the visual/accessibility checklist from the brief
-  - **Details**: (1) Run `npm run build` — zero TypeScript errors, zero Vite errors. (2) Grep all new component files for forbidden patterns: `#[0-9a-fA-F]`, `rgb(`, `rgba(`, `hsl(`, hardcoded font-size `px` values, and `ms` duration literals — none should appear. (3) Start `npm run dev` and manually verify via Playwright or browser: all three routes show Header+Footer; skip link works on Tab; hamburger works at mobile width; Button variants render; Badge variants render; ProgressBar ARIA attrs in DOM; Logo gradient IDs are unique per instance; document.title updates on route change. (4) Fix any issues found before marking complete.
-  - **Files**: No new files; fixes to any component files if issues are found
-  - **Verify**: `npm run build` exits 0; grep audit finds no hardcoded values; dev server visual checks pass
-  - **Brief ref**: Verification section (entire)
+  - **Verify**: `npm run build` exits 0 with no errors; `npm run dev` serves the app; navigating between `/`, `/about`, `/contact` in the browser renders each page without full reload
+  - **Brief ref**: Scope — "Wiring up pages in App.tsx"; Verification section

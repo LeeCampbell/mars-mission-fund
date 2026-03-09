@@ -114,7 +114,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; page renders heading, message, and back-link button
   - **Brief ref**: `ContributePlaceholderPage` row in Files table, `ContributePlaceholderPage` layout section
 
-- [ ] TASK-09: Add routes and lazy loading to `App.tsx`
+- [x] TASK-09: Add routes and lazy loading to `App.tsx`
   - **Goal**: Register `/campaigns/:id` and `/contribute/:id` routes with `React.lazy` + `Suspense`
   - **Details**:
     - Open `src/App.tsx`

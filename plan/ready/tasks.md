@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The Tailwind CSS entry in the Frontend table no longer implies it is used for component styling. The clarification is legible in the rendered table. No other rows in the table are altered.
   - **Brief ref**: Brief § Approach — Divergence 2; § Files to Create/Modify row 2.
 
-- [ ] TASK-04: Verify and update specs/README.md index accuracy
+- [x] TASK-04: Verify and update specs/README.md index accuracy
   - **Goal**: Confirm every `.md` file under `specs/` (excluding `README.md` itself) appears in the index tables with an accurate description; update any stale descriptions given the changes made in TASK-01 through TASK-03.
   - **Details**: Cross-check the full file list from the brief against the current index tables in `specs/README.md`: `product-vision-and-mission.md`, `standards/brand.md`, `standards/engineering.md`, `tech/architecture.md`, `tech/security.md`, `tech/reliability.md`, `tech/data-management.md`, `tech/frontend.md`, `tech/audit.md`, `tech/markdown.md`, `tech/tech-stack.md`, `tooling/github.md`, `domain/account.md`, `domain/campaign.md`, `domain/donor.md`, `domain/payments.md`, `domain/kyc.md`. For each file: verify it appears in the correct section table; verify the description still accurately reflects the file after TASK-01 through TASK-03 edits. In particular, check that the L3-005 (`tech/frontend.md`) description does not mention anything that would now be inaccurate (e.g., no explicit mention of manual font hosting), and that the L3-008 (`tech/tech-stack.md`) description still holds. Update any stale descriptions. Follow one-sentence-per-line rule (L3-007).
   - **Files**: `specs/README.md`

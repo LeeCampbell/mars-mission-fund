@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; compiles; skip link is the first focusable element; hamburger toggles nav on small viewports; NavLink active class applies; no hardcoded values
   - **Brief ref**: Approach → Header; Accessibility notes → Header; Verification → Header
 
-- [ ] TASK-10: Footer component
+- [x] TASK-10: Footer component
   - **Goal**: Implement the `Footer` with Logo (72px), tagline, navigation links, and copyright — responsive vertical stack on mobile
   - **Details**: Create `src/components/Footer.tsx`. Renders a `<footer>` semantic element containing: Logo (`size="md"`, 72px), a tagline string (e.g. "Funding humanity's multiplanetary future"), nav links (`/`, `/about`, `/contact`), and copyright text (e.g. "© 2026 Mars Mission Fund"). On mobile (below `--breakpoint-md`): stack all sections vertically. On desktop: horizontal layout. All spacing, colour, font via semantic tokens. No React Router NavLink required (plain `<a>` or Link is fine).
   - **Files**: `src/components/Footer.tsx`

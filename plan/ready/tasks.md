@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File contains 6 `@font-face` blocks; Bebas Neue uses `optional`, others use `swap`
   - **Brief ref**: Scope — `@font-face` declarations; Approach — Font approach (L3-005 §9.1)
 
-- [ ] TASK-04: Create `src/tokens.css` with Tier 1 + Tier 2 design tokens
+- [x] TASK-04: Create `src/tokens.css` with Tier 1 + Tier 2 design tokens
   - **Goal**: Define all design system CSS custom properties on `:root` plus the `prefers-reduced-motion` override block
   - **Details**: **Tier 1 identity tokens** — colour palette (e.g. `--void: #060A14`, `--stellar-white`, `--mars-red`, `--ion-blue`, full scale), typography scale (font-size, line-height, letter-spacing primitives), spacing scale, border-radius primitives, motion duration/easing primitives (e.g. `--duration-fast`, `--duration-base`, `--easing-standard`). **Tier 2 semantic tokens** — map primitives to purpose: colours (`--color-bg-page`, `--color-bg-surface`, `--color-text-primary`, `--color-text-secondary`, `--color-accent-primary`, `--color-accent-secondary`, `--color-border-default`, etc.), typography (`--font-display`, `--font-body`, `--font-mono`), spacing (`--space-*`), radius (`--radius-*`), motion (`--motion-duration-*`, `--motion-easing-*`, `--motion-ambient`). **Breakpoint tokens** — `--breakpoint-sm`, `--breakpoint-md`, `--breakpoint-lg`, `--breakpoint-xl`. **`prefers-reduced-motion` block** — override all `--motion-duration-*` to `0ms`; set `--motion-ambient: static`; minimal easing overrides.
   - **Files**: `src/tokens.css`

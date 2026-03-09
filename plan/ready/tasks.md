@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Section renders with correct gradient background and secondary button; no raw hex or Tier 1 tokens
   - **Brief ref**: Implementation note 5
 
-- [ ] TASK-08: Create `HomePage.tsx` page component
+- [x] TASK-08: Create `HomePage.tsx` page component
   - **Goal**: Assemble all five homepage section components into a single page
   - **Details**: Create `src/pages/HomePage.tsx`. Import and render in order: `HeroSection`, `StatsSection`, `HowItWorksSection`, `FeaturedMissionsSection`, `ClosingCtaSection`. No additional markup beyond the fragment wrapper. Page `<title>` is already handled by `Layout.tsx`.
   - **Files**: `src/pages/HomePage.tsx`

@@ -21,7 +21,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test --help` (or `cat package.json`) shows all three scripts present
   - **Brief ref**: §Approach step 5, §Files to Create/Modify
 
-- [ ] TASK-03: Configure Vitest in vite.config.ts
+- [x] TASK-03: Configure Vitest in vite.config.ts
   - **Goal**: Wire Vitest into the existing Vite config with jsdom environment and v8 coverage thresholds
   - **Details**:
     1. Add `/// <reference types="vitest" />` as the very first line of `vite.config.ts`

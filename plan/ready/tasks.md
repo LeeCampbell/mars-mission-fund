@@ -68,7 +68,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File contains exactly two export-star statements with `.js` extensions
   - **Brief ref**: Implementation step 6 / Files table row 6
 
-- [ ] TASK-07: Run `npm install` to wire workspace symlinks and verify
+- [x] TASK-07: Run `npm install` to wire workspace symlinks and verify
   - **Goal**: Create the `node_modules/@mmf/shared` symlink and confirm the full setup is valid.
   - **Details**:
     1. Run `npm install` from repo root

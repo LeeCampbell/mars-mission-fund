@@ -52,3 +52,14 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 - The server `vitest.config.ts` only needs `environment: 'node'`; no special ESM transforms are required because `server/package.json` sets `"type": "module"`, which makes Node treat all `.js` output as ESM.
 - **Express 5 + SuperTest testability**: the app is built as a factory function `createApp(pool: Pool): Express` that accepts the database pool via dependency injection. This pattern is required so tests can pass a mock pool without side effects from real DB connections or port binding.
 - The `src/api/<domain>.ts` layer falls back to inline mock data when the API returns a non-OK response or is unreachable. This makes the frontend fully functional during local development even when the Express server is not running.
+
+## Issue #52: Plan files may contain markdownlint violations
+
+- `plan/ready/brief.md` and `plan/ready/tasks.md` can be created with ordered list numbers (1., 2., 3., …) and fenced code blocks without surrounding blank lines, both of which violate markdownlint rules MD029 and MD031.
+- Resolution: Fix ordered list items to always use `1.` (the "one" style), and add blank lines before and after all fenced code blocks. Also, `package.json` formatting may drift — run `npx prettier --write package.json` if the format check fails.
+
+## Issue #52: packages/shared tsconfig.json needs lib and skipLibCheck
+
+- Running `tsc --noEmit` from `packages/shared` without a `lib` option defaults to ES5, causing errors in `@types/react`, `@types/chai`, and `zod` type definitions (can't find `Set`, `Map`, `WeakMap`, etc.).
+- Additionally, the workspace `node_modules` contains many `@types/*` packages from the root frontend project that the shared package doesn't need to type-check.
+- Resolution: Add `"lib": ["ES2020"]` and `"skipLibCheck": true` to `packages/shared/tsconfig.json`.

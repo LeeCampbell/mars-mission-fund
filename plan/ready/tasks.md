@@ -100,7 +100,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; page renders all sections, loading/error states are handled
   - **Brief ref**: `CampaignDetailPage` row in Files table, Page layout section
 
-- [ ] TASK-08: Create `ContributePlaceholderPage`
+- [x] TASK-08: Create `ContributePlaceholderPage`
   - **Goal**: Simple "Coming Soon" placeholder page that links back to the campaign detail
   - **Details**:
     - Create `src/pages/ContributePlaceholderPage.tsx`

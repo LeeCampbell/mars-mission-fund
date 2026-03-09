@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cat package.json` shows the workspaces field; `npm install` at repo root succeeds without errors
   - **Brief ref**: "Add `"workspaces": ["packages/*"]` to root `package.json`"
 
-- [ ] TASK-02: Create packages/shared/package.json
+- [x] TASK-02: Create packages/shared/package.json
   - **Goal**: Define the `@mmf/shared` package manifest with correct metadata, exports map, and dependencies
   - **Details**:
     - `"name": "@mmf/shared"`, `"version": "0.1.0"`, `"private": true`, `"type": "module"`

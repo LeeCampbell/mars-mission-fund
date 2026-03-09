@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File created. `npm run build` passes. Header renders at top of viewport; skip link visible on Tab; active route link styled; hamburger appears below 768px and toggles nav.
   - **Brief ref**: §Approach step 8
 
-- [ ] TASK-10: Footer component
+- [x] TASK-10: Footer component
   - **Goal**: Implement `src/components/Footer.tsx` — site footer with logo, tagline, navigation links, and copyright.
   - **Details**: Structure: `<footer>`. Logo at `size="md"` (72px). Tagline text: "Your stake. Their mission. Our planet." in `--color-text-muted` or `--color-text-secondary`. Nav links: Home / About / Contact using React Router `Link`. Copyright line: "© <year> Mars Mission Fund. All rights reserved." — year from `new Date().getFullYear()`. Layout: horizontal row on desktop (logo-tagline on left, links + copyright on right); single column stack on mobile. Background: `--color-surface-footer` or `--color-surface-dark`. All visual values via tokens only.
   - **Files**: `src/components/Footer.tsx`

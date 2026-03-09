@@ -27,7 +27,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds with no TypeScript errors; hook file exports `useCampaign`
   - **Brief ref**: `src/hooks/useCampaign.ts` row in Files table, L3-005 §1.3 staleTime requirement
 
-- [ ] TASK-03: Create `FundingProgressSection` component
+- [x] TASK-03: Create `FundingProgressSection` component
   - **Goal**: Display raised/target amounts, contributor count, time remaining, a `ProgressBar`, and a "Contribute" button linking to `/contribute/:id`
   - **Details**:
     - Create `src/components/campaigns/FundingProgressSection.tsx`

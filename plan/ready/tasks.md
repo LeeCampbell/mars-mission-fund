@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: 4 StatCards visible; responsive at 640/1024px; `npm run build` passes
   - **Brief ref**: Homepage structure — StatsSection
 
-- [ ] TASK-05: Create HowItWorksSection composite component
+- [x] TASK-05: Create HowItWorksSection composite component
   - **Goal**: Build the `HowItWorksSection` composite with SectionLabel and 3 step Cards
   - **Details**: Create `src/components/HowItWorksSection.tsx`. Use `SectionLabel` with text `"02 — HOW IT WORKS"`. Render 3× `Card` (with `accent` prop), each showing a step number (e.g., `"01"`), step title, and description. Static copy: step 1 "Browse Missions", step 2 "Back a Mission", step 3 "Track Progress". Responsive grid: 1 col mobile, 3 cols at 1024px. Tier 2 tokens only.
   - **Files**: `src/components/HowItWorksSection.tsx` (create)

@@ -100,7 +100,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes. DevTools `:root` computed styles show all listed custom properties.
   - **Brief ref**: Scope — "`src/tokens.css`"; Approach steps 5 — "Tokens"; L2-001 Sections 1–2 and 5.2; L3-005 Section 5.2
 
-- [ ] TASK-07: Add `@theme` block and global reset/base styles to `src/index.css`
+- [x] TASK-07: Add `@theme` block and global reset/base styles to `src/index.css`
   - **Goal**: Expose key semantic tokens as Tailwind v4 utilities via `@theme`, and apply a brand-consistent global CSS reset.
   - **Details**:
     - **`@theme` block** (in `src/index.css`, after imports):

@@ -1,3 +1,57 @@
 @import "tailwindcss";
 @import "./fonts.css";
 @import "./tokens.css";
+
+@theme {
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-action-primary: var(--color-action-primary);
+  --color-action-primary-hover: var(--color-action-primary-hover);
+  --color-accent: var(--color-accent);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-border: var(--color-border);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-button: var(--radius-button);
+  --radius-card: var(--radius-card);
+  --font-family-brand: var(--font-brand);
+  --font-family-body: var(--font-body);
+  --font-family-mono: var(--font-mono);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--chrome);
+  font-family: var(--font-brand);
+  line-height: 1.1;
+  margin: 0;
+}
+
+a {
+  color: var(--color-action-primary);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--color-action-primary-hover);
+}

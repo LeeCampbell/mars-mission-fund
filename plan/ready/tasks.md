@@ -78,7 +78,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `server/package.json` is valid JSON with all listed runtime and dev dependencies. `server/tsconfig.json` is valid JSON with `strict: true` and the correct `target`/`module`/`moduleResolution` values. Running `cd server && npm install` completes without errors.
   - **Brief ref**: §5 `server/package.json`, §6 `server/tsconfig.json`
 
-- [ ] TASK-07: Verify frontend build and migrations SQL syntax
+- [x] TASK-07: Verify frontend build and migrations SQL syntax
   - **Goal**: Confirm that all previous tasks' outputs are syntactically valid and the existing frontend build still passes.
   - **Details**:
     - Run `npm run build` from the repo root and confirm it exits 0.

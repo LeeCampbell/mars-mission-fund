@@ -386,14 +386,21 @@ The brand typography defined in [Brand Application Standard](L2-001) Section 1.3
 | DM Sans | `--font-body` | Body text, buttons, card titles |
 | Space Mono | `--font-data` | Labels, data values, mission codes |
 
-Font loading strategy:
+Font loading implementation:
 
-- Fonts are self-hosted (no third-party font CDN dependency).
-- `font-display: swap` for body font (DM Sans) to prevent invisible text.
-- `font-display: optional` for display font (Bebas Neue) on slow connections — fallback is acceptable for display headings.
-- Data font (Space Mono) loaded with `font-display: swap`.
-- Font files served in WOFF2 format with appropriate subset (Latin + extended Latin).
-- Font preload hints (`<link rel="preload">`) for DM Sans (critical text rendering).
+Fonts are loaded via the `@fontsource/bebas-neue`, `@fontsource/dm-sans`, and `@fontsource/space-mono` npm packages, imported in `src/index.css`.
+The underlying font files are WOFF2 format — the same self-hosted, no-CDN approach described in the spec intent — but the mechanism is npm-managed rather than manually downloaded.
+At build time, Vite bundles the WOFF2 files from the `@fontsource` packages into the output; no runtime CDN request occurs.
+
+Rationale: standardised font loading via `@fontsource` npm packages avoids manual file management (no manual WOFF2 downloads or `@font-face` declarations to maintain) and provides controlled subsetting through each package's CSS imports.
+
+`font-display` strategy per font:
+
+- `font-display: swap` for DM Sans (body font) — prevents invisible text while the font loads.
+- `font-display: optional` for Bebas Neue (display font) on slow connections — a fallback is acceptable for display headings.
+- `font-display: swap` for Space Mono (data font).
+
+Font preload hint (`<link rel="preload">`) is applied to DM Sans as the critical path font for body text rendering.
 
 ### 9.2 Image Optimisation
 

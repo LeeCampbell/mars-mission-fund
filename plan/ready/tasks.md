@@ -57,7 +57,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `grep -E "dev:server|test:server" package.json` shows `-w @mmf/server` in both lines
   - **Brief ref**: Step 5 — Update root `package.json` scripts
 
-- [ ] TASK-06: Delete the old `server/` directory
+- [x] TASK-06: Delete the old `server/` directory
   - **Goal**: Remove the entire `server/` directory from the repo root
   - **Details**: After confirming all files are present in `packages/server/`, delete `server/` and all its contents. Verify with `ls server/` returning "no such file or directory".
   - **Files**: `server/` (delete entire directory)

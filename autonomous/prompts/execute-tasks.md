@@ -45,14 +45,7 @@ Follow project standards:
 
 ### Step 4: Verify
 
-Run the full CI check suite before committing. Every check must pass:
-
-1. `npx tsc -b --noEmit` (type-check)
-1. `npm run lint` (ESLint — run `npm run lint:fix` to auto-fix)
-1. `npm run format:check` (Prettier — run `npm run format` to auto-fix)
-1. `npm run lint:md` (Markdownlint)
-1. `npm run build` (Vite build)
-1. `npm run test:coverage` (tests)
+Run `./scripts/ci-check.sh` before committing. Every check must pass.
 
 If any check fails, fix the issue and re-run until all pass.
 

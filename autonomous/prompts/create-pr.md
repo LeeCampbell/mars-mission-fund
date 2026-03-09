@@ -18,14 +18,7 @@ The branch has already been pushed. Plan archival is handled by the calling scri
 
 ### Step 1: Final Verification
 
-Run the full CI check suite. Every check must pass:
-
-1. `npx tsc -b --noEmit` (type-check)
-1. `npm run lint` (ESLint — run `npm run lint:fix` to auto-fix)
-1. `npm run format:check` (Prettier — run `npm run format` to auto-fix)
-1. `npm run lint:md` (Markdownlint)
-1. `npm run build` (Vite build)
-1. `npm run test:coverage` (tests)
+Run `./scripts/ci-check.sh`. Every check must pass.
 
 If any check fails, fix the issue, commit the fix, and re-run until all pass.
 

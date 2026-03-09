@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Section 1.2 lists all three directory paths. No sentence has more than one sentence on a line. Surrounding text is unchanged.
   - **Brief ref**: Step 1, paragraph 1
 
-- [ ] TASK-03: Add Tailwind v4 CSS-first configuration pattern
+- [x] TASK-03: Add Tailwind v4 CSS-first configuration pattern
   - **Goal**: Document the `@import "tailwindcss"` / `@theme` pattern and the rule that components use `var()` directly.
   - **Details**: Add a new subsection to Section 2 (or Section 9, whichever is more appropriate after reading the file) documenting: `@import "tailwindcss"` activates the framework; a `@theme` block maps semantic tokens to Tailwind utilities; components consume tokens via `var()` not Tailwind utilities; `@theme` is additive. Follow one-sentence-per-line rule.
   - **Files**: `specs/tech/frontend.md`

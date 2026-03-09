@@ -171,6 +171,14 @@ Every design system primitive must include:
 - Components accept a `className` or equivalent escape hatch for layout positioning only — never for overriding visual tokens.
 - All interactive components support `disabled`, focus management, and keyboard navigation.
 
+### 2.4 Tailwind v4 CSS-First Configuration
+
+The project uses Tailwind CSS v4's CSS-first configuration model.
+`@import "tailwindcss"` in `src/index.css` activates the framework.
+A `@theme` block maps key semantic tokens to Tailwind utilities where useful.
+Components consume semantic tokens via `var()` references directly, not via Tailwind utility classes, because Tailwind utilities cannot represent all semantic token values (e.g., gradient backgrounds).
+The `@theme` block is additive — it does not replace `var()` references in component stylesheets.
+
 ---
 
 ## 3. Performance Budgets

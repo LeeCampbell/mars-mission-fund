@@ -33,7 +33,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The `RUN` step appears in the Dockerfile with the correct download URL and `chmod +x` call.
   - **Brief ref**: §3 Dockerfile DBMate install
 
-- [ ] TASK-04: Create DBMate migration files (tables)
+- [x] TASK-04: Create DBMate migration files (tables)
   - **Goal**: Create the five schema migration files that define the campaign read model tables.
   - **Details**: Create `server/db/migrations/` directory and the following files, each with `-- migrate:up` and `-- migrate:down` sections:
     - `20260309000001_create_campaigns.sql` — `campaigns` table with all columns listed in the brief (UUID PK, slug, title, summary, description, alignment_statement, category, tags TEXT[], status, hero_image_url, min/max/current funding in cents as BIGINT, contributor_count, deadline, launched_at, created_at, updated_at).

@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists at repo root and contents match Section 11.3 of `specs/tech/markdown.md` exactly
   - **Brief ref**: Section "4. markdownlint config"
 
-- [ ] TASK-05: Install packages
+- [x] TASK-05: Install packages
   - **Goal**: Install all new devDependencies into node_modules
   - **Details**: Run `npm install` to install the 6 new packages added in TASK-01. Confirm no peer dependency errors for the listed versions
   - **Files**: `package-lock.json` (updated)

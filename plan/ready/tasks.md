@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Every `.md` file under `specs/` appears in the README index; no stale entries reference non-existent files; markdownlint passes.
   - **Brief ref**: Scope section, Verify specs/README.md bullet; Approach step 5.
 
-- [ ] TASK-06: Update specs/learnings.md with milestone gotchas
+- [x] TASK-06: Update specs/learnings.md with milestone gotchas
   - **Goal**: Capture any new gotchas discovered during issues #40–#43 so future agents can avoid the same pitfalls.
   - **Details**: Review the implemented code in the repository (particularly `server/`, `src/api/`, `src/hooks/`, `vite.config.ts`, and any Vitest configs under `server/`) for evidence of non-obvious configuration choices or workarounds. Add entries for any confirmed gotchas — for example: Vitest config for server-side tests with ESM (if a special `vitest.config.ts` or transform setting was needed), SuperTest + Express 5 specifics (e.g. async route handlers, error handling differences), or DBMate invocation quirks. Each entry should follow the existing format: a heading with the issue context, bullet points for the problem and resolution. If no new gotchas are found beyond what is already documented, add a brief entry noting that issues #40–#43 completed without new tooling surprises.
   - **Files**: `specs/learnings.md` (modify)

@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All 6 WOFF2 files exist and are non-zero bytes (`ls -lh src/assets/fonts/`)
   - **Brief ref**: Scope — Self-hosted WOFF2 files; Approach — Font approach
 
-- [ ] TASK-03: Create `src/fonts.css` with `@font-face` declarations
+- [x] TASK-03: Create `src/fonts.css` with `@font-face` declarations
   - **Goal**: Declare all font faces pointing to the local WOFF2 assets with correct `font-display` values
   - **Details**: Write `@font-face` rules for each weight. Use `font-display: optional` for Bebas Neue (decorative, non-critical). Use `font-display: swap` for DM Sans (body) and Space Mono (mono). Paths must be relative to `src/assets/fonts/`. Include `font-weight` and `font-style` descriptors for each variant.
   - **Files**: `src/fonts.css`

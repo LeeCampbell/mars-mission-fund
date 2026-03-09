@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File contains `-- migrate:up` and `-- migrate:down`. There are 8–10 INSERT statements for campaigns. Related inserts reference valid campaign IDs. `ON CONFLICT DO NOTHING` is present on all campaign inserts.
   - **Brief ref**: §4 DBMate migrations (migration 6)
 
-- [ ] TASK-06: Create `server/package.json` and `server/tsconfig.json`
+- [x] TASK-06: Create `server/package.json` and `server/tsconfig.json`
   - **Goal**: Establish the server sub-package with correct runtime and dev dependencies and TypeScript configuration.
   - **Details**:
     - `server/package.json`: `"name": "server"`, `"type": "module"`, `"main": "dist/index.js"`. Runtime deps: `express@^5`, `pg`, `dotenv`, `pino`, `pino-http`, `zod`, `swagger-jsdoc`, `swagger-ui-express`. Dev deps: `@types/express`, `@types/pg`, `@types/node`, `typescript`, `pino-pretty`, `vitest`, `supertest`, `@types/supertest`. Include `"scripts"`: `"build": "tsc"`, `"dev": "node --watch dist/index.js"`, `"test": "vitest"`.

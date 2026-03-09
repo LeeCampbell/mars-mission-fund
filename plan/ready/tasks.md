@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; component renders all required fields; no hardcoded colours or Tailwind visual classes.
   - **Brief ref**: Section "4 — CampaignCard component"
 
-- [ ] TASK-05: Create `CampaignsPage` (`src/pages/CampaignsPage.tsx`)
+- [x] TASK-05: Create `CampaignsPage` (`src/pages/CampaignsPage.tsx`)
   - **Goal**: Page component that calls `useCampaigns()` and renders a responsive 1→2→3-column CSS grid of `CampaignCard`s, with accessible loading and error states.
   - **Details**:
     - Import `useCampaigns` and `CampaignCard`.

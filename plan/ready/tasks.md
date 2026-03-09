@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Every file returned by the directory listing has an entry in `specs/README.md`. No entries are missing.
   - **Brief ref**: Step 5
 
-- [ ] TASK-10: Run markdownlint and fix any violations
+- [x] TASK-10: Run markdownlint and fix any violations
   - **Goal**: Ensure all edited spec files have zero markdownlint violations.
   - **Details**: Run `npx markdownlint-cli2 "specs/**/*.md"`. Fix any violations found in `specs/tech/frontend.md` (and `specs/README.md` if modified). Re-run until zero violations. Also do a final one-sentence-per-line check on all edited sections.
   - **Files**: `specs/tech/frontend.md` (and `specs/README.md` if modified)

@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Directory `src/components/ui/` exists; `src/tokens.css` contains Tier 2 `--color-*`, `--font-*`, `--radius-*`, `--transition-*` custom properties
   - **Brief ref**: Prerequisites section; Files to Create/Modify table
 
-- [ ] TASK-02: Button component
+- [x] TASK-02: Button component
   - **Goal**: Implement the `Button` primitive with `primary`, `secondary`, and `ghost` variants, polymorphic `href` rendering, disabled state, and focus/hover/transition states
   - **Details**: Create `src/components/ui/Button.tsx`. Props: `variant: 'primary' | 'secondary' | 'ghost'` (default `primary`), `href?: string`, `disabled?: boolean`, plus standard button/anchor HTML attrs. When `href` is set render an `<a>` element, otherwise `<button>`. Primary: gradient background using `--color-action-primary` token family. Secondary: surface background with border. Ghost: transparent with border. Hover darkens via token. Focus ring uses `--color-border-accent` (orange outline). Disabled: reduced opacity, `cursor: not-allowed`, `pointer-events: none`. All colours, radii, font, transitions via `var(--semantic-token)` only — no hardcoded values.
   - **Files**: `src/components/ui/Button.tsx`

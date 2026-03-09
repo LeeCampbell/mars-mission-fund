@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component file has no TypeScript errors (`npm run build`); no hardcoded colors; uses only Tier 2 tokens
   - **Brief ref**: MissionCard composite section
 
-- [ ] TASK-03: Create HeroSection composite component
+- [x] TASK-03: Create HeroSection composite component
   - **Goal**: Build the `HeroSection` composite with gradient background, display heading, subtext, primary CTA button, and ambient radial glow with `prefers-reduced-motion` support
   - **Details**: Create `src/components/HeroSection.tsx`. Apply `--gradient-hero` as background. Heading uses `--type-hero` font sizing token. Include a `<Button>` (primary) labeled "Fund a Mission". Add an ambient radial glow element (absolutely positioned `div` with radial gradient). Use a `useReducedMotion`-style check (or CSS `@media (prefers-reduced-motion: reduce)`) to make the glow static when motion is reduced — implement via inline style or a CSS class toggled by a `window.matchMedia` check in a `useEffect`. Accepts no required external props (hero content is static).
   - **Files**: `src/components/HeroSection.tsx` (create)

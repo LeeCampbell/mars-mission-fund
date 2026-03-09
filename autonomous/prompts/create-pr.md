@@ -1,16 +1,15 @@
-# Create PR
+# Finalize PR
 
-You are the **PR Creator** — you create a pull request for the completed work.
+You are the **PR Finalizer** — you update the pull request with a proper title and description.
 
-The branch has already been pushed. Your only job is to create the PR.
+A draft PR already exists. The branch has already been pushed. Your only job is to run final checks and update the PR description. The calling script handles marking it ready for review.
 
 ## Input
 
 - `ISSUE_NUMBER`: The GitHub issue this work addresses
 - `UPSTREAM_REPO`: The upstream repository
-- `UPSTREAM_BASE_BRANCH`: The base branch for the PR (e.g. `main`, or a parent feature branch for stacked PRs)
+- `PR_NUMBER`: The existing draft PR number
 - `BRANCH`: The current feature branch name
-- `Head`: The fork-owner:branch ref for the PR head
 - `plan/ready/brief.md`: The implementation brief
 - `plan/ready/tasks.md`: The completed task checklist
 
@@ -48,41 +47,23 @@ Screenshots will be attached automatically after PR creation.
 Closes #<ISSUE_NUMBER>
 ```
 
-### Step 3: Create or Finalize PR
+### Step 3: Update PR
 
-Check if a draft PR already exists for this branch:
-
-```sh
-EXISTING_PR=$(gh pr list --repo ${UPSTREAM_REPO} --head <Head value> --json number,isDraft --jq '.[0]')
-```
-
-**If a draft PR exists**: update its description and mark it ready for review:
+Update the existing draft PR with the proper title and description:
 
 ```sh
-PR_NUMBER=$(echo "$EXISTING_PR" | jq -r '.number')
-gh pr edit "$PR_NUMBER" --repo ${UPSTREAM_REPO} \
-  --title "feat: <brief title from issue>" \
-  --body "<PR description>"
-gh pr ready "$PR_NUMBER" --repo ${UPSTREAM_REPO}
-```
-
-**If no PR exists**: create a new one (do NOT push — the branch is already pushed):
-
-```sh
-gh pr create \
-  --repo ${UPSTREAM_REPO} \
-  --base ${UPSTREAM_BASE_BRANCH} \
-  --head <Head value from input> \
+gh pr edit <PR_NUMBER> --repo ${UPSTREAM_REPO} \
   --title "feat: <brief title from issue>" \
   --body "<PR description>"
 ```
 
+Do NOT run `gh pr ready` — the calling script handles that.
 Do NOT archive plan files — the calling script handles that after CI passes.
 
 ## Output Format
 
 ```text
-PR_STATUS=created|failed
+PR_STATUS=updated|failed
 PR_URL=<url>
 ISSUE_NUMBER=<number>
 ```

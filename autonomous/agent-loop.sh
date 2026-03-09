@@ -148,6 +148,26 @@ Upstream repo: ${UPSTREAM_REPO}" \
 
     if [ -f "plan/ready/tasks.md" ]; then
       echo ">>> Tasks created"
+
+      # Push branch to fork so we can create a draft PR for visibility
+      git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE" || true
+
+      # Create draft PR (once — this state only runs once)
+      PR_NUMBER=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr create \
+        --repo "$UPSTREAM_REPO" \
+        --base "$UPSTREAM_BASE_BRANCH" \
+        --head "${FORK_OWNER}:${BRANCH}" \
+        --title "feat: ${ISSUE_TITLE}" \
+        --body "Work in progress for #${ISSUE_NUMBER}" \
+        --draft --json number --jq '.number' 2>&1) || true
+
+      if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" -eq "$PR_NUMBER" ] 2>/dev/null; then
+        echo "$PR_NUMBER" > plan/.pr-number
+        echo ">>> Draft PR #${PR_NUMBER} created"
+      else
+        echo "!!! Draft PR creation failed (non-fatal): ${PR_NUMBER}"
+      fi
+
       clear_state
     else
       echo "!!! No tasks produced"
@@ -186,17 +206,6 @@ Upstream repo: ${UPSTREAM_REPO}" \
       echo "!!! Push failed — branch may have diverged"
     fi
 
-    # Create draft PR on first push for visibility (if none exists yet)
-    if ! GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr list --repo "$UPSTREAM_REPO" --head "${FORK_OWNER}:${BRANCH}" --json number --jq '.[0].number' 2>/dev/null | grep -q .; then
-      GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr create \
-        --repo "$UPSTREAM_REPO" \
-        --base "$UPSTREAM_BASE_BRANCH" \
-        --head "${FORK_OWNER}:${BRANCH}" \
-        --title "feat: ${ISSUE_TITLE}" \
-        --body "Work in progress for #${ISSUE_NUMBER}" \
-        --draft 2>&1 | tee -a "$LOG_FILE" || echo "!!! Draft PR creation failed (non-fatal)"
-    fi
-
     clear_state
 
     # Check if more tasks remain
@@ -216,13 +225,31 @@ Upstream repo: ${UPSTREAM_REPO}" \
       echo "!!! Push failed — branch may have diverged"
     fi
 
-    # Save fork token before overriding for PR creation
+    # Resolve PR number: from plan file (created in create-tasks), or query upstream
+    PR_NUMBER=""
+    if [ -f "plan/.pr-number" ]; then
+      PR_NUMBER=$(cat plan/.pr-number)
+    fi
+    if [ -z "$PR_NUMBER" ]; then
+      PR_NUMBER=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr list --repo "$UPSTREAM_REPO" \
+        --head "${FORK_OWNER}:${BRANCH}" --json number --jq '.[0].number' 2>/dev/null || true)
+    fi
+
+    if [ -z "$PR_NUMBER" ]; then
+      echo "!!! No draft PR found — cannot finalize"
+      clear_state
+      exit 2
+    fi
+
+    echo ">>> Finalizing PR #${PR_NUMBER}"
+
+    # Save fork token before overriding for PR operations
     GH_TOKEN_FORK="$GH_TOKEN"
 
-    # Claude will run `gh pr create --repo UPSTREAM_REPO` which needs upstream token
+    # Claude will run `gh pr edit --repo UPSTREAM_REPO` which needs upstream token
     export GH_TOKEN="$GH_TOKEN_UPSTREAM"
 
-    # Let Claude create the PR with a proper description
+    # Let Claude update the PR title and description
     timeout "$TIMEOUT" claude \
       --dangerously-skip-permissions \
       --print \
@@ -232,68 +259,57 @@ Upstream repo: ${UPSTREAM_REPO}" \
 Issue number: #${ISSUE_NUMBER}
 Issue title: ${ISSUE_TITLE}
 Upstream repo: ${UPSTREAM_REPO}
-Base branch: ${UPSTREAM_BASE_BRANCH}
-Head: ${FORK_OWNER}:${BRANCH}
+PR number: ${PR_NUMBER}
 Branch: ${BRANCH}" \
       2>&1 | tee "$LOG_FILE" || true
 
-    # Extract PR number from Claude's output log, with fallback to gh pr list
-    PR_NUMBER=$(grep -oE 'https://github.com/[^ ]+/pull/[0-9]+' "$LOG_FILE" | head -1 | grep -oE '[0-9]+$' || true)
-    if [ -z "$PR_NUMBER" ]; then
-      PR_NUMBER=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr list --repo "$UPSTREAM_REPO" \
-        --head "${FORK_OWNER}:${BRANCH}" --json number --jq '.[0].number' 2>/dev/null || true)
-    fi
+    # Mark PR as ready for review (deterministic — not delegated to Claude)
+    GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr ready "$PR_NUMBER" \
+      --repo "$UPSTREAM_REPO" 2>&1 | tee -a "$LOG_FILE" || true
+    echo ">>> PR #${PR_NUMBER} marked ready for review"
 
     # Upload screenshots as a PR comment
     if ls /screenshots/ISSUE-${ISSUE_NUMBER}-*.png 1>/dev/null 2>&1; then
-      if [ -n "$PR_NUMBER" ]; then
-        COMMENT_BODY="## Screenshots\n\n"
-        FORK_REPO=$(echo "$FORK_URL" | sed 's|.*github.com/||;s|\.git$||')
+      COMMENT_BODY="## Screenshots\n\n"
+      FORK_REPO=$(echo "$FORK_URL" | sed 's|.*github.com/||;s|\.git$||')
 
-        # Ensure screenshots branch exists on fork
-        if ! GH_TOKEN="$GH_TOKEN_FORK" gh api "repos/${FORK_REPO}/git/ref/heads/screenshots" &>/dev/null; then
-          DEFAULT_SHA=$(GH_TOKEN="$GH_TOKEN_FORK" gh api "repos/${FORK_REPO}/git/ref/heads/main" --jq '.object.sha')
-          GH_TOKEN="$GH_TOKEN_FORK" gh api "repos/${FORK_REPO}/git/refs" \
-            -X POST -f ref="refs/heads/screenshots" -f sha="$DEFAULT_SHA" 2>/dev/null || true
-        fi
-
-        for img in /screenshots/ISSUE-${ISSUE_NUMBER}-*.png; do
-          FNAME=$(basename "$img")
-          # Upload to fork repo screenshots branch via contents API (uses fork token)
-          # Pipe base64 via stdin to jq, then pipe JSON to gh api, to avoid
-          # Linux MAX_ARG_STRLEN (128KB) limit on individual command-line args.
-          (base64 -w0 "$img" 2>/dev/null || base64 "$img") \
-          | tr -d '\n' \
-          | jq -Rs \
-            --arg msg "chore: add screenshot ${FNAME}" \
-            --arg branch "screenshots" \
-            '{message: $msg, content: ., branch: $branch}' \
-          | GH_TOKEN="$GH_TOKEN_FORK" gh api \
-            "repos/${FORK_REPO}/contents/screenshots/PR-${PR_NUMBER}/${FNAME}" \
-            -X PUT --input - \
-          || echo "!!! Failed to upload screenshot: ${FNAME}"
-
-          RAW_URL="https://raw.githubusercontent.com/${FORK_REPO}/screenshots/screenshots/PR-${PR_NUMBER}/${FNAME}"
-          COMMENT_BODY="${COMMENT_BODY}### ${FNAME}\n![${FNAME}](${RAW_URL})\n\n"
-        done
-
-        # Post comment on upstream PR with screenshots (uses upstream token)
-        echo -e "$COMMENT_BODY" | GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr comment "$PR_NUMBER" \
-          --repo "$UPSTREAM_REPO" --body-file - || true
+      # Ensure screenshots branch exists on fork
+      if ! GH_TOKEN="$GH_TOKEN_FORK" gh api "repos/${FORK_REPO}/git/ref/heads/screenshots" &>/dev/null; then
+        DEFAULT_SHA=$(GH_TOKEN="$GH_TOKEN_FORK" gh api "repos/${FORK_REPO}/git/ref/heads/main" --jq '.object.sha')
+        GH_TOKEN="$GH_TOKEN_FORK" gh api "repos/${FORK_REPO}/git/refs" \
+          -X POST -f ref="refs/heads/screenshots" -f sha="$DEFAULT_SHA" 2>/dev/null || true
       fi
+
+      for img in /screenshots/ISSUE-${ISSUE_NUMBER}-*.png; do
+        FNAME=$(basename "$img")
+        # Upload to fork repo screenshots branch via contents API (uses fork token)
+        # Pipe base64 via stdin to jq, then pipe JSON to gh api, to avoid
+        # Linux MAX_ARG_STRLEN (128KB) limit on individual command-line args.
+        (base64 -w0 "$img" 2>/dev/null || base64 "$img") \
+        | tr -d '\n' \
+        | jq -Rs \
+          --arg msg "chore: add screenshot ${FNAME}" \
+          --arg branch "screenshots" \
+          '{message: $msg, content: ., branch: $branch}' \
+        | GH_TOKEN="$GH_TOKEN_FORK" gh api \
+          "repos/${FORK_REPO}/contents/screenshots/PR-${PR_NUMBER}/${FNAME}" \
+          -X PUT --input - \
+        || echo "!!! Failed to upload screenshot: ${FNAME}"
+
+        RAW_URL="https://raw.githubusercontent.com/${FORK_REPO}/screenshots/screenshots/PR-${PR_NUMBER}/${FNAME}"
+        COMMENT_BODY="${COMMENT_BODY}### ${FNAME}\n![${FNAME}](${RAW_URL})\n\n"
+      done
+
+      # Post comment on upstream PR with screenshots (uses upstream token)
+      echo -e "$COMMENT_BODY" | GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr comment "$PR_NUMBER" \
+        --repo "$UPSTREAM_REPO" --body-file - || true
     fi
 
     # Write PR number for await-ci state (do NOT archive plan yet — needed for remediation)
-    if [ -n "$PR_NUMBER" ]; then
-      echo "$PR_NUMBER" > plan/.pr-url
-      clear_state
-      echo ">>> PR created (#${PR_NUMBER}) for issue #${ISSUE_NUMBER}, transitioning to await-ci"
-      exit 1  # iterate again into await-ci
-    else
-      echo "!!! Could not extract PR number from log"
-      clear_state
-      exit 2
-    fi
+    echo "$PR_NUMBER" > plan/.pr-url
+    clear_state
+    echo ">>> PR #${PR_NUMBER} finalized for issue #${ISSUE_NUMBER}, transitioning to await-ci"
+    exit 1  # iterate again into await-ci
     ;;
 
   await-ci)

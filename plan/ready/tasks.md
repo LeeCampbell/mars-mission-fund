@@ -14,7 +14,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds with no TypeScript errors; `vite.config.ts` contains the proxy rule; `src/main.tsx` renders `<QueryClientProvider>`.
   - **Brief ref**: Section "1 — Dependency & build config"
 
-- [ ] TASK-02: Create API layer (`src/api/campaigns.ts`)
+- [x] TASK-02: Create API layer (`src/api/campaigns.ts`)
   - **Goal**: Provide a typed `Campaign` interface and a `fetchCampaigns()` function that calls `GET /v1/campaigns` and throws on non-OK responses.
   - **Details**:
     - Export the `Campaign` interface exactly as specified in the brief (id, title, summary, category, status, raisedAmount, goalAmount, fundingProgressPct, deadline, heroImageUrl?).

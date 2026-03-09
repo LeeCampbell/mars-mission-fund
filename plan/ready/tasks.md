@@ -42,7 +42,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cd server && npx tsc --noEmit` passes; schemas can be imported and `.parse()` called in isolation.
   - **Brief ref**: Directory structure — `campaigns/types.ts`; Key design decisions — Zod validation.
 
-- [ ] TASK-04: Create campaigns/queries.ts — parameterised SQL query functions
+- [x] TASK-04: Create campaigns/queries.ts — parameterised SQL query functions
   - **Goal**: Implement `listCampaigns` and `getCampaignById` using parameterised `pool.query()` calls only — no string interpolation in SQL.
   - **Details**:
     - Create `server/src/campaigns/queries.ts`.

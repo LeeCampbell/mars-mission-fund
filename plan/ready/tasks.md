@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: 3 MissionCards render with badges and progress bars; responsive; `npm run build` passes
   - **Brief ref**: Homepage structure — FeaturedMissionsSection
 
-- [ ] TASK-07: Create ClosingCtaSection composite component
+- [x] TASK-07: Create ClosingCtaSection composite component
   - **Goal**: Build the `ClosingCtaSection` with deep-field background, heading, and secondary Button
   - **Details**: Create `src/components/ClosingCtaSection.tsx`. Apply `--gradient-surface-card` as background. Include a prominent heading (Tier 2 heading token) with copy encouraging users to back a mission. Add a `<Button>` (secondary or outline variant) labeled "Explore All Missions". Center-aligned layout. Tier 2 tokens only.
   - **Files**: `src/components/ClosingCtaSection.tsx` (create)

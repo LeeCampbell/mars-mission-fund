@@ -42,7 +42,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; component renders ProgressBar, formatted amounts, contributor count, time remaining, and Contribute button
   - **Brief ref**: `FundingProgressSection` row in Files table, Page layout §Sidebar
 
-- [ ] TASK-04: Create `MilestonesSection` component
+- [x] TASK-04: Create `MilestonesSection` component
   - **Goal**: Render an ordered list of campaign milestones with status indicators
   - **Details**:
     - Create `src/components/campaigns/MilestonesSection.tsx`

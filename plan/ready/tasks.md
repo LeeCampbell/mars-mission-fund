@@ -37,7 +37,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `src/`, `index.html`, `vite.config.ts` no longer exist at repo root; `packages/client/src/`, `packages/client/index.html`, `packages/client/vite.config.ts` all exist
   - **Brief ref**: Step 3 — Move files
 
-- [ ] TASK-04: Wire tsconfig files
+- [x] TASK-04: Wire tsconfig files
   - **Goal**: Move `tsconfig.app.json` to `packages/client/tsconfig.json`, delete `tsconfig.node.json`, and update root `tsconfig.json` to use project references
   - **Details**:
     - `git mv tsconfig.app.json packages/client/tsconfig.json`

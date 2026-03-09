@@ -64,7 +64,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; re-exports from both `campaign.js` and `api.js`
   - **Brief ref**: "Create `packages/shared/src/index.ts` as a barrel"
 
-- [ ] TASK-07: Run npm install and verify workspace linking
+- [x] TASK-07: Run npm install and verify workspace linking
   - **Goal**: Confirm that `npm install` at the repo root succeeds and links the workspace package
   - **Details**:
     - Run `npm install` at the repo root

@@ -131,7 +131,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; Footer renders with 72px logo, tagline, nav links, copyright; semantic `<footer>` in DOM; stacks on mobile
   - **Brief ref**: Brief "Scope" — Footer; "Approach" — TASK-09
 
-- [ ] TASK-10: Create Layout component and wire routing in App.tsx
+- [x] TASK-10: Create Layout component and wire routing in App.tsx
   - **Goal**: Create the shared page Layout wrapper and update App.tsx to use it for all routes
   - **Details**:
     - Create `src/components/Layout.tsx`: renders `<Header />`, `<main id="main-content">` (skip-link target), `<Footer />`; `<main>` has top padding/margin to clear sticky header height

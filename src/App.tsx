@@ -6,12 +6,11 @@ import { SectionLabel } from './components/ui/SectionLabel'
 import { Badge } from './components/ui/Badge'
 import { ProgressBar } from './components/ui/ProgressBar'
 import { Logo } from './components/ui/Logo'
-import { Header } from './components/Header'
-import { Footer } from './components/Footer'
+import { Layout } from './components/Layout'
 
 function HomePage() {
   return (
-    <main id="main-content" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <h1>Button Component — TASK-01</h1>
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         <Button variant="primary">Primary Button</Button>
@@ -65,28 +64,28 @@ function HomePage() {
         <Logo size="md" />
         <Logo size="lg" />
       </div>
-    </main>
+    </div>
   )
 }
 
 function AboutPage() {
-  return <main id="main-content" style={{ padding: '2rem' }}><h1>About</h1></main>
+  return <div style={{ padding: '2rem' }}><h1>About</h1></div>
 }
 
 function ContactPage() {
-  return <main id="main-content" style={{ padding: '2rem' }}><h1>Contact</h1></main>
+  return <div style={{ padding: '2rem' }}><h1>Contact</h1></div>
 }
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Header />
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Route>
       </Routes>
-      <Footer />
     </BrowserRouter>
   )
 }

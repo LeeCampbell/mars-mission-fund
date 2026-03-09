@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File created. `npm run build` passes. Renders orange fill at non-100 value; green fill at `complete`. ARIA attributes present in DOM. Setting `prefers-reduced-motion` suppresses animation.
   - **Brief ref**: §Approach step 6
 
-- [ ] TASK-08: Logo primitive
+- [x] TASK-08: Logo primitive
   - **Goal**: Implement `src/components/ui/Logo.tsx` — an inline SVG coin logo component with `sm`/`md`/`lg` size variants.
   - **Details**: Read `assets/logo.svg` to get the raw SVG markup. Convert to JSX (camelCase attributes, `xmlns` retained). Props: `size?: 'sm' | 'md' | 'lg'` (default `'md'`). Size map: `sm` → 32px height, `md` → 72px height, `lg` → 120px height. Width scales proportionally (preserve aspect ratio via `viewBox`). Add `role="img"` and `aria-label` prop (default `"Mars Mission Fund"`). Do not reference an external file — the SVG paths must be inlined in the JSX.
   - **Files**: `src/components/ui/Logo.tsx`

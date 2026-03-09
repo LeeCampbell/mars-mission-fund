@@ -119,7 +119,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cd server && npm test` runs and all tests pass with no real database.
   - **Brief ref**: `__tests__/campaigns.test.ts`; Key design decisions — Test strategy; Verification section.
 
-- [ ] TASK-10: Wire ESLint config and verify full build, lint, and test pass
+- [x] TASK-10: Wire ESLint config and verify full build, lint, and test pass
   - **Goal**: Ensure the root ESLint config excludes `server/src/**` from React-specific rules so `npm run lint` passes, and confirm all verification steps from the brief succeed.
   - **Details**:
     - Inspect `eslint.config.js` at repo root; add an ignore or override so React/JSX ESLint plugins are not applied to `server/src/**` files.

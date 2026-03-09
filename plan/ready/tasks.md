@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; compiles; ARIA attrs present in rendered output; `prefers-reduced-motion` handled; endpoint dot visible; no hardcoded values
   - **Brief ref**: Scope → ProgressBar; Accessibility notes → ProgressBar; Verification → ProgressBar
 
-- [ ] TASK-08: Logo component
+- [x] TASK-08: Logo component
   - **Goal**: Implement the `Logo` inline SVG component with `sm`/`md`/`lg` size variants and instance-unique gradient IDs
   - **Details**: Create `src/components/ui/Logo.tsx`. Props: `size?: 'sm' | 'md' | 'lg'` (default `md`), `aria-label?: string` (default `"Mars Mission Fund"`), `className?: string`. Size maps: `sm` → 32px height, `md` → 72px height, `lg` → 120px height (width scales proportionally). Inline the SVG coin logo from `assets/logo.svg` (read that file first). Because SVG `linearGradient` / `radialGradient` `id` attributes are global in the DOM, generate a unique suffix per component instance using `useId()` (React 18+) or a module-level counter, and suffix all gradient `id` and `xlink:href`/`href` references with that suffix. Add `role="img"` and `aria-label` to the `<svg>` element.
   - **Files**: `src/components/ui/Logo.tsx`

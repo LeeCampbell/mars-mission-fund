@@ -10,7 +10,7 @@ services:
       - BASE_BRANCH=${BASE_BRANCH}
       - BRANCH=${BRANCH}
     volumes:
-      - ./screenshots:/screenshots
+      - ./logs/${ISSUE_NUMBER:-default}/screenshots:/screenshots
       - ./logs/${ISSUE_NUMBER:-default}:/workspace/logs
     mem_limit: 4g
     cpus: 2

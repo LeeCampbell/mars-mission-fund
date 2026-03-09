@@ -14,7 +14,9 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\""
+    "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
+    "dev:server": "npm run dev --prefix server",
+    "test:server": "npm run test --prefix server"
   },
   "dependencies": {
     "react": "^19.0.0",

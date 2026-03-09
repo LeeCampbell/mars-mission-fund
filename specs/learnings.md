@@ -30,6 +30,16 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 - Importing `@testing-library/jest-dom` in a Vitest setup file causes `ReferenceError: expect is not defined` because the default entry tries to extend Jest's global `expect`.
 - Resolution: Use `import '@testing-library/jest-dom/vitest'` instead, which uses Vitest's `expect` API. This entry point is available in v6+.
 
+## Issue #41: Vitest in server/ picks up root vite.config.ts
+
+- Running `vitest run` from `server/` picks up the root `vite.config.ts` which sets `environment: 'jsdom'` and `setupFiles: ['src/test/setup.ts']` — causing failures in the server test suite.
+- Resolution: Create `server/vitest.config.ts` with `environment: 'node'` to override the root config.
+
+## Issue #41: Mocking pg QueryResult in Vitest
+
+- Casting `{ rows: [], rowCount: 0 }` as `QueryResult` causes TS2352 because the partial object doesn't overlap enough with the full type.
+- Resolution: Remove the cast entirely — `mockResolvedValueOnce` accepts `unknown`, so no cast is needed. The mock return value does not need to satisfy the full `QueryResult` interface.
+
 ## Issue #2: Vite rejects `<noscript>` inside `<head>`
 
 - Placing `<noscript>` in the `<head>` of `index.html` causes a parse5 build error: "disallowed-content-in-noscript-in-head".

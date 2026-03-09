@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `node_modules/vitest` and `node_modules/@testing-library/react` exist; `npm ls vitest` exits 0
   - **Brief ref**: §Dependencies, §Approach step 1
 
-- [ ] TASK-02: Add npm test scripts to package.json
+- [x] TASK-02: Add npm test scripts to package.json
   - **Goal**: Expose `test`, `test:watch`, and `test:coverage` scripts
   - **Details**: Add to the `"scripts"` section of `package.json`:
     - `"test": "vitest run"`

@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component exists; `npm run build` passes; 4 StatCards visible in grid
   - **Brief ref**: "Homepage structure — StatsSection"
 
-- [ ] TASK-05: Create HowItWorksSection component
+- [x] TASK-05: Create HowItWorksSection component
   - **Goal**: Build the 3-step explainer section for the Homepage
   - **Details**: Create `src/components/HowItWorksSection.tsx`. SectionLabel "02 — HOW IT WORKS", `<h2>` "FROM BACKER TO MISSION PARTNER". Three Card components in a responsive grid: 1 column → 3 columns at `lg` (1024px). Step cards: (1) "Discover" — Browse active missions aligned with your vision. (2) "Back" — Pledge your support and join the mission team. (3) "Track" — Follow progress with real-time mission updates. Each card may include a step number label. Use only semantic tokens for styling.
   - **Files**: `src/components/HowItWorksSection.tsx`

@@ -16,11 +16,12 @@ You are the **Implementation Agent** — you execute one task at a time from the
 
 ### Step 1: Load Context
 
-1. Read `./specs/README.md` for project standards (follow references as needed)
-2. Read `./plan/ready/brief.md` for the implementation goals
-3. Read `./plan/ready/tasks.md` for the task checklist
-4. Find the **first unchecked task** (`- [ ]`) — this is your assignment
-5. Read any specs referenced in the task's **Brief ref** field
+1. Read `/workspace/shared/learnings.md` if it exists — these are tips from previous agents that may save you time
+2. Read `./specs/README.md` for project standards (follow references as needed)
+3. Read `./plan/ready/brief.md` for the implementation goals
+4. Read `./plan/ready/tasks.md` for the task checklist
+5. Find the **first unchecked task** (`- [ ]`) — this is your assignment
+6. Read any specs referenced in the task's **Brief ref** field
 
 ### Step 2: Prepare
 
@@ -84,3 +85,14 @@ NEXT_TASK=TASK-{NN+1}: {next task name} (or "none")
 - If you cannot complete a task after 3 attempts, report the blocker and STOP
 - If a predecessor task is not checked off, STOP and report the dependency gap
 - Never mark a task as done if verification fails
+
+## Shared Learnings
+
+When you encounter an unexpected issue (environment quirk, token permission problem, build gotcha, workaround needed), append a concise entry to `/workspace/shared/learnings.md` so future agents benefit:
+
+```markdown
+## Issue #<number>: <short title>
+- <what you discovered and how you resolved it>
+```
+
+Only write genuine surprises — not routine steps.

@@ -11,12 +11,13 @@ You are the **Brief Author** — you read a GitHub issue, the project specs, and
 
 ### Step 1: Gather Context
 
-1. Read the GitHub issue:
+1. Read `/workspace/shared/learnings.md` if it exists — these are tips from previous agents about known gotchas and workarounds
+2. Read the GitHub issue:
    ```
    gh issue view ${ISSUE_NUMBER} --repo ${UPSTREAM_REPO}
    ```
-2. Read the project specs — start with `./specs/README.md` and follow references as needed
-3. Explore the codebase to understand the current state (file structure, existing components, patterns)
+3. Read the project specs — start with `./specs/README.md` and follow references as needed
+4. Explore the codebase to understand the current state (file structure, existing components, patterns)
 
 ### Step 2: Write the Brief
 

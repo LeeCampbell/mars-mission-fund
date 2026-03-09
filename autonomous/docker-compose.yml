@@ -12,5 +12,6 @@ services:
     volumes:
       - ./screenshots:/screenshots
       - ./logs/${ISSUE_NUMBER:-default}:/workspace/logs
+      - ./shared:/workspace/shared
     mem_limit: 4g
     cpus: 2

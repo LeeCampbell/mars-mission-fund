@@ -24,7 +24,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists and is valid JSON; `"name"` is `@mmf/shared`
   - **Brief ref**: "Create `packages/shared/package.json` with name `@mmf/shared`"
 
-- [ ] TASK-03: Create packages/shared/tsconfig.json
+- [x] TASK-03: Create packages/shared/tsconfig.json
   - **Goal**: TypeScript configuration that compiles shared package to ESM with declarations
   - **Details**:
     - `"module": "NodeNext"`, `"moduleResolution": "NodeNext"`

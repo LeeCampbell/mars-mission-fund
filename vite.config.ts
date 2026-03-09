@@ -13,7 +13,7 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
-    exclude: ['server/**', 'node_modules/**'],
+    exclude: ['server/**', 'packages/**', 'node_modules/**'],
     setupFiles: ['src/test/setup.ts'],
     coverage: {
       provider: 'v8',

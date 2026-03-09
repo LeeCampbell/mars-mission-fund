@@ -36,14 +36,14 @@ Brief: plan/ready/brief.md
   - **Verify**: `find packages/server/src packages/server/db -type f | sort` lists all expected files
   - **Brief ref**: Step 3 — Move source files
 
-- [ ] TASK-04: Update `packages/server/src/campaigns/types.ts` to import from `@mmf/shared`
+- [x] TASK-04: Update `packages/server/src/campaigns/types.ts` to import from `@mmf/shared`
   - **Goal**: Replace locally-defined shared types with imports from `@mmf/shared`; keep server-only schemas local
   - **Details**: Create `packages/server/src/campaigns/types.ts` (do NOT copy verbatim from `server/`). The new file should:
     1. Import `CampaignStatusSchema`, `CampaignCategorySchema`, `CampaignSummarySchema`, `CampaignSchema` from `'@mmf/shared'`
-    2. Re-export the corresponding TypeScript types via `export type { CampaignStatus, CampaignCategory, CampaignSummary, Campaign } from '@mmf/shared'`
-    3. Keep `RouteParamsSchema` and `ListQuerySchema` defined locally using `zod` (these are server-only)
-    4. Keep `RouteParams` and `ListQuery` type exports inferred locally from those schemas
-    5. Remove the local definitions of `CampaignStatusSchema`, `CampaignCategorySchema`, `CampaignSummarySchema`, and `CampaignSchema`
+    1. Re-export the corresponding TypeScript types via `export type { CampaignStatus, CampaignCategory, CampaignSummary, Campaign } from '@mmf/shared'`
+    1. Keep `RouteParamsSchema` and `ListQuerySchema` defined locally using `zod` (these are server-only)
+    1. Keep `RouteParams` and `ListQuery` type exports inferred locally from those schemas
+    1. Remove the local definitions of `CampaignStatusSchema`, `CampaignCategorySchema`, `CampaignSummarySchema`, and `CampaignSchema`
   - **Files**: `packages/server/src/campaigns/types.ts` (create)
   - **Verify**: File contains `from '@mmf/shared'` import and no local definition of `CampaignStatusSchema`; `RouteParamsSchema` and `ListQuerySchema` are still defined in the file
   - **Brief ref**: Step 4 — Update `packages/server/src/campaigns/types.ts`

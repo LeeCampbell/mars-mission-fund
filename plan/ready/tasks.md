@@ -165,7 +165,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes. Dev server shows dark background (`#060A14`), light body text, and confirms `box-sizing` reset applies.
   - **Brief ref**: Scope — "`src/index.css`", "Global reset / base styles", "Tailwind `@theme` block"; Approach step 6 — "Base styles"
 
-- [ ] TASK-08: Update `index.html` with meta tags, dark background, noscript, and font preload
+- [x] TASK-08: Update `index.html` with meta tags, dark background, noscript, and font preload
   - **Goal**: Produce a production-ready HTML entry point with correct metadata, a dark body background, a `<noscript>` fallback, and a `<link rel="preload">` for DM Sans.
   - **Details**:
     - Set `<html lang="en">`.

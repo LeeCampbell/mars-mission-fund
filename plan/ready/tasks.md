@@ -47,7 +47,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; TypeScript types are exported
   - **Brief ref**: "Create `packages/shared/src/campaign.ts`"
 
-- [ ] TASK-05: Create packages/shared/src/api.ts
+- [x] TASK-05: Create packages/shared/src/api.ts
   - **Goal**: Define the `ApiResponse<T>` generic envelope type matching the server's response shape
   - **Details**:
     - Export `type ApiResponse<T> = { data: T }` — matches the `{ data: T }` pattern in `server/src/campaigns/routes.ts`

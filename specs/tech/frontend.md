@@ -537,6 +537,12 @@ Domain specs may not introduce visual properties that bypass this spec's token a
 
 ---
 
+## Glossary
+
+**Layout shell**: the shared structural wrapper rendered on every page, consisting of the Header component, a `<main id="main-content">` element (skip-link target), and the Footer component, composed by the Layout component.
+
+---
+
 ## Change Log
 
 | Date | Version | Author | Summary |

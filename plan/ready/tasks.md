@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The note is present. It references L2-001 Section 3.1. It does not modify L2-001. One sentence per line.
   - **Brief ref**: Step 3
 
-- [ ] TASK-07: Add "layout shell" vocabulary definition
+- [x] TASK-07: Add "layout shell" vocabulary definition
   - **Goal**: Define "layout shell" in `specs/tech/frontend.md` so the term is formally specified.
   - **Details**: Add the definition to an appropriate location in `specs/tech/frontend.md` (e.g., a Glossary section or inline where layout shell is first discussed): *Layout shell: the shared structural wrapper rendered on every page, consisting of the Header component, a `<main id="main-content">` element (skip-link target), and the Footer component, composed by the Layout component.* Follow one-sentence-per-line rule.
   - **Files**: `specs/tech/frontend.md`

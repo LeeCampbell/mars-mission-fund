@@ -30,7 +30,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cat packages/shared/tsconfig.json` shows all required compiler options
   - **Brief ref**: Implementation step 3 / Files table row 3
 
-- [ ] TASK-04: Create `packages/shared/src/campaigns.ts` with Zod schemas
+- [x] TASK-04: Create `packages/shared/src/campaigns.ts` with Zod schemas
   - **Goal**: Define the shared Campaign domain Zod schemas and inferred TypeScript types.
   - **Details**: Read `server/src/campaigns/types.ts` to get the exact schema definitions, then create `packages/shared/src/campaigns.ts` containing only:
     - `CampaignStatusSchema`, `CampaignCategorySchema`, `CampaignSummarySchema`, `CampaignSchema`
@@ -44,11 +44,13 @@ Brief: plan/ready/brief.md
 - [ ] TASK-05: Create `packages/shared/src/api.ts` with `ApiResponse<T>`
   - **Goal**: Define the generic API response envelope type matching the server's existing HTTP response shape.
   - **Details**: Create `packages/shared/src/api.ts` containing:
+
     ```ts
     export interface ApiResponse<T> {
       data: T
     }
     ```
+
   - **Files**: `packages/shared/src/api.ts`
   - **Verify**: File exports `ApiResponse` interface with a single `data: T` property
   - **Brief ref**: Implementation step 5 / Files table row 5
@@ -56,10 +58,12 @@ Brief: plan/ready/brief.md
 - [ ] TASK-06: Create `packages/shared/src/index.ts` barrel export
   - **Goal**: Provide a single entry point that re-exports everything from both modules.
   - **Details**: Create `packages/shared/src/index.ts` with `.js` extensions in specifiers (required for NodeNext compatibility):
+
     ```ts
     export * from './campaigns.js'
     export * from './api.js'
     ```
+
   - **Files**: `packages/shared/src/index.ts`
   - **Verify**: File contains exactly two export-star statements with `.js` extensions
   - **Brief ref**: Implementation step 6 / Files table row 6
@@ -68,11 +72,11 @@ Brief: plan/ready/brief.md
   - **Goal**: Create the `node_modules/@mmf/shared` symlink and confirm the full setup is valid.
   - **Details**:
     1. Run `npm install` from repo root
-    2. Confirm `node_modules/@mmf/shared` is a symlink pointing to `packages/shared/`
-    3. Run `cd packages/shared && npx tsc --noEmit` — must complete without errors
-    4. Run `npm test` from repo root — must still pass
-    5. Run `cd server && npm test` — must still pass
-    6. Run `npm run build` from repo root — Vite build must succeed
+    1. Confirm `node_modules/@mmf/shared` is a symlink pointing to `packages/shared/`
+    1. Run `cd packages/shared && npx tsc --noEmit` — must complete without errors
+    1. Run `npm test` from repo root — must still pass
+    1. Run `cd server && npm test` — must still pass
+    1. Run `npm run build` from repo root — Vite build must succeed
   - **Files**: none (verification only)
   - **Verify**: All five commands above exit with code 0; symlink exists at `node_modules/@mmf/shared`
   - **Brief ref**: Implementation step 7 / Verification section

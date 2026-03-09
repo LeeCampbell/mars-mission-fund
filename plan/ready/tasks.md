@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; TypeScript compiles without errors; hook returns correct TanStack Query result shape.
   - **Brief ref**: Section "3 — Query hook"
 
-- [ ] TASK-04: Create `CampaignCard` component (`src/components/campaigns/CampaignCard.tsx`)
+- [x] TASK-04: Create `CampaignCard` component (`src/components/campaigns/CampaignCard.tsx`)
   - **Goal**: Build a composite card component that accepts a `Campaign` prop and renders a category badge, title, summary excerpt, funding progress bar, raised/goal amounts (USD), and time-remaining label — following the same inline `React.CSSProperties` + semantic-token pattern as existing components.
   - **Details**:
     - Create the directory `src/components/campaigns/` if it does not exist.

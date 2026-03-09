@@ -54,7 +54,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cd server && npx tsc --noEmit` passes; functions accept a typed pool and return typed promises.
   - **Brief ref**: Directory structure — `campaigns/queries.ts`; Key design decisions — Parameterised queries.
 
-- [ ] TASK-05: Create middleware files — correlationId, requestLogger, errorHandler
+- [x] TASK-05: Create middleware files — correlationId, requestLogger, errorHandler
   - **Goal**: Implement the three middleware modules used by the Express app.
   - **Details**:
     - `server/src/middleware/correlationId.ts`: reads `x-correlation-id` request header; if absent generates one via `crypto.randomUUID()`; sets `res.locals.correlationId` and writes the header on the response; calls `next()`.

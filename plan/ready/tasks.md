@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component file exists and TypeScript compiles without errors (`npm run build`)
   - **Brief ref**: "MissionCard composite" and Files table
 
-- [ ] TASK-03: Create HeroSection component
+- [x] TASK-03: Create HeroSection component
   - **Goal**: Build the full-viewport hero section for the Homepage
   - **Details**: Create `src/components/HeroSection.tsx`. Full-viewport height (`min-h-screen` or 100dvh). Background uses `var(--gradient-hero)`. Heading "CROWDFUNDING THE NEXT GIANT LEAP" in `var(--type-hero)` with responsive sizing (48px mobile → 72px md → 96px xl) via CSS custom property or Tailwind responsive classes. Subtext copy beneath heading. Primary Button "Explore Missions" linking to `href="#"`. Ambient radial glow `<div>` decoration element — apply `prefers-reduced-motion: reduce` media query via CSS to set `opacity: 0` or `display: none` on the glow element. Ensure heading has appropriate semantic level (`<h1>`).
   - **Files**: `src/components/HeroSection.tsx`

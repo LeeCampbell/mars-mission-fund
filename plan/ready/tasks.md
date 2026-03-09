@@ -55,7 +55,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exports `ApiResponse` interface with a single `data: T` property
   - **Brief ref**: Implementation step 5 / Files table row 5
 
-- [ ] TASK-06: Create `packages/shared/src/index.ts` barrel export
+- [x] TASK-06: Create `packages/shared/src/index.ts` barrel export
   - **Goal**: Provide a single entry point that re-exports everything from both modules.
   - **Details**: Create `packages/shared/src/index.ts` with `.js` extensions in specifiers (required for NodeNext compatibility):
 

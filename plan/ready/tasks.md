@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `/` route renders all 5 sections top-to-bottom; `npm run build` passes
   - **Brief ref**: Homepage structure section
 
-- [ ] TASK-09: Implement full About page
+- [x] TASK-09: Implement full About page
   - **Goal**: Replace the `About.tsx` stub with the full 4-section about page assembled inline (no sub-components)
   - **Details**: Modify `src/pages/About.tsx`. Read `specs/product-vision-and-mission.md` for copy (Sections 1.1, 1.2, 1.3, 1.4). Build 4 sections inline:
     1. Hero area — page title in `--type-page-title`

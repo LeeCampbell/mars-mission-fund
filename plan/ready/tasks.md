@@ -71,7 +71,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes. In the built `dist/assets/` directory, `.woff2` files appear, confirming Vite bundled them.
   - **Brief ref**: Scope — "`src/fonts.css`"; Approach step 4 — "Fonts"; L3-005 Section 9.1
 
-- [ ] TASK-06: Create `src/tokens.css` with Tier 1 and Tier 2 design tokens
+- [x] TASK-06: Create `src/tokens.css` with Tier 1 and Tier 2 design tokens
   - **Goal**: Define all L2-001 CSS custom properties (identity palette, semantic tokens, motion, radii, breakpoints) on `:root`.
   - **Details**:
     - Create `src/tokens.css`.

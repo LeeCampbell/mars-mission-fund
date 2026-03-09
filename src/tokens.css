@@ -1,0 +1,94 @@
+/* ============================================================
+   Design Tokens — L2-001
+   Tier 1: Identity tokens (raw palette, font families, base scale)
+   Tier 2: Semantic tokens (mapped to Tier 1)
+   Breakpoints: L3-005 Section 5.2
+   ============================================================ */
+
+:root {
+  /* ----------------------------------------------------------
+     Tier 1 — Colour palette
+     ---------------------------------------------------------- */
+  --void: #060a14;
+  --deepspace: #0d1526;
+  --nebula: #1a2640;
+  --storm: #2d3f5c;
+  --steel: #4a6080;
+  --silver: #c8d0dc;
+  --chrome: #e8edf5;
+  --stardust: #f5f7fa;
+  --launchfire: #ff4d1c;
+  --ember: #ff7a4d;
+  --solar: #ffb347;
+  --aurora: #00e5cc;
+  --plasma: #7b61ff;
+  --comet: #00b8d9;
+
+  /* ----------------------------------------------------------
+     Tier 1 — Font families
+     ---------------------------------------------------------- */
+  --font-brand: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  /* ----------------------------------------------------------
+     Tier 1 — Base scale
+     ---------------------------------------------------------- */
+  --space-base: 4px;
+  --radius-base: 4px;
+
+  /* ----------------------------------------------------------
+     Tier 2 — Semantic colour tokens
+     ---------------------------------------------------------- */
+  --color-background: var(--void);
+  --color-surface: var(--deepspace);
+  --color-surface-raised: var(--nebula);
+  --color-border: var(--storm);
+  --color-text-primary: var(--chrome);
+  --color-text-secondary: var(--silver);
+  --color-text-muted: var(--steel);
+  --color-action-primary: var(--launchfire);
+  --color-action-primary-hover: var(--ember);
+  --color-accent: var(--aurora);
+  --color-accent-alt: var(--plasma);
+
+  /* ----------------------------------------------------------
+     Tier 2 — Radii
+     ---------------------------------------------------------- */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 16px;
+  --radius-button: 2px;
+  --radius-card: 8px;
+  --radius-pill: 9999px;
+
+  /* ----------------------------------------------------------
+     Tier 2 — Motion
+     ---------------------------------------------------------- */
+  --motion-enter: 200ms;
+  --motion-exit: 150ms;
+  --motion-emphasis: 300ms;
+  --motion-easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-easing-enter: cubic-bezier(0, 0, 0.2, 1);
+  --motion-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ----------------------------------------------------------
+     Breakpoints — L3-005 Section 5.2
+     ---------------------------------------------------------- */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+}
+
+/* ----------------------------------------------------------
+   prefers-reduced-motion override — L2-001 Section 5.2
+   ---------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-enter: 0ms;
+    --motion-exit: 0ms;
+    --motion-emphasis: 0ms;
+  }
+}

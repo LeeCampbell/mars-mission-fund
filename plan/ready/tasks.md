@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists at the expected path; contains exactly 5 tasks with all required fields; markdownlint passes on the file.
   - **Brief ref**: Approach step 1; Files table row 1.
 
-- [ ] TASK-02: Update specs/tech/tech-stack.md — Local Development subsection
+- [x] TASK-02: Update specs/tech/tech-stack.md — Local Development subsection
   - **Goal**: Document the local development environment details (Docker Compose, DBMate, server layout) that were implemented during issues #40–#43.
   - **Details**: Add a **Local Development** subsection under the Database & Data Access section (or immediately after the CI/CD section). Include: (a) `docker-compose.dev.yml` runs `postgres:16-alpine` on port 5432 for local development; (b) DBMate is invoked via `docker run` (or local install) to apply migrations from `server/db/migrations/`; (c) migration file naming convention is `YYYYMMDDHHMMSS_<snake_case_description>.sql`; (d) server directory layout: `server/src/` with sub-directories `campaigns/`, `db/`, `middleware/`, and `__tests__/`. Bump version from `0.1.0` to `0.2.0` and add a change-log entry dated 2026-03-09 summarising the Local Development additions.
   - **Files**: `specs/tech/tech-stack.md` (modify)

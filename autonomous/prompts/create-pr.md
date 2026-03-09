@@ -18,9 +18,18 @@ The branch has already been pushed. Plan archival is handled by the calling scri
 
 ### Step 1: Final Verification
 
-1. Run `npm run build` to ensure the build passes
-1. Run any configured linters/tests
-1. Verify all tasks in `plan/ready/tasks.md` are checked `[x]`
+Run the full CI check suite. Every check must pass:
+
+1. `npx tsc -b --noEmit` (type-check)
+1. `npm run lint` (ESLint — run `npm run lint:fix` to auto-fix)
+1. `npm run format:check` (Prettier — run `npm run format` to auto-fix)
+1. `npm run lint:md` (Markdownlint)
+1. `npm run build` (Vite build)
+1. `npm run test:coverage` (tests)
+
+If any check fails, fix the issue, commit the fix, and re-run until all pass.
+
+Verify all tasks in `plan/ready/tasks.md` are checked `[x]`.
 
 ### Step 2: Prepare PR Description
 
@@ -46,9 +55,25 @@ Screenshots will be attached automatically after PR creation.
 Closes #<ISSUE_NUMBER>
 ```
 
-### Step 3: Create PR
+### Step 3: Create or Finalize PR
 
-Create the PR (do NOT push — the branch is already pushed):
+Check if a draft PR already exists for this branch:
+
+```sh
+EXISTING_PR=$(gh pr list --repo ${UPSTREAM_REPO} --head <Head value> --json number,isDraft --jq '.[0]')
+```
+
+**If a draft PR exists**: update its description and mark it ready for review:
+
+```sh
+PR_NUMBER=$(echo "$EXISTING_PR" | jq -r '.number')
+gh pr edit "$PR_NUMBER" --repo ${UPSTREAM_REPO} \
+  --title "feat: <brief title from issue>" \
+  --body "<PR description>"
+gh pr ready "$PR_NUMBER" --repo ${UPSTREAM_REPO}
+```
+
+**If no PR exists**: create a new one (do NOT push — the branch is already pushed):
 
 ```sh
 gh pr create \

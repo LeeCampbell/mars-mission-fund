@@ -171,6 +171,17 @@ Upstream repo: ${UPSTREAM_REPO}" \
       echo "!!! Push failed — branch may have diverged"
     fi
 
+    # Create draft PR on first push for visibility (if none exists yet)
+    if ! gh pr list --repo "$UPSTREAM_REPO" --head "${FORK_OWNER}:${BRANCH}" --json number --jq '.[0].number' 2>/dev/null | grep -q .; then
+      GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr create \
+        --repo "$UPSTREAM_REPO" \
+        --base "$UPSTREAM_BASE_BRANCH" \
+        --head "${FORK_OWNER}:${BRANCH}" \
+        --title "feat: ${ISSUE_TITLE}" \
+        --body "Work in progress for #${ISSUE_NUMBER}" \
+        --draft 2>&1 | tee -a "$LOG_FILE" || echo "!!! Draft PR creation failed (non-fatal)"
+    fi
+
     clear_state
 
     # Check if more tasks remain

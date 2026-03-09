@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File has `:root { ... }` with Tier 1 and Tier 2 vars; has `@media (prefers-reduced-motion: reduce)` block overriding motion tokens
   - **Brief ref**: Scope — `src/tokens.css`; Approach — Token strategy, Motion accessibility (L2-001 §1–2, §5.2; L3-005 §5.2, §6.3)
 
-- [ ] TASK-05: Create `src/index.css` with Tailwind import chain, `@theme` block, and base styles
+- [x] TASK-05: Create `src/index.css` with Tailwind import chain, `@theme` block, and base styles
   - **Goal**: Wire Tailwind v4, tokens, and fonts; expose key tokens as Tailwind utilities; apply dark-theme base styles
   - **Details**: File structure in order: (1) `@import "tailwindcss"` — Tailwind v4 CSS-first entry. (2) `@import "./tokens.css"`. (3) `@import "./fonts.css"`. (4) `@theme { ... }` block — map semantic colour tokens to `--color-*` Tailwind theme vars (e.g. `--color-bg-page: var(--color-bg-page)` after renaming or using inline values), map `--font-*` tokens to Tailwind `--font-*`, map `--radius-*`. (5) Base/reset styles in `@layer base` — `html` and `body` reset (margin 0, box-sizing border-box); `body` background `var(--color-bg-page)`, colour `var(--color-text-secondary)`, font-family `var(--font-body)`, line-height from token; `*` universal box-sizing reset; basic `a` colour; `h1–h6` font-family `var(--font-display)`.
   - **Files**: `src/index.css`

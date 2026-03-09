@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists at repo root; imports and structure are valid flat config format
   - **Brief ref**: Section "2. ESLint config"
 
-- [ ] TASK-03: Create .prettierrc.json and .prettierignore
+- [x] TASK-03: Create .prettierrc.json and .prettierignore
   - **Goal**: Configure Prettier to match existing code style and exclude generated/build files
   - **Details**: `.prettierrc.json` with `singleQuote: true`, `semi: false`, `tabWidth: 2`, `trailingComma: "es5"`, `printWidth: 100`. `.prettierignore` excluding `node_modules/`, `dist/`, `build/`, `coverage/`, `*.tsbuildinfo`, and `specs/standards/mars-mission-fund-brand.html`
   - **Files**: `.prettierrc.json`, `.prettierignore`

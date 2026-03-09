@@ -72,7 +72,7 @@ Document the issue sequence in `BRIEF.md`. The **last issue** must always be a c
    `04-architecture.tasks.md` → Issue: "Create Architecture code review" (parallel)
    `05-data.tasks.md` → Issue: "Create Data code review" (parallel)
 4. `06-code-review-all.tasks.md` → Issue: "Create comprehensive review" (depends on #2-#5)
-5. `07-close.tasks.md` → Issue: "Close milestone" (depends on all above)
+5. `07-close.tasks.md` → Issue: "Milestone housekeeping" (depends on all above)
 ```
 
 ### Step 5: Create Task Files
@@ -115,10 +115,10 @@ Task decomposition rules:
 
 ### Close-out issue
 
-The **last task file** in every milestone MUST be `{NN}-close.tasks.md`. This issue migrates learnings from the plan into permanent specs and cleans up. Its tasks are:
+The **last task file** in every milestone MUST be `{NN}-close.tasks.md`. This issue migrates learnings from the plan into permanent specs and cleans up (it does NOT close the GitHub milestone — that is a human-only action). Its tasks are:
 
 ```markdown
-# Close milestone: {milestone name}
+# Milestone housekeeping: {milestone name}
 
 **Issue:** #{number}
 **Branch:** chore/close-{milestone-name}

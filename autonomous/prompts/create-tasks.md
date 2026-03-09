@@ -51,6 +51,7 @@ Brief: plan/ready/brief.md
 - **Granularity**: Prefer more smaller tasks over fewer large ones
 - **Verification**: Every task must have a concrete verification step (build, visual check, test)
 - **No gaps**: The complete checklist should fully implement the brief — nothing missing
+- **Human-only actions**: Do NOT create tasks for closing issues, closing milestones, or merging PRs. These are handled by humans outside the agent workflow. If the issue's only deliverables are human actions, create a single task that comments on the issue listing the actions the human needs to perform.
 
 ## Output Format
 

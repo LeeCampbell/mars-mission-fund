@@ -17,7 +17,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; TypeScript reports no errors in `src/api/campaigns.ts`
   - **Brief ref**: Dependencies, Mock data strategy, `src/api/campaigns.ts` row in Files table
 
-- [ ] TASK-02: Create `useCampaign` hook
+- [x] TASK-02: Create `useCampaign` hook
   - **Goal**: Provide a typed TanStack Query hook that fetches a single campaign by id
   - **Details**:
     - Create `src/hooks/useCampaign.ts`

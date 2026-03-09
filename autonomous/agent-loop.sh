@@ -212,14 +212,14 @@ Branch: ${BRANCH}" \
       2>&1 | tee "$LOG_FILE" || true
 
     # Upload screenshots as a PR comment
-    if ls /screenshots/TASK-*.png 1>/dev/null 2>&1; then
+    if ls /screenshots/ISSUE-${ISSUE_NUMBER}-*.png 1>/dev/null 2>&1; then
       PR_NUMBER=$(grep -oE 'https://github.com/[^ ]+/pull/[0-9]+' "$LOG_FILE" | head -1 | grep -oE '[0-9]+$')
 
       if [ -n "$PR_NUMBER" ]; then
         COMMENT_BODY="## Screenshots\n\n"
         FORK_REPO=$(echo "$FORK_URL" | sed 's|.*github.com/||;s|\.git$||')
 
-        for img in /screenshots/TASK-*.png; do
+        for img in /screenshots/ISSUE-${ISSUE_NUMBER}-*.png; do
           FNAME=$(basename "$img")
           # Upload to fork repo via contents API (uses fork token)
           BASE64=$(base64 -w0 "$img" 2>/dev/null || base64 "$img")

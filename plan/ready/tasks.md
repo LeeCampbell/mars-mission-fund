@@ -98,7 +98,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` exits 0. In `npm run dev`, the browser Network tab shows font requests to `localhost` (not `fonts.googleapis.com`).
   - **Brief ref**: Approach — Step 4 (Self-hosted fonts).
 
-- [ ] TASK-06: Create design tokens CSS file (Tier 1 + Tier 2 + reduced-motion)
+- [x] TASK-06: Create design tokens CSS file (Tier 1 + Tier 2 + reduced-motion)
   - **Goal**: Define all L2-001 brand CSS custom properties — Tier 1 identity tokens and Tier 2 semantic tokens — in a single `src/tokens.css` file, plus the `prefers-reduced-motion` overrides.
   - **Details**:
     - Create `src/tokens.css` with a single `:root` block containing:

@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All three rationale entries are present with the stated reasons. One sentence per line.
   - **Brief ref**: Step 2
 
-- [ ] TASK-06: Add Success button variant deferral note
+- [x] TASK-06: Add Success button variant deferral note
   - **Goal**: Record that the Success button variant is a planned phased rollout, not a contradiction of L2-001.
   - **Details**: In `specs/tech/frontend.md` Section 2 (or the Component Library section), add a note stating: Success button variant implementation follows L2-001 Section 3.1 and is introduced when the first workflow requiring it is built — it is not a requirement for marketing-only pages. Follow one-sentence-per-line rule.
   - **Files**: `specs/tech/frontend.md`

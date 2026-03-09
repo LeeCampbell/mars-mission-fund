@@ -179,6 +179,13 @@ A `@theme` block maps key semantic tokens to Tailwind utilities where useful.
 Components consume semantic tokens via `var()` references directly, not via Tailwind utility classes, because Tailwind utilities cannot represent all semantic token values (e.g., gradient backgrounds).
 The `@theme` block is additive — it does not replace `var()` references in component stylesheets.
 
+### 2.5 Component Variant Phased Rollout
+
+The component library implements variants as they are required by product features.
+The Success button variant is specified in [Brand Application Standard](L2-001) Section 3.1 and will be introduced when the first workflow requiring it is built.
+It is not a requirement for marketing-only pages.
+This is a planned phased rollout, not a deviation from L2-001.
+
 ---
 
 ## 3. Performance Budgets

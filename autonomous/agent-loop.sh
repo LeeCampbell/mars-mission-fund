@@ -219,18 +219,25 @@ Branch: ${BRANCH}" \
         COMMENT_BODY="## Screenshots\n\n"
         FORK_REPO=$(echo "$FORK_URL" | sed 's|.*github.com/||;s|\.git$||')
 
+        # Ensure screenshots branch exists on fork
+        if ! GH_TOKEN="$GH_TOKEN_FORK" gh api "repos/${FORK_REPO}/git/ref/heads/screenshots" &>/dev/null; then
+          DEFAULT_SHA=$(GH_TOKEN="$GH_TOKEN_FORK" gh api "repos/${FORK_REPO}/git/ref/heads/main" --jq '.object.sha')
+          GH_TOKEN="$GH_TOKEN_FORK" gh api "repos/${FORK_REPO}/git/refs" \
+            -X POST -f ref="refs/heads/screenshots" -f sha="$DEFAULT_SHA" 2>/dev/null || true
+        fi
+
         for img in /screenshots/ISSUE-${ISSUE_NUMBER}-*.png; do
           FNAME=$(basename "$img")
-          # Upload to fork repo via contents API (uses fork token)
+          # Upload to fork repo screenshots branch via contents API (uses fork token)
           BASE64=$(base64 -w0 "$img" 2>/dev/null || base64 "$img")
           GH_TOKEN="$GH_TOKEN_FORK" gh api \
-            "repos/${FORK_REPO}/contents/screenshots/${FNAME}" \
+            "repos/${FORK_REPO}/contents/screenshots/PR-${PR_NUMBER}/${FNAME}" \
             -X PUT \
             -f message="chore: add screenshot ${FNAME}" \
             -f content="$BASE64" \
-            -f branch="$BRANCH" 2>/dev/null || true
+            -f branch="screenshots" 2>/dev/null || true
 
-          RAW_URL="https://raw.githubusercontent.com/${FORK_REPO}/${BRANCH}/screenshots/${FNAME}"
+          RAW_URL="https://raw.githubusercontent.com/${FORK_REPO}/screenshots/screenshots/PR-${PR_NUMBER}/${FNAME}"
           COMMENT_BODY="${COMMENT_BODY}### ${FNAME}\n![${FNAME}](${RAW_URL})\n\n"
         done
 

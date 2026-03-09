@@ -1,6 +1,6 @@
-@import "tailwindcss";
-@import "./tokens.css";
-@import "./fonts.css";
+@import 'tailwindcss';
+@import './tokens.css';
+@import './fonts.css';
 
 /* =============================================================================
    TAILWIND v4 THEME — expose semantic tokens as Tailwind utilities
@@ -8,46 +8,46 @@
    ============================================================================= */
 @theme {
   /* --- Colours --- */
-  --color-bg-page:     var(--color-bg-page);
-  --color-bg-surface:  var(--color-bg-surface);
+  --color-bg-page: var(--color-bg-page);
+  --color-bg-surface: var(--color-bg-surface);
   --color-bg-elevated: var(--color-bg-elevated);
-  --color-bg-overlay:  var(--color-bg-overlay);
-  --color-bg-input:    var(--color-bg-input);
-  --color-bg-accent:   var(--color-bg-accent);
+  --color-bg-overlay: var(--color-bg-overlay);
+  --color-bg-input: var(--color-bg-input);
+  --color-bg-accent: var(--color-bg-accent);
 
-  --color-text-primary:   var(--color-text-primary);
+  --color-text-primary: var(--color-text-primary);
   --color-text-secondary: var(--color-text-secondary);
-  --color-text-tertiary:  var(--color-text-tertiary);
-  --color-text-accent:    var(--color-text-accent);
+  --color-text-tertiary: var(--color-text-tertiary);
+  --color-text-accent: var(--color-text-accent);
 
-  --color-action-primary:       var(--color-action-primary);
+  --color-action-primary: var(--color-action-primary);
   --color-action-primary-hover: var(--color-action-primary-hover);
-  --color-action-secondary-bg:  var(--color-action-secondary-bg);
-  --color-action-disabled:      var(--color-action-disabled);
+  --color-action-secondary-bg: var(--color-action-secondary-bg);
+  --color-action-disabled: var(--color-action-disabled);
 
-  --color-border-subtle:   var(--color-border-subtle);
+  --color-border-subtle: var(--color-border-subtle);
   --color-border-emphasis: var(--color-border-emphasis);
-  --color-border-input:    var(--color-border-input);
-  --color-border-accent:   var(--color-border-accent);
+  --color-border-input: var(--color-border-input);
+  --color-border-accent: var(--color-border-accent);
 
   --color-status-success: var(--color-status-success);
-  --color-status-error:   var(--color-status-error);
+  --color-status-error: var(--color-status-error);
   --color-status-warning: var(--color-status-warning);
-  --color-status-info:    var(--color-status-info);
+  --color-status-info: var(--color-status-info);
 
   /* --- Font families --- */
   --font-display: var(--font-display);
-  --font-body:    var(--font-body);
-  --font-mono:    var(--font-mono);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
 
   /* --- Border radius --- */
-  --radius-button:     var(--radius-button);
-  --radius-badge:      var(--radius-badge);
-  --radius-input:      var(--radius-input);
-  --radius-card:       var(--radius-card);
+  --radius-button: var(--radius-button);
+  --radius-badge: var(--radius-badge);
+  --radius-input: var(--radius-input);
+  --radius-card: var(--radius-card);
   --radius-card-large: var(--radius-card-large);
-  --radius-stat:       var(--radius-stat);
-  --radius-progress:   var(--radius-progress);
+  --radius-stat: var(--radius-stat);
+  --radius-progress: var(--radius-progress);
 }
 
 /* =============================================================================

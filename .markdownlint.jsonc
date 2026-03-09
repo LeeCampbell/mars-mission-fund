@@ -36,5 +36,5 @@
   "MD026": { "punctuation": ".,;:!" },
 
   // Table separator style: padded (spaces around dashes)
-  "MD060": { "style": "padded" }
+  "MD060": { "style": "padded" },
 }

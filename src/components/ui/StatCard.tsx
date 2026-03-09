@@ -57,9 +57,7 @@ export function StatCard({
     <div style={cardStyle} className={className}>
       <div style={labelStyle}>{label}</div>
       <div style={valueStyle}>{value}</div>
-      {subText && (
-        <div style={subTextVariantStyles[subVariant]}>{subText}</div>
-      )}
+      {subText && <div style={subTextVariantStyles[subVariant]}>{subText}</div>}
     </div>
   )
 }

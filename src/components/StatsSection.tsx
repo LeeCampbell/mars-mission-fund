@@ -22,10 +22,30 @@ const headingStyle: CSSProperties = {
 }
 
 const stats = [
-  { label: 'Total Funded', value: '$4.2M', subText: 'Across all missions', subVariant: 'positive' as const },
-  { label: 'Active Missions', value: '127', subText: 'And counting', subVariant: 'neutral' as const },
-  { label: 'Total Backers', value: '18,400', subText: 'Mission believers', subVariant: 'positive' as const },
-  { label: 'Success Rate', value: '94%', subText: 'Missions reaching goal', subVariant: 'positive' as const },
+  {
+    label: 'Total Funded',
+    value: '$4.2M',
+    subText: 'Across all missions',
+    subVariant: 'positive' as const,
+  },
+  {
+    label: 'Active Missions',
+    value: '127',
+    subText: 'And counting',
+    subVariant: 'neutral' as const,
+  },
+  {
+    label: 'Total Backers',
+    value: '18,400',
+    subText: 'Mission believers',
+    subVariant: 'positive' as const,
+  },
+  {
+    label: 'Success Rate',
+    value: '94%',
+    subText: 'Missions reaching goal',
+    subVariant: 'positive' as const,
+  },
 ]
 
 export function StatsSection() {

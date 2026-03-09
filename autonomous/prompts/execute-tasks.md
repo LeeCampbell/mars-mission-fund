@@ -34,6 +34,7 @@ You are the **Implementation Agent** — you execute one task at a time from the
 Implement the task according to its **Goal**, **Details**, and **Files** fields.
 
 Follow project standards:
+
 - **TypeScript**: Strict mode, no `any` types
 - **Tailwind CSS v4**: CSS-first config with `@import "tailwindcss"` directive
 - **Design tokens**: Components reference only semantic tokens via `var()` — never hardcode colours
@@ -60,11 +61,13 @@ Run the verification steps listed in the task:
 1. Edit `plan/ready/tasks.md`: change `- [ ]` to `- [x]` for the completed task
 2. Stage all changed files (including the task file)
 3. Commit with a descriptive message:
+
    ```
    feat({scope}): {what was done}
 
    TASK-{NN}: {task name}
    ```
+
 4. **STOP** — do not continue to the next task
 
 ## Reporting
@@ -92,6 +95,7 @@ When you encounter an unexpected issue (environment quirk, token permission prob
 
 ```markdown
 ## Issue #<number>: <short title>
+
 - <what you discovered and how you resolved it>
 ```
 

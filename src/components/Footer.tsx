@@ -114,9 +114,7 @@ export function Footer() {
           ))}
         </nav>
 
-        <p style={copyrightStyle}>
-          © 2026 Mars Mission Fund. All rights reserved.
-        </p>
+        <p style={copyrightStyle}>© 2026 Mars Mission Fund. All rights reserved.</p>
       </div>
     </footer>
   )

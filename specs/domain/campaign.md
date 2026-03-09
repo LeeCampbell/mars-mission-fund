@@ -67,43 +67,43 @@ This spec governs the full campaign lifecycle on Mars Mission Fund — from init
 
 ### 3.1 States
 
-| State | Description |
-| ----- | ----------- |
-| **Draft** | Creator is assembling the proposal. Not visible to reviewers or the public. |
-| **Submitted** | Creator has submitted the proposal for review. Immutable until review outcome. |
-| **Under Review** | A reviewer has been assigned and is evaluating the proposal. |
-| **Approved** | The proposal has passed review and is cleared to go live. |
-| **Rejected** | The proposal has been rejected with written rationale. |
-| **Live** | The campaign is publicly visible and accepting contributions. |
-| **Funded** | The campaign has reached its minimum funding target. Contributions continue until the deadline or maximum funding cap is reached. |
-| **Suspended** | Campaign temporarily frozen (e.g., creator KYC revoked). No new contributions accepted. Awaiting resolution. |
-| **Failed** | The campaign deadline has passed without reaching the minimum funding target. |
-| **Settlement** | Funds are being disbursed to the creator per the milestone plan. |
-| **Complete** | All milestones verified and all funds disbursed (or campaign otherwise finalised). |
-| **Cancelled** | Campaign cancelled by the creator or an administrator before completion. |
+| State            | Description                                                                                                                       |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **Draft**        | Creator is assembling the proposal. Not visible to reviewers or the public.                                                       |
+| **Submitted**    | Creator has submitted the proposal for review. Immutable until review outcome.                                                    |
+| **Under Review** | A reviewer has been assigned and is evaluating the proposal.                                                                      |
+| **Approved**     | The proposal has passed review and is cleared to go live.                                                                         |
+| **Rejected**     | The proposal has been rejected with written rationale.                                                                            |
+| **Live**         | The campaign is publicly visible and accepting contributions.                                                                     |
+| **Funded**       | The campaign has reached its minimum funding target. Contributions continue until the deadline or maximum funding cap is reached. |
+| **Suspended**    | Campaign temporarily frozen (e.g., creator KYC revoked). No new contributions accepted. Awaiting resolution.                      |
+| **Failed**       | The campaign deadline has passed without reaching the minimum funding target.                                                     |
+| **Settlement**   | Funds are being disbursed to the creator per the milestone plan.                                                                  |
+| **Complete**     | All milestones verified and all funds disbursed (or campaign otherwise finalised).                                                |
+| **Cancelled**    | Campaign cancelled by the creator or an administrator before completion.                                                          |
 
 ### 3.2 Valid Transitions
 
-| From | To | Triggered By | Conditions |
-| ---- | -- | ------------ | ---------- |
-| Draft | Submitted | Creator | All required fields completed; creator has passed KYC (reference [KYC](L4-005)) |
-| Draft | Draft | Creator | Iterative editing; no constraints |
-| Submitted | Under Review | Reviewer | Reviewer claims campaign from review queue (FIFO) |
-| Under Review | Approved | Reviewer | Curation criteria met; written approval rationale recorded |
-| Under Review | Rejected | Reviewer | Written rejection rationale and resubmission guidance provided |
-| Rejected | Draft | Creator | Creator chooses to revise and resubmit |
-| Approved | Live | Creator or System | Creator sets launch date; system publishes at scheduled time |
-| Live | Funded | System | Minimum funding target reached; campaign remains live for additional contributions until deadline or maximum cap |
-| Live | Failed | System | Deadline reached without meeting minimum funding target |
-| Live | Cancelled | Creator or Admin | Creator requests cancellation; admin approves (if contributions exist, triggers refund — reference [Payments](L4-004)) |
-| Funded | Settlement | System or Admin | Deadline reached; first milestone verification triggered |
-| Settlement | Complete | System | All milestones verified and funds disbursed, OR final settlement action taken |
-| Live | Suspended | System or Admin | Creator KYC revoked or other compliance issue requiring investigation |
-| Funded | Suspended | System or Admin | Creator KYC revoked or other compliance issue requiring investigation |
-| Suspended | Live | Admin | Issue resolved (e.g., KYC re-verified); campaign resumes accepting contributions |
-| Suspended | Funded | Admin | Issue resolved; campaign was already funded before suspension |
-| Suspended | Cancelled | Admin | Issue not resolved within allowed window; contributions refunded via [Payments](L4-004) |
-| Settlement | Cancelled | Admin | Extraordinary circumstances; remaining funds refunded via [Payments](L4-004) |
+| From         | To           | Triggered By      | Conditions                                                                                                             |
+| ------------ | ------------ | ----------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Draft        | Submitted    | Creator           | All required fields completed; creator has passed KYC (reference [KYC](L4-005))                                        |
+| Draft        | Draft        | Creator           | Iterative editing; no constraints                                                                                      |
+| Submitted    | Under Review | Reviewer          | Reviewer claims campaign from review queue (FIFO)                                                                      |
+| Under Review | Approved     | Reviewer          | Curation criteria met; written approval rationale recorded                                                             |
+| Under Review | Rejected     | Reviewer          | Written rejection rationale and resubmission guidance provided                                                         |
+| Rejected     | Draft        | Creator           | Creator chooses to revise and resubmit                                                                                 |
+| Approved     | Live         | Creator or System | Creator sets launch date; system publishes at scheduled time                                                           |
+| Live         | Funded       | System            | Minimum funding target reached; campaign remains live for additional contributions until deadline or maximum cap       |
+| Live         | Failed       | System            | Deadline reached without meeting minimum funding target                                                                |
+| Live         | Cancelled    | Creator or Admin  | Creator requests cancellation; admin approves (if contributions exist, triggers refund — reference [Payments](L4-004)) |
+| Funded       | Settlement   | System or Admin   | Deadline reached; first milestone verification triggered                                                               |
+| Settlement   | Complete     | System            | All milestones verified and funds disbursed, OR final settlement action taken                                          |
+| Live         | Suspended    | System or Admin   | Creator KYC revoked or other compliance issue requiring investigation                                                  |
+| Funded       | Suspended    | System or Admin   | Creator KYC revoked or other compliance issue requiring investigation                                                  |
+| Suspended    | Live         | Admin             | Issue resolved (e.g., KYC re-verified); campaign resumes accepting contributions                                       |
+| Suspended    | Funded       | Admin             | Issue resolved; campaign was already funded before suspension                                                          |
+| Suspended    | Cancelled    | Admin             | Issue not resolved within allowed window; contributions refunded via [Payments](L4-004)                                |
+| Settlement   | Cancelled    | Admin             | Extraordinary circumstances; remaining funds refunded via [Payments](L4-004)                                           |
 
 ### 3.3 State Machine Rules
 
@@ -127,15 +127,15 @@ This spec governs the full campaign lifecycle on Mars Mission Fund — from init
 
 The submission form is a guided, multi-step flow. All fields are required unless marked optional.
 
-| Field Group | Fields | Notes |
-| ----------- | ------ | ----- |
-| **Mission Objectives** | Title, summary (≤280 chars), detailed description (rich text), Mars-mission alignment statement | How does this project contribute to getting humanity to Mars? |
-| **Team Credentials** | Team members (name, role, bio), relevant experience, advisory board (optional) | At least one team member required |
-| **Funding** | Minimum funding target (USD), maximum funding cap (USD), funding deadline, budget breakdown, campaign category | Budget breakdown must account for 100% of the minimum target. The platform uses USD. Maximum cap is the point at which the campaign stops accepting contributions. |
-| **Milestone Plan** | Milestones (title, description, target date, funding percentage, verification criteria) | At least two milestones required; funding percentages must sum to 100% |
-| **Risk Disclosures** | Key risks, mitigation strategies | At least one risk disclosure required |
-| **Media** | Hero image, additional images/video (optional) | Image specifications per [Brand](L2-001) |
-| **Stretch Goals** | Stretch goal tiers (optional): target amount, description, deliverables | Optional; if provided, must be above the minimum funding target and at or below the maximum funding cap |
+| Field Group            | Fields                                                                                                         | Notes                                                                                                                                                              |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Mission Objectives** | Title, summary (≤280 chars), detailed description (rich text), Mars-mission alignment statement                | How does this project contribute to getting humanity to Mars?                                                                                                      |
+| **Team Credentials**   | Team members (name, role, bio), relevant experience, advisory board (optional)                                 | At least one team member required                                                                                                                                  |
+| **Funding**            | Minimum funding target (USD), maximum funding cap (USD), funding deadline, budget breakdown, campaign category | Budget breakdown must account for 100% of the minimum target. The platform uses USD. Maximum cap is the point at which the campaign stops accepting contributions. |
+| **Milestone Plan**     | Milestones (title, description, target date, funding percentage, verification criteria)                        | At least two milestones required; funding percentages must sum to 100%                                                                                             |
+| **Risk Disclosures**   | Key risks, mitigation strategies                                                                               | At least one risk disclosure required                                                                                                                              |
+| **Media**              | Hero image, additional images/video (optional)                                                                 | Image specifications per [Brand](L2-001)                                                                                                                           |
+| **Stretch Goals**      | Stretch goal tiers (optional): target amount, description, deliverables                                        | Optional; if provided, must be above the minimum funding target and at or below the maximum funding cap                                                            |
 
 ### 4.3 Draft Persistence
 
@@ -148,18 +148,18 @@ The submission form is a guided, multi-step flow. All fields are required unless
 Every campaign must be assigned exactly one primary category from the platform taxonomy.
 Creators may also add free-form tags for additional discoverability.
 
-| Category | Description |
-| -------- | ----------- |
-| Propulsion | Technologies that reduce travel time, cost, and risk of the Earth-to-Mars journey — chemical rockets, nuclear propulsion, orbital refuelling, transfer vehicles |
-| Entry, Descent & Landing | Systems for slowing down and landing safely on Mars — heat shields, retro-propulsion, precision landing for large payloads |
-| Power & Energy | Electricity generation and storage on Mars — solar arrays, nuclear fission reactors, energy storage, power distribution |
-| Habitats & Construction | Structures for living and working on Mars — pressurised modules, radiation shielding, regolith-based construction, lava tube utilisation |
-| Life Support & Crew Health | Systems that keep people alive — air recycling, water purification, waste management, medical capability, crew wellbeing |
-| Food & Water Production | Growing food and extracting water on Mars — controlled-environment agriculture, hydroponics, water ice extraction, bioreactors |
-| In-Situ Resource Utilisation | Using Martian materials to manufacture what the colony needs — oxygen and propellant production, metal extraction, 3D printing with local materials |
-| Radiation Protection | Shielding humans and electronics from cosmic rays and solar particles — shielding materials, underground habitats, biological countermeasures, early-warning systems |
-| Robotics & Automation | Robots that explore, build, and operate systems on Mars — autonomous rovers, construction robots, drilling systems, AI-driven operations |
-| Communications & Navigation | Connecting Mars to Earth and surface assets to each other — deep-space optical comms, relay satellites, surface mesh networks, positioning systems |
+| Category                     | Description                                                                                                                                                          |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Propulsion                   | Technologies that reduce travel time, cost, and risk of the Earth-to-Mars journey — chemical rockets, nuclear propulsion, orbital refuelling, transfer vehicles      |
+| Entry, Descent & Landing     | Systems for slowing down and landing safely on Mars — heat shields, retro-propulsion, precision landing for large payloads                                           |
+| Power & Energy               | Electricity generation and storage on Mars — solar arrays, nuclear fission reactors, energy storage, power distribution                                              |
+| Habitats & Construction      | Structures for living and working on Mars — pressurised modules, radiation shielding, regolith-based construction, lava tube utilisation                             |
+| Life Support & Crew Health   | Systems that keep people alive — air recycling, water purification, waste management, medical capability, crew wellbeing                                             |
+| Food & Water Production      | Growing food and extracting water on Mars — controlled-environment agriculture, hydroponics, water ice extraction, bioreactors                                       |
+| In-Situ Resource Utilisation | Using Martian materials to manufacture what the colony needs — oxygen and propellant production, metal extraction, 3D printing with local materials                  |
+| Radiation Protection         | Shielding humans and electronics from cosmic rays and solar particles — shielding materials, underground habitats, biological countermeasures, early-warning systems |
+| Robotics & Automation        | Robots that explore, build, and operate systems on Mars — autonomous rovers, construction robots, drilling systems, AI-driven operations                             |
+| Communications & Navigation  | Connecting Mars to Earth and surface assets to each other — deep-space optical comms, relay satellites, surface mesh networks, positioning systems                   |
 
 This taxonomy is derived from NASA's Technology Taxonomy and adapted for a general donor audience per the "Accessibility Over Exclusivity" principle (L1-001).
 
@@ -196,14 +196,14 @@ On submission, the system validates:
 
 Reviewers evaluate proposals against the following criteria:
 
-| Criterion | Description |
-| --------- | ----------- |
+| Criterion                  | Description                                                                                                   |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | **Mars-Mission Alignment** | Does the project credibly contribute to Mars-enabling goals as defined in [Product Vision & Mission](L1-001)? |
-| **Feasibility** | Is the funding target realistic for the proposed deliverables? Is the timeline achievable? |
-| **Team Credibility** | Does the team have relevant experience or credentials? |
-| **Risk Transparency** | Are risks honestly disclosed with reasonable mitigation strategies? |
-| **Milestone Quality** | Are milestones specific, measurable, and verifiable? |
-| **Completeness** | Are all required fields substantively filled (not just placeholder text)? |
+| **Feasibility**            | Is the funding target realistic for the proposed deliverables? Is the timeline achievable?                    |
+| **Team Credibility**       | Does the team have relevant experience or credentials?                                                        |
+| **Risk Transparency**      | Are risks honestly disclosed with reasonable mitigation strategies?                                           |
+| **Milestone Quality**      | Are milestones specific, measurable, and verifiable?                                                          |
+| **Completeness**           | Are all required fields substantively filled (not just placeholder text)?                                     |
 
 ### 5.3 Review Actions
 
@@ -427,40 +427,40 @@ The funding model is **flexible with a minimum threshold**: campaigns that meet 
 
 ### 11.1 Campaign ↔ Payments ([Payments](L4-004))
 
-| Event | Campaign Publishes | Payments Responds |
-| ----- | ------------------ | ----------------- |
-| Campaign goes Live | `CampaignLive` — campaign ID, minimum funding target, maximum funding cap, deadline | Payments creates escrow account for campaign |
-| Contribution received | — | Payments notifies campaign of confirmed contribution amount |
-| Funding target reached | `FundingTargetReached` — campaign ID | Payments acknowledges; no action until settlement |
-| Campaign funded at deadline | `CampaignFunded` — campaign ID, total collected | Payments holds funds in escrow pending milestone verification |
-| Milestone verified | `MilestoneVerified` — campaign ID, milestone ID, disbursement amount | Payments executes disbursement to creator |
-| Campaign failed | `CampaignFailed` — campaign ID | Payments executes refunds to all contributors |
-| Campaign suspended | `CampaignSuspended` — campaign ID, reason | Payments stops accepting new contributions for this campaign |
-| Campaign resumed | `CampaignResumed` — campaign ID | Payments resumes accepting contributions (if below cap and before deadline) |
-| Campaign cancelled | `CampaignCancelled` — campaign ID | Payments executes refunds for any existing contributions |
-| All milestones complete | `CampaignComplete` — campaign ID | Payments confirms all funds settled; closes escrow |
+| Event                       | Campaign Publishes                                                                  | Payments Responds                                                           |
+| --------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Campaign goes Live          | `CampaignLive` — campaign ID, minimum funding target, maximum funding cap, deadline | Payments creates escrow account for campaign                                |
+| Contribution received       | —                                                                                   | Payments notifies campaign of confirmed contribution amount                 |
+| Funding target reached      | `FundingTargetReached` — campaign ID                                                | Payments acknowledges; no action until settlement                           |
+| Campaign funded at deadline | `CampaignFunded` — campaign ID, total collected                                     | Payments holds funds in escrow pending milestone verification               |
+| Milestone verified          | `MilestoneVerified` — campaign ID, milestone ID, disbursement amount                | Payments executes disbursement to creator                                   |
+| Campaign failed             | `CampaignFailed` — campaign ID                                                      | Payments executes refunds to all contributors                               |
+| Campaign suspended          | `CampaignSuspended` — campaign ID, reason                                           | Payments stops accepting new contributions for this campaign                |
+| Campaign resumed            | `CampaignResumed` — campaign ID                                                     | Payments resumes accepting contributions (if below cap and before deadline) |
+| Campaign cancelled          | `CampaignCancelled` — campaign ID                                                   | Payments executes refunds for any existing contributions                    |
+| All milestones complete     | `CampaignComplete` — campaign ID                                                    | Payments confirms all funds settled; closes escrow                          |
 
 Both specs must define these events.
 The event schema and transport mechanism are defined in [Architecture](L3-001).
 
 ### 11.2 Campaign ↔ Donor ([Donor](L4-003))
 
-| Direction | Data Provided |
-| --------- | ------------- |
+| Direction        | Data Provided                                                                                                                          |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | Campaign → Donor | Campaign metadata for discovery: title, summary, category, funding progress, deadline, status, hero image, Mars-mission alignment tags |
-| Donor → Campaign | Contribution data: contributor count, total contributed (aggregated), individual contribution events (via [Payments](L4-004)) |
+| Donor → Campaign | Contribution data: contributor count, total contributed (aggregated), individual contribution events (via [Payments](L4-004))          |
 
 - The campaign service provides read-only campaign data to the donor discovery and search systems.
 - Contribution data flows through [Payments](L4-004), not directly from donor to campaign.
 
 ### 11.3 Campaign ↔ Account ([Account](L4-001))
 
-| Role | Campaign Permissions |
-| ---- | -------------------- |
-| **Creator** | Create drafts, edit drafts, submit proposals, launch approved campaigns, post updates, submit milestone evidence, request cancellation, request deadline extensions, request milestone changes |
-| **Reviewer** | View and claim submitted proposals from review queue, approve/reject proposals, request clarification, recuse from review |
-| **Admin** | Reassign reviewers, approve cancellations, verify milestones, handle appeals, approve/reject deadline extensions, approve/reject milestone changes, manage suspended campaigns (restore or cancel) |
-| **Backer** (Donor) | View live campaigns, contribute (via [Payments](L4-004)), view updates and milestone progress |
+| Role               | Campaign Permissions                                                                                                                                                                               |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Creator**        | Create drafts, edit drafts, submit proposals, launch approved campaigns, post updates, submit milestone evidence, request cancellation, request deadline extensions, request milestone changes     |
+| **Reviewer**       | View and claim submitted proposals from review queue, approve/reject proposals, request clarification, recuse from review                                                                          |
+| **Admin**          | Reassign reviewers, approve cancellations, verify milestones, handle appeals, approve/reject deadline extensions, approve/reject milestone changes, manage suspended campaigns (restore or cancel) |
+| **Backer** (Donor) | View live campaigns, contribute (via [Payments](L4-004)), view updates and milestone progress                                                                                                      |
 
 Role definitions and assignment are governed by [Account](L4-001).
 Campaign enforces permissions based on the authenticated user's role.
@@ -482,7 +482,7 @@ Campaign enforces permissions based on the authenticated user's role.
 
 ## Change Log
 
-| Date | Version | Author | Summary |
-| ---- | ------- | ------ | ------- |
-| March 2026 | 0.1 | — | Initial stub. Campaign state machine, submission flow, review pipeline, approval/rejection, live management, milestones, completion, failure, interface contracts with Payments, Donor, Account, and KYC. |
-| March 2026 | 0.2 | — | Resolved all open questions. Funding: USD, min $1M, max $1B. Flexible funding model (min threshold + max cap). Duration: 1 week–1 year. Pull-based reviewer queue (FIFO), 5-day SLA. Deadline extensions (30-day max, 90-day cumulative). Milestone change requests with Admin approval and contributor notification. KYC revocation handling (14-day re-verification window). Unlimited simultaneous campaigns. 10-category taxonomy based on NASA Technology Taxonomy. |
+| Date       | Version | Author | Summary                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ---------- | ------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| March 2026 | 0.1     | —      | Initial stub. Campaign state machine, submission flow, review pipeline, approval/rejection, live management, milestones, completion, failure, interface contracts with Payments, Donor, Account, and KYC.                                                                                                                                                                                                                                                                |
+| March 2026 | 0.2     | —      | Resolved all open questions. Funding: USD, min $1M, max $1B. Flexible funding model (min threshold + max cap). Duration: 1 week–1 year. Pull-based reviewer queue (FIFO), 5-day SLA. Deadline extensions (30-day max, 90-day cumulative). Milestone change requests with Admin approval and contributor notification. KYC revocation handling (14-day re-verification window). Unlimited simultaneous campaigns. 10-category taxonomy based on NASA Technology Taxonomy. |

@@ -97,12 +97,10 @@ export function HeroSection() {
     <section style={sectionStyle} aria-label="Hero">
       <div className="hero-glow" aria-hidden="true" style={glowStyle} />
       <div style={contentStyle}>
-        <h1 className={heroHeadingClass}>
-          Crowdfunding the Next Giant Leap
-        </h1>
+        <h1 className={heroHeadingClass}>Crowdfunding the Next Giant Leap</h1>
         <p style={subtextStyle}>
-          Mars Mission Fund connects visionary space projects with the backers who believe
-          in humanity's multiplanetary future. Every pledge moves the launch window closer.
+          Mars Mission Fund connects visionary space projects with the backers who believe in
+          humanity's multiplanetary future. Every pledge moves the launch window closer.
         </p>
         <Button variant="primary" href="#">
           Explore Missions

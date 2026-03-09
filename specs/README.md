@@ -1,8 +1,8 @@
 # Mars Mission Fund — Specification Index
 
 > **Read this file first.**
-This is the authoritative index of all specifications governing the Mars Mission Fund platform.
-Before implementing any task, identify which specs govern the affected domain and read them in layer order (L1 → L4).
+> This is the authoritative index of all specifications governing the Mars Mission Fund platform.
+> Before implementing any task, identify which specs govern the affected domain and read them in layer order (L1 → L4).
 
 ---
 
@@ -49,9 +49,9 @@ Each spec includes a **Local demo scope** note identifying what matters for the 
 
 ### L1 — Strategic (changes quarterly or at major pivots)
 
-| Spec ID | Document | Purpose | Status |
-| ------- | -------- | ------- | ------ |
-| L1-001 | `product-vision-and-mission.md` | Root document. Defines why we exist, who we serve, what we build, and what we don't. All other specs must align with the vision, mission, principles, and scope boundaries defined here. | Approved |
+| Spec ID | Document                        | Purpose                                                                                                                                                                                  | Status   |
+| ------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| L1-001  | `product-vision-and-mission.md` | Root document. Defines why we exist, who we serve, what we build, and what we don't. All other specs must align with the vision, mission, principles, and scope boundaries defined here. | Approved |
 
 **Governance**: Changes to L1 require product leadership approval and trigger a review of all downstream specs for alignment.
 
@@ -59,10 +59,10 @@ Each spec includes a **Local demo scope** note identifying what matters for the 
 
 ### L2 — Standards (changes monthly or at standard reviews)
 
-| Spec ID | Document | Purpose | Depends On | Status |
-| ------- | -------- | ------- | ---------- | ------ |
-| L2-001 | `standards/brand.md` | How the MMF brand system (colours, typography, voice, motion) is applied within the product. References the HTML brand guidelines as the source of truth for design tokens. Specifies product-specific application rules, component-to-token mappings, accessibility requirements, and voice-in-product patterns. Does not duplicate brand guidelines. | L1-001, Brand Guidelines (HTML) | Approved |
-| L2-002 | `standards/engineering.md` | The engineering constitution. Codifies non-negotiable technical decisions: security-first architecture, parameterised queries only, encryption standards, testing requirements, code quality gates, and dependency management policies. All L3 and L4 specs inherit these constraints. | L1-001 | Approved |
+| Spec ID | Document                   | Purpose                                                                                                                                                                                                                                                                                                                                                | Depends On                      | Status   |
+| ------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------- | -------- |
+| L2-001  | `standards/brand.md`       | How the MMF brand system (colours, typography, voice, motion) is applied within the product. References the HTML brand guidelines as the source of truth for design tokens. Specifies product-specific application rules, component-to-token mappings, accessibility requirements, and voice-in-product patterns. Does not duplicate brand guidelines. | L1-001, Brand Guidelines (HTML) | Approved |
+| L2-002  | `standards/engineering.md` | The engineering constitution. Codifies non-negotiable technical decisions: security-first architecture, parameterised queries only, encryption standards, testing requirements, code quality gates, and dependency management policies. All L3 and L4 specs inherit these constraints.                                                                 | L1-001                          | Approved |
 
 **Governance**: Changes to L2 require engineering and design leadership review. Changes to L2-002 trigger a review of all L3 specs.
 
@@ -70,16 +70,16 @@ Each spec includes a **Local demo scope** note identifying what matters for the 
 
 ### L3 — Technical (changes at sprint level / technology decisions)
 
-| Spec ID | Document | Purpose | Depends On | Status |
-| ------- | -------- | ------- | ---------- | ------ |
-| L3-001 | `tech/architecture.md` | System architecture, service boundaries, data model, infrastructure design, deployment topology, and inter-service communication patterns. | L1-001, L2-002, L3-008 | Approved |
-| L3-002 | `tech/security.md` | Threat model, control matrix, authentication/authorisation architecture, encryption standards, compliance mapping (PCI DSS, GDPR, Australian Privacy Act). Implements the "Security as Foundation" principle from L1-001. | L1-001, L2-002, L3-001 | Approved |
-| L3-003 | `tech/reliability.md` | Availability targets, failover strategies, disaster recovery, backup policies, circuit breakers, health checks, and degradation modes. | L2-002, L3-001 | Approved |
-| L3-004 | `tech/data-management.md` | Data classification scheme, retention policies, data lifecycle, anonymisation rules, backup and recovery, data access patterns, and migration strategies. | L2-002, L3-001, L3-002 | Approved |
-| L3-005 | `tech/frontend.md` | Frontend architecture, component library standards, performance budgets, accessibility (WCAG 2.1 AA minimum), responsive breakpoints, animation performance constraints, and browser support matrix. Implements brand tokens defined in L2-001. | L2-001, L2-002, L3-001 | Approved |
-| L3-006 | `tech/audit.md` | Audit logging architecture, immutable event streams, what gets logged, retention periods, access controls on audit data, regulatory reporting, and anomaly detection. Implements the "Transparency as Currency" principle from L1-001. | L1-001, L2-002, L3-001, L3-002 | Approved |
-| L3-007 | `tech/markdown.md` | Markdown authorship standard: one-sentence-per-line rule, heading and list conventions, linter configuration (markdownlint). Governs all `.md` files in the repository. | L2-002 | Approved |
-| L3-008 | `tech/tech-stack.md` | Enumerates all technology choices: languages, frameworks, libraries, infrastructure, and tooling. Single source of truth for the platform's technology baseline. | L1-001, L2-002, L3-001 | Approved |
+| Spec ID | Document                  | Purpose                                                                                                                                                                                                                                         | Depends On                     | Status   |
+| ------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ | -------- |
+| L3-001  | `tech/architecture.md`    | System architecture, service boundaries, data model, infrastructure design, deployment topology, and inter-service communication patterns.                                                                                                      | L1-001, L2-002, L3-008         | Approved |
+| L3-002  | `tech/security.md`        | Threat model, control matrix, authentication/authorisation architecture, encryption standards, compliance mapping (PCI DSS, GDPR, Australian Privacy Act). Implements the "Security as Foundation" principle from L1-001.                       | L1-001, L2-002, L3-001         | Approved |
+| L3-003  | `tech/reliability.md`     | Availability targets, failover strategies, disaster recovery, backup policies, circuit breakers, health checks, and degradation modes.                                                                                                          | L2-002, L3-001                 | Approved |
+| L3-004  | `tech/data-management.md` | Data classification scheme, retention policies, data lifecycle, anonymisation rules, backup and recovery, data access patterns, and migration strategies.                                                                                       | L2-002, L3-001, L3-002         | Approved |
+| L3-005  | `tech/frontend.md`        | Frontend architecture, component library standards, performance budgets, accessibility (WCAG 2.1 AA minimum), responsive breakpoints, animation performance constraints, and browser support matrix. Implements brand tokens defined in L2-001. | L2-001, L2-002, L3-001         | Approved |
+| L3-006  | `tech/audit.md`           | Audit logging architecture, immutable event streams, what gets logged, retention periods, access controls on audit data, regulatory reporting, and anomaly detection. Implements the "Transparency as Currency" principle from L1-001.          | L1-001, L2-002, L3-001, L3-002 | Approved |
+| L3-007  | `tech/markdown.md`        | Markdown authorship standard: one-sentence-per-line rule, heading and list conventions, linter configuration (markdownlint). Governs all `.md` files in the repository.                                                                         | L2-002                         | Approved |
+| L3-008  | `tech/tech-stack.md`      | Enumerates all technology choices: languages, frameworks, libraries, infrastructure, and tooling. Single source of truth for the platform's technology baseline.                                                                                | L1-001, L2-002, L3-001         | Approved |
 
 **Governance**: Changes to L3 specs require engineering review. Changes to L3-001 (architecture) or L3-002 (security) trigger review of all dependent L3 and L4 specs.
 
@@ -87,13 +87,13 @@ Each spec includes a **Local demo scope** note identifying what matters for the 
 
 ### L4 — Domain (changes per feature / per release)
 
-| Spec ID | Document | Purpose | Depends On | Status |
-| ------- | -------- | ------- | ---------- | ------ |
-| L4-001 | `domain/account.md` | The full account lifecycle: registration, onboarding, email verification, password policies, SSO integration, profile management, role assignment, session management, notification preferences, account recovery, account deactivation, and data portability. Onboarding is a phase within this lifecycle, not a separate concern. | L2-001, L3-002, L3-005, L4-005 | Approved |
-| L4-002 | `domain/campaign.md` | Full campaign lifecycle: project submission, review pipeline, approval/rejection, live campaign management, funding progress tracking, milestone definition and verification, stretch goals, deadline enforcement, campaign completion, campaign failure handling, and fund settlement. Origination is a phase within this lifecycle, not a separate concern. | L1-001, L2-001, L3-001, L3-006, L4-004 | Approved |
-| L4-003 | `domain/donor.md` | The complete donor-side bounded context: project discovery and search, recommendation engine, curated collections, category browsing, contribution flow (references L4-004), ongoing donor relationship management, contribution history, impact reporting, milestone notifications, cumulative impact dashboards, and repeat engagement patterns. Implements the "Accessibility Over Exclusivity" principle from L1-001. | L1-001, L2-001, L3-005, L4-002, L4-004 | Approved |
-| L4-004 | `domain/payments.md` | Payment processing: gateway integration (Stripe), tokenisation, PCI DSS scope management (SAQ-A), escrow mechanics, milestone-based disbursement, multi-approval disbursement workflows, refund handling, currency support, transaction reconciliation, tax receipt generation, and financial reporting. | L2-002, L3-001, L3-002, L3-004, L3-006 | Approved |
-| L4-005 | `domain/kyc.md` | Identity verification: KYC document upload, automated verification checks, sanctions screening, manual review workflows, verification status lifecycle, re-verification triggers, jurisdictional requirements, and data retention rules specific to identity documents. | L2-002, L3-002, L3-004, L3-006 | Approved |
+| Spec ID | Document             | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                   | Depends On                             | Status   |
+| ------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | -------- |
+| L4-001  | `domain/account.md`  | The full account lifecycle: registration, onboarding, email verification, password policies, SSO integration, profile management, role assignment, session management, notification preferences, account recovery, account deactivation, and data portability. Onboarding is a phase within this lifecycle, not a separate concern.                                                                                       | L2-001, L3-002, L3-005, L4-005         | Approved |
+| L4-002  | `domain/campaign.md` | Full campaign lifecycle: project submission, review pipeline, approval/rejection, live campaign management, funding progress tracking, milestone definition and verification, stretch goals, deadline enforcement, campaign completion, campaign failure handling, and fund settlement. Origination is a phase within this lifecycle, not a separate concern.                                                             | L1-001, L2-001, L3-001, L3-006, L4-004 | Approved |
+| L4-003  | `domain/donor.md`    | The complete donor-side bounded context: project discovery and search, recommendation engine, curated collections, category browsing, contribution flow (references L4-004), ongoing donor relationship management, contribution history, impact reporting, milestone notifications, cumulative impact dashboards, and repeat engagement patterns. Implements the "Accessibility Over Exclusivity" principle from L1-001. | L1-001, L2-001, L3-005, L4-002, L4-004 | Approved |
+| L4-004  | `domain/payments.md` | Payment processing: gateway integration (Stripe), tokenisation, PCI DSS scope management (SAQ-A), escrow mechanics, milestone-based disbursement, multi-approval disbursement workflows, refund handling, currency support, transaction reconciliation, tax receipt generation, and financial reporting.                                                                                                                  | L2-002, L3-001, L3-002, L3-004, L3-006 | Approved |
+| L4-005  | `domain/kyc.md`      | Identity verification: KYC document upload, automated verification checks, sanctions screening, manual review workflows, verification status lifecycle, re-verification triggers, jurisdictional requirements, and data retention rules specific to identity documents.                                                                                                                                                   | L2-002, L3-002, L3-004, L3-006         | Approved |
 
 **Governance**: Changes to L4 specs follow standard feature review. Changes that affect interfaces between domain specs require review of all connected specs (check "Depends On" chains).
 
@@ -104,8 +104,8 @@ Each spec includes a **Local demo scope** note identifying what matters for the 
 Operational references and CLI cheat-sheets.
 These are not numbered specs and do not participate in the L1–L4 dependency hierarchy.
 
-| Document | Purpose |
-|----------|---------|
+| Document            | Purpose                                                                 |
+| ------------------- | ----------------------------------------------------------------------- |
 | `tooling/github.md` | CLI reference for managing GitHub milestones, issues, and PRs via `gh`. |
 
 ---
@@ -155,13 +155,13 @@ L1-001 Product Vision & Mission
 
 Some concerns span multiple specs. When working in these areas, read all referenced specs:
 
-| Concern | Governing Specs | Notes |
-| ------- | --------------- | ----- |
-| Payment security | L3-002, L3-006, L4-004, L4-005 | PCI DSS compliance touches security, audit, payments, and KYC |
-| User data privacy | L3-002, L3-004, L4-001, L4-005 | GDPR and Australian Privacy Act span security, data management, account, and KYC |
-| Campaign financial integrity | L3-006, L4-002, L4-004 | Escrow, milestone disbursement, and audit trail must be consistent |
-| Donor experience | L2-001, L3-005, L4-003, L4-004 | Brand standards, frontend standards, donor spec, and payments must deliver a cohesive flow |
-| Access control | L3-002, L4-001, L4-002, L4-005 | RBAC model defined in security, implemented across account, campaign review, and KYC workflows |
+| Concern                      | Governing Specs                | Notes                                                                                          |
+| ---------------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------- |
+| Payment security             | L3-002, L3-006, L4-004, L4-005 | PCI DSS compliance touches security, audit, payments, and KYC                                  |
+| User data privacy            | L3-002, L3-004, L4-001, L4-005 | GDPR and Australian Privacy Act span security, data management, account, and KYC               |
+| Campaign financial integrity | L3-006, L4-002, L4-004         | Escrow, milestone disbursement, and audit trail must be consistent                             |
+| Donor experience             | L2-001, L3-005, L4-003, L4-004 | Brand standards, frontend standards, donor spec, and payments must deliver a cohesive flow     |
+| Access control               | L3-002, L4-001, L4-002, L4-005 | RBAC model defined in security, implemented across account, campaign review, and KYC workflows |
 
 ---
 
@@ -210,10 +210,10 @@ All specs in this ecosystem follow these conventions:
 
 ## External References
 
-| Reference | Type | Location | Notes |
-| --------- | ---- | -------- | ----- |
+| Reference        | Type          | Location                                 | Notes                                                                                                                               |
+| ---------------- | ------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | Brand Guidelines | Design system | `standards/mars-mission-fund-brand.html` | Source of truth for design tokens, colour palette, typography, voice & tone, motion. L2-001 references this; does not duplicate it. |
 
 ---
 
-*This index is the entry point for all agents and contributors. Keep it current.*
+_This index is the entry point for all agents and contributors. Keep it current._

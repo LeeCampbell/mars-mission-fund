@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `node_modules/eslint`, `node_modules/prettier`, and `node_modules/markdownlint-cli2` exist; `npm install` exits 0
   - **Brief ref**: Section "1. Install packages"
 
-- [ ] TASK-06: Auto-fix ESLint and Prettier violations
+- [x] TASK-06: Auto-fix ESLint and Prettier violations
   - **Goal**: Automatically fix all auto-fixable style and lint issues in `src/`
   - **Details**: Run `npm run lint:fix` to apply ESLint auto-fixes, then run `npm run format` to apply Prettier formatting to all `src/`, config, and root `.ts`/`.tsx`/`.js`/`.json` files. Re-run in that order
   - **Files**: `src/**/*.{ts,tsx}`, `eslint.config.js`, `.prettierrc.json`, `package.json`, and any other formatted files

@@ -44,22 +44,22 @@ It implements the "Security as Foundation" principle from the [Product Vision & 
 This spec inherits all constraints from the [Engineering Standard](L2-002).
 The following sections are directly implemented by this spec:
 
-| L2-002 Section | Constraint | How This Spec Implements It |
-| --- | --- | --- |
-| 1.1 Encryption | TLS 1.3 minimum; AES-256 at rest for sensitive data | Section 6 defines encryption standards, key management, and certificate lifecycle |
-| 1.2 Data Access | Parameterised queries only | Inherited by all services; enforced by data access layer defined in [Architecture](L3-001), Section 4.2 |
-| 1.3 Secrets Management | Secrets via dedicated service, injected at runtime | Section 6.3 defines secret handling requirements; technology choice recorded in [Architecture](L3-001), Section 8 |
-| 1.4 Input Validation | All external input validated at system boundary; CSP headers mandatory | Section 7 defines CSP policy and input validation standards |
-| 1.5 Authentication & Authorisation | Every endpoint authenticated; MFA for financial and admin operations | Sections 4 and 5 define the full authentication and authorisation architecture |
-| 1.6 Dependency Security | Vulnerability scanning on every build; CVE response SLAs | Section 11 defines security review cadence and dependency scanning integration |
-| 1.7 Logging & Auditability | Every state mutation logged; sensitive data never logged | Jointly implemented with [Audit](L3-006); this spec defines what constitutes a security-relevant event |
+| L2-002 Section                     | Constraint                                                             | How This Spec Implements It                                                                                       |
+| ---------------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| 1.1 Encryption                     | TLS 1.3 minimum; AES-256 at rest for sensitive data                    | Section 6 defines encryption standards, key management, and certificate lifecycle                                 |
+| 1.2 Data Access                    | Parameterised queries only                                             | Inherited by all services; enforced by data access layer defined in [Architecture](L3-001), Section 4.2           |
+| 1.3 Secrets Management             | Secrets via dedicated service, injected at runtime                     | Section 6.3 defines secret handling requirements; technology choice recorded in [Architecture](L3-001), Section 8 |
+| 1.4 Input Validation               | All external input validated at system boundary; CSP headers mandatory | Section 7 defines CSP policy and input validation standards                                                       |
+| 1.5 Authentication & Authorisation | Every endpoint authenticated; MFA for financial and admin operations   | Sections 4 and 5 define the full authentication and authorisation architecture                                    |
+| 1.6 Dependency Security            | Vulnerability scanning on every build; CVE response SLAs               | Section 11 defines security review cadence and dependency scanning integration                                    |
+| 1.7 Logging & Auditability         | Every state mutation logged; sensitive data never logged               | Jointly implemented with [Audit](L3-006); this spec defines what constitutes a security-relevant event            |
 
 This spec also inherits from [Architecture](L3-001):
 
-| L3-001 Section | Constraint | How This Spec Implements It |
-| --- | --- | --- |
-| 3.2 API Gateway | TLS termination and token validation at the gateway | Section 4.3 defines token validation rules at the gateway |
-| 6.3 Service Identity | Every service-to-service call authenticated | Section 5.4 defines the service identity trust model |
+| L3-001 Section       | Constraint                                          | How This Spec Implements It                               |
+| -------------------- | --------------------------------------------------- | --------------------------------------------------------- |
+| 3.2 API Gateway      | TLS termination and token validation at the gateway | Section 4.3 defines token validation rules at the gateway |
+| 6.3 Service Identity | Every service-to-service call authenticated         | Section 5.4 defines the service identity trust model      |
 
 ---
 
@@ -70,65 +70,65 @@ The threat model is a living document — it must be reviewed and updated whenev
 
 ### 3.1 Threat Categories
 
-| STRIDE Category | Description | Primary Targets |
-| --- | --- | --- |
-| **Spoofing** | An attacker impersonates a legitimate user, service, or system component | Authentication endpoints, service-to-service calls, API Gateway |
-| **Tampering** | An attacker modifies data in transit or at rest | Payment transactions, campaign data, escrow balances, KYC documents |
-| **Repudiation** | An actor denies performing an action, and the system cannot prove otherwise | Financial transactions, campaign approvals, disbursement authorisations, admin operations |
-| **Information Disclosure** | Sensitive data is exposed to unauthorised parties | PII, financial data, KYC documents, authentication credentials, audit logs |
-| **Denial of Service** | An attacker degrades or prevents legitimate access to the platform | API Gateway, authentication service, payment processing |
-| **Elevation of Privilege** | An attacker gains access to resources or operations beyond their authorised role | Role assignment, admin endpoints, campaign review pipeline, disbursement approval |
+| STRIDE Category            | Description                                                                      | Primary Targets                                                                           |
+| -------------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **Spoofing**               | An attacker impersonates a legitimate user, service, or system component         | Authentication endpoints, service-to-service calls, API Gateway                           |
+| **Tampering**              | An attacker modifies data in transit or at rest                                  | Payment transactions, campaign data, escrow balances, KYC documents                       |
+| **Repudiation**            | An actor denies performing an action, and the system cannot prove otherwise      | Financial transactions, campaign approvals, disbursement authorisations, admin operations |
+| **Information Disclosure** | Sensitive data is exposed to unauthorised parties                                | PII, financial data, KYC documents, authentication credentials, audit logs                |
+| **Denial of Service**      | An attacker degrades or prevents legitimate access to the platform               | API Gateway, authentication service, payment processing                                   |
+| **Elevation of Privilege** | An attacker gains access to resources or operations beyond their authorised role | Role assignment, admin endpoints, campaign review pipeline, disbursement approval         |
 
 ### 3.2 Trust Boundaries
 
-| Boundary | Description | Controls |
-| --- | --- | --- |
-| External → API Gateway | All traffic from end users, external APIs, webhooks | TLS 1.3, authentication, rate limiting, input validation, CSP headers |
-| API Gateway → Domain Services | Validated requests forwarded to internal services | Token validation, correlation ID propagation, authorisation enforcement |
-| Service → Service | Inter-service communication within the platform | Service identity authentication (see Section 5.4), authorisation policies |
-| Service → External Provider | Calls to payment gateway, KYC provider, email service | Adapter abstraction per [Architecture](L3-001), Section 3.3; TLS 1.3; credential isolation |
-| Service → Data Store | Database and object storage access | Data access layer enforcement, parameterised queries, encryption at rest |
-| Audit boundary | Audit log ingestion and storage | Append-only writes, no delete/modify capability — see [Audit](L3-006) |
+| Boundary                      | Description                                           | Controls                                                                                   |
+| ----------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| External → API Gateway        | All traffic from end users, external APIs, webhooks   | TLS 1.3, authentication, rate limiting, input validation, CSP headers                      |
+| API Gateway → Domain Services | Validated requests forwarded to internal services     | Token validation, correlation ID propagation, authorisation enforcement                    |
+| Service → Service             | Inter-service communication within the platform       | Service identity authentication (see Section 5.4), authorisation policies                  |
+| Service → External Provider   | Calls to payment gateway, KYC provider, email service | Adapter abstraction per [Architecture](L3-001), Section 3.3; TLS 1.3; credential isolation |
+| Service → Data Store          | Database and object storage access                    | Data access layer enforcement, parameterised queries, encryption at rest                   |
+| Audit boundary                | Audit log ingestion and storage                       | Append-only writes, no delete/modify capability — see [Audit](L3-006)                      |
 
 ### 3.3 Security Control Matrix
 
-| Threat | Trust Boundary | Control | Spec Reference | Priority |
-| --- | --- | --- | --- | --- |
-| **Spoofing** | | | | |
-| User impersonation | External → API Gateway | OAuth 2.0 / OIDC authentication via Clerk with MFA | Section 4 | Critical |
-| Session hijacking | External → API Gateway | Short-lived access tokens (5 min), secure HttpOnly cookies, session binding to device/user-agent | Section 4.3, 4.4 | Critical |
-| Credential stuffing | External → API Gateway | Account lockout after 3 failed attempts, rate limiting on auth endpoints (10/min) | Section 4.5, 7.3 | Critical |
-| Token forgery | API Gateway → Domain Services | RS256/ES256 JWT signature validation, issuer and expiry checks at gateway | Section 4.3 | Critical |
-| Service impersonation | Service → Service | Not applicable in current single-unit deployment; JWT service tokens if services are split | Section 5.4, [Architecture](L3-001) | Critical |
-| Webhook spoofing | Service → External Provider | Stripe webhook signature verification (HMAC-SHA256) before processing | [Payments](L4-004), Section 3.3 | Critical |
-| **Tampering** | | | | |
-| Payment manipulation | Service → External Provider | Stripe tokenisation — platform never handles raw card data; signed API requests | [Payments](L4-004) | Critical |
-| Data at rest modification | Service → Data Store | AES-256 encryption at rest via AWS KMS; envelope encryption with DEK/KEK | Section 6.1 | Critical |
-| Data in transit interception | All boundaries | TLS 1.3 minimum on all connections, including internal service communication | Section 6.2 | Critical |
-| Escrow ledger manipulation | Service → Data Store | Append-only immutable ledger; double-entry bookkeeping; daily reconciliation against Stripe | [Payments](L4-004), [Audit](L3-006) | Critical |
-| Request parameter tampering | External → API Gateway | Input validation at system boundary; allowlist validation; Zod schema enforcement | Section 7.1 | High |
-| **Repudiation** | | | | |
-| Financial action denial | All internal boundaries | Immutable audit logging of all payment state mutations with actor, timestamp, correlation ID | [Audit](L3-006) | Critical |
-| Role change denial | API Gateway → Domain Services | Security-critical audit events for all role assignments and changes | Section 5.2, [Audit](L3-006) | Critical |
-| Campaign approval denial | API Gateway → Domain Services | Audit trail for all campaign review decisions with reviewer identity | [Audit](L3-006) | High |
-| Disbursement approval denial | API Gateway → Domain Services | Dual-approval workflow with independent audit entries per approver | [Payments](L4-004), Section 7.2 | Critical |
-| **Information Disclosure** | | | | |
-| PII exposure | All boundaries | Data classification scheme; field-level encryption for sensitive fields; log sanitisation | Section 6, [Data Management](L3-004) | Critical |
-| Card data exposure | External → API Gateway | SAQ-A scope — card data never enters platform; Stripe Elements handles client-side | [Payments](L4-004), Section 8.1 | Critical |
-| KYC document exposure | Service → Data Store | Encrypted at rest (AES-256); access restricted to KYC service; access logged | [KYC](L4-005), Section 6.1 | Critical |
-| Credential leakage | All boundaries | Secrets managed via AWS KMS; injected at runtime; never logged, committed, or passed as CLI args | Section 6.3 | Critical |
-| Error message information leak | External → API Gateway | Generic error responses to external clients; detailed errors logged internally only | Section 7.1 | Medium |
-| Referrer leakage | External → API Gateway | `Referrer-Policy: strict-origin-when-cross-origin` header | Section 7.2 | Medium |
-| **Denial of Service** | | | | |
-| API flooding | External → API Gateway | Rate limiting: 100/min general, 10/min auth, 20/min financial; `Retry-After` headers | Section 7.3 | High |
-| Authentication endpoint abuse | External → API Gateway | Stricter rate limits on auth endpoints; account lockout with escalating duration | Section 4.5, 7.3 | High |
-| Resource exhaustion via file upload | External → API Gateway | File type validation (magic bytes), size limits, storage in separate domain | Section 7.1 | High |
-| **Elevation of Privilege** | | | | |
-| Unauthorised role assignment | API Gateway → Domain Services | RBAC enforcement; Reviewer/Admin assigned by Admin; Super Admin by Super Admin only with MFA | Section 5.2 | Critical |
-| Horizontal privilege escalation | API Gateway → Domain Services | Resource-level authorisation in domain services (e.g., creators manage only own campaigns) | Section 5.3 | Critical |
-| Vertical privilege escalation | API Gateway → Domain Services | API-layer authorisation on every request; role claims validated from access token | Section 5.3 | Critical |
-| UI-only access control bypass | External → API Gateway | Authorisation enforced at API layer, not UI; UI role-based hiding is cosmetic only | Section 5.3 | Critical |
-| MFA bypass on privileged actions | API Gateway → Domain Services | MFA required for all financial actions, admin operations, and account recovery | Section 4.2 | Critical |
+| Threat                              | Trust Boundary                | Control                                                                                          | Spec Reference                       | Priority |
+| ----------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------ | -------- |
+| **Spoofing**                        |                               |                                                                                                  |                                      |          |
+| User impersonation                  | External → API Gateway        | OAuth 2.0 / OIDC authentication via Clerk with MFA                                               | Section 4                            | Critical |
+| Session hijacking                   | External → API Gateway        | Short-lived access tokens (5 min), secure HttpOnly cookies, session binding to device/user-agent | Section 4.3, 4.4                     | Critical |
+| Credential stuffing                 | External → API Gateway        | Account lockout after 3 failed attempts, rate limiting on auth endpoints (10/min)                | Section 4.5, 7.3                     | Critical |
+| Token forgery                       | API Gateway → Domain Services | RS256/ES256 JWT signature validation, issuer and expiry checks at gateway                        | Section 4.3                          | Critical |
+| Service impersonation               | Service → Service             | Not applicable in current single-unit deployment; JWT service tokens if services are split       | Section 5.4, [Architecture](L3-001)  | Critical |
+| Webhook spoofing                    | Service → External Provider   | Stripe webhook signature verification (HMAC-SHA256) before processing                            | [Payments](L4-004), Section 3.3      | Critical |
+| **Tampering**                       |                               |                                                                                                  |                                      |          |
+| Payment manipulation                | Service → External Provider   | Stripe tokenisation — platform never handles raw card data; signed API requests                  | [Payments](L4-004)                   | Critical |
+| Data at rest modification           | Service → Data Store          | AES-256 encryption at rest via AWS KMS; envelope encryption with DEK/KEK                         | Section 6.1                          | Critical |
+| Data in transit interception        | All boundaries                | TLS 1.3 minimum on all connections, including internal service communication                     | Section 6.2                          | Critical |
+| Escrow ledger manipulation          | Service → Data Store          | Append-only immutable ledger; double-entry bookkeeping; daily reconciliation against Stripe      | [Payments](L4-004), [Audit](L3-006)  | Critical |
+| Request parameter tampering         | External → API Gateway        | Input validation at system boundary; allowlist validation; Zod schema enforcement                | Section 7.1                          | High     |
+| **Repudiation**                     |                               |                                                                                                  |                                      |          |
+| Financial action denial             | All internal boundaries       | Immutable audit logging of all payment state mutations with actor, timestamp, correlation ID     | [Audit](L3-006)                      | Critical |
+| Role change denial                  | API Gateway → Domain Services | Security-critical audit events for all role assignments and changes                              | Section 5.2, [Audit](L3-006)         | Critical |
+| Campaign approval denial            | API Gateway → Domain Services | Audit trail for all campaign review decisions with reviewer identity                             | [Audit](L3-006)                      | High     |
+| Disbursement approval denial        | API Gateway → Domain Services | Dual-approval workflow with independent audit entries per approver                               | [Payments](L4-004), Section 7.2      | Critical |
+| **Information Disclosure**          |                               |                                                                                                  |                                      |          |
+| PII exposure                        | All boundaries                | Data classification scheme; field-level encryption for sensitive fields; log sanitisation        | Section 6, [Data Management](L3-004) | Critical |
+| Card data exposure                  | External → API Gateway        | SAQ-A scope — card data never enters platform; Stripe Elements handles client-side               | [Payments](L4-004), Section 8.1      | Critical |
+| KYC document exposure               | Service → Data Store          | Encrypted at rest (AES-256); access restricted to KYC service; access logged                     | [KYC](L4-005), Section 6.1           | Critical |
+| Credential leakage                  | All boundaries                | Secrets managed via AWS KMS; injected at runtime; never logged, committed, or passed as CLI args | Section 6.3                          | Critical |
+| Error message information leak      | External → API Gateway        | Generic error responses to external clients; detailed errors logged internally only              | Section 7.1                          | Medium   |
+| Referrer leakage                    | External → API Gateway        | `Referrer-Policy: strict-origin-when-cross-origin` header                                        | Section 7.2                          | Medium   |
+| **Denial of Service**               |                               |                                                                                                  |                                      |          |
+| API flooding                        | External → API Gateway        | Rate limiting: 100/min general, 10/min auth, 20/min financial; `Retry-After` headers             | Section 7.3                          | High     |
+| Authentication endpoint abuse       | External → API Gateway        | Stricter rate limits on auth endpoints; account lockout with escalating duration                 | Section 4.5, 7.3                     | High     |
+| Resource exhaustion via file upload | External → API Gateway        | File type validation (magic bytes), size limits, storage in separate domain                      | Section 7.1                          | High     |
+| **Elevation of Privilege**          |                               |                                                                                                  |                                      |          |
+| Unauthorised role assignment        | API Gateway → Domain Services | RBAC enforcement; Reviewer/Admin assigned by Admin; Super Admin by Super Admin only with MFA     | Section 5.2                          | Critical |
+| Horizontal privilege escalation     | API Gateway → Domain Services | Resource-level authorisation in domain services (e.g., creators manage only own campaigns)       | Section 5.3                          | Critical |
+| Vertical privilege escalation       | API Gateway → Domain Services | API-layer authorisation on every request; role claims validated from access token                | Section 5.3                          | Critical |
+| UI-only access control bypass       | External → API Gateway        | Authorisation enforced at API layer, not UI; UI role-based hiding is cosmetic only               | Section 5.3                          | Critical |
+| MFA bypass on privileged actions    | API Gateway → Domain Services | MFA required for all financial actions, admin operations, and account recovery                   | Section 4.2                          | Critical |
 
 ---
 
@@ -154,21 +154,21 @@ Per [Engineering Standard](L2-002), Section 1.5, MFA is required for:
 
 Supported MFA methods:
 
-| Method | Use Case | Notes |
-| --- | --- | --- |
-| TOTP (Time-Based One-Time Password) | Primary MFA method for all users | MUST comply with RFC 6238; 30-second time step; SHA-256 minimum |
-| WebAuthn / FIDO2 | Recommended for administrative and high-privilege users | Hardware security keys and platform authenticators supported |
-| Recovery codes | Account recovery when primary MFA is unavailable | Single-use; 10 codes generated at MFA enrolment; stored hashed |
+| Method                              | Use Case                                                | Notes                                                           |
+| ----------------------------------- | ------------------------------------------------------- | --------------------------------------------------------------- |
+| TOTP (Time-Based One-Time Password) | Primary MFA method for all users                        | MUST comply with RFC 6238; 30-second time step; SHA-256 minimum |
+| WebAuthn / FIDO2                    | Recommended for administrative and high-privilege users | Hardware security keys and platform authenticators supported    |
+| Recovery codes                      | Account recovery when primary MFA is unavailable        | Single-use; 10 codes generated at MFA enrolment; stored hashed  |
 
 SMS-based OTP is not supported as an MFA method due to known vulnerabilities (SIM swapping, SS7 attacks).
 
 ### 4.3 Token Architecture
 
-| Token Type | Purpose | Lifetime | Storage |
-| --- | --- | --- | --- |
-| Access token | Authorises API requests | 5 minutes | Memory only (never persisted to disk or local storage) |
-| Refresh token | Obtains new access tokens without re-authentication | 1 day | Secure, HttpOnly cookie; server-side reference validated against revocation list |
-| ID token | Carries identity claims (OIDC) | Same as access token | Memory only |
+| Token Type    | Purpose                                             | Lifetime             | Storage                                                                          |
+| ------------- | --------------------------------------------------- | -------------------- | -------------------------------------------------------------------------------- |
+| Access token  | Authorises API requests                             | 5 minutes            | Memory only (never persisted to disk or local storage)                           |
+| Refresh token | Obtains new access tokens without re-authentication | 1 day                | Secure, HttpOnly cookie; server-side reference validated against revocation list |
+| ID token      | Carries identity claims (OIDC)                      | Same as access token | Memory only                                                                      |
 
 - Access tokens are JWTs signed with RS256 (minimum 2048-bit RSA) or ES256.
 - The API Gateway validates token signatures, expiry, and issuer before forwarding requests to domain services per [Architecture](L3-001), Section 3.2.
@@ -199,13 +199,13 @@ SMS-based OTP is not supported as an MFA method due to known vulnerabilities (SI
 
 Mars Mission Fund uses Role-Based Access Control (RBAC) with five roles defined in the [Product Vision & Mission](L1-001):
 
-| Role | Description | Typical Capabilities |
-| --- | --- | --- |
-| **Backer** | A user who contributes funds to campaigns | Browse campaigns, make contributions, view own contribution history, manage own profile |
-| **Creator** | A user who creates and manages campaigns | All Backer capabilities + create campaigns, manage own campaigns, define milestones, request disbursements |
-| **Reviewer** | A user who reviews and approves/rejects campaigns | All Backer capabilities + review submitted campaigns, approve/reject, request changes |
-| **Administrator** | A user who manages platform operations | All Reviewer capabilities + manage users, assign roles (except Super Administrator), view audit logs, manage platform settings |
-| **Super Administrator** | Highest-privilege platform user | All Administrator capabilities + assign Administrator/Super Administrator roles, access compliance reports, manage security settings |
+| Role                    | Description                                       | Typical Capabilities                                                                                                                 |
+| ----------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **Backer**              | A user who contributes funds to campaigns         | Browse campaigns, make contributions, view own contribution history, manage own profile                                              |
+| **Creator**             | A user who creates and manages campaigns          | All Backer capabilities + create campaigns, manage own campaigns, define milestones, request disbursements                           |
+| **Reviewer**            | A user who reviews and approves/rejects campaigns | All Backer capabilities + review submitted campaigns, approve/reject, request changes                                                |
+| **Administrator**       | A user who manages platform operations            | All Reviewer capabilities + manage users, assign roles (except Super Administrator), view audit logs, manage platform settings       |
+| **Super Administrator** | Highest-privilege platform user                   | All Administrator capabilities + assign Administrator/Super Administrator roles, access compliance reports, manage security settings |
 
 ### 5.2 Role Assignment Rules
 
@@ -289,15 +289,15 @@ Per [Engineering Standard](L2-002), Section 1.4:
 
 All web responses must include the following security headers:
 
-| Header | Value | Purpose |
-| --- | --- | --- |
-| `Content-Security-Policy` | `default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://*.clerk.accounts.dev; frame-ancestors 'none'; base-uri 'self'; form-action 'self'` | Mitigate XSS and data injection |
-| `Strict-Transport-Security` | `max-age=31536000; includeSubDomains; preload` | Enforce HTTPS |
-| `X-Content-Type-Options` | `nosniff` | Prevent MIME-type sniffing |
-| `X-Frame-Options` | `DENY` | Prevent clickjacking |
-| `Referrer-Policy` | `strict-origin-when-cross-origin` | Control referrer information leakage |
-| `Permissions-Policy` | `camera=(), microphone=(), geolocation=(), payment=()` | Restrict browser feature access |
-| `Cache-Control` | `no-store` for authenticated responses | Prevent caching of sensitive data |
+| Header                      | Value                                                                                                                                                                                                                 | Purpose                              |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `Content-Security-Policy`   | `default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://*.clerk.accounts.dev; frame-ancestors 'none'; base-uri 'self'; form-action 'self'` | Mitigate XSS and data injection      |
+| `Strict-Transport-Security` | `max-age=31536000; includeSubDomains; preload`                                                                                                                                                                        | Enforce HTTPS                        |
+| `X-Content-Type-Options`    | `nosniff`                                                                                                                                                                                                             | Prevent MIME-type sniffing           |
+| `X-Frame-Options`           | `DENY`                                                                                                                                                                                                                | Prevent clickjacking                 |
+| `Referrer-Policy`           | `strict-origin-when-cross-origin`                                                                                                                                                                                     | Control referrer information leakage |
+| `Permissions-Policy`        | `camera=(), microphone=(), geolocation=(), payment=()`                                                                                                                                                                | Restrict browser feature access      |
+| `Cache-Control`             | `no-store` for authenticated responses                                                                                                                                                                                | Prevent caching of sensitive data    |
 
 ### 7.3 Rate Limiting
 
@@ -322,49 +322,49 @@ Mars Mission Fund targets **SAQ-A** compliance scope by delegating all cardholde
 Payment gateway: **Stripe** (per [Payments](L4-004) and [Tech Stack](L3-008)).
 Client-side tokenisation via **Stripe Elements** — the platform never stores, processes, or transmits raw cardholder data.
 
-| SAQ-A Requirement | Implementation | Spec Reference |
-| --- | --- | --- |
-| **2.1** — No cardholder data stored, processed, or transmitted by MMF systems | All card data handled by Stripe Elements client-side; platform receives only Stripe payment method tokens | [Payments](L4-004), Section 4 |
-| **2.2** — All payment pages delivered via HTTPS | TLS 1.3 enforced on all connections; HSTS with preload | Section 6.2, 7.2 |
-| **3.1** — Restrict inbound traffic to necessary connections | API Gateway rate limiting; firewall rules restrict ingress to HTTPS only | Section 7.3, [Architecture](L3-001) |
-| **3.2** — Restrict outbound traffic to payment processor | Stripe API calls via adapter; outbound restricted to Stripe API endpoints and other declared external providers | [Payments](L4-004), [Architecture](L3-001) |
-| **6.1** — Security patches applied in timely manner | Dependency vulnerability scanning on every CI build; CVSS 9.0+ blocks merge | Section 11 |
-| **6.2** — Protection against known vulnerabilities | SAST on every CI build; DAST weekly in staging; bi-annual penetration testing | Section 11 |
-| **7.1** — Restrict access to system components and cardholder data | RBAC with five roles; MFA for financial and admin operations; API-layer authorisation | Sections 4, 5 |
-| **7.2** — Unique ID for each person with access | Clerk-managed user identities; no shared or generic accounts | Section 4.1 |
-| **8.1** — Identify and authenticate access to system components | OAuth 2.0 / OIDC authentication; MFA on financial actions | Section 4 |
-| **9.1** — Physical security of payment processing areas | Not applicable — no cardholder data processed or stored in MMF infrastructure | N/A |
-| **11.1** — Test security systems and processes regularly | Security review cadence: SAST/DAST continuous, penetration testing bi-annually, threat model review quarterly | Section 11 |
-| **11.2** — Maintain an information security policy | This spec (L3-002) serves as the security policy; reviewed on architectural change or quarterly | This spec |
-| **12.1** — Monitor all access to network resources and cardholder data | Immutable audit logs for all payment-related events; all authorisation failures logged | [Audit](L3-006), Section 5.3 |
+| SAQ-A Requirement                                                             | Implementation                                                                                                  | Spec Reference                             |
+| ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| **2.1** — No cardholder data stored, processed, or transmitted by MMF systems | All card data handled by Stripe Elements client-side; platform receives only Stripe payment method tokens       | [Payments](L4-004), Section 4              |
+| **2.2** — All payment pages delivered via HTTPS                               | TLS 1.3 enforced on all connections; HSTS with preload                                                          | Section 6.2, 7.2                           |
+| **3.1** — Restrict inbound traffic to necessary connections                   | API Gateway rate limiting; firewall rules restrict ingress to HTTPS only                                        | Section 7.3, [Architecture](L3-001)        |
+| **3.2** — Restrict outbound traffic to payment processor                      | Stripe API calls via adapter; outbound restricted to Stripe API endpoints and other declared external providers | [Payments](L4-004), [Architecture](L3-001) |
+| **6.1** — Security patches applied in timely manner                           | Dependency vulnerability scanning on every CI build; CVSS 9.0+ blocks merge                                     | Section 11                                 |
+| **6.2** — Protection against known vulnerabilities                            | SAST on every CI build; DAST weekly in staging; bi-annual penetration testing                                   | Section 11                                 |
+| **7.1** — Restrict access to system components and cardholder data            | RBAC with five roles; MFA for financial and admin operations; API-layer authorisation                           | Sections 4, 5                              |
+| **7.2** — Unique ID for each person with access                               | Clerk-managed user identities; no shared or generic accounts                                                    | Section 4.1                                |
+| **8.1** — Identify and authenticate access to system components               | OAuth 2.0 / OIDC authentication; MFA on financial actions                                                       | Section 4                                  |
+| **9.1** — Physical security of payment processing areas                       | Not applicable — no cardholder data processed or stored in MMF infrastructure                                   | N/A                                        |
+| **11.1** — Test security systems and processes regularly                      | Security review cadence: SAST/DAST continuous, penetration testing bi-annually, threat model review quarterly   | Section 11                                 |
+| **11.2** — Maintain an information security policy                            | This spec (L3-002) serves as the security policy; reviewed on architectural change or quarterly                 | This spec                                  |
+| **12.1** — Monitor all access to network resources and cardholder data        | Immutable audit logs for all payment-related events; all authorisation failures logged                          | [Audit](L3-006), Section 5.3               |
 
 Jointly owned with [Payments](L4-004).
 
 ### 8.2 GDPR
 
-| GDPR Right / Obligation | Implementation | Spec Reference |
-| --- | --- | --- |
-| Lawful basis for processing | Consent management and contractual necessity documented per data type | [Data Management](L3-004) |
-| Right to access (Art. 15) | Data export API for user's own data | [Account](L4-001) |
-| Right to erasure (Art. 17) | Anonymisation workflow; retention overrides for legal obligations | [Data Management](L3-004) |
-| Right to rectification (Art. 16) | Profile editing; corrections to KYC data via re-submission | [Account](L4-001), [KYC](L4-005) |
-| Data portability (Art. 20) | Machine-readable export of user-provided data | [Account](L4-001) |
-| Breach notification (Art. 33, 34) | 72-hour notification process | Section 10.3 |
-| Data protection by design (Art. 25) | Encryption at rest and in transit, field-level encryption, access control | Sections 5, 6 |
-| Data Protection Impact Assessment (DPIA) | Required for KYC processing, payment processing, profiling | [KYC](L4-005), [Payments](L4-004) |
+| GDPR Right / Obligation                  | Implementation                                                            | Spec Reference                    |
+| ---------------------------------------- | ------------------------------------------------------------------------- | --------------------------------- |
+| Lawful basis for processing              | Consent management and contractual necessity documented per data type     | [Data Management](L3-004)         |
+| Right to access (Art. 15)                | Data export API for user's own data                                       | [Account](L4-001)                 |
+| Right to erasure (Art. 17)               | Anonymisation workflow; retention overrides for legal obligations         | [Data Management](L3-004)         |
+| Right to rectification (Art. 16)         | Profile editing; corrections to KYC data via re-submission                | [Account](L4-001), [KYC](L4-005)  |
+| Data portability (Art. 20)               | Machine-readable export of user-provided data                             | [Account](L4-001)                 |
+| Breach notification (Art. 33, 34)        | 72-hour notification process                                              | Section 10.3                      |
+| Data protection by design (Art. 25)      | Encryption at rest and in transit, field-level encryption, access control | Sections 5, 6                     |
+| Data Protection Impact Assessment (DPIA) | Required for KYC processing, payment processing, profiling                | [KYC](L4-005), [Payments](L4-004) |
 
 ### 8.3 Australian Privacy Act
 
-| Principle | Implementation | Spec Reference |
-| --- | --- | --- |
-| APP 1 — Open and transparent management | Privacy policy, data handling documentation | [Data Management](L3-004) |
+| Principle                                            | Implementation                                        | Spec Reference                   |
+| ---------------------------------------------------- | ----------------------------------------------------- | -------------------------------- |
+| APP 1 — Open and transparent management              | Privacy policy, data handling documentation           | [Data Management](L3-004)        |
 | APP 3 — Collection of solicited personal information | Collect only what is necessary for platform functions | [Account](L4-001), [KYC](L4-005) |
-| APP 6 — Use or disclosure | Data used only for the purpose it was collected | [Data Management](L3-004) |
-| APP 8 — Cross-border disclosure | Data residency and transfer controls | [Data Management](L3-004) |
-| APP 11 — Security of personal information | Encryption, access control, secure destruction | Sections 5, 6 |
-| APP 12 — Access to personal information | User data access and export | [Account](L4-001) |
-| APP 13 — Correction of personal information | Profile editing and correction workflows | [Account](L4-001) |
-| Notifiable Data Breaches scheme | Mandatory breach notification to OAIC | Section 10.3 |
+| APP 6 — Use or disclosure                            | Data used only for the purpose it was collected       | [Data Management](L3-004)        |
+| APP 8 — Cross-border disclosure                      | Data residency and transfer controls                  | [Data Management](L3-004)        |
+| APP 11 — Security of personal information            | Encryption, access control, secure destruction        | Sections 5, 6                    |
+| APP 12 — Access to personal information              | User data access and export                           | [Account](L4-001)                |
+| APP 13 — Correction of personal information          | Profile editing and correction workflows              | [Account](L4-001)                |
+| Notifiable Data Breaches scheme                      | Mandatory breach notification to OAIC                 | Section 10.3                     |
 
 ---
 
@@ -408,12 +408,12 @@ Operational incident response (availability, performance degradation) is defined
 
 ### 10.1 Severity Classification
 
-| Severity | Description | Examples | Response Time |
-| --- | --- | --- | --- |
-| **Critical** | Active breach, data exfiltration, or exploitation in progress | Unauthorised access to PII or financial data, payment system compromise, credential leak | Immediate (within 15 minutes) |
-| **High** | Confirmed vulnerability being actively exploited or high likelihood of imminent exploitation | Unpatched critical CVE in production, privilege escalation vulnerability discovered | Within 1 hour |
-| **Medium** | Vulnerability identified, not yet exploited; security control degradation | Failed penetration test finding, misconfigured security header, expired certificate | Within 24 hours |
-| **Low** | Minor security improvement or hardening opportunity | Non-critical dependency update, security best practice recommendation | Within 1 sprint |
+| Severity     | Description                                                                                  | Examples                                                                                 | Response Time                 |
+| ------------ | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------- |
+| **Critical** | Active breach, data exfiltration, or exploitation in progress                                | Unauthorised access to PII or financial data, payment system compromise, credential leak | Immediate (within 15 minutes) |
+| **High**     | Confirmed vulnerability being actively exploited or high likelihood of imminent exploitation | Unpatched critical CVE in production, privilege escalation vulnerability discovered      | Within 1 hour                 |
+| **Medium**   | Vulnerability identified, not yet exploited; security control degradation                    | Failed penetration test finding, misconfigured security header, expired certificate      | Within 24 hours               |
+| **Low**      | Minor security improvement or hardening opportunity                                          | Non-critical dependency update, security best practice recommendation                    | Within 1 sprint               |
 
 ### 10.2 Response Process
 
@@ -446,17 +446,17 @@ Operational incident response (availability, performance degradation) is defined
 
 ## 11. Security Review & Testing Cadence
 
-| Activity | Frequency | Scope | Output |
-| --- | --- | --- | --- |
-| Dependency vulnerability scan | Every CI build | All direct and transitive dependencies | Automated; blocks merge for CVSS 9.0+ per [Engineering Standard](L2-002), Section 1.6 |
-| Static application security testing (SAST) | Every CI build | All application code | Automated; integrated into CI pipeline |
-| Dynamic application security testing (DAST) | Weekly in staging | Running application in staging environment | Automated scan report |
-| Penetration test — external | Bi-annually | External attack surface | Third-party report; findings triaged by severity |
-| Penetration test — internal | Bi-annually | Internal services, privilege escalation, lateral movement | Third-party report |
-| Threat model review | On architectural change or quarterly (whichever is sooner) | Section 3 of this spec | Updated threat model |
-| Security code review | Every PR touching security surfaces | Authentication, authorisation, payment flows, encryption, data access | Second reviewer with security domain expertise per [Engineering Standard](L2-002), Section 3.4 |
-| Secret rotation audit | Quarterly | All secrets in the secrets management service | Verification that rotation policies are followed |
-| Compliance review | Annually | PCI DSS SAQ-A, GDPR, Australian Privacy Act | Compliance report |
+| Activity                                    | Frequency                                                  | Scope                                                                 | Output                                                                                         |
+| ------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Dependency vulnerability scan               | Every CI build                                             | All direct and transitive dependencies                                | Automated; blocks merge for CVSS 9.0+ per [Engineering Standard](L2-002), Section 1.6          |
+| Static application security testing (SAST)  | Every CI build                                             | All application code                                                  | Automated; integrated into CI pipeline                                                         |
+| Dynamic application security testing (DAST) | Weekly in staging                                          | Running application in staging environment                            | Automated scan report                                                                          |
+| Penetration test — external                 | Bi-annually                                                | External attack surface                                               | Third-party report; findings triaged by severity                                               |
+| Penetration test — internal                 | Bi-annually                                                | Internal services, privilege escalation, lateral movement             | Third-party report                                                                             |
+| Threat model review                         | On architectural change or quarterly (whichever is sooner) | Section 3 of this spec                                                | Updated threat model                                                                           |
+| Security code review                        | Every PR touching security surfaces                        | Authentication, authorisation, payment flows, encryption, data access | Second reviewer with security domain expertise per [Engineering Standard](L2-002), Section 3.4 |
+| Secret rotation audit                       | Quarterly                                                  | All secrets in the secrets management service                         | Verification that rotation policies are followed                                               |
+| Compliance review                           | Annually                                                   | PCI DSS SAQ-A, GDPR, Australian Privacy Act                           | Compliance report                                                                              |
 
 ---
 
@@ -513,9 +513,9 @@ Operational incident response (availability, performance degradation) is defined
 
 ## 13. Change Log
 
-| Date | Version | Author | Summary |
-| --- | --- | --- | --- |
-| March 2026 | 0.1 | — | Initial stub. STRIDE threat model, security control matrix, OAuth 2.0/OIDC authentication, RBAC with five roles, encryption standards, session management, PCI DSS/GDPR/Australian Privacy Act compliance mapping, incident response plan, security review cadence. |
-| March 2026 | 0.2 | — | Resolved OQ-1: Clerk selected as Identity Provider per L3-008. |
-| March 2026 | 0.3 | — | Resolved all remaining open questions (OQ-2 through OQ-14). Access token 5 min, refresh token 1 day, unlimited sessions, 15 min idle / 8 hr absolute timeout, 3-attempt lockout, AWS KMS + ACM, CSP directives, rate limits, 30s revocation propagation, bi-annual pen testing, breach notification escalation chain. Status moved to Review. |
-| March 2026 | 0.4 | — | Expanded Security Control Matrix (Section 3.3) with comprehensive controls across all STRIDE categories and trust boundaries. Expanded PCI DSS SAQ-A mapping (Section 8.1) for Stripe gateway. Removed placeholder notes. |
+| Date       | Version | Author | Summary                                                                                                                                                                                                                                                                                                                                       |
+| ---------- | ------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| March 2026 | 0.1     | —      | Initial stub. STRIDE threat model, security control matrix, OAuth 2.0/OIDC authentication, RBAC with five roles, encryption standards, session management, PCI DSS/GDPR/Australian Privacy Act compliance mapping, incident response plan, security review cadence.                                                                           |
+| March 2026 | 0.2     | —      | Resolved OQ-1: Clerk selected as Identity Provider per L3-008.                                                                                                                                                                                                                                                                                |
+| March 2026 | 0.3     | —      | Resolved all remaining open questions (OQ-2 through OQ-14). Access token 5 min, refresh token 1 day, unlimited sessions, 15 min idle / 8 hr absolute timeout, 3-attempt lockout, AWS KMS + ACM, CSP directives, rate limits, 30s revocation propagation, bi-annual pen testing, breach notification escalation chain. Status moved to Review. |
+| March 2026 | 0.4     | —      | Expanded Security Control Matrix (Section 3.3) with comprehensive controls across all STRIDE categories and trust boundaries. Expanded PCI DSS SAQ-A mapping (Section 8.1) for Stripe gateway. Removed placeholder notes.                                                                                                                     |

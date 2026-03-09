@@ -27,25 +27,32 @@ Create `plan/planning/brief.md` with this structure:
 # Brief: Issue #<number> — <title>
 
 ## Goal
+
 One-paragraph summary of what this issue asks for.
 
 ## Scope
+
 - What is IN scope (bullet list)
 - What is OUT of scope (bullet list)
 
 ## Approach
+
 High-level implementation strategy. Reference specific files, components, and patterns.
 
 ## Files to Create/Modify
-| File | Action | Description |
-|------|--------|-------------|
+
+| File         | Action        | Description  |
+| ------------ | ------------- | ------------ |
 | path/to/file | create/modify | what changes |
 
 ## Dependencies
+
 Any npm packages, external services, or prerequisite work needed.
 
 ## Verification
+
 How to verify the implementation is correct:
+
 - Build: `npm run build` succeeds
 - Visual: what to check in the browser at `http://localhost:5173`
 - Tests: any specific test commands
@@ -61,10 +68,12 @@ After writing the brief, critically review it for:
 4. **Completeness**: Are all files listed? Are dependencies identified?
 
 If the brief passes self-review:
+
 - Move it to `plan/ready/brief.md`
 - Output: `BRIEF_STATUS=approved`
 
 If the brief needs revision:
+
 - Keep it at `plan/planning/brief.md`
 - Write concerns to `plan/planning/brief-review.md`
 - Output: `BRIEF_STATUS=needs-review`

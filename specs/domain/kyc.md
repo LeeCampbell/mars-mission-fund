@@ -47,41 +47,41 @@ This spec governs identity verification for Mars Mission Fund: KYC document uplo
 
 ### From [Engineering Standard](L2-002)
 
-| L2-002 Section | Constraint | How This Spec Applies It |
-| --- | --- | --- |
-| 1.1 (Encryption) | All sensitive data encrypted at rest (AES-256) and in transit (TLS 1.3) | KYC documents and verification results are classified Restricted per [Data Management](L3-004), Section 1.1 — encrypted at rest with AES-256 and additional key management controls |
-| 1.2 (Data Access) | Parameterised queries only; all access through data access layer | All KYC data queries go through the data access layer with classification-based access checks |
-| 1.4 (Input Validation) | All external input validated at system boundary; file uploads validated for type, size, and content; uploaded files served from separate domain | Document uploads validated for file type (magic bytes), size limits, and content scanning before acceptance |
-| 1.7 (Logging & Auditability) | Every state mutation logged; sensitive data never logged | All KYC status transitions, document uploads, verification results, and review decisions are logged as audit events; document content and PII are never logged |
-| 2.3 (What We Don't Build) | Identity verification infrastructure is integrated, not built | KYC provider is a third-party service, integrated via adapter |
-| 2.4 (Abstraction Requirement) | External dependencies accessed through internal interfaces | KYC provider accessed through an abstraction layer; no vendor SDK referenced directly by application code |
+| L2-002 Section                | Constraint                                                                                                                                      | How This Spec Applies It                                                                                                                                                            |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.1 (Encryption)              | All sensitive data encrypted at rest (AES-256) and in transit (TLS 1.3)                                                                         | KYC documents and verification results are classified Restricted per [Data Management](L3-004), Section 1.1 — encrypted at rest with AES-256 and additional key management controls |
+| 1.2 (Data Access)             | Parameterised queries only; all access through data access layer                                                                                | All KYC data queries go through the data access layer with classification-based access checks                                                                                       |
+| 1.4 (Input Validation)        | All external input validated at system boundary; file uploads validated for type, size, and content; uploaded files served from separate domain | Document uploads validated for file type (magic bytes), size limits, and content scanning before acceptance                                                                         |
+| 1.7 (Logging & Auditability)  | Every state mutation logged; sensitive data never logged                                                                                        | All KYC status transitions, document uploads, verification results, and review decisions are logged as audit events; document content and PII are never logged                      |
+| 2.3 (What We Don't Build)     | Identity verification infrastructure is integrated, not built                                                                                   | KYC provider is a third-party service, integrated via adapter                                                                                                                       |
+| 2.4 (Abstraction Requirement) | External dependencies accessed through internal interfaces                                                                                      | KYC provider accessed through an abstraction layer; no vendor SDK referenced directly by application code                                                                           |
 
 ### From [Security](L3-002)
 
-| L3-002 Section | Constraint | How This Spec Applies It |
-| --- | --- | --- |
-| 4.2 (MFA) | MFA required for administrative operations | Manual review decisions and admin overrides on KYC status require MFA |
-| 5.1 (RBAC) | Five-role model with defined capabilities | KYC document submission available to authenticated users; manual review restricted to Administrator and Super Administrator roles |
-| 5.2 (Role Assignment) | Creator role granted after KYC verification | This spec defines the verification lifecycle that determines when Creator role eligibility is triggered |
-| 8.2 (GDPR) | DPIA required for KYC processing | Data Protection Impact Assessment required before KYC processing goes live |
-| 8.3 (Australian Privacy Act) | APP 3 — collect only what is necessary | Only identity documents required for verification are collected; no extraneous personal data |
+| L3-002 Section               | Constraint                                  | How This Spec Applies It                                                                                                          |
+| ---------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| 4.2 (MFA)                    | MFA required for administrative operations  | Manual review decisions and admin overrides on KYC status require MFA                                                             |
+| 5.1 (RBAC)                   | Five-role model with defined capabilities   | KYC document submission available to authenticated users; manual review restricted to Administrator and Super Administrator roles |
+| 5.2 (Role Assignment)        | Creator role granted after KYC verification | This spec defines the verification lifecycle that determines when Creator role eligibility is triggered                           |
+| 8.2 (GDPR)                   | DPIA required for KYC processing            | Data Protection Impact Assessment required before KYC processing goes live                                                        |
+| 8.3 (Australian Privacy Act) | APP 3 — collect only what is necessary      | Only identity documents required for verification are collected; no extraneous personal data                                      |
 
 ### From [Data Management](L3-004)
 
-| L3-004 Section | Constraint | How This Spec Applies It |
-| --- | --- | --- |
-| 1.1 (Classification) | KYC identity documents classified as Restricted | All identity documents, sanctions screening results, and verification decision records stored with Restricted-level controls |
-| 2.1 (Retention) | KYC documents retained for duration of active account + 1 year active, 7 years archive after account closure | This spec implements KYC-specific retention per the schedule in [Data Management](L3-004) |
-| 4.5 (Right-to-Erasure) | Erasure workflow for data subject requests | KYC documents subject to AML/CTF retention override — identity documents retained for legal minimum even after erasure request; documented in Section 8.4 |
-| 5.1 (Access by Classification) | Restricted data requires MFA-verified access, all access logged and alerted | All access to KYC documents and verification records enforces MFA and is audit-logged |
+| L3-004 Section                 | Constraint                                                                                                   | How This Spec Applies It                                                                                                                                  |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.1 (Classification)           | KYC identity documents classified as Restricted                                                              | All identity documents, sanctions screening results, and verification decision records stored with Restricted-level controls                              |
+| 2.1 (Retention)                | KYC documents retained for duration of active account + 1 year active, 7 years archive after account closure | This spec implements KYC-specific retention per the schedule in [Data Management](L3-004)                                                                 |
+| 4.5 (Right-to-Erasure)         | Erasure workflow for data subject requests                                                                   | KYC documents subject to AML/CTF retention override — identity documents retained for legal minimum even after erasure request; documented in Section 8.4 |
+| 5.1 (Access by Classification) | Restricted data requires MFA-verified access, all access logged and alerted                                  | All access to KYC documents and verification records enforces MFA and is audit-logged                                                                     |
 
 ### From [Audit](L3-006)
 
-| L3-006 Section | Constraint | How This Spec Applies It |
-| --- | --- | --- |
-| 4.1 (Event Categories) | KYC events are a defined audit event category (`kyc`) | All KYC state transitions emit `kyc`-type audit events per the schema in [Audit](L3-006), Section 3 |
-| 6.1 (Retention) | KYC audit events retained 7 years after relationship end | KYC audit retention aligned with AML/CTF record-keeping obligations |
-| 9.1 (Anomaly Detection) | Suspicious activity patterns detected | Repeated verification failures, unusual document submission patterns, and sanctions screening flag patterns are routed to anomaly detection |
+| L3-006 Section          | Constraint                                               | How This Spec Applies It                                                                                                                    |
+| ----------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| 4.1 (Event Categories)  | KYC events are a defined audit event category (`kyc`)    | All KYC state transitions emit `kyc`-type audit events per the schema in [Audit](L3-006), Section 3                                         |
+| 6.1 (Retention)         | KYC audit events retained 7 years after relationship end | KYC audit retention aligned with AML/CTF record-keeping obligations                                                                         |
+| 9.1 (Anomaly Detection) | Suspicious activity patterns detected                    | Repeated verification failures, unusual document submission patterns, and sanctions screening flag patterns are routed to anomaly detection |
 
 ---
 
@@ -134,11 +134,11 @@ This spec governs identity verification for Mars Mission Fund: KYC document uplo
 
 ### 4.1 Accepted Document Types
 
-| Document Type | Jurisdictions | Requirements |
-| --- | --- | --- |
-| Passport | All | Photo page; must be current (not expired) |
-| National Identity Card | Countries where government-issued national ID exists | Front and back; must be current |
-| Driver's Licence | Australia, United States, United Kingdom, EU member states | Front and back; must be current; photo required |
+| Document Type          | Jurisdictions                                              | Requirements                                    |
+| ---------------------- | ---------------------------------------------------------- | ----------------------------------------------- |
+| Passport               | All                                                        | Photo page; must be current (not expired)       |
+| National Identity Card | Countries where government-issued national ID exists       | Front and back; must be current                 |
+| Driver's Licence       | Australia, United States, United Kingdom, EU member states | Front and back; must be current; photo required |
 
 Additional documents (e.g., residence permits, government-issued photo cards) may be added per jurisdiction as market scope expands.
 
@@ -154,11 +154,11 @@ Additional documents (e.g., residence permits, government-issued photo cards) ma
 Different jurisdictions may require different document types or additional documentation.
 The platform must support configurable document requirements per country.
 
-| Jurisdiction | Primary Accepted Documents | Additional Requirements |
-| --- | --- | --- |
-| Australia | Passport, Driver's Licence | — |
-| United States | Passport, Driver's Licence | — |
-| United Kingdom | Passport, Driver's Licence, National ID | — |
+| Jurisdiction     | Primary Accepted Documents              | Additional Requirements            |
+| ---------------- | --------------------------------------- | ---------------------------------- |
+| Australia        | Passport, Driver's Licence              | —                                  |
+| United States    | Passport, Driver's Licence              | —                                  |
+| United Kingdom   | Passport, Driver's Licence, National ID | —                                  |
 | EU Member States | Passport, National ID, Driver's Licence | Document language support required |
 
 Jurisdictional configuration must be maintained as reference data, not hardcoded.
@@ -189,17 +189,17 @@ Per [Engineering Standard](L2-002), Section 2.4, the Veriff SDK is wrapped behin
 
 **Verification result mapping**:
 
-| Provider Result | Internal Status | Next Step |
-| --- | --- | --- |
-| Pass | Proceed to sanctions screening | Section 5.2 |
-| Fail — document unreadable | Pending Resubmission | User notified to resubmit with clearer image |
-| Fail — document expired | Pending Resubmission | User notified to submit current document |
-| Fail — liveness not detected | Pending Resubmission | User notified to retry with video liveness session |
-| Fail — liveness spoofing detected | Escalate to Manual Review | Flagged for human review as potential fraud |
-| Fail — suspected forgery | Escalate to Manual Review | Flagged for human review |
-| Fail — data mismatch | Escalate to Manual Review | Profile data vs. document data discrepancy |
-| Inconclusive | Escalate to Manual Review | Provider unable to make a determination |
-| Provider error | Retry with backoff; if persistent, escalate to Manual Review | Operational failure, not a verification result |
+| Provider Result                   | Internal Status                                              | Next Step                                          |
+| --------------------------------- | ------------------------------------------------------------ | -------------------------------------------------- |
+| Pass                              | Proceed to sanctions screening                               | Section 5.2                                        |
+| Fail — document unreadable        | Pending Resubmission                                         | User notified to resubmit with clearer image       |
+| Fail — document expired           | Pending Resubmission                                         | User notified to submit current document           |
+| Fail — liveness not detected      | Pending Resubmission                                         | User notified to retry with video liveness session |
+| Fail — liveness spoofing detected | Escalate to Manual Review                                    | Flagged for human review as potential fraud        |
+| Fail — suspected forgery          | Escalate to Manual Review                                    | Flagged for human review                           |
+| Fail — data mismatch              | Escalate to Manual Review                                    | Profile data vs. document data discrepancy         |
+| Inconclusive                      | Escalate to Manual Review                                    | Provider unable to make a determination            |
+| Provider error                    | Retry with backoff; if persistent, escalate to Manual Review | Operational failure, not a verification result     |
 
 ### 5.2 Sanctions Screening
 
@@ -220,11 +220,11 @@ All users who pass automated verification (or manual review approval) must be sc
 
 **Screening result handling**:
 
-| Screening Result | Action |
-| --- | --- |
-| Clear | Verification status set to Verified |
-| Potential Match | Escalated to Manual Review with sanctions match details |
-| Confirmed Match | Verification status set to Rejected — sanctions; account flagged; Administrator notified immediately; incident logged as Critical severity per [Security](L3-002), Section 10.1 |
+| Screening Result | Action                                                                                                                                                                          |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Clear            | Verification status set to Verified                                                                                                                                             |
+| Potential Match  | Escalated to Manual Review with sanctions match details                                                                                                                         |
+| Confirmed Match  | Verification status set to Rejected — sanctions; account flagged; Administrator notified immediately; incident logged as Critical severity per [Security](L3-002), Section 10.1 |
 
 **Re-screening frequency**: Re-screening occurs as part of the 2-year re-verification cycle.
 When a user's Verified status expires (after 2 years), re-verification includes fresh sanctions screening.
@@ -244,11 +244,11 @@ MFA is required for all manual review actions per [Security](L3-002), Section 4.
 
 **Review actions**:
 
-| Action | Description | Result |
-| --- | --- | --- |
-| Approve | Reviewer confirms identity is valid | Proceeds to sanctions screening (if not yet screened) or status set to Verified (if sanctions already cleared) |
-| Request Resubmission | Document quality insufficient or additional documentation needed | Status set to Pending Resubmission; user notified with specific reason |
-| Reject | Identity cannot be verified; fraudulent or disqualifying information | Status set to Rejected; user notified with rationale |
+| Action               | Description                                                          | Result                                                                                                         |
+| -------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Approve              | Reviewer confirms identity is valid                                  | Proceeds to sanctions screening (if not yet screened) or status set to Verified (if sanctions already cleared) |
+| Request Resubmission | Document quality insufficient or additional documentation needed     | Status set to Pending Resubmission; user notified with specific reason                                         |
+| Reject               | Identity cannot be verified; fraudulent or disqualifying information | Status set to Rejected; user notified with rationale                                                           |
 
 **Decision logging**: Every manual review decision is logged as a `kyc` audit event per [Audit](L3-006), Section 4.1, including:
 
@@ -264,17 +264,17 @@ MFA is required for all manual review actions per [Security](L3-002), Section 4.
 
 ### 6.1 Status States
 
-| Status | Description |
-| --- | --- |
-| **Not Verified** | Default state for new accounts. No KYC documents submitted. |
-| **Pending** | Documents submitted; automated verification or sanctions screening in progress. |
-| **Pending Resubmission** | Previous submission failed validation or was returned by a reviewer; awaiting new submission from user. |
-| **In Manual Review** | Automated verification inconclusive or failed; awaiting human review. |
-| **Verified** | Identity confirmed through automated verification and sanctions screening (and manual review if applicable). |
-| **Expired** | Previously verified, but verification has expired (document expiry or time-based re-verification trigger). |
-| **Re-verification Required** | A trigger event (see Section 7) requires the user to re-verify. |
-| **Rejected** | Identity verification failed with a definitive rejection. User may appeal or resubmit (see Section 6.3). |
-| **Locked** | KYC submission locked after 5 failed attempts. Requires Administrator intervention to unlock (see Section 6.3). |
+| Status                       | Description                                                                                                     |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Not Verified**             | Default state for new accounts. No KYC documents submitted.                                                     |
+| **Pending**                  | Documents submitted; automated verification or sanctions screening in progress.                                 |
+| **Pending Resubmission**     | Previous submission failed validation or was returned by a reviewer; awaiting new submission from user.         |
+| **In Manual Review**         | Automated verification inconclusive or failed; awaiting human review.                                           |
+| **Verified**                 | Identity confirmed through automated verification and sanctions screening (and manual review if applicable).    |
+| **Expired**                  | Previously verified, but verification has expired (document expiry or time-based re-verification trigger).      |
+| **Re-verification Required** | A trigger event (see Section 7) requires the user to re-verify.                                                 |
+| **Rejected**                 | Identity verification failed with a definitive rejection. User may appeal or resubmit (see Section 6.3).        |
+| **Locked**                   | KYC submission locked after 5 failed attempts. Requires Administrator intervention to unlock (see Section 6.3). |
 
 ### 6.2 State Transitions
 
@@ -313,14 +313,14 @@ Every state transition emits a `kyc` audit event per [Audit](L3-006).
 Verified status is not permanent.
 The following events trigger a transition to Expired or Re-verification Required:
 
-| Trigger | New Status | Rationale |
-| --- | --- | --- |
-| Identity document expiry date reached | Expired | Document no longer valid; fresh verification needed |
-| Time-based re-verification period elapsed (2 years from verification date) | Expired | Verified status expires 2 years after verification, requiring full re-verification |
-| Regulatory change affecting verification requirements | Re-verification Required | New regulations may require additional checks or different documents |
-| Suspicious activity flag from [Audit](L3-006) anomaly detection | Re-verification Required | Anomalous patterns warrant identity re-confirmation |
-| User changes legal name or nationality in profile | Re-verification Required | Identity documents must match current profile data |
-| Sanctions list update results in potential match for previously verified user | Re-verification Required | Re-screening against updated lists produces a match requiring review |
+| Trigger                                                                       | New Status               | Rationale                                                                          |
+| ----------------------------------------------------------------------------- | ------------------------ | ---------------------------------------------------------------------------------- |
+| Identity document expiry date reached                                         | Expired                  | Document no longer valid; fresh verification needed                                |
+| Time-based re-verification period elapsed (2 years from verification date)    | Expired                  | Verified status expires 2 years after verification, requiring full re-verification |
+| Regulatory change affecting verification requirements                         | Re-verification Required | New regulations may require additional checks or different documents               |
+| Suspicious activity flag from [Audit](L3-006) anomaly detection               | Re-verification Required | Anomalous patterns warrant identity re-confirmation                                |
+| User changes legal name or nationality in profile                             | Re-verification Required | Identity documents must match current profile data                                 |
+| Sanctions list update results in potential match for previously verified user | Re-verification Required | Re-screening against updated lists produces a match requiring review               |
 
 **Impact of non-Verified status on dependent systems**:
 
@@ -346,15 +346,15 @@ Identity documents are classified as **Restricted** per [Data Management](L3-004
 
 ### 8.2 What Is Stored
 
-| Data Element | Classification | Retention |
-| --- | --- | --- |
-| Original document images | Restricted | Per Section 8.3 |
-| Extracted document data (name, DOB, document number, expiry) | Restricted | Per Section 8.3 |
-| Verification result (pass/fail, confidence score, provider reference) | Restricted | Per Section 8.3 |
-| Sanctions screening result | Restricted | Per Section 8.3 |
-| Manual review decision and rationale | Restricted | Per Section 8.3 |
-| Video liveness session result (pass/fail, provider reference) | Restricted | Per Section 8.3 |
-| Verification status history (state transitions with timestamps) | Confidential | Per Section 8.3 |
+| Data Element                                                          | Classification | Retention       |
+| --------------------------------------------------------------------- | -------------- | --------------- |
+| Original document images                                              | Restricted     | Per Section 8.3 |
+| Extracted document data (name, DOB, document number, expiry)          | Restricted     | Per Section 8.3 |
+| Verification result (pass/fail, confidence score, provider reference) | Restricted     | Per Section 8.3 |
+| Sanctions screening result                                            | Restricted     | Per Section 8.3 |
+| Manual review decision and rationale                                  | Restricted     | Per Section 8.3 |
+| Video liveness session result (pass/fail, provider reference)         | Restricted     | Per Section 8.3 |
+| Verification status history (state transitions with timestamps)       | Confidential   | Per Section 8.3 |
 
 Video liveness capture footage (video frames, biometric data) is retained only by Veriff and is not stored in the Mars Mission Fund platform.
 Only the session result and provider reference are stored locally.
@@ -363,12 +363,12 @@ Only the session result and provider reference are stored locally.
 
 Per [Data Management](L3-004), Section 2.1:
 
-| Data Type | Active Retention | Archive Retention | Total | Regulatory Driver |
-| --- | --- | --- | --- | --- |
-| KYC identity documents and extracted data | Duration of active account + 1 year | 7 years from account closure | ~8+ years | AML/CTF Act (Australia), GDPR |
-| Sanctions screening results | Duration of active account + 1 year | 7 years from account closure | ~8+ years | AML/CTF Act |
-| Verification decisions and rationale | Duration of active account + 1 year | 7 years from account closure | ~8+ years | AML/CTF Act |
-| Verification status history | Duration of active account | 30 days after account closure (then anonymised) | Account lifetime + 30 days | GDPR |
+| Data Type                                 | Active Retention                    | Archive Retention                               | Total                      | Regulatory Driver             |
+| ----------------------------------------- | ----------------------------------- | ----------------------------------------------- | -------------------------- | ----------------------------- |
+| KYC identity documents and extracted data | Duration of active account + 1 year | 7 years from account closure                    | ~8+ years                  | AML/CTF Act (Australia), GDPR |
+| Sanctions screening results               | Duration of active account + 1 year | 7 years from account closure                    | ~8+ years                  | AML/CTF Act                   |
+| Verification decisions and rationale      | Duration of active account + 1 year | 7 years from account closure                    | ~8+ years                  | AML/CTF Act                   |
+| Verification status history               | Duration of active account          | 30 days after account closure (then anonymised) | Account lifetime + 30 days | GDPR                          |
 
 ### 8.4 Right-to-Erasure Handling
 
@@ -396,22 +396,22 @@ When a user deactivates their account:
 All KYC events are logged as `kyc`-type audit events per [Audit](L3-006), Section 4.1.
 The following events must be logged:
 
-| Event | Audit Action | Logged Fields (in addition to base schema) |
-| --- | --- | --- |
-| Document uploaded | `kyc.document.upload` | Document type, file metadata (size, format), user ID |
-| Automated verification initiated | `kyc.verification.start` | Provider reference, document type |
-| Automated verification result received | `kyc.verification.result` | Provider reference, result (pass/fail/inconclusive), confidence score (if available) |
-| Sanctions screening initiated | `kyc.sanctions.start` | Lists checked, user identity reference |
-| Sanctions screening result received | `kyc.sanctions.result` | Result (clear/potential match/confirmed match), lists checked |
-| Escalated to manual review | `kyc.review.escalate` | Reason for escalation, queue position |
-| Manual review decision | `kyc.review.decision` | Reviewer ID, decision (approve/resubmit/reject), rationale |
-| Status transition | `kyc.status.change` | Previous status, new status, trigger reason |
-| Re-verification triggered | `kyc.reverification.trigger` | Trigger type (document expiry, suspicious activity, etc.) |
-| Document accessed | `kyc.document.access` | Accessor ID, access purpose, document reference |
-| Document deleted (retention expiry) | `kyc.document.delete` | Deletion reason (retention expiry, account deactivation), document reference |
-| Resubmission threshold reached (3 attempts) | `kyc.resubmission.cs_alert` | User ID, attempt count, failure history summary |
-| Account locked for KYC submission (5 attempts) | `kyc.resubmission.account_locked` | User ID, attempt count, failure history summary |
-| Account unlocked for KYC submission (admin intervention) | `kyc.resubmission.account_unlocked` | User ID, admin actor ID, unlock rationale |
+| Event                                                    | Audit Action                        | Logged Fields (in addition to base schema)                                           |
+| -------------------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------ |
+| Document uploaded                                        | `kyc.document.upload`               | Document type, file metadata (size, format), user ID                                 |
+| Automated verification initiated                         | `kyc.verification.start`            | Provider reference, document type                                                    |
+| Automated verification result received                   | `kyc.verification.result`           | Provider reference, result (pass/fail/inconclusive), confidence score (if available) |
+| Sanctions screening initiated                            | `kyc.sanctions.start`               | Lists checked, user identity reference                                               |
+| Sanctions screening result received                      | `kyc.sanctions.result`              | Result (clear/potential match/confirmed match), lists checked                        |
+| Escalated to manual review                               | `kyc.review.escalate`               | Reason for escalation, queue position                                                |
+| Manual review decision                                   | `kyc.review.decision`               | Reviewer ID, decision (approve/resubmit/reject), rationale                           |
+| Status transition                                        | `kyc.status.change`                 | Previous status, new status, trigger reason                                          |
+| Re-verification triggered                                | `kyc.reverification.trigger`        | Trigger type (document expiry, suspicious activity, etc.)                            |
+| Document accessed                                        | `kyc.document.access`               | Accessor ID, access purpose, document reference                                      |
+| Document deleted (retention expiry)                      | `kyc.document.delete`               | Deletion reason (retention expiry, account deactivation), document reference         |
+| Resubmission threshold reached (3 attempts)              | `kyc.resubmission.cs_alert`         | User ID, attempt count, failure history summary                                      |
+| Account locked for KYC submission (5 attempts)           | `kyc.resubmission.account_locked`   | User ID, attempt count, failure history summary                                      |
+| Account unlocked for KYC submission (admin intervention) | `kyc.resubmission.account_unlocked` | User ID, admin actor ID, unlock rationale                                            |
 
 **Sensitive data rules**: Document content, PII extracted from documents, and raw sanctions screening details are never included in audit log entries.
 Only resource identifiers and result classifications are logged, per [Audit](L3-006), Section 3.3.
@@ -422,57 +422,57 @@ Only resource identifiers and result classifications are logged, per [Audit](L3-
 
 ### 10.1 KYC <> Account (L4-001)
 
-| This Spec Provides | Account Spec Consumes |
-| --- | --- |
+| This Spec Provides                                                        | Account Spec Consumes                                                                                             |
+| ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | KYC verification status for each user (see Section 6.1 for status values) | Account verification state — [Account](L4-001) displays KYC status to the user and gates Creator role eligibility |
-| KYC status change events | [Account](L4-001) updates user-facing verification state and triggers notifications on status changes |
-| Re-verification required notifications | [Account](L4-001) surfaces re-verification prompts to the user |
+| KYC status change events                                                  | [Account](L4-001) updates user-facing verification state and triggers notifications on status changes             |
+| Re-verification required notifications                                    | [Account](L4-001) surfaces re-verification prompts to the user                                                    |
 
 **Integration mechanism**: KYC service exposes a status query API and publishes status change events.
 [Account](L4-001) subscribes to status change events and queries current status as needed.
 
 ### 10.2 KYC <> Payments (L4-004)
 
-| This Spec Provides | Payments Spec Consumes |
-| --- | --- |
-| KYC verification status (Verified / not Verified) | [Payments](L4-004) checks KYC status before processing disbursements — only users with Verified status are eligible for disbursement |
-| KYC status change events (specifically: Verified → Expired or Re-verification Required) | [Payments](L4-004) pauses pending disbursements when KYC status leaves Verified state |
+| This Spec Provides                                                                      | Payments Spec Consumes                                                                                                               |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| KYC verification status (Verified / not Verified)                                       | [Payments](L4-004) checks KYC status before processing disbursements — only users with Verified status are eligible for disbursement |
+| KYC status change events (specifically: Verified → Expired or Re-verification Required) | [Payments](L4-004) pauses pending disbursements when KYC status leaves Verified state                                                |
 
 **Integration mechanism**: [Payments](L4-004) queries KYC status synchronously before disbursement processing and subscribes to status change events for proactive disbursement holds.
 
 ### 10.3 KYC <> Campaign (L4-002)
 
-| This Spec Provides | Campaign Spec Consumes |
-| --- | --- |
+| This Spec Provides                                | Campaign Spec Consumes                                                                                                         |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | KYC verification status (Verified / not Verified) | [Campaign](L4-002) checks KYC status before allowing project submission — only users with Verified status can submit campaigns |
-| KYC status change events | [Campaign](L4-002) may use status changes to update campaign eligibility for existing campaigns |
+| KYC status change events                          | [Campaign](L4-002) may use status changes to update campaign eligibility for existing campaigns                                |
 
 **Integration mechanism**: [Campaign](L4-002) queries KYC status synchronously at project submission time.
 
 ### 10.4 KYC <> Security (L3-002)
 
-| This Spec Provides | Security Spec Provides |
-| --- | --- |
-| Verification lifecycle that determines Creator role eligibility | RBAC model, role assignment rules, MFA requirements for KYC admin operations |
-| Sanctions screening results that may trigger security incident response | Incident response process for sanctions matches (Critical severity) |
+| This Spec Provides                                                      | Security Spec Provides                                                       |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Verification lifecycle that determines Creator role eligibility         | RBAC model, role assignment rules, MFA requirements for KYC admin operations |
+| Sanctions screening results that may trigger security incident response | Incident response process for sanctions matches (Critical severity)          |
 
 Reference: [Security](L3-002), Section 12.7.
 
 ### 10.5 KYC <> Data Management (L3-004)
 
-| This Spec Provides | Data Management Spec Provides |
-| --- | --- |
-| Specific KYC document types and verification workflows | Restricted classification for KYC documents, retention schedule, right-to-erasure handling rules |
-| Definition of which identity records are legally required to be retained post-erasure request | Anonymisation and deletion enforcement mechanism |
+| This Spec Provides                                                                            | Data Management Spec Provides                                                                    |
+| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Specific KYC document types and verification workflows                                        | Restricted classification for KYC documents, retention schedule, right-to-erasure handling rules |
+| Definition of which identity records are legally required to be retained post-erasure request | Anonymisation and deletion enforcement mechanism                                                 |
 
 Reference: [Data Management](L3-004), Section 9.5.
 
 ### 10.6 KYC <> Audit (L3-006)
 
-| This Spec Provides | Audit Spec Provides |
-| --- | --- |
-| KYC-specific audit events (Section 9) logged as `kyc` event type | Immutable logging infrastructure, event schema, retention (7 years for KYC events), anomaly detection |
-| Suspicious activity patterns (repeated failures, unusual submission patterns) for anomaly detection | Anomaly detection alerts that trigger re-verification (Section 7) |
+| This Spec Provides                                                                                  | Audit Spec Provides                                                                                   |
+| --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| KYC-specific audit events (Section 9) logged as `kyc` event type                                    | Immutable logging infrastructure, event schema, retention (7 years for KYC events), anomaly detection |
+| Suspicious activity patterns (repeated failures, unusual submission patterns) for anomaly detection | Anomaly detection alerts that trigger re-verification (Section 7)                                     |
 
 Reference: [Audit](L3-006), Section 11.5.
 
@@ -552,8 +552,8 @@ Reference: [Audit](L3-006), Section 11.5.
 
 ## Change Log
 
-| Date | Version | Author | Summary |
-| --- | --- | --- | --- |
-| March 2026 | 0.1 | — | Initial stub. KYC verification flow, document types and jurisdictional requirements, automated verification with provider abstraction, sanctions screening (OFAC, EU, UN, Australian DFAT), manual review workflow, verification status lifecycle (eight states), re-verification triggers, identity document storage and retention (Restricted classification, AML/CTF retention), right-to-erasure handling, auditable events, interface contracts with Account/Payments/Campaign/Security/Data Management/Audit, acceptance criteria. |
-| March 2026 | 0.2 | — | Closed open questions OQ-2 through OQ-6 and OQ-8. Resolved: video liveness check required, 20 MB max file size, 3/5-attempt resubmission escalation, 2-year re-verification period, sanctions re-screening at re-verification, launch countries AU/US/UK/EU. Updated spec body to reflect resolved values. |
-| March 2026 | 0.3 | — | Added Locked status to lifecycle (9 states). Added Depended On By for L4-002 and L4-004. Added video liveness to governs list and Australian DFAT to sanctions list reference. Added liveness data storage clarification (retained by Veriff only). Added audit events for resubmission escalation thresholds and account unlock. Added AC-KYC-013c for admin unlock. |
+| Date       | Version | Author | Summary                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ---------- | ------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| March 2026 | 0.1     | —      | Initial stub. KYC verification flow, document types and jurisdictional requirements, automated verification with provider abstraction, sanctions screening (OFAC, EU, UN, Australian DFAT), manual review workflow, verification status lifecycle (eight states), re-verification triggers, identity document storage and retention (Restricted classification, AML/CTF retention), right-to-erasure handling, auditable events, interface contracts with Account/Payments/Campaign/Security/Data Management/Audit, acceptance criteria. |
+| March 2026 | 0.2     | —      | Closed open questions OQ-2 through OQ-6 and OQ-8. Resolved: video liveness check required, 20 MB max file size, 3/5-attempt resubmission escalation, 2-year re-verification period, sanctions re-screening at re-verification, launch countries AU/US/UK/EU. Updated spec body to reflect resolved values.                                                                                                                                                                                                                               |
+| March 2026 | 0.3     | —      | Added Locked status to lifecycle (9 states). Added Depended On By for L4-002 and L4-004. Added video liveness to governs list and Australian DFAT to sanctions list reference. Added liveness data storage clarification (retained by Veriff only). Added audit events for resubmission escalation thresholds and account unlock. Added AC-KYC-013c for admin unlock.                                                                                                                                                                    |

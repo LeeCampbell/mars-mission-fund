@@ -141,8 +141,9 @@ export function ContactPage() {
                   marginBottom: '16px',
                 }}
               >
-                Whether you're a mission team looking for capital, an investor seeking opportunities, or simply a believer in
-                humanity's multi-planetary future — we want to hear from you.
+                Whether you're a mission team looking for capital, an investor seeking
+                opportunities, or simply a believer in humanity's multi-planetary future — we want
+                to hear from you.
               </p>
               <p
                 style={{
@@ -152,8 +153,8 @@ export function ContactPage() {
                   lineHeight: '1.7',
                 }}
               >
-                Our team responds to all enquiries within two business days. For urgent mission-critical matters, please
-                mark your subject line with "PRIORITY".
+                Our team responds to all enquiries within two business days. For urgent
+                mission-critical matters, please mark your subject line with "PRIORITY".
               </p>
             </Card>
           </div>

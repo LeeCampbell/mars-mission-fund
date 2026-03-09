@@ -26,10 +26,7 @@ const accentBarStyle: React.CSSProperties = {
 
 export function Card({ accent = false, children, className }: CardProps) {
   return (
-    <div
-      style={cardStyle}
-      className={className}
-    >
+    <div style={cardStyle} className={className}>
       {accent && <div style={accentBarStyle} aria-hidden="true" />}
       {children}
     </div>

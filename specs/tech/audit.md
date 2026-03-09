@@ -54,32 +54,32 @@ Audit events extend the structured logging baseline from [Engineering Standard](
 
 ### 3.1 Base Fields (inherited from L2-002 Section 6.1)
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `timestamp` | string (ISO 8601 with timezone) | When the event occurred |
-| `level` | string | Always `AUDIT` for audit events (distinct from operational log levels) |
-| `correlation_id` | string (UUID) | Request correlation ID from the edge |
-| `service` | string | Name of the emitting service |
-| `message` | string | Human-readable description of the auditable action |
-| `context` | object | Structured metadata (see audit-specific fields below) |
+| Field            | Type                            | Description                                                            |
+| ---------------- | ------------------------------- | ---------------------------------------------------------------------- |
+| `timestamp`      | string (ISO 8601 with timezone) | When the event occurred                                                |
+| `level`          | string                          | Always `AUDIT` for audit events (distinct from operational log levels) |
+| `correlation_id` | string (UUID)                   | Request correlation ID from the edge                                   |
+| `service`        | string                          | Name of the emitting service                                           |
+| `message`        | string                          | Human-readable description of the auditable action                     |
+| `context`        | object                          | Structured metadata (see audit-specific fields below)                  |
 
 ### 3.2 Audit-Specific Fields
 
-| Field | Type | Required | Description |
-| ----- | ---- | -------- | ----------- |
-| `event_type` | string (enum) | Yes | Category of audit event (see Section 4) |
-| `actor_id` | string | Yes | Identity of the user or service principal that performed the action |
-| `actor_type` | string (enum) | Yes | `user`, `service`, `system`, `admin` |
-| `action` | string | Yes | The specific action performed (e.g., `campaign.create`, `payment.disburse`, `user.login`) |
-| `resource_type` | string | Yes | Type of resource affected (e.g., `campaign`, `payment`, `account`) |
-| `resource_id` | string | Yes | Identifier of the affected resource |
-| `outcome` | string (enum) | Yes | `success`, `failure`, `denied` |
-| `ip_address` | string | Conditional | Client IP address (required for user-initiated events, omitted for system events) |
-| `user_agent` | string | Conditional | Client user agent (required for user-initiated events) |
-| `previous_state` | object | Conditional | Snapshot of relevant fields before the mutation (required for state changes) |
-| `new_state` | object | Conditional | Snapshot of relevant fields after the mutation (required for state changes) |
-| `reason` | string | Conditional | Reason for the action, where applicable (e.g., denial reason, admin override justification) |
-| `metadata` | object | No | Additional structured context specific to the event type |
+| Field            | Type          | Required    | Description                                                                                 |
+| ---------------- | ------------- | ----------- | ------------------------------------------------------------------------------------------- |
+| `event_type`     | string (enum) | Yes         | Category of audit event (see Section 4)                                                     |
+| `actor_id`       | string        | Yes         | Identity of the user or service principal that performed the action                         |
+| `actor_type`     | string (enum) | Yes         | `user`, `service`, `system`, `admin`                                                        |
+| `action`         | string        | Yes         | The specific action performed (e.g., `campaign.create`, `payment.disburse`, `user.login`)   |
+| `resource_type`  | string        | Yes         | Type of resource affected (e.g., `campaign`, `payment`, `account`)                          |
+| `resource_id`    | string        | Yes         | Identifier of the affected resource                                                         |
+| `outcome`        | string (enum) | Yes         | `success`, `failure`, `denied`                                                              |
+| `ip_address`     | string        | Conditional | Client IP address (required for user-initiated events, omitted for system events)           |
+| `user_agent`     | string        | Conditional | Client user agent (required for user-initiated events)                                      |
+| `previous_state` | object        | Conditional | Snapshot of relevant fields before the mutation (required for state changes)                |
+| `new_state`      | object        | Conditional | Snapshot of relevant fields after the mutation (required for state changes)                 |
+| `reason`         | string        | Conditional | Reason for the action, where applicable (e.g., denial reason, admin override justification) |
+| `metadata`       | object        | No          | Additional structured context specific to the event type                                    |
 
 ### 3.3 Sensitive Data Rules
 
@@ -100,17 +100,17 @@ Beyond state mutations, the following event categories are mandatory.
 
 ### 4.1 Event Categories
 
-| Category | Event Type | Examples |
-| -------- | ---------- | -------- |
-| **Authentication** | `auth` | Login success/failure, logout, MFA challenge/success/failure, session creation/expiry, token refresh, password reset request/completion |
-| **Authorisation** | `authz` | Permission check granted/denied, role assignment/removal, privilege escalation, access to restricted resources |
-| **State Mutation** | `mutation` | Any create, update, or delete operation on a domain entity (campaign, payment, account, KYC record) |
-| **Data Access** | `access` | Read access to sensitive data (PII, financial records, KYC documents) — not every read, only reads of classified-sensitive resources |
-| **Configuration Change** | `config` | Feature flag changes, environment variable updates, service configuration changes, deployment events |
-| **Admin Action** | `admin` | Any action performed with elevated privileges — user impersonation, manual overrides, data corrections, bulk operations |
-| **Financial Event** | `financial` | Payment initiation, payment completion, refund, escrow hold/release, disbursement, reconciliation |
-| **KYC Event** | `kyc` | Document upload, verification status change, sanctions screening result, manual review decision |
-| **System Event** | `system` | Service startup/shutdown, scheduled job execution, automated retention enforcement, audit log export |
+| Category                 | Event Type  | Examples                                                                                                                                |
+| ------------------------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **Authentication**       | `auth`      | Login success/failure, logout, MFA challenge/success/failure, session creation/expiry, token refresh, password reset request/completion |
+| **Authorisation**        | `authz`     | Permission check granted/denied, role assignment/removal, privilege escalation, access to restricted resources                          |
+| **State Mutation**       | `mutation`  | Any create, update, or delete operation on a domain entity (campaign, payment, account, KYC record)                                     |
+| **Data Access**          | `access`    | Read access to sensitive data (PII, financial records, KYC documents) — not every read, only reads of classified-sensitive resources    |
+| **Configuration Change** | `config`    | Feature flag changes, environment variable updates, service configuration changes, deployment events                                    |
+| **Admin Action**         | `admin`     | Any action performed with elevated privileges — user impersonation, manual overrides, data corrections, bulk operations                 |
+| **Financial Event**      | `financial` | Payment initiation, payment completion, refund, escrow hold/release, disbursement, reconciliation                                       |
+| **KYC Event**            | `kyc`       | Document upload, verification status change, sanctions screening result, manual review decision                                         |
+| **System Event**         | `system`    | Service startup/shutdown, scheduled job execution, automated retention enforcement, audit log export                                    |
 
 ### 4.2 Logging Trigger Rules
 
@@ -158,18 +158,18 @@ General data retention policies are defined in [Data Management](L3-004); this s
 
 ### 6.1 Retention Schedule
 
-| Event Category | Minimum Retention | Rationale |
-| -------------- | ----------------- | --------- |
-| Financial events | 7 years | PCI DSS, Australian tax record-keeping requirements |
-| KYC events | 7 years after relationship end | AML/CTF Act record-keeping obligations |
-| Authentication events | 2 years | Security investigation window |
-| Authorisation events | 2 years | Security investigation window |
-| Data access events | 2 years | GDPR data access audit trail |
-| Admin actions | 7 years | Regulatory and compliance audit trail |
-| Configuration changes | 2 years | Change management audit trail |
-| State mutations (financial entities) | 7 years | Aligned with financial event retention |
-| State mutations (non-financial entities) | 2 years | Operational audit trail |
-| System events | 1 year | Operational diagnostics |
+| Event Category                           | Minimum Retention              | Rationale                                           |
+| ---------------------------------------- | ------------------------------ | --------------------------------------------------- |
+| Financial events                         | 7 years                        | PCI DSS, Australian tax record-keeping requirements |
+| KYC events                               | 7 years after relationship end | AML/CTF Act record-keeping obligations              |
+| Authentication events                    | 2 years                        | Security investigation window                       |
+| Authorisation events                     | 2 years                        | Security investigation window                       |
+| Data access events                       | 2 years                        | GDPR data access audit trail                        |
+| Admin actions                            | 7 years                        | Regulatory and compliance audit trail               |
+| Configuration changes                    | 2 years                        | Change management audit trail                       |
+| State mutations (financial entities)     | 7 years                        | Aligned with financial event retention              |
+| State mutations (non-financial entities) | 2 years                        | Operational audit trail                             |
+| System events                            | 1 year                         | Operational diagnostics                             |
 
 ### 6.2 Retention Enforcement
 
@@ -191,14 +191,14 @@ General data retention policies are defined in [Data Management](L3-004); this s
 
 ### 7.2 Access Roles
 
-| Role | Read Access | Write Access | Notes |
-| ---- | ----------- | ------------ | ----- |
-| Application services | No direct read | Append only (via audit logging SDK) | Services emit audit events but cannot query them |
-| Engineers (on-call / incident response) | Scoped read (own service, limited time window) | None | Access granted per-incident, time-limited, logged |
-| Security team | Full read | None | For security investigations and compliance audits |
-| Compliance / audit team | Full read | None | For regulatory reporting and external audit support |
-| Platform administrators | Full read | None | No one has write/delete access — by design |
-| External auditors | Scoped read (via export) | None | Read access via exported reports, not direct system access |
+| Role                                    | Read Access                                    | Write Access                        | Notes                                                      |
+| --------------------------------------- | ---------------------------------------------- | ----------------------------------- | ---------------------------------------------------------- |
+| Application services                    | No direct read                                 | Append only (via audit logging SDK) | Services emit audit events but cannot query them           |
+| Engineers (on-call / incident response) | Scoped read (own service, limited time window) | None                                | Access granted per-incident, time-limited, logged          |
+| Security team                           | Full read                                      | None                                | For security investigations and compliance audits          |
+| Compliance / audit team                 | Full read                                      | None                                | For regulatory reporting and external audit support        |
+| Platform administrators                 | Full read                                      | None                                | No one has write/delete access — by design                 |
+| External auditors                       | Scoped read (via export)                       | None                                | Read access via exported reports, not direct system access |
 
 ### 7.3 Access Mechanism
 
@@ -255,15 +255,15 @@ The system must detect suspicious patterns in near-real-time and surface them to
 
 The following patterns must be detected and alerted on:
 
-| Pattern | Description | Severity |
-| ------- | ----------- | -------- |
-| Repeated authentication failures | Multiple failed login attempts for the same account within a time window | High |
-| Unusual transaction patterns | Transactions outside normal volume, frequency, or amount ranges for a given account or campaign | High |
-| Privilege escalation attempts | Authorisation denials followed by successful access to the same resource (potential bypass) | Critical |
-| Off-hours admin actions | Administrative actions performed outside normal business hours | Medium |
-| Bulk data access | Unusually large volumes of sensitive data reads by a single actor in a short period | High |
-| Geographic anomalies | Authentication or financial actions from unexpected geographic locations | Medium |
-| Configuration changes without change tickets | Configuration or feature flag changes that don't correlate with approved change records | High |
+| Pattern                                      | Description                                                                                     | Severity |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------- |
+| Repeated authentication failures             | Multiple failed login attempts for the same account within a time window                        | High     |
+| Unusual transaction patterns                 | Transactions outside normal volume, frequency, or amount ranges for a given account or campaign | High     |
+| Privilege escalation attempts                | Authorisation denials followed by successful access to the same resource (potential bypass)     | Critical |
+| Off-hours admin actions                      | Administrative actions performed outside normal business hours                                  | Medium   |
+| Bulk data access                             | Unusually large volumes of sensitive data reads by a single actor in a short period             | High     |
+| Geographic anomalies                         | Authentication or financial actions from unexpected geographic locations                        | Medium   |
+| Configuration changes without change tickets | Configuration or feature flag changes that don't correlate with approved change records         | High     |
 
 ### 9.2 Detection Architecture
 
@@ -356,7 +356,7 @@ The SDK must:
 
 ## Change Log
 
-| Date | Version | Author | Summary |
-| ---- | ------- | ------ | ------- |
-| March 2026 | 0.1 | — | Initial stub. Audit event schema, logging categories, immutability guarantees, retention schedule, access controls, regulatory reporting (PCI DSS, GDPR, Australian Privacy Act), anomaly detection baselines, query interface, and audit logging SDK. |
-| March 2026 | 0.2 | — | Resolved all 10 open questions. Established reference-only redaction strategy, PostgreSQL event store (aligned with CQRS/ES from L3-001), SHA-256 hash chain with daily verification, tiered storage retention, SAQ-A PCI scope, rule-based anomaly detection, 5-minute ingestion SLA. |
+| Date       | Version | Author | Summary                                                                                                                                                                                                                                                                                |
+| ---------- | ------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| March 2026 | 0.1     | —      | Initial stub. Audit event schema, logging categories, immutability guarantees, retention schedule, access controls, regulatory reporting (PCI DSS, GDPR, Australian Privacy Act), anomaly detection baselines, query interface, and audit logging SDK.                                 |
+| March 2026 | 0.2     | —      | Resolved all 10 open questions. Established reference-only redaction strategy, PostgreSQL event store (aligned with CQRS/ES from L3-001), SHA-256 hash chain with daily verification, tiered storage retention, SAQ-A PCI scope, rule-based anomaly detection, 5-minute ingestion SLA. |

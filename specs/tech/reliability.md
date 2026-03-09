@@ -60,11 +60,11 @@ In practice, "100%" means the platform's financial surfaces must meet or exceed 
 
 ### 1.1 Tiered Availability Targets
 
-| Tier | Description | Availability Target | Max Monthly Downtime | Examples |
-| ---- | ----------- | ------------------- | -------------------- | -------- |
-| Tier 1 — Financial Critical | Flows involving money movement | 99.99% | ~4.3 minutes | Payment processing, escrow operations, disbursements, refunds |
-| Tier 2 — Core Platform | Flows required for primary user journeys | 99.95% | ~21.9 minutes | Authentication, campaign browsing, donor contributions (non-payment steps), KYC submission |
-| Tier 3 — Supporting Services | Flows that enhance experience but are not blocking | 99.9% | ~43.8 minutes | Search, recommendations, notifications, impact dashboards, reporting |
+| Tier                         | Description                                        | Availability Target | Max Monthly Downtime | Examples                                                                                   |
+| ---------------------------- | -------------------------------------------------- | ------------------- | -------------------- | ------------------------------------------------------------------------------------------ |
+| Tier 1 — Financial Critical  | Flows involving money movement                     | 99.99%              | ~4.3 minutes         | Payment processing, escrow operations, disbursements, refunds                              |
+| Tier 2 — Core Platform       | Flows required for primary user journeys           | 99.95%              | ~21.9 minutes        | Authentication, campaign browsing, donor contributions (non-payment steps), KYC submission |
+| Tier 3 — Supporting Services | Flows that enhance experience but are not blocking | 99.9%               | ~43.8 minutes        | Search, recommendations, notifications, impact dashboards, reporting                       |
 
 ### 1.2 Measurement
 
@@ -74,11 +74,11 @@ In practice, "100%" means the platform's financial surfaces must meet or exceed 
 
 ### 1.3 SLA vs SLO vs SLI
 
-| Term | Definition | Owner |
-| ---- | ---------- | ----- |
+| Term                          | Definition                                                          | Owner                               |
+| ----------------------------- | ------------------------------------------------------------------- | ----------------------------------- |
 | SLI (Service Level Indicator) | The metric being measured (e.g., request success rate, latency p99) | Engineering team owning the service |
-| SLO (Service Level Objective) | The internal target for each SLI (the targets in Section 1.1) | Engineering leadership |
-| SLA (Service Level Agreement) | The external commitment to users, with consequences for breach | Product and business leadership |
+| SLO (Service Level Objective) | The internal target for each SLI (the targets in Section 1.1)       | Engineering leadership              |
+| SLA (Service Level Agreement) | The external commitment to users, with consequences for breach      | Product and business leadership     |
 
 SLOs must be stricter than SLAs.
 The gap between SLO and SLA is the error budget — the margin within which the team can deploy, experiment, and take calculated risks.
@@ -119,11 +119,11 @@ This gives a substantial error budget gap — for example, a Tier 1 service with
 
 ### 3.1 RPO and RTO Targets
 
-| Tier | RPO (Recovery Point Objective) | RTO (Recovery Time Objective) |
-| ---- | ------------------------------ | ----------------------------- |
-| Tier 1 — Financial Critical | 0 (zero data loss for committed transactions) | 15 minutes |
-| Tier 2 — Core Platform | 5 minutes | 30 minutes |
-| Tier 3 — Supporting Services | 1 hour | 4 hours |
+| Tier                         | RPO (Recovery Point Objective)                | RTO (Recovery Time Objective) |
+| ---------------------------- | --------------------------------------------- | ----------------------------- |
+| Tier 1 — Financial Critical  | 0 (zero data loss for committed transactions) | 15 minutes                    |
+| Tier 2 — Core Platform       | 5 minutes                                     | 30 minutes                    |
+| Tier 3 — Supporting Services | 1 hour                                        | 4 hours                       |
 
 ### 3.2 Disaster Recovery Plan Requirements
 
@@ -145,14 +145,14 @@ Backup implementation must coordinate with the data classification and retention
 
 ### 4.1 Backup Frequency
 
-| Data Type | Backup Frequency | Retention Period |
-| --------- | ---------------- | ---------------- |
-| Financial transaction data | Continuous (real-time replication) | As defined in [Data Management](L3-004) — minimum 7 years for financial records |
-| User account data | Every 6 hours | As defined in [Data Management](L3-004) |
-| Campaign data | Every 6 hours | As defined in [Data Management](L3-004) |
-| Audit logs | Continuous (append-only, replicated) | As defined in [Audit](L3-006) |
-| Application configuration | On every change (version-controlled) | Indefinite (in version control) |
-| Infrastructure state | On every change (infrastructure-as-code) | Indefinite (in version control) |
+| Data Type                  | Backup Frequency                         | Retention Period                                                                |
+| -------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------- |
+| Financial transaction data | Continuous (real-time replication)       | As defined in [Data Management](L3-004) — minimum 7 years for financial records |
+| User account data          | Every 6 hours                            | As defined in [Data Management](L3-004)                                         |
+| Campaign data              | Every 6 hours                            | As defined in [Data Management](L3-004)                                         |
+| Audit logs                 | Continuous (append-only, replicated)     | As defined in [Audit](L3-006)                                                   |
+| Application configuration  | On every change (version-controlled)     | Indefinite (in version control)                                                 |
+| Infrastructure state       | On every change (infrastructure-as-code) | Indefinite (in version control)                                                 |
 
 ### 4.2 Backup Integrity
 
@@ -171,7 +171,7 @@ Backup implementation must coordinate with the data classification and retention
 ## 5. Circuit Breaker Patterns
 
 External dependencies will fail.
-The question is not *if* but *when* and *how gracefully* the platform handles it.
+The question is not _if_ but _when_ and _how gracefully_ the platform handles it.
 
 ### 5.1 Circuit Breaker Requirements
 
@@ -179,10 +179,10 @@ Every call to an external dependency (payment gateways, KYC providers, email ser
 
 Circuit breakers must implement three states:
 
-| State | Behaviour |
-| ----- | --------- |
-| **Closed** | Requests pass through normally.  Failures are counted. |
-| **Open** | Requests fail immediately without calling the dependency.  A fallback response is returned. |
+| State         | Behaviour                                                                                       |
+| ------------- | ----------------------------------------------------------------------------------------------- |
+| **Closed**    | Requests pass through normally. Failures are counted.                                           |
+| **Open**      | Requests fail immediately without calling the dependency. A fallback response is returned.      |
 | **Half-Open** | A limited number of probe requests are allowed through to test if the dependency has recovered. |
 
 ### 5.2 Circuit Breaker Configuration
@@ -190,13 +190,13 @@ Circuit breakers must implement three states:
 > **Note**: Specific threshold values should be tuned per dependency based on observed behaviour.
 > The following are starting defaults:
 
-| Parameter | Default |
-| --------- | ------- |
-| Failure threshold to open | 5 consecutive failures or >50% failure rate over 30 seconds |
-| Open duration before half-open | 30 seconds |
-| Half-open probe count | 3 requests |
-| Success threshold to close | 3 consecutive successes in half-open state |
-| Call timeout | 5 seconds for Tier 1 dependencies, 10 seconds for Tier 2/3 |
+| Parameter                      | Default                                                     |
+| ------------------------------ | ----------------------------------------------------------- |
+| Failure threshold to open      | 5 consecutive failures or >50% failure rate over 30 seconds |
+| Open duration before half-open | 30 seconds                                                  |
+| Half-open probe count          | 3 requests                                                  |
+| Success threshold to close     | 3 consecutive successes in half-open state                  |
+| Call timeout                   | 5 seconds for Tier 1 dependencies, 10 seconds for Tier 2/3  |
 
 ### 5.3 Bulkhead Isolation
 
@@ -216,10 +216,10 @@ Implements [Engineering Standard](L2-002), Section 6.3.
 
 Every service must expose the following health check endpoints:
 
-| Endpoint | Purpose | Authentication |
-| -------- | ------- | -------------- |
-| `GET /health/live` | Liveness — confirms the process is running and can accept TCP connections | None (per [Engineering Standard](L2-002), Section 5.4) |
-| `GET /health/ready` | Readiness — confirms the service and its critical dependencies are functioning | None |
+| Endpoint            | Purpose                                                                        | Authentication                                         |
+| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| `GET /health/live`  | Liveness — confirms the process is running and can accept TCP connections      | None (per [Engineering Standard](L2-002), Section 5.4) |
+| `GET /health/ready` | Readiness — confirms the service and its critical dependencies are functioning | None                                                   |
 
 ### 6.2 Response Format
 
@@ -258,14 +258,14 @@ Users must receive clear communication about what is and is not available.
 
 ### 7.1 Degradation Scenarios
 
-| Scenario | Impact | Degradation Behaviour |
-| -------- | ------ | --------------------- |
-| **Payment gateway down** | Cannot process new contributions | Display maintenance message on contribution flow.  Existing campaign pages remain browsable.  Queue contribution intents for retry when gateway recovers (with user consent).  Queued intents expire after **2 minutes** — if the gateway has not recovered, the user is notified that their contribution was not processed and invited to try again later. |
-| **KYC provider unreachable** | Cannot verify new identities | Allow account creation to proceed.  Queue KYC verification.  Restrict actions requiring verified identity until verification completes.  Notify user of delay. |
-| **Search infrastructure unavailable** | Cannot search campaigns | Fall back to category browsing and curated collections.  Hide search UI or display "temporarily unavailable" message.  All other platform functions continue normally. |
-| **Email/notification service down** | Cannot send notifications | Queue notifications for retry.  Critical notifications (payment confirmations, security alerts) must have a secondary delivery channel or be surfaced in-app. |
-| **Database read replica down** | Read performance degraded | Route reads to primary (with increased latency).  Monitor primary load.  Alert immediately for capacity planning. |
-| **Cache layer down** | Response times increase | Serve requests directly from database.  Accept higher latency.  Apply rate limiting if database load approaches capacity. |
+| Scenario                              | Impact                           | Degradation Behaviour                                                                                                                                                                                                                                                                                                                                    |
+| ------------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Payment gateway down**              | Cannot process new contributions | Display maintenance message on contribution flow. Existing campaign pages remain browsable. Queue contribution intents for retry when gateway recovers (with user consent). Queued intents expire after **2 minutes** — if the gateway has not recovered, the user is notified that their contribution was not processed and invited to try again later. |
+| **KYC provider unreachable**          | Cannot verify new identities     | Allow account creation to proceed. Queue KYC verification. Restrict actions requiring verified identity until verification completes. Notify user of delay.                                                                                                                                                                                              |
+| **Search infrastructure unavailable** | Cannot search campaigns          | Fall back to category browsing and curated collections. Hide search UI or display "temporarily unavailable" message. All other platform functions continue normally.                                                                                                                                                                                     |
+| **Email/notification service down**   | Cannot send notifications        | Queue notifications for retry. Critical notifications (payment confirmations, security alerts) must have a secondary delivery channel or be surfaced in-app.                                                                                                                                                                                             |
+| **Database read replica down**        | Read performance degraded        | Route reads to primary (with increased latency). Monitor primary load. Alert immediately for capacity planning.                                                                                                                                                                                                                                          |
+| **Cache layer down**                  | Response times increase          | Serve requests directly from database. Accept higher latency. Apply rate limiting if database load approaches capacity.                                                                                                                                                                                                                                  |
 
 ### 7.2 Degradation Principles
 
@@ -284,35 +284,35 @@ Implements [Engineering Standard](L2-002), Section 6.5.
 
 ### 8.1 Alert Severity Levels
 
-| Severity | Criteria | Response Time | Notification Channel |
-| -------- | -------- | ------------- | -------------------- |
-| **P1 — Critical** | Tier 1 service is down or data integrity is at risk | Immediate (within 5 minutes) | Page on-call engineer + escalation to engineering leadership |
-| **P2 — High** | Tier 2 service is down or Tier 1 is degraded | Within 15 minutes | Page on-call engineer |
-| **P3 — Medium** | Tier 3 service is down or Tier 2 is degraded, or SLO burn rate is elevated | Within 1 hour | Notify on-call engineer via team channel |
-| **P4 — Low** | Non-urgent anomalies, capacity warnings, approaching thresholds | Next business day | Team channel notification |
+| Severity          | Criteria                                                                   | Response Time                | Notification Channel                                         |
+| ----------------- | -------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------ |
+| **P1 — Critical** | Tier 1 service is down or data integrity is at risk                        | Immediate (within 5 minutes) | Page on-call engineer + escalation to engineering leadership |
+| **P2 — High**     | Tier 2 service is down or Tier 1 is degraded                               | Within 15 minutes            | Page on-call engineer                                        |
+| **P3 — Medium**   | Tier 3 service is down or Tier 2 is degraded, or SLO burn rate is elevated | Within 1 hour                | Notify on-call engineer via team channel                     |
+| **P4 — Low**      | Non-urgent anomalies, capacity warnings, approaching thresholds            | Next business day            | Team channel notification                                    |
 
 ### 8.2 Alert Thresholds
 
 These thresholds implement the baseline defined in [Engineering Standard](L2-002), Section 6.5:
 
-| Condition | Threshold | Severity |
-| --------- | --------- | -------- |
-| Error rate exceeds 2x baseline for 5 minutes | Per-service baseline, measured over rolling 7 days | P2 (P1 if Tier 1 service) |
-| p99 latency exceeds SLO for 5 minutes | Per-service SLO target | P2 (P1 if Tier 1 service) |
-| Health check fails 3 consecutive times | Any service | P2 (P1 if Tier 1 service) |
-| Dependency health check failure | Any critical dependency | P3 (P2 if dependency serves Tier 1 flow) |
-| Error budget burn rate >2% per hour | Per-service monthly error budget | P3 |
-| Disk/memory/CPU >85% utilisation for 15 minutes | Any service | P3 |
-| Error budget >50% consumed with >50% of month remaining | Monthly budget calculation | P4 |
+| Condition                                               | Threshold                                          | Severity                                 |
+| ------------------------------------------------------- | -------------------------------------------------- | ---------------------------------------- |
+| Error rate exceeds 2x baseline for 5 minutes            | Per-service baseline, measured over rolling 7 days | P2 (P1 if Tier 1 service)                |
+| p99 latency exceeds SLO for 5 minutes                   | Per-service SLO target                             | P2 (P1 if Tier 1 service)                |
+| Health check fails 3 consecutive times                  | Any service                                        | P2 (P1 if Tier 1 service)                |
+| Dependency health check failure                         | Any critical dependency                            | P3 (P2 if dependency serves Tier 1 flow) |
+| Error budget burn rate >2% per hour                     | Per-service monthly error budget                   | P3                                       |
+| Disk/memory/CPU >85% utilisation for 15 minutes         | Any service                                        | P3                                       |
+| Error budget >50% consumed with >50% of month remaining | Monthly budget calculation                         | P4                                       |
 
 ### 8.3 Escalation Policy
 
-| Time Since Alert | Action |
-| ---------------- | ------ |
-| 0 minutes | On-call engineer paged |
-| 15 minutes (P1) / 30 minutes (P2) | If not acknowledged, escalate to secondary on-call |
-| 30 minutes (P1) / 1 hour (P2) | If not resolved or actively mitigated, escalate to engineering leadership |
-| 1 hour (P1) | If not resolved, incident commander engaged, status page updated |
+| Time Since Alert                  | Action                                                                    |
+| --------------------------------- | ------------------------------------------------------------------------- |
+| 0 minutes                         | On-call engineer paged                                                    |
+| 15 minutes (P1) / 30 minutes (P2) | If not acknowledged, escalate to secondary on-call                        |
+| 30 minutes (P1) / 1 hour (P2)     | If not resolved or actively mitigated, escalate to engineering leadership |
+| 1 hour (P1)                       | If not resolved, incident commander engaged, status page updated          |
 
 ### 8.4 On-Call Requirements
 
@@ -328,12 +328,12 @@ The [Product Vision & Mission](L1-001) sets targets of MTTD (Mean Time to Detect
 
 ### 9.1 Incident Severity Classification
 
-| Severity | Definition | MTTD Target | MTTR Target |
-| -------- | ---------- | ----------- | ----------- |
-| **SEV-1** | Complete outage of a Tier 1 service, data breach, or financial data integrity issue | < 5 minutes | < 1 hour |
-| **SEV-2** | Partial outage of Tier 1, complete outage of Tier 2, or significant performance degradation affecting users | < 10 minutes | < 2 hours |
-| **SEV-3** | Tier 3 service outage, minor performance degradation, or non-critical feature failure | < 15 minutes | < 4 hours |
-| **SEV-4** | Cosmetic issues, minor bugs, or issues affecting a small number of users | < 1 hour | < 24 hours |
+| Severity  | Definition                                                                                                  | MTTD Target  | MTTR Target |
+| --------- | ----------------------------------------------------------------------------------------------------------- | ------------ | ----------- |
+| **SEV-1** | Complete outage of a Tier 1 service, data breach, or financial data integrity issue                         | < 5 minutes  | < 1 hour    |
+| **SEV-2** | Partial outage of Tier 1, complete outage of Tier 2, or significant performance degradation affecting users | < 10 minutes | < 2 hours   |
+| **SEV-3** | Tier 3 service outage, minor performance degradation, or non-critical feature failure                       | < 15 minutes | < 4 hours   |
+| **SEV-4** | Cosmetic issues, minor bugs, or issues affecting a small number of users                                    | < 1 hour     | < 24 hours  |
 
 ### 9.2 Incident Response Process
 
@@ -360,8 +360,8 @@ The [Product Vision & Mission](L1-001) sets targets of MTTD (Mean Time to Detect
 
 ### With [Architecture](L3-001)
 
-- This spec defines *what* availability and failover targets must be met.
-  [Architecture](L3-001) defines *how* — the infrastructure topology, deployment model, and technology choices that achieve these targets.
+- This spec defines _what_ availability and failover targets must be met.
+  [Architecture](L3-001) defines _how_ — the infrastructure topology, deployment model, and technology choices that achieve these targets.
 - Health check endpoint paths and response format defined here must be implemented by every service defined in [Architecture](L3-001).
 
 ### With [Security](L3-002)
@@ -416,7 +416,7 @@ The [Product Vision & Mission](L1-001) sets targets of MTTD (Mean Time to Detect
 
 ## Change Log
 
-| Date | Version | Author | Summary |
-| ---- | ------- | ------ | ------- |
-| March 2026 | 0.1 | — | Initial stub. Availability targets (three tiers), failover requirements, DR plan (RPO/RTO), backup policies, circuit breaker patterns, health check contract, graceful degradation modes, alerting and escalation, incident classification and response. |
-| March 2026 | 1.0 | — | All open questions resolved. Active-passive failover, error budget freeze policy, Statuspage, PagerDuty, individual-service DR drills, 2-minute payment queue expiry, 99% external SLA. Promoted to Approved. |
+| Date       | Version | Author | Summary                                                                                                                                                                                                                                                  |
+| ---------- | ------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| March 2026 | 0.1     | —      | Initial stub. Availability targets (three tiers), failover requirements, DR plan (RPO/RTO), backup policies, circuit breaker patterns, health check contract, graceful degradation modes, alerting and escalation, incident classification and response. |
+| March 2026 | 1.0     | —      | All open questions resolved. Active-passive failover, error budget freeze policy, Statuspage, PagerDuty, individual-service DR drills, 2-minute payment queue expiry, 99% external SLA. Promoted to Approved.                                            |

@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Change log contains a v0.4 entry. One sentence per line.
   - **Brief ref**: Step 1, last line
 
-- [ ] TASK-09: Verify specs/README.md index completeness
+- [x] TASK-09: Verify specs/README.md index completeness
   - **Goal**: Confirm every `.md` file under `specs/` has a corresponding entry in `specs/README.md`.
   - **Details**: Run `find specs/ -name "*.md"` (or use Glob) to list all spec files. Compare against entries in `specs/README.md`. If no new files were created, no changes are needed. If a new file was added, add it to the correct tier section in the index.
   - **Files**: `specs/README.md` (modify only if a new file was added)

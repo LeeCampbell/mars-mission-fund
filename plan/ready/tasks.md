@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The local demo scope note no longer states a single Docker Compose stack; the corrected topology (DB-only Compose + separate server process) is clearly stated; version reads `0.4`; change log updated; markdownlint passes.
   - **Brief ref**: Scope section, Update L3-001 bullet; Approach step 4.
 
-- [ ] TASK-05: Verify specs/README.md index completeness
+- [x] TASK-05: Verify specs/README.md index completeness
   - **Goal**: Confirm that the `specs/README.md` index table and file-system layout section accurately reflects every `.md` file currently under `specs/`.
   - **Details**: List all `.md` files under `specs/` (excluding `README.md` itself). Compare against the tables in `specs/README.md` (Specification Hierarchy tables and File System Layout section). No new spec files were added in this milestone, but check for drift from earlier milestones. If every file is accounted for and no entries are stale or missing, make no changes (document this in a code comment or simply leave the file untouched). If drift is found, correct the index and add a change-log-style note at the bottom of `specs/README.md`.
   - **Files**: `specs/README.md` (verify; modify only if drift found)

@@ -23,7 +23,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; TypeScript compiles without errors (`npm run build`); the `Campaign` interface matches the brief spec.
   - **Brief ref**: Section "2 — API layer"
 
-- [ ] TASK-03: Create TanStack Query hook (`src/hooks/useCampaigns.ts`)
+- [x] TASK-03: Create TanStack Query hook (`src/hooks/useCampaigns.ts`)
   - **Goal**: Expose a `useCampaigns()` hook that queries the API via TanStack Query with default `staleTime` (0).
   - **Details**:
     - Import `useQuery` from `@tanstack/react-query` and `fetchCampaigns` from `../api/campaigns`.

@@ -74,7 +74,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; compiles; `<footer>` element present; Logo renders at md size; responsive layout applies; no hardcoded values
   - **Brief ref**: Approach → Footer; Files table; Verification → Footer
 
-- [ ] TASK-11: Layout component
+- [x] TASK-11: Layout component
   - **Goal**: Implement the `Layout` wrapper that composes Header + `<main id="main-content">` + Footer and updates `document.title` on route change
   - **Details**: Create `src/components/Layout.tsx`. Uses React Router v7's `<Outlet>` to render child routes inside `<main id="main-content">`. Imports and renders `<Header />` above and `<Footer />` below. On each route change, update `document.title` using `useLocation()` from `react-router` — map pathnames to human-readable titles, e.g. `/` → `"Mars Mission Fund"`, `/about` → `"About — Mars Mission Fund"`, `/contact` → `"Contact — Mars Mission Fund"`. Use a `useEffect` that fires on `location.pathname` change. The `<main>` element is the skip-link target: `id="main-content"`, `tabIndex={-1}` to allow programmatic focus.
   - **Files**: `src/components/Layout.tsx`

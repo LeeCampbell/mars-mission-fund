@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File has no inline `Campaign`/`Milestone`/etc. interface definitions; imports them from `@mmf/shared`
   - **Brief ref**: Step 5 — Update Campaign type imports
 
-- [ ] TASK-06: Install dependencies and verify build, tests, and type check
+- [x] TASK-06: Install dependencies and verify build, tests, and type check
   - **Goal**: Confirm the restructured workspace builds, tests pass, and tsc reports no errors
   - **Details**:
     - Run `npm install` from repo root to link workspace packages

@@ -145,7 +145,8 @@ Upstream repo: ${UPSTREAM_REPO}" \
   execute-tasks)
     set_state "execute-tasks"
     # Count unchecked before
-    BEFORE=$(grep -c '^\- \[ \]' "plan/ready/tasks.md" || echo 0)
+    BEFORE=$(grep -c '^\- \[ \]' "plan/ready/tasks.md" || true)
+    BEFORE=${BEFORE:-0}
 
     timeout "$TIMEOUT" claude \
       --dangerously-skip-permissions \
@@ -154,7 +155,8 @@ Upstream repo: ${UPSTREAM_REPO}" \
       2>&1 | tee "$LOG_FILE" || true
 
     # Count unchecked after
-    AFTER=$(grep -c '^\- \[ \]' "plan/ready/tasks.md" || echo 0)
+    AFTER=$(grep -c '^\- \[ \]' "plan/ready/tasks.md" || true)
+    AFTER=${AFTER:-0}
     echo ">>> Tasks remaining: ${BEFORE} → ${AFTER}"
 
     # Stuck detection

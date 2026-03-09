@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; compiles; three variants type-check; dot has `aria-hidden="true"`; no hardcoded colour values
   - **Brief ref**: Scope → Badge; Accessibility notes → Badge; Verification → Badge
 
-- [ ] TASK-07: ProgressBar component
+- [x] TASK-07: ProgressBar component
   - **Goal**: Implement the fully accessible `ProgressBar` with track, fill, endpoint dot, complete ARIA attributes, and `prefers-reduced-motion` support
   - **Details**: Create `src/components/ui/ProgressBar.tsx`. Props: `value: number` (0–100), `aria-label: string`, `className?: string`. Renders: outer track div, inner fill div (width = `${value}%`), and a small circle dot at the right end of the fill. Add `role="progressbar"`, `aria-valuenow={value}`, `aria-valuemin={0}`, `aria-valuemax={100}`, `aria-label` on the track element. Fill colour: orange (`--color-action-primary` or `--color-progress-fill`) for in-progress; green (`--color-status-success-*`) when `value === 100`. Fill transition via `var(--transition-duration-*)` token. Under `@media (prefers-reduced-motion: reduce)`, set `transition: none` (use a CSS class or inline style with the media query). All visual values via tokens.
   - **Files**: `src/components/ui/ProgressBar.tsx`

@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cat package.json | grep workspaces` shows `"workspaces": ["packages/*"]`
   - **Brief ref**: Implementation step 1 / Files table row 1
 
-- [ ] TASK-02: Create `packages/shared/package.json`
+- [x] TASK-02: Create `packages/shared/package.json`
   - **Goal**: Declare the `@mmf/shared` package manifest so npm workspaces and module resolvers can locate it.
   - **Details**: Create `packages/shared/package.json` with:
     - `"name": "@mmf/shared"`, `"version": "0.0.1"`, `"private": true`, `"type": "module"`

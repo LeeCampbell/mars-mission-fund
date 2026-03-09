@@ -37,7 +37,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists and is valid JSON
   - **Brief ref**: "Create `packages/shared/tsconfig.json` targeting ESM output"
 
-- [ ] TASK-04: Create packages/shared/src/campaign.ts
+- [x] TASK-04: Create packages/shared/src/campaign.ts
   - **Goal**: Define the canonical Campaign domain Zod schemas and inferred types in the shared package
   - **Details**:
     - Copy `CampaignStatusSchema`, `CampaignCategorySchema`, `CampaignSummarySchema`, `CampaignSchema` from `server/src/campaigns/types.ts` (exclude `RouteParamsSchema` and `ListQuerySchema` — server-only)

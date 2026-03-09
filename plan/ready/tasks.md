@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File starts with `@import "tailwindcss"`; contains `@theme { }` block; `@layer base` sets body bg and font
   - **Brief ref**: Scope — `src/index.css`; Approach — Token strategy
 
-- [ ] TASK-06: Create `index.html` entry point
+- [x] TASK-06: Create `index.html` entry point
   - **Goal**: Produce an `index.html` with correct meta tags, dark background, preload hints, and branded noscript fallback
   - **Details**: `<html lang="en">`. `<head>`: `<meta charset="UTF-8">`, `<meta name="viewport" content="width=device-width, initial-scale=1.0">`, `<meta name="description" content="Mars Mission Fund — ...">`, `<meta name="theme-color" content="#060A14">`, `<title>Mars Mission Fund</title>`. Background colour on `<html>` via `style="background:#060A14"` to prevent flash. `<link rel="preload">` for DM Sans 400 woff2 with `as="font" type="font/woff2" crossorigin`. `<link rel="stylesheet" href="/src/index.css">` (dev; Vite injects in prod). `<noscript>` with a meaningful message, e.g. "Mars Mission Fund requires JavaScript to be enabled." `<div id="root"></div>`. `<script type="module" src="/src/main.tsx"></script>`.
   - **Files**: `index.html`

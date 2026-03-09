@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All 4 sections render; principles shows 5 cards; personas shows 4 cards; `npm run build` succeeds
   - **Brief ref**: Implementation note 6; Scope — "AboutPage.tsx page component with four sections"
 
-- [ ] TASK-10: Create `ContactPage.tsx` page component
+- [x] TASK-10: Create `ContactPage.tsx` page component
   - **Goal**: Contact page with static contact info and social links — no form
   - **Details**: Create `src/pages/ContactPage.tsx`. Two sections: (01) GET IN TOUCH — contact details (email, GitHub org, general inquiry address) inside `Card` components; (02) FOLLOW THE MISSION — social/community links rendered as `Button variant="ghost"` or styled anchors. No `<form>` element anywhere. Each section prefixed with `SectionLabel`.
   - **Files**: `src/pages/ContactPage.tsx`

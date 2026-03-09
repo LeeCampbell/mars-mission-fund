@@ -77,7 +77,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cd server && npx tsc --noEmit` passes; router exported correctly.
   - **Brief ref**: Directory structure — `campaigns/routes.ts`; Key design decisions — Pool injection, Zod validation.
 
-- [ ] TASK-07: Create app.ts — Express app factory
+- [x] TASK-07: Create app.ts — Express app factory
   - **Goal**: Implement `createApp(pool)` that wires all middleware and routers into a fully configured Express 5 application (no `listen` call).
   - **Details**:
     - Create `server/src/app.ts`.

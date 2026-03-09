@@ -100,7 +100,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cd server && npx tsc --noEmit` passes; file can be executed with `tsx src/index.ts` (exits after bind attempt without a real DB connection failing startup).
   - **Brief ref**: Directory structure — `index.ts`; Scripts section — `dev:server`.
 
-- [ ] TASK-09: Create SuperTest integration tests for campaign routes
+- [x] TASK-09: Create SuperTest integration tests for campaign routes
   - **Goal**: Achieve 100% SuperTest coverage of all documented route contracts — success, not-found, and invalid-param cases — with the pg pool mocked so no real database is needed.
   - **Details**:
     - Create `server/src/__tests__/campaigns.test.ts`.

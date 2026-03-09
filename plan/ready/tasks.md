@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Section 2.1 contains explicit documentation of the inline `React.CSSProperties` pattern, a statement that Tailwind is not used for component-level styles, and the rationale paragraph. The existing token consumption rule and code block are untouched. No contradiction with L2-001 (Tier 2 token enforcement is preserved — the inline style approach is described as enforcing it).
   - **Brief ref**: Brief § Approach — Divergence 2; § Files to Create/Modify row 1.
 
-- [ ] TASK-03: Update tech-stack.md — clarify Tailwind CSS actual usage
+- [x] TASK-03: Update tech-stack.md — clarify Tailwind CSS actual usage
   - **Goal**: Amend the Tailwind CSS row in the Frontend table of `specs/tech/tech-stack.md` to document the actual usage scope: CSS reset and global normalisation layer, not a component utility class system.
   - **Details**: In `specs/tech/tech-stack.md` in the Frontend table, the Tailwind CSS row currently says `Utility-first CSS framework` in the Purpose column. Add a clarifying note (either expand the Purpose cell inline or add a new Notes/Usage row immediately after) that states: Tailwind v4 is used as the CSS reset and normalisation layer only; component-level styling is done via inline CSS custom properties using `var()` references on Tier 2 semantic tokens, not Tailwind utility classes. Follow one-sentence-per-line rule (L3-007). The table must remain valid Markdown.
   - **Files**: `specs/tech/tech-stack.md`

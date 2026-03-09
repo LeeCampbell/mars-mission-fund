@@ -74,7 +74,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File created. `npm run build` passes. Footer renders logo, tagline, links, and copyright; stacks vertically on narrow viewport.
   - **Brief ref**: §Approach step 9
 
-- [ ] TASK-11: Layout wrapper and App.tsx integration
+- [x] TASK-11: Layout wrapper and App.tsx integration
   - **Goal**: Implement `src/components/Layout.tsx` and update `src/App.tsx` to wrap all routes in the Layout via React Router v7 layout route pattern.
   - **Details**: `Layout.tsx`: renders `<Header />`, `<main id="main-content" tabIndex={-1}>` (skip-link target; `tabIndex={-1}` allows programmatic focus), `<Outlet />` inside `<main>`, `<Footer />`. The `<main>` element must have top padding/margin sufficient to clear the sticky header (use a `--header-height` token or a `pt-*` class referencing the token). `App.tsx`: import Layout and restructure routes so Layout is the parent layout route with `<Outlet>` and all page routes (Home, About, Contact — even if they are placeholder components) are children. Add `useEffect` + `useLocation` to update `document.title` on route change (title format: `"<Page> | Mars Mission Fund"`). If placeholder page components do not exist, create minimal ones (`src/pages/Home.tsx`, `src/pages/About.tsx`, `src/pages/Contact.tsx`) that render a `<h1>` so the router has valid children.
   - **Files**: `src/components/Layout.tsx`, `src/App.tsx`, `src/pages/Home.tsx` (create if absent), `src/pages/About.tsx` (create if absent), `src/pages/Contact.tsx` (create if absent)

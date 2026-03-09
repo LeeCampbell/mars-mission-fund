@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run lint:md` exits 0
   - **Brief ref**: Section "6. Fix existing violations"
 
-- [ ] TASK-09: Final verification
+- [x] TASK-09: Final verification
   - **Goal**: Confirm all quality gates pass and no regressions were introduced
   - **Details**: Run the full verification suite in order: `npm run build`, `npm run lint`, `npm run format:check`, `npm run lint:md`. All four commands must exit 0. If any fail, diagnose and fix before marking complete
   - **Files**: None (read-only verification)

@@ -46,7 +46,7 @@ const socialLinkStyle: CSSProperties = {
   display: 'block',
   fontFamily: 'var(--type-body)',
   fontSize: '15px',
-  color: 'var(--color-accent)',
+  color: 'var(--color-text-accent)',
   textDecoration: 'none',
   marginTop: '8px',
 }

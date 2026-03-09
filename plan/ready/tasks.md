@@ -89,7 +89,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds with zero errors; dev server shows all three pages with real content; React Router navigation works without full reload
   - **Brief ref**: "Files to Create/Modify — App.tsx" and "Verification" section
 
-- [ ] TASK-12: Accessibility and token compliance audit
+- [x] TASK-12: Accessibility and token compliance audit
   - **Goal**: Verify WCAG 2.1 AA compliance and confirm zero hardcoded values across all new components
   - **Details**: Review all created files for: (1) Every interactive element (`<a>`, `<button>`) has visible focus styles inherited from design system or explicitly set via `var(--color-focus-ring)` or equivalent token. (2) All `ProgressBar` usages have `aria-label`, `aria-valuenow`, `aria-valuemin="0"`, `aria-valuemax="100"`. (3) Social link `<a>` elements have `aria-label` with descriptive text. (4) Ambient glow in HeroSection has `aria-hidden="true"`. (5) Grep all new `.tsx` files for any hardcoded hex colours (`#`), `rgb(`, pixel sizes that aren't `0px`, or hardcoded font sizes — fix any found. (6) Confirm `prefers-reduced-motion` CSS is applied to the glow decoration. Run final `npm run build`.
   - **Files**: All files in `src/components/` and `src/pages/` created in this issue

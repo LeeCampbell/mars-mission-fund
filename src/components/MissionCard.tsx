@@ -13,7 +13,7 @@ interface MissionCardProps {
 }
 
 const titleStyle: React.CSSProperties = {
-  fontFamily: 'var(--type-heading-sm)',
+  fontFamily: 'var(--type-card-title)',
   color: 'var(--color-text-primary)',
   margin: '12px 0 8px',
   fontSize: '18px',
@@ -30,8 +30,8 @@ const descriptionStyle: React.CSSProperties = {
 }
 
 const fundingStatusStyle: React.CSSProperties = {
-  fontFamily: 'var(--type-mono)',
-  color: 'var(--color-text-muted)',
+  fontFamily: 'var(--type-data)',
+  color: 'var(--color-text-tertiary)',
   fontSize: '12px',
   margin: '8px 0 16px',
 }

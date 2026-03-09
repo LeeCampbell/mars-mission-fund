@@ -36,7 +36,7 @@ const glowStyle: React.CSSProperties = {
   width: '800px',
   height: '800px',
   borderRadius: '50%',
-  background: 'radial-gradient(circle, rgba(255, 92, 26, 0.12) 0%, transparent 70%)',
+  background: 'radial-gradient(circle, var(--color-status-active-bg) 0%, transparent 70%)',
   pointerEvents: 'none',
 }
 
@@ -70,7 +70,7 @@ const heroStyles = `
     width: 800px;
     height: 800px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 92, 26, 0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--color-status-active-bg) 0%, transparent 70%);
     pointer-events: none;
   }
   @media (prefers-reduced-motion: reduce) {

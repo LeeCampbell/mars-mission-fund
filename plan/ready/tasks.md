@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; no TypeScript errors (`npm run build` or `tsc --noEmit`); imports resolve correctly
   - **Brief ref**: Scope — "One composite component for mission cards: MissionCard"; Implementation note 4
 
-- [ ] TASK-03: Create `HeroSection` component
+- [x] TASK-03: Create `HeroSection` component
   - **Goal**: Full-viewport hero with display heading, subtext, primary CTA button, and ambient glow animation
   - **Details**: Create `src/components/HeroSection.tsx`. Background: `var(--gradient-hero)`. Heading: `font-family: var(--font-family-display)`, uppercase, 48px mobile / 72px md / 96px xl. Ambient glow: absolutely positioned div with `animation: ... var(--motion-ambient)` wrapped in `@media (prefers-reduced-motion: no-preference)` (use a `<style>` tag). CTA: `Button variant="primary"` with text "Explore Missions". `min-height: 100dvh`.
   - **Files**: `src/components/HeroSection.tsx`

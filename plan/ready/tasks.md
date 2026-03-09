@@ -48,7 +48,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File contains `from '@mmf/shared'` import and no local definition of `CampaignStatusSchema`; `RouteParamsSchema` and `ListQuerySchema` are still defined in the file
   - **Brief ref**: Step 4 — Update `packages/server/src/campaigns/types.ts`
 
-- [ ] TASK-05: Update root `package.json` scripts
+- [x] TASK-05: Update root `package.json` scripts
   - **Goal**: Change `dev:server` and `test:server` to use npm workspaces syntax
   - **Details**: Edit root `package.json` to replace:
     - `"dev:server": "npm run dev --prefix server"` → `"dev:server": "npm run dev -w @mmf/server"`

@@ -15,8 +15,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\"",
-    "dev:server": "npm run dev --prefix server",
-    "test:server": "npm run test --prefix server"
+    "dev:server": "npm run dev -w @mmf/server",
+    "test:server": "npm run test -w @mmf/server"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.21",

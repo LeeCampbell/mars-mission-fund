@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; compiles; three sizes render correctly; gradient IDs are unique when two `<Logo>` instances appear in the DOM simultaneously (inspect rendered HTML); `role="img"` and `aria-label` present
   - **Brief ref**: Approach → Logo; Accessibility notes → Logo; Verification → Logo
 
-- [ ] TASK-09: Header component
+- [x] TASK-09: Header component
   - **Goal**: Implement the responsive `Header` with skip-to-content link, Logo, wordmark, NavLink navigation, and mobile hamburger toggle
   - **Details**: Create `src/components/Header.tsx`. Structure: `<header>` containing — (1) `<a href="#main-content" className="skip-link">Skip to content</a>` as the first child; (2) Logo (`size="sm"`, 32px); (3) wordmark "MARS MISSION FUND" in Bebas Neue via `--font-family-display` token; (4) `<nav aria-label="Main navigation">` with React Router `<NavLink>` links for `/`, `/about`, `/contact` — active link gets distinct styling via `--color-border-accent` or `--color-action-primary`; (5) hamburger `<button>` visible only below `--breakpoint-md` (768px), toggling a `useState` boolean that shows/hides the nav. Skip link is visually hidden until focused (standard `sr-only` + `focus:not-sr-only` pattern using tokens for position/background). All colours, fonts, spacing via semantic tokens.
   - **Files**: `src/components/Header.tsx`

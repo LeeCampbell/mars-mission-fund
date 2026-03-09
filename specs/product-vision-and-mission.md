@@ -69,7 +69,7 @@ The platform is organised around three core transactional workflows. Each is sum
 
 #### Workflow 1: Campaign Lifecycle
 
-_Detailed spec: `domain/campaign.md`_
+*Detailed spec: `domain/campaign.md`*
 
 Project creators submit proposals containing mission objectives, team credentials, funding targets, milestone plans, and risk disclosures. Submissions enter a structured review pipeline managed by platform administrators. Approved projects become live campaigns with public funding pages, progress tracking, milestone verification, and completion or failure handling.
 
@@ -82,7 +82,7 @@ Project creators submit proposals containing mission objectives, team credential
 
 #### Workflow 2: Donor Lifecycle
 
-_Detailed specs: `domain/donor.md`, `domain/payments.md`, `domain/kyc.md`_
+*Detailed specs: `domain/donor.md`, `domain/payments.md`, `domain/kyc.md`*
 
 The donor-side experience encompasses discovery, contribution, and ongoing relationship management. Backers find projects aligned with their interests, contribute through a secure payment flow, and maintain a long-term relationship with the missions they fund through impact reporting and engagement features.
 
@@ -95,7 +95,7 @@ The donor-side experience encompasses discovery, contribution, and ongoing relat
 
 #### Workflow 3: Account & Identity
 
-_Detailed specs: `domain/account.md`, `domain/kyc.md`, `tech/security.md`_
+*Detailed specs: `domain/account.md`, `domain/kyc.md`, `tech/security.md`*
 
 The account bounded context governs the full lifecycle of a user's relationship with the platform: creation, authentication, profile management, role assignment, session management, and account recovery or deactivation. It underpins every interaction and enforces fine-grained permissions appropriate for a financial application.
 
@@ -159,4 +159,4 @@ This document is the root of a four-layer specification hierarchy designed for a
 
 ---
 
-_Your stake. Their mission. Our planet._
+*Your stake. Their mission. Our planet.*

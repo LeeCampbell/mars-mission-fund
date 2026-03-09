@@ -157,11 +157,11 @@ Requires leaders who are both technically strong and skilled coaches.
 
 These six positions form a reinforcing system:
 
-- _Empowered Autonomy_ requires _High Standards_ — you can only trust experts to decide independently if the standards are clear enough that "independent" doesn't mean "inconsistent."
-- _Don't Reinvent_ supports _Selfless_ — when teams use the same best-of-breed tools, knowledge transfers naturally and people move across teams without relearning infrastructure.
-- _Coach & Support_ sustains _High Standards_ — you can maintain a high bar without creating a harsh culture because leaders develop people rather than just gatekeeping.
-- _Product First_ drives _High Standards_ — experience obsession means the quality bar is set by user perception, not engineering convenience.
-- _Selfless_ enables _Empowered Autonomy_ — teams can make fast local decisions because shared values ensure those decisions align with company direction.
+- *Empowered Autonomy* requires *High Standards* — you can only trust experts to decide independently if the standards are clear enough that "independent" doesn't mean "inconsistent."
+- *Don't Reinvent* supports *Selfless* — when teams use the same best-of-breed tools, knowledge transfers naturally and people move across teams without relearning infrastructure.
+- *Coach & Support* sustains *High Standards* — you can maintain a high bar without creating a harsh culture because leaders develop people rather than just gatekeeping.
+- *Product First* drives *High Standards* — experience obsession means the quality bar is set by user perception, not engineering convenience.
+- *Selfless* enables *Empowered Autonomy* — teams can make fast local decisions because shared values ensure those decisions align with company direction.
 
 ---
 
@@ -438,7 +438,7 @@ Production deployments to financial flows (payment processing, escrow, disbursem
 **Values served**: High Standards, Product First
 
 Every interface is a product surface.
-Internal APIs receive the same care as external ones — because today's internal API is tomorrow's integration point, and because _Product First_ means the developer experience of consuming an API is part of the overall experience we obsess over.
+Internal APIs receive the same care as external ones — because today's internal API is tomorrow's integration point, and because *Product First* means the developer experience of consuming an API is part of the overall experience we obsess over.
 
 ### 5.1 Versioning
 
@@ -618,6 +618,6 @@ If a change includes a database migration, the migration must be backward-compat
 
 ---
 
-_This standard governs all engineering at Mars Mission Fund.
+*This standard governs all engineering at Mars Mission Fund.
 Every L3 and L4 spec inherits these constraints.
-For the value framework that informs these standards, see the [Campbell Method Engineering Values Assessment](https://www.campbellmethod.com/resources/engineering-values-assessment)._
+For the value framework that informs these standards, see the [Campbell Method Engineering Values Assessment](https://www.campbellmethod.com/resources/engineering-values-assessment).*

@@ -179,8 +179,8 @@ Immutable data moves directly from Creation to a read-only Active state and then
 - Anonymisation must be irreversible.
   There must be no technical mechanism to re-identify anonymised data.
 - Anonymisation must address all direct identifiers (name, email, address, phone, government IDs) and indirect identifiers that could enable re-identification in combination (date of birth + postcode + donation amount).
-- The anonymisation technique is **k-anonymity**: each released record must be indistinguishable from at least _k_-1 other records on quasi-identifier attributes. The value of _k_ is determined per dataset based on re-identification risk assessment, with a minimum of _k_ = 5.
-- Quasi-identifiers (e.g., date of birth, postcode, donation amount ranges) are generalised or suppressed to achieve the target _k_ value.
+- The anonymisation technique is **k-anonymity**: each released record must be indistinguishable from at least *k*-1 other records on quasi-identifier attributes. The value of *k* is determined per dataset based on re-identification risk assessment, with a minimum of *k* = 5.
+- Quasi-identifiers (e.g., date of birth, postcode, donation amount ranges) are generalised or suppressed to achieve the target *k* value.
 - The anonymisation approach must be documented and reviewed against re-identification risk before deployment.
 
 ### 4.4 Pseudonymisation Requirements

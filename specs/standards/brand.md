@@ -548,4 +548,4 @@ The following are violations of this standard. Agents and developers must flag t
 
 ---
 
-_This standard governs brand application in the Mars Mission Fund product. For the visual identity source of truth (logo specimens, colour swatches, type specimens, motion demos), reference the brand guidelines: `mars-mission-fund-brand.html`._
+*This standard governs brand application in the Mars Mission Fund product. For the visual identity source of truth (logo specimens, colour swatches, type specimens, motion demos), reference the brand guidelines: `mars-mission-fund-brand.html`.*

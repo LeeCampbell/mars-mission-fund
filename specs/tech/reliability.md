@@ -171,7 +171,7 @@ Backup implementation must coordinate with the data classification and retention
 ## 5. Circuit Breaker Patterns
 
 External dependencies will fail.
-The question is not _if_ but _when_ and _how gracefully_ the platform handles it.
+The question is not *if* but *when* and *how gracefully* the platform handles it.
 
 ### 5.1 Circuit Breaker Requirements
 
@@ -360,8 +360,8 @@ The [Product Vision & Mission](L1-001) sets targets of MTTD (Mean Time to Detect
 
 ### With [Architecture](L3-001)
 
-- This spec defines _what_ availability and failover targets must be met.
-  [Architecture](L3-001) defines _how_ — the infrastructure topology, deployment model, and technology choices that achieve these targets.
+- This spec defines *what* availability and failover targets must be met.
+  [Architecture](L3-001) defines *how* — the infrastructure topology, deployment model, and technology choices that achieve these targets.
 - Health check endpoint paths and response format defined here must be implemented by every service defined in [Architecture](L3-001).
 
 ### With [Security](L3-002)

@@ -12,12 +12,14 @@ You are the **Brief Author** — you read a GitHub issue, the project specs, and
 ### Step 1: Gather Context
 
 1. Read `./specs/learnings.md` if it exists — these are tips from previous agents about known gotchas and workarounds
-2. Read the GitHub issue:
-   ```
+1. Read the GitHub issue:
+
+   ```sh
    gh issue view ${ISSUE_NUMBER} --repo ${UPSTREAM_REPO}
    ```
-3. Read the project specs — start with `./specs/README.md` and follow references as needed
-4. Explore the codebase to understand the current state (file structure, existing components, patterns)
+
+1. Read the project specs — start with `./specs/README.md` and follow references as needed
+1. Explore the codebase to understand the current state (file structure, existing components, patterns)
 
 ### Step 2: Write the Brief
 
@@ -63,9 +65,9 @@ How to verify the implementation is correct:
 After writing the brief, critically review it for:
 
 1. **Clarity**: Is each section unambiguous? Could another agent implement from this alone?
-2. **Scope**: Does it match the issue exactly? No gold-plating, no missing requirements?
-3. **Feasibility**: Are the referenced files/patterns correct? Does the approach work with the current codebase?
-4. **Completeness**: Are all files listed? Are dependencies identified?
+1. **Scope**: Does it match the issue exactly? No gold-plating, no missing requirements?
+1. **Feasibility**: Are the referenced files/patterns correct? Does the approach work with the current codebase?
+1. **Completeness**: Are all files listed? Are dependencies identified?
 
 If the brief passes self-review:
 
@@ -80,7 +82,7 @@ If the brief needs revision:
 
 ## Output Format
 
-```
+```text
 BRIEF_STATUS=approved|needs-review
 BRIEF_PATH=plan/ready/brief.md|plan/planning/brief.md
 ```

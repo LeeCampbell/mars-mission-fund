@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` exits 0; `dist/` contains `index.html` and at least one JS bundle
   - **Brief ref**: Verification — Build
 
-- [ ] TASK-10: Visual smoke-test via dev server
+- [x] TASK-10: Visual smoke-test via dev server
   - **Goal**: Confirm the dev server starts, routes work, dark theme is applied, and fonts load from local assets
   - **Details**: Start `npm run dev` and use the Playwright browser tool to navigate to `http://localhost:5173`. Check: (1) Page background is `#060A14`. (2) Navigating to `/about` and `/contact` shows different placeholder headings. (3) No requests to `fonts.googleapis.com` or `fonts.gstatic.com` in Network tab. (4) Browser console has no errors. Take a screenshot as evidence.
   - **Files**: No files changed (fix any issues discovered)

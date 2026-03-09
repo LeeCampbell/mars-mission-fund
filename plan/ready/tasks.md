@@ -28,7 +28,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cd server && npx tsc --noEmit` passes after this file is added (with stub `app.ts` and `index.ts` if required by tsconfig).
   - **Brief ref**: Directory structure — `db/pool.ts`; Key design decisions — Pool injection.
 
-- [ ] TASK-03: Create campaigns/types.ts — Zod schemas and inferred TS types
+- [x] TASK-03: Create campaigns/types.ts — Zod schemas and inferred TS types
   - **Goal**: Define all Zod schemas and derived TypeScript types used by the campaign routes and query functions.
   - **Details**:
     - Create `server/src/campaigns/types.ts`.

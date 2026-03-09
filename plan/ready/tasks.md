@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; `src/components/ui/` has all primitives listed above
   - **Brief ref**: Dependencies section
 
-- [ ] TASK-02: Create MissionCard composite component
+- [x] TASK-02: Create MissionCard composite component
   - **Goal**: Build the `MissionCard` composite that wraps Card with Badge, mission title, description, ProgressBar, funding status text, and ghost Button
   - **Details**: Create `src/components/MissionCard.tsx`. Define a TypeScript props interface (`title`, `description`, `badge`, `progress`, `fundingStatus`, `buttonLabel`). Use the `Card` primitive with `accent` prop. Include `Badge` for category label, mission title in `--type-section-heading`, description text, `ProgressBar`, funding status line, and a ghost `Button`. Use only Tier 2 semantic CSS custom properties for all styling (no hardcoded hex/rgb, no Tier 1 token names like `--launchfire`).
   - **Files**: `src/components/MissionCard.tsx` (create)

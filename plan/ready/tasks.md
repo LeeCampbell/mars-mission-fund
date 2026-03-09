@@ -30,7 +30,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` still exits 0; `tsc -b` passes with no new type errors
   - **Brief ref**: §Approach step 2, §Verification
 
-- [ ] TASK-04: Create global jest-dom setup file
+- [x] TASK-04: Create global jest-dom setup file
   - **Goal**: Register extended jest-dom matchers for all tests
   - **Details**: Create `src/test/setup.ts` containing a single line: `import '@testing-library/jest-dom'`. This file is referenced by `setupFiles` in `vite.config.ts`.
   - **Files**: `src/test/setup.ts` (create)

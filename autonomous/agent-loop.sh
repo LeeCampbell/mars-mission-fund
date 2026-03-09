@@ -187,7 +187,7 @@ Upstream repo: ${UPSTREAM_REPO}" \
     fi
 
     # Create draft PR on first push for visibility (if none exists yet)
-    if ! gh pr list --repo "$UPSTREAM_REPO" --head "${FORK_OWNER}:${BRANCH}" --json number --jq '.[0].number' 2>/dev/null | grep -q .; then
+    if ! GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr list --repo "$UPSTREAM_REPO" --head "${FORK_OWNER}:${BRANCH}" --json number --jq '.[0].number' 2>/dev/null | grep -q .; then
       GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr create \
         --repo "$UPSTREAM_REPO" \
         --base "$UPSTREAM_BASE_BRANCH" \
@@ -237,8 +237,12 @@ Head: ${FORK_OWNER}:${BRANCH}
 Branch: ${BRANCH}" \
       2>&1 | tee "$LOG_FILE" || true
 
-    # Extract PR number from Claude's output log
-    PR_NUMBER=$(grep -oE 'https://github.com/[^ ]+/pull/[0-9]+' "$LOG_FILE" | head -1 | grep -oE '[0-9]+$')
+    # Extract PR number from Claude's output log, with fallback to gh pr list
+    PR_NUMBER=$(grep -oE 'https://github.com/[^ ]+/pull/[0-9]+' "$LOG_FILE" | head -1 | grep -oE '[0-9]+$' || true)
+    if [ -z "$PR_NUMBER" ]; then
+      PR_NUMBER=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr list --repo "$UPSTREAM_REPO" \
+        --head "${FORK_OWNER}:${BRANCH}" --json number --jq '.[0].number' 2>/dev/null || true)
+    fi
 
     # Upload screenshots as a PR comment
     if ls /screenshots/ISSUE-${ISSUE_NUMBER}-*.png 1>/dev/null 2>&1; then
@@ -328,7 +332,6 @@ Branch: ${BRANCH}" \
         # CI passed — archive plan and exit 0
         echo ">>> CI passed! Archiving plan."
         archive_plan
-        clear_state
         echo ">>> Issue #${ISSUE_NUMBER} complete"
         exit 0
         ;;
@@ -346,10 +349,11 @@ Branch: ${BRANCH}" \
         echo $((ATTEMPTS + 1)) > "$ATTEMPTS_FILE"
         echo ">>> CI failing — remediation attempt $((ATTEMPTS + 1))/${MAX_CI_ATTEMPTS}"
 
-        # Get the failed run ID
+        # Get the failed run ID (filter to failing checks only)
         RUN_ID=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr checks "$PR_NUMBER" \
-          --repo "$UPSTREAM_REPO" --json link --jq '.[0].link' \
-          | grep -oE '[0-9]+$') || true
+          --repo "$UPSTREAM_REPO" --json state,link \
+          --jq '.[] | select(.state == "FAILURE") | .link' \
+          | head -1 | grep -oE '[0-9]+$') || true
 
         # Get failure logs
         FAILED_LOG=""

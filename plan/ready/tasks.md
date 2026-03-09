@@ -55,7 +55,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; `ApiResponse` is exported as a generic type
   - **Brief ref**: "Create `packages/shared/src/api.ts`"
 
-- [ ] TASK-06: Create packages/shared/src/index.ts barrel export
+- [x] TASK-06: Create packages/shared/src/index.ts barrel export
   - **Goal**: Single entry point re-exporting all public symbols from the shared package
   - **Details**:
     - `export * from './campaign.js'` (`.js` extension required for NodeNext module resolution)

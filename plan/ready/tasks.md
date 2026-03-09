@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; compiles; all three text areas render; no hardcoded values
   - **Brief ref**: Scope → StatCard; Files table; Verification → StatCard
 
-- [ ] TASK-05: SectionLabel component
+- [x] TASK-05: SectionLabel component
   - **Goal**: Implement the `SectionLabel` primitive — a numbered section header in Space Mono uppercase
   - **Details**: Create `src/components/ui/SectionLabel.tsx`. Props: `number: number | string`, `label: string`, `className?: string`. Renders text in the format `01 — LABEL` (zero-padded two-digit number). Font family: Space Mono via `--font-family-mono` token. Text transform: uppercase. Colour: accent/orange via `--color-text-accent` or equivalent token. Font size via token. Rendered as a `<p>` or `<span>` (not a heading — callers decide heading semantics).
   - **Files**: `src/components/ui/SectionLabel.tsx`

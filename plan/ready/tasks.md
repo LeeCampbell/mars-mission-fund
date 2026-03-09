@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cat packages/server/package.json` shows `"name": "@mmf/server"` and `"@mmf/shared": "*"` in dependencies
   - **Brief ref**: Step 1 — Scaffold `packages/server/`
 
-- [ ] TASK-02: Copy config files verbatim
+- [x] TASK-02: Copy config files verbatim
   - **Goal**: Copy `tsconfig.json` and `vitest.config.ts` from `server/` to `packages/server/` with no content changes
   - **Details**: Read `server/tsconfig.json` and `server/vitest.config.ts` and write identical copies to `packages/server/tsconfig.json` and `packages/server/vitest.config.ts`. All relative path references (`src/**/*`, `dist/`) remain valid in the new location.
   - **Files**: `packages/server/tsconfig.json` (create), `packages/server/vitest.config.ts` (create)

@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: 3 MissionCards render with different badge variants, visible progress bars, and CTA buttons
   - **Brief ref**: Implementation note 4
 
-- [ ] TASK-07: Create `ClosingCtaSection` component
+- [x] TASK-07: Create `ClosingCtaSection` component
   - **Goal**: Closing call-to-action section with gradient background, centred content, and secondary button
   - **Details**: Create `src/components/ClosingCtaSection.tsx`. Background: `var(--gradient-surface-card)`. Centred heading + body paragraph + `Button variant="secondary"`. Adequate vertical padding (`var(--space-section-y)` or equivalent token).
   - **Files**: `src/components/ClosingCtaSection.tsx`

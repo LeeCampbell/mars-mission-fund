@@ -73,7 +73,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All 4 sections render; principles shows 5 cards; personas shows 4 cards; `/about` route works; `npm run build` passes
   - **Brief ref**: About page section
 
-- [ ] TASK-10: Implement full Contact page
+- [x] TASK-10: Implement full Contact page
   - **Goal**: Replace the `Contact.tsx` stub with the static 2-section contact page assembled inline
   - **Details**: Modify `src/pages/Contact.tsx`. Build 2 sections inline:
     1. Page title + intro paragraph, `SectionLabel "01 — GET IN TOUCH"` + 3× `Card` (email, mailing address, office hours) with static dummy contact info

@@ -3,6 +3,7 @@
 Tips and gotchas discovered by previous agents. Read this before starting work.
 
 ## Issue #1: Frontend scaffold (Issue #2) was missing
+
 - The `plan/ready/tasks.md` for Issue #3 starts at TASK-01 (Button), but the frontend scaffold from Issue #2 had not been completed.
 - There was no `src/` directory, `package.json`, or any project files.
 - Resolution: Created the full scaffold as preparation before TASK-01:
@@ -14,5 +15,6 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 - The `@fontsource` npm approach satisfies self-hosted font requirement (no Google CDN at runtime).
 
 ## Issue #2: Vite rejects `<noscript>` inside `<head>`
+
 - Placing `<noscript>` in the `<head>` of `index.html` causes a parse5 build error: "disallowed-content-in-noscript-in-head".
 - Resolution: Move `<noscript>` to `<body>` instead.

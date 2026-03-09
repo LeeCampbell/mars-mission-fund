@@ -35,17 +35,17 @@ Each spec includes a "Local demo scope" note identifying what matters for the wo
 
 ## Tech Stack
 
-| Layer | Technology |
-| ----- | ---------- |
-| ![Lang](https://img.shields.io/badge/Language-0E2040?style=flat-square) | TypeScript (frontend and backend) |
-| ![Runtime](https://img.shields.io/badge/Runtime-0E2040?style=flat-square) | Node.js 22.x LTS |
-| ![Frontend](https://img.shields.io/badge/Frontend-0E2040?style=flat-square) | React 19.x |
-| ![Backend](https://img.shields.io/badge/Backend-0E2040?style=flat-square) | Express 5.x |
+| Layer                                                                       | Technology                                              |
+| --------------------------------------------------------------------------- | ------------------------------------------------------- |
+| ![Lang](https://img.shields.io/badge/Language-0E2040?style=flat-square)     | TypeScript (frontend and backend)                       |
+| ![Runtime](https://img.shields.io/badge/Runtime-0E2040?style=flat-square)   | Node.js 22.x LTS                                        |
+| ![Frontend](https://img.shields.io/badge/Frontend-0E2040?style=flat-square) | React 19.x                                              |
+| ![Backend](https://img.shields.io/badge/Backend-0E2040?style=flat-square)   | Express 5.x                                             |
 | ![Database](https://img.shields.io/badge/Database-0E2040?style=flat-square) | PostgreSQL 16.11 (Aurora in production, Docker locally) |
-| ![Arch](https://img.shields.io/badge/Architecture-0E2040?style=flat-square) | Hexagonal (Ports and Adapters), CQRS / Event Sourcing |
-| ![Testing](https://img.shields.io/badge/Testing-0E2040?style=flat-square) | Vitest, Playwright, Testing Library, SuperTest |
-| ![Auth](https://img.shields.io/badge/Auth-0E2040?style=flat-square) | Clerk |
-| ![Payments](https://img.shields.io/badge/Payments-0E2040?style=flat-square) | Stripe (stubbed locally) |
+| ![Arch](https://img.shields.io/badge/Architecture-0E2040?style=flat-square) | Hexagonal (Ports and Adapters), CQRS / Event Sourcing   |
+| ![Testing](https://img.shields.io/badge/Testing-0E2040?style=flat-square)   | Vitest, Playwright, Testing Library, SuperTest          |
+| ![Auth](https://img.shields.io/badge/Auth-0E2040?style=flat-square)         | Clerk                                                   |
+| ![Payments](https://img.shields.io/badge/Payments-0E2040?style=flat-square) | Stripe (stubbed locally)                                |
 
 For the full technology inventory, see [specs/tech/tech-stack.md](./specs/tech/tech-stack.md).
 
@@ -99,12 +99,12 @@ e2e/                Playwright end-to-end tests
 
 The [specs/](./specs/) directory contains a layered specification system:
 
-| Layer | Scope | Specs |
-| ----- | ----- | ----- |
-| ![L1](https://img.shields.io/badge/L1-STRATEGIC-FF5C1A?style=flat-square&labelColor=0B1628) | Product vision and mission | 1 spec |
-| ![L2](https://img.shields.io/badge/L2-STANDARDS-FF8C42?style=flat-square&labelColor=0B1628) | Brand and engineering standards | 2 specs |
+| Layer                                                                                       | Scope                                                     | Specs   |
+| ------------------------------------------------------------------------------------------- | --------------------------------------------------------- | ------- |
+| ![L1](https://img.shields.io/badge/L1-STRATEGIC-FF5C1A?style=flat-square&labelColor=0B1628) | Product vision and mission                                | 1 spec  |
+| ![L2](https://img.shields.io/badge/L2-STANDARDS-FF8C42?style=flat-square&labelColor=0B1628) | Brand and engineering standards                           | 2 specs |
 | ![L3](https://img.shields.io/badge/L3-TECHNICAL-1A3A6E?style=flat-square&labelColor=0B1628) | Architecture, security, frontend, data, audit, tech stack | 8 specs |
-| ![L4](https://img.shields.io/badge/L4-DOMAIN-FFB347?style=flat-square&labelColor=0B1628) | Account, campaign, donor, payments, KYC workflows | 5 specs |
+| ![L4](https://img.shields.io/badge/L4-DOMAIN-FFB347?style=flat-square&labelColor=0B1628)    | Account, campaign, donor, payments, KYC workflows         | 5 specs |
 
 Read [specs/README.md](./specs/README.md) before implementing any feature.
 It includes the full dependency graph, agent protocol, and cross-cutting concern index.

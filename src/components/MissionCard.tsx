@@ -36,18 +36,26 @@ const fundingStatusStyle: React.CSSProperties = {
   margin: '8px 0 16px',
 }
 
-export function MissionCard({ title, description, badge, progress, raised, goal }: MissionCardProps) {
+export function MissionCard({
+  title,
+  description,
+  badge,
+  progress,
+  raised,
+  goal,
+}: MissionCardProps) {
   return (
     <Card accent>
       <Badge variant="active">{badge}</Badge>
       <h3 style={titleStyle}>{title}</h3>
       <p style={descriptionStyle}>{description}</p>
-      <ProgressBar
-        value={progress}
-        label={`${title} funding progress: ${progress}% funded`}
-      />
-      <p style={fundingStatusStyle}>Raised {raised} of {goal}</p>
-      <Button variant="ghost" href="#">View Mission</Button>
+      <ProgressBar value={progress} label={`${title} funding progress: ${progress}% funded`} />
+      <p style={fundingStatusStyle}>
+        Raised {raised} of {goal}
+      </p>
+      <Button variant="ghost" href="#">
+        View Mission
+      </Button>
     </Card>
   )
 }

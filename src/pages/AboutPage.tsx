@@ -52,42 +52,51 @@ const cardBodyStyle: CSSProperties = {
 const principles = [
   {
     title: 'Transparency',
-    description: 'Every mission publishes full financial breakdowns, milestone targets, and real-time progress. No black boxes.',
+    description:
+      'Every mission publishes full financial breakdowns, milestone targets, and real-time progress. No black boxes.',
   },
   {
     title: 'Accountability',
-    description: 'Mission teams sign binding milestone agreements. Funds are released in tranches tied to verified progress.',
+    description:
+      'Mission teams sign binding milestone agreements. Funds are released in tranches tied to verified progress.',
   },
   {
     title: 'Accessibility',
-    description: 'Minimum pledges start at $10. Space investment is no longer reserved for billionaires and institutions.',
+    description:
+      'Minimum pledges start at $10. Space investment is no longer reserved for billionaires and institutions.',
   },
   {
     title: 'Long-Term Thinking',
-    description: 'We prioritise missions with 10-year return horizons and compounding civilisational value over quick wins.',
+    description:
+      'We prioritise missions with 10-year return horizons and compounding civilisational value over quick wins.',
   },
   {
     title: 'Community First',
-    description: 'Backers vote on platform policy changes, featured missions, and resource allocation. Your stake is your voice.',
+    description:
+      'Backers vote on platform policy changes, featured missions, and resource allocation. Your stake is your voice.',
   },
 ]
 
 const personas = [
   {
     title: 'Individual Backers',
-    description: 'Everyday citizens who believe the next chapter of human exploration should belong to everyone. From first-timers to seasoned space enthusiasts.',
+    description:
+      'Everyday citizens who believe the next chapter of human exploration should belong to everyone. From first-timers to seasoned space enthusiasts.',
   },
   {
     title: 'Mission Teams',
-    description: 'Engineers, scientists, and entrepreneurs building the hardware and software that will carry us to the stars. We provide the capital runway they need.',
+    description:
+      'Engineers, scientists, and entrepreneurs building the hardware and software that will carry us to the stars. We provide the capital runway they need.',
   },
   {
     title: 'Corporate Partners',
-    description: 'Forward-thinking companies co-investing in breakthrough technologies that align with their long-term strategic interests and ESG commitments.',
+    description:
+      'Forward-thinking companies co-investing in breakthrough technologies that align with their long-term strategic interests and ESG commitments.',
   },
   {
     title: 'Research Institutions',
-    description: 'Universities and independent labs that need sustainable funding models beyond grant cycles to pursue ambitious, multi-year space science programmes.',
+    description:
+      'Universities and independent labs that need sustainable funding models beyond grant cycles to pursue ambitious, multi-year space science programmes.',
   },
 ]
 
@@ -102,10 +111,11 @@ export function AboutPage() {
             WE EXIST TO FUND THE FUTURE OF SPACE
           </h2>
           <p style={bodyStyle}>
-            For too long, space exploration has been the exclusive domain of governments and billionaires. Mars Mission Fund
-            exists to change that. We connect mission teams with a global community of backers who believe humanity's future
-            extends beyond Earth — and who are willing to put their money where that belief is. Every dollar on this platform
-            is a vote for a multi-planetary civilisation.
+            For too long, space exploration has been the exclusive domain of governments and
+            billionaires. Mars Mission Fund exists to change that. We connect mission teams with a
+            global community of backers who believe humanity's future extends beyond Earth — and who
+            are willing to put their money where that belief is. Every dollar on this platform is a
+            vote for a multi-planetary civilisation.
           </p>
         </div>
       </section>
@@ -121,19 +131,21 @@ export function AboutPage() {
             <Card accent>
               <h3 style={cardTitleStyle}>The Problem</h3>
               <p style={cardBodyStyle}>
-                Promising space missions die on the launchpad every year — not because of technical failure, but because of
-                funding failure. Traditional venture capital demands short return windows that space timelines simply cannot
-                match. Government grants are over-subscribed, politically sensitive, and slow. The result: brilliant engineers
+                Promising space missions die on the launchpad every year — not because of technical
+                failure, but because of funding failure. Traditional venture capital demands short
+                return windows that space timelines simply cannot match. Government grants are
+                over-subscribed, politically sensitive, and slow. The result: brilliant engineers
                 shelve their most ambitious ideas before they ever reach prototype.
               </p>
             </Card>
             <Card accent>
               <h3 style={cardTitleStyle}>Our Solution</h3>
               <p style={cardBodyStyle}>
-                Mars Mission Fund provides patient, community-driven capital structured around mission milestones rather than
-                quarterly earnings. Backers invest in outcomes they believe in, mission teams get the runway they need, and
-                the platform enforces accountability through transparent milestone-gated fund releases. The funding gap closes
-                one mission at a time.
+                Mars Mission Fund provides patient, community-driven capital structured around
+                mission milestones rather than quarterly earnings. Backers invest in outcomes they
+                believe in, mission teams get the runway they need, and the platform enforces
+                accountability through transparent milestone-gated fund releases. The funding gap
+                closes one mission at a time.
               </p>
             </Card>
           </div>

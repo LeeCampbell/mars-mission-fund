@@ -116,7 +116,7 @@ Lists must be surrounded by blank lines (MD032).
 
 ### 4.1 Code Blocks
 
-Use fenced code blocks with backticks (`` ``` ``), not indented code blocks (MD046).
+Use fenced code blocks with backticks (` ``` `), not indented code blocks (MD046).
 Do not use tildes (`~~~`) for fences (MD048).
 
 Every fenced code block must specify a language identifier (MD040).
@@ -173,7 +173,7 @@ Separator rows must use padded style with spaces around dashes, matching the hea
 
 ```markdown
 | Name | Value |
-|------|-------|
+| ---- | ----- |
 | Foo  | Bar   |
 ```
 
@@ -277,7 +277,7 @@ The configuration matching this spec:
   "MD026": { "punctuation": ".,;:!" },
 
   // Table separator style: padded (spaces around dashes)
-  "MD060": { "style": "padded" }
+  "MD060": { "style": "padded" },
 }
 ```
 
@@ -286,11 +286,11 @@ The configuration matching this spec:
 ## Change Log
 
 | Date       | Version | Author | Summary                                                                                    |
-|------------|---------|--------|--------------------------------------------------------------------------------------------|
+| ---------- | ------- | ------ | ------------------------------------------------------------------------------------------ |
 | March 2026 | 1.0     | —      | Initial draft. One-sentence-per-line rule, markdownlint integration, linter configuration. |
 | March 2026 | 1.0     | —      | Promoted to Review status. Content complete.                                               |
 
 ---
 
-*This standard governs all Markdown authorship in the Mars Mission Fund project.
-For the engineering quality principles that motivate these rules, see L2-002 (standards/engineering.md).*
+_This standard governs all Markdown authorship in the Mars Mission Fund project.
+For the engineering quality principles that motivate these rules, see L2-002 (standards/engineering.md)._

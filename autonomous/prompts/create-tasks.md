@@ -40,7 +40,7 @@ Brief: plan/ready/brief.md
   - **Brief ref**: Which section of the brief this implements
 
 - [ ] TASK-02: <short title>
-  ...
+      ...
 ```
 
 ### Guidelines

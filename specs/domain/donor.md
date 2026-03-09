@@ -45,25 +45,25 @@ It implements the "Accessibility Over Exclusivity" principle from the [Product V
 
 ### From [Engineering Standard](L2-002)
 
-| Section | Constraint | Application to Donor Context |
-| ------- | ---------- | ---------------------------- |
-| 1.2 Data Access | Parameterised queries only | All search queries, contribution lookups, and history retrieval must use the data access layer. No raw SQL. |
-| 1.4 Input Validation | All external input validated at boundary | Search terms, filter parameters, contribution amounts, and recommendation feedback must be validated and sanitised. |
-| 1.5 Authentication & Authorisation | Every endpoint authenticated | Donor endpoints that mutate state (contributions, preferences, dismissals) require an authenticated session. Campaign discovery and search (Section 3) are accessible to anonymous users; personalisation features (recommendations, search history) require authentication. |
-| 1.7 Logging & Auditability | Every state mutation logged | Contributions initiated, cancelled, and completed are state mutations. Preference changes and notification opt-outs must also be logged. |
-| 4.2 Test Coverage | 90% unit, 100% integration for API contracts | All search, contribution, and history endpoints require full contract coverage. |
-| 5.1–5.3 API Contracts | Versioned, backward-compatible, consistent errors | Donor APIs follow the standard versioning, compatibility, and error response rules. |
-| 6.1 Structured Logging | JSON logs with correlation ID | All donor service log entries include correlation ID for end-to-end tracing through search → contribution → payment flows. |
+| Section                            | Constraint                                        | Application to Donor Context                                                                                                                                                                                                                                                 |
+| ---------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.2 Data Access                    | Parameterised queries only                        | All search queries, contribution lookups, and history retrieval must use the data access layer. No raw SQL.                                                                                                                                                                  |
+| 1.4 Input Validation               | All external input validated at boundary          | Search terms, filter parameters, contribution amounts, and recommendation feedback must be validated and sanitised.                                                                                                                                                          |
+| 1.5 Authentication & Authorisation | Every endpoint authenticated                      | Donor endpoints that mutate state (contributions, preferences, dismissals) require an authenticated session. Campaign discovery and search (Section 3) are accessible to anonymous users; personalisation features (recommendations, search history) require authentication. |
+| 1.7 Logging & Auditability         | Every state mutation logged                       | Contributions initiated, cancelled, and completed are state mutations. Preference changes and notification opt-outs must also be logged.                                                                                                                                     |
+| 4.2 Test Coverage                  | 90% unit, 100% integration for API contracts      | All search, contribution, and history endpoints require full contract coverage.                                                                                                                                                                                              |
+| 5.1–5.3 API Contracts              | Versioned, backward-compatible, consistent errors | Donor APIs follow the standard versioning, compatibility, and error response rules.                                                                                                                                                                                          |
+| 6.1 Structured Logging             | JSON logs with correlation ID                     | All donor service log entries include correlation ID for end-to-end tracing through search → contribution → payment flows.                                                                                                                                                   |
 
 ### From [Brand Application Standard](L2-001)
 
-| Section | Constraint | Application to Donor Context |
-| ------- | ---------- | ---------------------------- |
-| 2.1–2.6 Semantic Tokens | Components consume Tier 2 only | All donor UI (search results, campaign cards, contribution forms, dashboards) must use semantic tokens exclusively. |
-| 3.2 Cards | Card specification | Campaign discovery cards follow the card component spec. |
-| 3.3 Progress Bars | Progress bar specification | Funding progress on campaign cards and detail views follows the progress bar spec. |
-| 4.2 Copy Patterns | Voice-in-product | All donor-facing copy (search empty states, contribution confirmations, milestone notifications) follows the copy patterns defined in L2-001 Section 4.2. |
-| 5.1–5.4 Accessibility | WCAG 2.1 AA minimum | Search interfaces, contribution flows, and dashboards must meet all accessibility requirements including contrast, motion, focus, and screen reader support. |
+| Section                 | Constraint                     | Application to Donor Context                                                                                                                                 |
+| ----------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2.1–2.6 Semantic Tokens | Components consume Tier 2 only | All donor UI (search results, campaign cards, contribution forms, dashboards) must use semantic tokens exclusively.                                          |
+| 3.2 Cards               | Card specification             | Campaign discovery cards follow the card component spec.                                                                                                     |
+| 3.3 Progress Bars       | Progress bar specification     | Funding progress on campaign cards and detail views follows the progress bar spec.                                                                           |
+| 4.2 Copy Patterns       | Voice-in-product               | All donor-facing copy (search empty states, contribution confirmations, milestone notifications) follows the copy patterns defined in L2-001 Section 4.2.    |
+| 5.1–5.4 Accessibility   | WCAG 2.1 AA minimum            | Search interfaces, contribution flows, and dashboards must meet all accessibility requirements including contrast, motion, focus, and screen reader support. |
 
 ### From [Frontend Standards](L3-005)
 
@@ -92,13 +92,13 @@ Anonymous users see search results and campaign details but do not receive perso
 
 Donors can narrow search results and browse views using the following filter dimensions:
 
-| Filter | Type | Values |
-| ------ | ---- | ------ |
-| Category | Multi-select | Categories defined in [Campaign](L4-002) taxonomy |
-| Funding status | Single-select | Active, Fully Funded, Ending Soon, New |
-| Deadline | Range | Date range picker (from–to) |
-| Contribution amount range | Range | Min–max slider or manual entry |
-| Sort order | Single-select | Relevance, Newest, Ending Soon, Most Funded, Least Funded |
+| Filter                    | Type          | Values                                                    |
+| ------------------------- | ------------- | --------------------------------------------------------- |
+| Category                  | Multi-select  | Categories defined in [Campaign](L4-002) taxonomy         |
+| Funding status            | Single-select | Active, Fully Funded, Ending Soon, New                    |
+| Deadline                  | Range         | Date range picker (from–to)                               |
+| Contribution amount range | Range         | Min–max slider or manual entry                            |
+| Sort order                | Single-select | Relevance, Newest, Ending Soon, Most Funded, Least Funded |
 
 Filters are composable — multiple filters apply simultaneously with AND logic.
 Filter state is preserved in the URL for shareability and back-button behaviour.
@@ -140,12 +140,12 @@ Collaborative filtering supplements content-based results once the donor has 3 o
 
 ### 4.2 Recommendation Inputs
 
-| Input | Source | Description |
-| ----- | ------ | ----------- |
-| Contribution history | This spec (Section 7) | Categories, amounts, and campaigns previously backed |
-| Browsing behaviour | Analytics events | Campaigns viewed, time spent, search terms used |
-| Stated preferences | [Account](L4-001) preferences | Category interests, notification preferences |
-| Campaign metadata | [Campaign](L4-002) | Category, funding status, creator, milestones, similar campaigns |
+| Input                | Source                        | Description                                                      |
+| -------------------- | ----------------------------- | ---------------------------------------------------------------- |
+| Contribution history | This spec (Section 7)         | Categories, amounts, and campaigns previously backed             |
+| Browsing behaviour   | Analytics events              | Campaigns viewed, time spent, search terms used                  |
+| Stated preferences   | [Account](L4-001) preferences | Category interests, notification preferences                     |
+| Campaign metadata    | [Campaign](L4-002)            | Category, funding status, creator, milestones, similar campaigns |
 
 ### 4.3 Recommendation Outputs
 
@@ -286,13 +286,13 @@ Every authenticated donor has a personal contribution dashboard displaying:
 
 ### 7.2 Contribution Statuses
 
-| Status | Description |
-| ------ | ----------- |
-| Pending | Payment initiated, awaiting confirmation from [Payments](L4-004) |
-| Confirmed | Payment confirmed, funds in escrow |
-| In Progress | Campaign active, milestones being delivered |
-| Completed | Campaign fully funded and all milestones delivered |
-| Refunded | Contribution refunded (campaign failed or cancelled) |
+| Status      | Description                                                      |
+| ----------- | ---------------------------------------------------------------- |
+| Pending     | Payment initiated, awaiting confirmation from [Payments](L4-004) |
+| Confirmed   | Payment confirmed, funds in escrow                               |
+| In Progress | Campaign active, milestones being delivered                      |
+| Completed   | Campaign fully funded and all milestones delivered               |
+| Refunded    | Contribution refunded (campaign failed or cancelled)             |
 
 Status transitions are driven by events from [Payments](L4-004) and [Campaign](L4-002).
 
@@ -387,49 +387,49 @@ The platform actively encourages repeat contributions through:
 
 This spec **consumes** campaign data for discovery and display.
 
-| Data | Direction | Description |
-| ---- | --------- | ----------- |
-| Campaign listing data | Campaign → Donor | Title, description, category, creator, hero image, funding target, amount raised, deadline, status, mission code |
-| Campaign detail data | Campaign → Donor | Full campaign description, milestones, stretch goals, creator updates, media |
-| Category taxonomy | Campaign → Donor | Category hierarchy for browsing and filtering |
-| Milestone events | Campaign → Donor | Milestone verified, milestone failed — triggers donor notifications |
-| Campaign completion event | Campaign → Donor | Campaign funded / failed — triggers donor dashboard updates and re-engagement |
+| Data                      | Direction        | Description                                                                                                      |
+| ------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Campaign listing data     | Campaign → Donor | Title, description, category, creator, hero image, funding target, amount raised, deadline, status, mission code |
+| Campaign detail data      | Campaign → Donor | Full campaign description, milestones, stretch goals, creator updates, media                                     |
+| Category taxonomy         | Campaign → Donor | Category hierarchy for browsing and filtering                                                                    |
+| Milestone events          | Campaign → Donor | Milestone verified, milestone failed — triggers donor notifications                                              |
+| Campaign completion event | Campaign → Donor | Campaign funded / failed — triggers donor dashboard updates and re-engagement                                    |
 
 This spec **provides** contribution data back to Campaign:
 
-| Data | Direction | Description |
-| ---- | --------- | ----------- |
-| Contribution count | Donor → Campaign | Number of backers (for campaign display) |
+| Data                         | Direction        | Description                                                   |
+| ---------------------------- | ---------------- | ------------------------------------------------------------- |
+| Contribution count           | Donor → Campaign | Number of backers (for campaign display)                      |
 | Contribution initiated event | Donor → Campaign | Signals a new contribution (campaign may update backer count) |
 
 ### 10.2 Payments (L4-004) → Donor (L4-003)
 
 This spec **hands off** payment processing and **receives** confirmation.
 
-| Data | Direction | Description |
-| ---- | --------- | ----------- |
-| Payment request | Donor → Payments | Donor ID, campaign ID, amount, contribution metadata |
-| Payment confirmation | Payments → Donor | Success/failure status, transaction reference, receipt data |
-| Refund event | Payments → Donor | Refund processed — triggers status update in contribution history |
-| Disbursement event | Payments → Donor | Milestone-based fund release — displayed in per-campaign impact view |
-| Tax receipt data | Payments → Donor | Financial data for receipt generation (amounts, dates, transaction references) |
+| Data                 | Direction        | Description                                                                    |
+| -------------------- | ---------------- | ------------------------------------------------------------------------------ |
+| Payment request      | Donor → Payments | Donor ID, campaign ID, amount, contribution metadata                           |
+| Payment confirmation | Payments → Donor | Success/failure status, transaction reference, receipt data                    |
+| Refund event         | Payments → Donor | Refund processed — triggers status update in contribution history              |
+| Disbursement event   | Payments → Donor | Milestone-based fund release — displayed in per-campaign impact view           |
+| Tax receipt data     | Payments → Donor | Financial data for receipt generation (amounts, dates, transaction references) |
 
 ### 10.3 Account (L4-001) → Donor (L4-003)
 
 This spec **consumes** backer identity and preferences.
 
-| Data | Direction | Description |
-| ---- | --------- | ----------- |
-| Donor identity | Account → Donor | Authenticated user ID, display name |
+| Data                     | Direction       | Description                                                     |
+| ------------------------ | --------------- | --------------------------------------------------------------- |
+| Donor identity           | Account → Donor | Authenticated user ID, display name                             |
 | Notification preferences | Account → Donor | Email opt-in/out, push notification preferences, frequency caps |
-| Category preferences | Account → Donor | Stated category interests for recommendation engine input |
+| Category preferences     | Account → Donor | Stated category interests for recommendation engine input       |
 
 ---
 
 ## Change Log
 
-| Date | Version | Author | Summary |
-| ---- | ------- | ------ | ------- |
-| March 2026 | 0.3 | — | Added social sharing to In Scope list, clarified multi-currency minimum contribution equivalent, added AC-DONOR-020 for anonymous browsing. |
-| March 2026 | 0.2 | — | Resolved all 7 open questions: hybrid recommendation algorithm, 20% diversity floor, $5 USD minimum contribution, 1 re-engagement notification per week cap, anonymous browse access, AU/US/EU/UK tax receipt jurisdictions, social sharing (campaign link only to X/Twitter/Facebook/LinkedIn/clipboard). Added Section 6.6 (Social Sharing) and AC-DONOR-019. |
-| March 2026 | 0.1 | — | Initial stub. Discovery and search, recommendation engine, curated collections, contribution flow, contribution history, impact reporting, repeat engagement, interface contracts with Campaign, Payments, and Account. |
+| Date       | Version | Author | Summary                                                                                                                                                                                                                                                                                                                                                         |
+| ---------- | ------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| March 2026 | 0.3     | —      | Added social sharing to In Scope list, clarified multi-currency minimum contribution equivalent, added AC-DONOR-020 for anonymous browsing.                                                                                                                                                                                                                     |
+| March 2026 | 0.2     | —      | Resolved all 7 open questions: hybrid recommendation algorithm, 20% diversity floor, $5 USD minimum contribution, 1 re-engagement notification per week cap, anonymous browse access, AU/US/EU/UK tax receipt jurisdictions, social sharing (campaign link only to X/Twitter/Facebook/LinkedIn/clipboard). Added Section 6.6 (Social Sharing) and AC-DONOR-019. |
+| March 2026 | 0.1     | —      | Initial stub. Discovery and search, recommendation engine, curated collections, contribution flow, contribution history, impact reporting, repeat engagement, interface contracts with Campaign, Payments, and Account.                                                                                                                                         |

@@ -54,12 +54,12 @@ Classification determines encryption requirements, access controls, retention po
 
 ### 1.1 Classification Levels
 
-| Level | Definition | Encryption at Rest | Access Control | Examples (MMF Domain) |
-| --- | --- | --- | --- | --- |
-| **Public** | Data intended for public consumption.  Disclosure causes no harm. | Not required (but may be encrypted by default depending on storage layer) | No restriction | Published campaign descriptions, public campaign images, platform statistics, public project milestones |
-| **Internal** | Data used for platform operations.  Not intended for public access but not sensitive if disclosed. | Required | Authenticated users with appropriate role | Internal campaign review notes, aggregate analytics, system configuration (non-secret), campaign category metadata |
-| **Confidential** | Data whose disclosure could harm individuals or the organisation.  Includes PII and financial data. | Required (AES-256) | Role-based, need-to-know, logged access | User profiles (name, email, address), donor contribution history, campaign financial details, payout records, transaction amounts, notification preferences |
-| **Restricted** | Data whose disclosure could cause severe harm.  Subject to regulatory requirements. | Required (AES-256), additional key management controls | Strict role-based, MFA required for access, all access logged and alerted | KYC identity documents (passport, licence), bank account details, payment card tokens, authentication credentials, encryption keys, sanctions screening results |
+| Level            | Definition                                                                                         | Encryption at Rest                                                        | Access Control                                                            | Examples (MMF Domain)                                                                                                                                           |
+| ---------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Public**       | Data intended for public consumption. Disclosure causes no harm.                                   | Not required (but may be encrypted by default depending on storage layer) | No restriction                                                            | Published campaign descriptions, public campaign images, platform statistics, public project milestones                                                         |
+| **Internal**     | Data used for platform operations. Not intended for public access but not sensitive if disclosed.  | Required                                                                  | Authenticated users with appropriate role                                 | Internal campaign review notes, aggregate analytics, system configuration (non-secret), campaign category metadata                                              |
+| **Confidential** | Data whose disclosure could harm individuals or the organisation. Includes PII and financial data. | Required (AES-256)                                                        | Role-based, need-to-know, logged access                                   | User profiles (name, email, address), donor contribution history, campaign financial details, payout records, transaction amounts, notification preferences     |
+| **Restricted**   | Data whose disclosure could cause severe harm. Subject to regulatory requirements.                 | Required (AES-256), additional key management controls                    | Strict role-based, MFA required for access, all access logged and alerted | KYC identity documents (passport, licence), bank account details, payment card tokens, authentication credentials, encryption keys, sanctions screening results |
 
 ### 1.2 Classification Responsibilities
 
@@ -87,18 +87,18 @@ Retention periods are driven by regulatory requirements, business needs, and the
 
 ### 2.1 Retention Schedule
 
-| Data Type | Classification | Active Retention | Archive Retention | Total Retention | Regulatory Driver |
-| --- | --- | --- | --- | --- | --- |
-| KYC identity documents | Restricted | Duration of active account + 1 year | 7 years from account closure | ~8+ years | AML/CTF Act (Australia), GDPR |
-| Transaction records | Confidential | 2 years | 7 years from transaction date | 7 years | Tax law, PCI DSS, AML/CTF Act |
-| Audit logs | Confidential | 1 year (hot storage) | 7 years (cold storage) | 7 years | Regulatory, [Audit](L3-006) |
-| User profiles | Confidential | Duration of active account | 30 days after account closure (then anonymised or deleted) | Account lifetime + 30 days | GDPR right to erasure, Australian Privacy Act |
-| Campaign content | Internal/Public | Duration of campaign + 2 years | 5 years from campaign close | ~7 years | Business continuity, dispute resolution |
-| Donor contribution history | Confidential | Duration of active account | 7 years from transaction date | 7 years | Tax law, donor receipts |
-| Payment card tokens | Restricted | Duration of active payment method | Deleted on payment method removal | Variable | PCI DSS |
-| Session and authentication data | Internal | Duration of session | 90 days | ~90 days | Security best practice |
-| Analytics and telemetry | Internal | 1 year | 2 years (aggregated, anonymised) | 3 years | Business intelligence |
-| System logs (non-audit) | Internal | 30 days (hot) | 1 year (cold) | ~13 months | Operational needs |
+| Data Type                       | Classification  | Active Retention                    | Archive Retention                                          | Total Retention            | Regulatory Driver                             |
+| ------------------------------- | --------------- | ----------------------------------- | ---------------------------------------------------------- | -------------------------- | --------------------------------------------- |
+| KYC identity documents          | Restricted      | Duration of active account + 1 year | 7 years from account closure                               | ~8+ years                  | AML/CTF Act (Australia), GDPR                 |
+| Transaction records             | Confidential    | 2 years                             | 7 years from transaction date                              | 7 years                    | Tax law, PCI DSS, AML/CTF Act                 |
+| Audit logs                      | Confidential    | 1 year (hot storage)                | 7 years (cold storage)                                     | 7 years                    | Regulatory, [Audit](L3-006)                   |
+| User profiles                   | Confidential    | Duration of active account          | 30 days after account closure (then anonymised or deleted) | Account lifetime + 30 days | GDPR right to erasure, Australian Privacy Act |
+| Campaign content                | Internal/Public | Duration of campaign + 2 years      | 5 years from campaign close                                | ~7 years                   | Business continuity, dispute resolution       |
+| Donor contribution history      | Confidential    | Duration of active account          | 7 years from transaction date                              | 7 years                    | Tax law, donor receipts                       |
+| Payment card tokens             | Restricted      | Duration of active payment method   | Deleted on payment method removal                          | Variable                   | PCI DSS                                       |
+| Session and authentication data | Internal        | Duration of session                 | 90 days                                                    | ~90 days                   | Security best practice                        |
+| Analytics and telemetry         | Internal        | 1 year                              | 2 years (aggregated, anonymised)                           | 3 years                    | Business intelligence                         |
+| System logs (non-audit)         | Internal        | 30 days (hot)                       | 1 year (cold)                                              | ~13 months                 | Operational needs                             |
 
 ### 2.2 Retention Enforcement
 
@@ -131,12 +131,12 @@ Each stage has specific handling rules, access controls, and storage requirement
 Creation → Active Use → Archival → Deletion/Anonymisation
 ```
 
-| Stage | Description | Storage Tier | Access Pattern |
-| --- | --- | --- | --- |
-| **Creation** | Data enters the system via user input, API integration, or system generation. | Primary (hot) | Write-once, validated at system boundary per [Engineering Standard](L2-002), Section 1.4 |
-| **Active Use** | Data is actively read and updated by platform operations. | Primary (hot) | Read/write by authorised roles |
-| **Archival** | Data is no longer actively used but must be retained for regulatory or business reasons. | Archive (cold) | Read-only, access requires justification and audit logging |
-| **Deletion / Anonymisation** | Data has exceeded its retention period or a deletion request has been fulfilled. | N/A | Irreversible removal or irreversible anonymisation |
+| Stage                        | Description                                                                              | Storage Tier   | Access Pattern                                                                           |
+| ---------------------------- | ---------------------------------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------------------------- |
+| **Creation**                 | Data enters the system via user input, API integration, or system generation.            | Primary (hot)  | Write-once, validated at system boundary per [Engineering Standard](L2-002), Section 1.4 |
+| **Active Use**               | Data is actively read and updated by platform operations.                                | Primary (hot)  | Read/write by authorised roles                                                           |
+| **Archival**                 | Data is no longer actively used but must be retained for regulatory or business reasons. | Archive (cold) | Read-only, access requires justification and audit logging                               |
+| **Deletion / Anonymisation** | Data has exceeded its retention period or a deletion request has been fulfilled.         | N/A            | Irreversible removal or irreversible anonymisation                                       |
 
 ### 3.2 Stage Transitions
 
@@ -179,8 +179,8 @@ Immutable data moves directly from Creation to a read-only Active state and then
 - Anonymisation must be irreversible.
   There must be no technical mechanism to re-identify anonymised data.
 - Anonymisation must address all direct identifiers (name, email, address, phone, government IDs) and indirect identifiers that could enable re-identification in combination (date of birth + postcode + donation amount).
-- The anonymisation technique is **k-anonymity**: each released record must be indistinguishable from at least *k*-1 other records on quasi-identifier attributes. The value of *k* is determined per dataset based on re-identification risk assessment, with a minimum of *k* = 5.
-- Quasi-identifiers (e.g., date of birth, postcode, donation amount ranges) are generalised or suppressed to achieve the target *k* value.
+- The anonymisation technique is **k-anonymity**: each released record must be indistinguishable from at least _k_-1 other records on quasi-identifier attributes. The value of _k_ is determined per dataset based on re-identification risk assessment, with a minimum of _k_ = 5.
+- Quasi-identifiers (e.g., date of birth, postcode, donation amount ranges) are generalised or suppressed to achieve the target _k_ value.
 - The anonymisation approach must be documented and reviewed against re-identification risk before deployment.
 
 ### 4.4 Pseudonymisation Requirements
@@ -208,12 +208,12 @@ When a data subject exercises their right to erasure:
 
 ### 5.1 Access by Classification Level
 
-| Classification | Who Can Access | Access Mechanism | Logging |
-| --- | --- | --- | --- |
-| **Public** | Any user, including unauthenticated visitors (via public APIs/pages) | Standard API/UI | Standard request logging |
-| **Internal** | Authenticated platform users with appropriate role | RBAC via data access layer | Standard structured logging |
-| **Confidential** | Users with explicit need-to-know role assignment | RBAC via data access layer, attribute-based filters | All access logged with actor, resource, and purpose |
-| **Restricted** | Users with Restricted-access role, MFA verified | RBAC + MFA challenge, via data access layer | All access logged, alerted, and periodically reviewed |
+| Classification   | Who Can Access                                                       | Access Mechanism                                    | Logging                                               |
+| ---------------- | -------------------------------------------------------------------- | --------------------------------------------------- | ----------------------------------------------------- |
+| **Public**       | Any user, including unauthenticated visitors (via public APIs/pages) | Standard API/UI                                     | Standard request logging                              |
+| **Internal**     | Authenticated platform users with appropriate role                   | RBAC via data access layer                          | Standard structured logging                           |
+| **Confidential** | Users with explicit need-to-know role assignment                     | RBAC via data access layer, attribute-based filters | All access logged with actor, resource, and purpose   |
+| **Restricted**   | Users with Restricted-access role, MFA verified                      | RBAC + MFA challenge, via data access layer         | All access logged, alerted, and periodically reviewed |
 
 ### 5.2 Data Access Layer
 
@@ -294,14 +294,14 @@ As required by [Engineering Standard](L2-002), Section 7.4:
 
 ### 7.2 Migration Patterns
 
-| Change Type | Pattern | Notes |
-| --- | --- | --- |
-| Add column | Add with default or nullable | Previous version ignores new column |
-| Remove column | Two-phase: (1) stop writing, (2) drop in next release | Previous version can still read the column |
-| Rename column | Two-phase: (1) add new column + dual-write, (2) drop old column in next release | Maintains backward compatibility |
-| Change column type | Two-phase: (1) add new column with new type + dual-write + backfill, (2) drop old column | Never alter a column type in place |
-| Add table | Straightforward | No backward compatibility concern |
-| Remove table | Two-phase: (1) stop all access, (2) drop in next release after verification | Verify no remaining consumers |
+| Change Type        | Pattern                                                                                  | Notes                                      |
+| ------------------ | ---------------------------------------------------------------------------------------- | ------------------------------------------ |
+| Add column         | Add with default or nullable                                                             | Previous version ignores new column        |
+| Remove column      | Two-phase: (1) stop writing, (2) drop in next release                                    | Previous version can still read the column |
+| Rename column      | Two-phase: (1) add new column + dual-write, (2) drop old column in next release          | Maintains backward compatibility           |
+| Change column type | Two-phase: (1) add new column with new type + dual-write + backfill, (2) drop old column | Never alter a column type in place         |
+| Add table          | Straightforward                                                                          | No backward compatibility concern          |
+| Remove table       | Two-phase: (1) stop all access, (2) drop in next release after verification              | Verify no remaining consumers              |
 
 ### 7.3 Data Migration
 
@@ -340,46 +340,46 @@ The primary data region is **US (United States)**. All data classifications are 
 
 ### 9.1 L3-002 (Security) Interface
 
-| This Spec Provides | Security Spec Provides |
-| --- | --- |
-| Data classification scheme (Section 1) defining what "sensitive" means for encryption and access control purposes | RBAC model defining roles and permissions that map to classification-level access |
-| Anonymisation and pseudonymisation rules (Section 4) for privacy compliance | Compliance control matrix (GDPR, Australian Privacy Act, PCI DSS) informing retention and handling rules |
-| Backup encryption requirements (Section 6) | Encryption key management architecture and key rotation policies |
+| This Spec Provides                                                                                                | Security Spec Provides                                                                                   |
+| ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Data classification scheme (Section 1) defining what "sensitive" means for encryption and access control purposes | RBAC model defining roles and permissions that map to classification-level access                        |
+| Anonymisation and pseudonymisation rules (Section 4) for privacy compliance                                       | Compliance control matrix (GDPR, Australian Privacy Act, PCI DSS) informing retention and handling rules |
+| Backup encryption requirements (Section 6)                                                                        | Encryption key management architecture and key rotation policies                                         |
 
 ### 9.2 L3-001 (Architecture) Interface
 
-| This Spec Provides | Architecture Spec Provides |
-| --- | --- |
+| This Spec Provides                                                         | Architecture Spec Provides                                                                     |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | Data access layer requirements (Section 5.2) — what the layer must enforce | Data access layer implementation — technology choice, service placement, connection management |
-| Cross-service data boundary rules (Section 5.3) | Service boundary definitions and inter-service communication patterns |
-| Data residency requirements (Section 8) | Infrastructure topology, region selection, replication strategy |
+| Cross-service data boundary rules (Section 5.3)                            | Service boundary definitions and inter-service communication patterns                          |
+| Data residency requirements (Section 8)                                    | Infrastructure topology, region selection, replication strategy                                |
 
 ### 9.3 L3-003 (Reliability) Interface
 
-| This Spec Provides | Reliability Spec Provides |
-| --- | --- |
-| Backup implementation requirements (Section 6) — encryption, classification, recovery testing | Backup frequency, RTO, RPO targets |
-| Data lifecycle stages affecting availability (Section 3) — archival reduces hot-storage load | Availability targets and failover strategies that the data layer must support |
+| This Spec Provides                                                                            | Reliability Spec Provides                                                     |
+| --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Backup implementation requirements (Section 6) — encryption, classification, recovery testing | Backup frequency, RTO, RPO targets                                            |
+| Data lifecycle stages affecting availability (Section 3) — archival reduces hot-storage load  | Availability targets and failover strategies that the data layer must support |
 
 ### 9.4 L4-004 (Payments) Interface
 
-| This Spec Provides | Payments Spec Provides |
-| --- | --- |
+| This Spec Provides                                                                                | Payments Spec Provides                                                       |
+| ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | Classification of payment data (Restricted) and retention rules for transaction records (7 years) | Specific payment data types, tokenisation approach, PCI DSS scope boundaries |
-| Anonymisation rules for financial data subject to right-to-erasure | Definition of which financial records are legally exempt from erasure |
+| Anonymisation rules for financial data subject to right-to-erasure                                | Definition of which financial records are legally exempt from erasure        |
 
 ### 9.5 L4-005 (KYC) Interface
 
-| This Spec Provides | KYC Spec Provides |
-| --- | --- |
-| Classification of KYC documents (Restricted) and retention rules (7+ years) | Specific document types, verification workflows, jurisdictional requirements |
-| Right-to-erasure handling for identity documents | Definition of which identity records are legally required to be retained post-erasure request |
+| This Spec Provides                                                          | KYC Spec Provides                                                                             |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Classification of KYC documents (Restricted) and retention rules (7+ years) | Specific document types, verification workflows, jurisdictional requirements                  |
+| Right-to-erasure handling for identity documents                            | Definition of which identity records are legally required to be retained post-erasure request |
 
 ---
 
 ## Change Log
 
-| Date | Version | Author | Summary |
-| --- | --- | --- | --- |
-| March 2026 | 0.1 | — | Initial stub. Data classification scheme (four levels with MMF examples), retention policies by data type, data lifecycle stages, anonymisation and pseudonymisation rules, right-to-erasure workflow, data access patterns and controls, backup and recovery requirements, schema and data migration strategy, data residency placeholders, interface contracts with L3-001/L3-002/L3-003/L4-004/L4-005. |
-| March 2026 | 0.2 | — | Resolved all open questions (OQ-1 through OQ-6). Set primary data region to US. Adopted k-anonymity for anonymisation. Set daily retention enforcement cadence. Confirmed manual legal hold process. Defined backup schedule (15-min deltas, daily full). Accepted backup-expiry approach for right-to-erasure propagation. Added local demo notes throughout. |
+| Date       | Version | Author | Summary                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ---------- | ------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| March 2026 | 0.1     | —      | Initial stub. Data classification scheme (four levels with MMF examples), retention policies by data type, data lifecycle stages, anonymisation and pseudonymisation rules, right-to-erasure workflow, data access patterns and controls, backup and recovery requirements, schema and data migration strategy, data residency placeholders, interface contracts with L3-001/L3-002/L3-003/L4-004/L4-005. |
+| March 2026 | 0.2     | —      | Resolved all open questions (OQ-1 through OQ-6). Set primary data region to US. Adopted k-anonymity for anonymisation. Set daily retention enforcement cadence. Confirmed manual legal hold process. Defined backup schedule (15-min deltas, daily full). Accepted backup-expiry approach for right-to-erasure propagation. Added local demo notes throughout.                                            |

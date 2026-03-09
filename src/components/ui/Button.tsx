@@ -8,7 +8,9 @@ interface BaseButtonProps {
   className?: string
 }
 
-type ButtonAsButton = BaseButtonProps & { href?: undefined } & ButtonHTMLAttributes<HTMLButtonElement>
+type ButtonAsButton = BaseButtonProps & {
+  href?: undefined
+} & ButtonHTMLAttributes<HTMLButtonElement>
 type ButtonAsAnchor = BaseButtonProps & { href: string } & AnchorHTMLAttributes<HTMLAnchorElement>
 
 type ButtonProps = ButtonAsButton | ButtonAsAnchor
@@ -28,7 +30,8 @@ const baseStyle: React.CSSProperties = {
   cursor: 'pointer',
   textDecoration: 'none',
   border: 'none',
-  transition: 'background var(--motion-hover), color var(--motion-hover), border-color var(--motion-hover), box-shadow var(--motion-hover)',
+  transition:
+    'background var(--motion-hover), color var(--motion-hover), border-color var(--motion-hover), box-shadow var(--motion-hover)',
   whiteSpace: 'nowrap',
 }
 

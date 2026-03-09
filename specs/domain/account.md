@@ -163,12 +163,12 @@ The onboarding flow guides new users through initial setup:
 
 Mars Mission Fund defines five roles as specified in the Product Vision & Mission (L1-001):
 
-| Role | Description |
-| ---- | ----------- |
-| **Backer** | Can browse campaigns, make contributions, view contribution history and impact dashboards. Default role for all registered users. |
-| **Creator** | Can submit campaign proposals, manage campaigns, define milestones. Requires KYC verification. |
-| **Reviewer** | Can review submitted campaigns, approve or reject proposals, verify milestones. Assigned by Administrator. |
-| **Administrator** | Can manage users, assign roles, suspend accounts, configure platform settings. Assigned by Super Administrator. |
+| Role                    | Description                                                                                                                                                           |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Backer**              | Can browse campaigns, make contributions, view contribution history and impact dashboards. Default role for all registered users.                                     |
+| **Creator**             | Can submit campaign proposals, manage campaigns, define milestones. Requires KYC verification.                                                                        |
+| **Reviewer**            | Can review submitted campaigns, approve or reject proposals, verify milestones. Assigned by Administrator.                                                            |
+| **Administrator**       | Can manage users, assign roles, suspend accounts, configure platform settings. Assigned by Super Administrator.                                                       |
 | **Super Administrator** | Full platform access. Can assign Administrator roles, manage system configuration, access audit logs. Provisioned through a controlled process (not self-assignable). |
 
 ### 3.1 Role Rules
@@ -199,15 +199,15 @@ Mars Mission Fund defines five roles as specified in the Product Vision & Missio
 
 ### 4.1 Profile Data
 
-| Field | Required | Editable | Notes |
-| ----- | -------- | -------- | ----- |
-| Email | Yes | Yes (with re-verification) | Primary identifier. Change triggers verification of new email. |
-| Display name | No | Yes | Shown on public-facing surfaces (campaign pages, contribution lists). |
-| Avatar | No | Yes | File upload validated per [Engineering Standard](L2-002) Section 1.4. |
-| Bio | No | Yes | Free-text, sanitised on input. |
-| Notification preferences | Yes (defaults set) | Yes | See Section 4.2. |
-| Contribution history view | Read-only | N/A | Sourced from [Donor](L4-003). Displayed within account profile. |
-| KYC verification status | Read-only | N/A | Sourced from [KYC](L4-005). Displayed within account profile. |
+| Field                     | Required           | Editable                   | Notes                                                                 |
+| ------------------------- | ------------------ | -------------------------- | --------------------------------------------------------------------- |
+| Email                     | Yes                | Yes (with re-verification) | Primary identifier. Change triggers verification of new email.        |
+| Display name              | No                 | Yes                        | Shown on public-facing surfaces (campaign pages, contribution lists). |
+| Avatar                    | No                 | Yes                        | File upload validated per [Engineering Standard](L2-002) Section 1.4. |
+| Bio                       | No                 | Yes                        | Free-text, sanitised on input.                                        |
+| Notification preferences  | Yes (defaults set) | Yes                        | See Section 4.2.                                                      |
+| Contribution history view | Read-only          | N/A                        | Sourced from [Donor](L4-003). Displayed within account profile.       |
+| KYC verification status   | Read-only          | N/A                        | Sourced from [KYC](L4-005). Displayed within account profile.         |
 
 ### 4.2 Notification Preferences
 
@@ -433,7 +433,7 @@ Escrow status queries during deactivation use the Payments read API.
 
 ## Change Log
 
-| Date | Version | Author | Summary |
-| ---- | ------- | ------ | ------- |
-| March 2026 | 0.1 | — | Initial stub. Registration, onboarding, roles, profile, sessions, recovery, deactivation, data portability, interface contracts with KYC, Donor, Campaign, and Payments. |
-| March 2026 | 0.2 | — | Resolved all open questions: verification link expiry (24h), password reset expiry (1h), SSO providers (Google, Microsoft), default notifications (all opt-in except announcements), reactivation window (90 days), export format (JSON + CSV), MFA recovery process (manual ID verification), no cooling-off period. |
+| Date       | Version | Author | Summary                                                                                                                                                                                                                                                                                                               |
+| ---------- | ------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| March 2026 | 0.1     | —      | Initial stub. Registration, onboarding, roles, profile, sessions, recovery, deactivation, data portability, interface contracts with KYC, Donor, Campaign, and Payments.                                                                                                                                              |
+| March 2026 | 0.2     | —      | Resolved all open questions: verification link expiry (24h), password reset expiry (1h), SSO providers (Google, Microsoft), default notifications (all opt-in except announcements), reactivation window (90 days), export format (JSON + CSV), MFA recovery process (manual ID verification), no cooling-off period. |

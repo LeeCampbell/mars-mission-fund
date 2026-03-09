@@ -98,7 +98,7 @@ Each task file has this format:
   - **Verification:** {how the agent knows it worked}
 
 - [ ] **TASK-02: {Name}**
-  ...
+      ...
 
 - [ ] **TASK-{NN}: Final verification**
   - **Goal:** Verify all deliverables for this issue
@@ -146,7 +146,6 @@ The **last task file** in every milestone MUST be `{NN}-close.tasks.md`. This is
 - [ ] **TASK-05: Update spec index**
   - **Goal:** Ensure every `.md` file under `specs/` has an entry in `specs/README.md` with title and one-line description
   - **Verification:** `specs/README.md` entries match the actual files in `specs/`
-
 ```
 
 > **Note:** Plan directory deletion and GitHub Milestone closure are handled

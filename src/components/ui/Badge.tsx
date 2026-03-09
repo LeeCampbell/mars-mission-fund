@@ -8,7 +8,10 @@ interface BadgeProps {
   className?: string
 }
 
-const variantStyles: Record<BadgeVariant, { badge: React.CSSProperties; dot: React.CSSProperties }> = {
+const variantStyles: Record<
+  BadgeVariant,
+  { badge: React.CSSProperties; dot: React.CSSProperties }
+> = {
   funded: {
     badge: {
       background: 'var(--color-status-success-bg)',
@@ -65,14 +68,8 @@ export function Badge({ variant, children, className }: BadgeProps) {
   const { badge, dot } = variantStyles[variant]
 
   return (
-    <span
-      className={className}
-      style={{ ...baseStyle, ...badge }}
-    >
-      <span
-        aria-hidden="true"
-        style={{ ...dotBaseStyle, ...dot }}
-      />
+    <span className={className} style={{ ...baseStyle, ...badge }}>
+      <span aria-hidden="true" style={{ ...dotBaseStyle, ...dot }} />
       {children}
     </span>
   )

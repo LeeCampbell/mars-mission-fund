@@ -49,17 +49,20 @@ const steps = [
   {
     number: '01',
     title: 'Discover',
-    description: 'Browse active missions aligned with your vision. Explore detailed mission briefs, team credentials, and funding milestones before committing.',
+    description:
+      'Browse active missions aligned with your vision. Explore detailed mission briefs, team credentials, and funding milestones before committing.',
   },
   {
     number: '02',
     title: 'Back',
-    description: 'Pledge your support and join the mission team. Every contribution moves the launch window closer and earns you a stake in the outcome.',
+    description:
+      'Pledge your support and join the mission team. Every contribution moves the launch window closer and earns you a stake in the outcome.',
   },
   {
     number: '03',
     title: 'Track',
-    description: 'Follow progress with real-time mission updates. Get direct access to mission logs, milestone reports, and team communications.',
+    description:
+      'Follow progress with real-time mission updates. Get direct access to mission logs, milestone reports, and team communications.',
   },
 ]
 

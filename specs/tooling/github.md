@@ -146,12 +146,12 @@ gh api repos/{owner}/{repo}/pulls/7/comments
 
 ## Quick Reference
 
-| Operation | Command | Identifier |
-|-----------|---------|------------|
-| Create milestone | `gh api repos/{owner}/{repo}/milestones -X POST -f title="..."` | Returns `number` |
-| List milestones | `gh api repos/{owner}/{repo}/milestones` | Query param `?state=open\|closed\|all` |
-| Get milestone | `gh api repos/{owner}/{repo}/milestones/{number}` | Milestone `number` (integer) |
-| Update milestone | `gh api repos/{owner}/{repo}/milestones/{number} -X PATCH` | Milestone `number` (integer) |
-| Delete milestone | `gh api repos/{owner}/{repo}/milestones/{number} -X DELETE` | Milestone `number` (integer) |
-| Assign issue | `gh issue create --milestone "Name"` or `gh issue edit N --milestone "Name"` | Milestone **name** (string) |
-| Assign PR | `gh pr create --milestone "Name"` or `gh pr edit N --milestone "Name"` | Milestone **name** (string) |
+| Operation        | Command                                                                      | Identifier                             |
+| ---------------- | ---------------------------------------------------------------------------- | -------------------------------------- |
+| Create milestone | `gh api repos/{owner}/{repo}/milestones -X POST -f title="..."`              | Returns `number`                       |
+| List milestones  | `gh api repos/{owner}/{repo}/milestones`                                     | Query param `?state=open\|closed\|all` |
+| Get milestone    | `gh api repos/{owner}/{repo}/milestones/{number}`                            | Milestone `number` (integer)           |
+| Update milestone | `gh api repos/{owner}/{repo}/milestones/{number} -X PATCH`                   | Milestone `number` (integer)           |
+| Delete milestone | `gh api repos/{owner}/{repo}/milestones/{number} -X DELETE`                  | Milestone `number` (integer)           |
+| Assign issue     | `gh issue create --milestone "Name"` or `gh issue edit N --milestone "Name"` | Milestone **name** (string)            |
+| Assign PR        | `gh pr create --milestone "Name"` or `gh pr edit N --milestone "Name"`       | Milestone **name** (string)            |

@@ -162,13 +162,13 @@ Donor initiates contribution
 
 ### 5.3 Contribution States
 
-| State | Description |
-| --- | --- |
-| `pending_capture` | Capture request sent to gateway. |
-| `captured` | Funds captured and held in escrow. |
-| `failed` | Capture failed. |
-| `refunded` | Contribution fully refunded. |
-| `partially_refunded` | Contribution partially refunded. |
+| State                | Description                        |
+| -------------------- | ---------------------------------- |
+| `pending_capture`    | Capture request sent to gateway.   |
+| `captured`           | Funds captured and held in escrow. |
+| `failed`             | Capture failed.                    |
+| `refunded`           | Contribution fully refunded.       |
+| `partially_refunded` | Contribution partially refunded.   |
 
 Every state transition is logged in the audit trail per [Audit](L3-006).
 
@@ -238,15 +238,15 @@ Per [Product Vision & Mission](L1-001), disbursement of escrowed funds requires 
 
 ### 7.4 Disbursement States
 
-| State | Description |
-| --- | --- |
-| `pending_approval` | Awaiting first administrator approval. |
+| State                | Description                               |
+| -------------------- | ----------------------------------------- |
+| `pending_approval`   | Awaiting first administrator approval.    |
 | `partially_approved` | First approval received; awaiting second. |
-| `approved` | Dual approval complete; ready for payout. |
-| `processing` | Payout initiated with gateway. |
-| `completed` | Funds transferred to creator. |
-| `failed` | Payout failed; requires investigation. |
-| `approval_expired` | Approval window elapsed; must restart. |
+| `approved`           | Dual approval complete; ready for payout. |
+| `processing`         | Payout initiated with gateway.            |
+| `completed`          | Funds transferred to creator.             |
+| `failed`             | Payout failed; requires investigation.    |
+| `approval_expired`   | Approval window elapsed; must restart.    |
 
 ---
 
@@ -270,11 +270,11 @@ Per [Product Vision & Mission](L1-001), disbursement of escrowed funds requires 
 
 ### 8.3 Refund States
 
-| State | Description |
-| --- | --- |
-| `pending` | Refund initiated; processing with gateway. |
+| State       | Description                                           |
+| ----------- | ----------------------------------------------------- |
+| `pending`   | Refund initiated; processing with gateway.            |
 | `completed` | Refund confirmed by gateway; funds returned to donor. |
-| `failed` | Refund failed; requires manual investigation. |
+| `failed`    | Refund failed; requires manual investigation.         |
 
 ### 8.4 Partial Refunds
 
@@ -375,14 +375,14 @@ Receipt wording must clearly state the deductible amount (gross contribution min
 
 The payment service exposes financial data for the admin dashboard:
 
-| Metric | Description |
-| --- | --- |
-| Total raised | Sum of all captured contributions across all campaigns. |
-| Total disbursed | Sum of all completed disbursements (principal). |
-| Total interest disbursed | Sum of all interest paid out to campaigns. |
-| Total in escrow | Current escrow balance across all campaigns (principal + accrued interest). |
-| Total refunded | Sum of all completed refunds (principal + interest). |
-| Net platform position | Total raised + total interest earned − disbursed − interest disbursed − refunded. |
+| Metric                   | Description                                                                       |
+| ------------------------ | --------------------------------------------------------------------------------- |
+| Total raised             | Sum of all captured contributions across all campaigns.                           |
+| Total disbursed          | Sum of all completed disbursements (principal).                                   |
+| Total interest disbursed | Sum of all interest paid out to campaigns.                                        |
+| Total in escrow          | Current escrow balance across all campaigns (principal + accrued interest).       |
+| Total refunded           | Sum of all completed refunds (principal + interest).                              |
+| Net platform position    | Total raised + total interest earned − disbursed − interest disbursed − refunded. |
 
 ### 12.2 Per-Campaign Financials
 
@@ -406,33 +406,33 @@ All report access is logged in the audit trail.
 
 ### 13.1 Interface with [Campaign](L4-002)
 
-| Direction | Event / Data | Description |
-| --- | --- | --- |
-| Campaign → Payments | `escrow_create` | When a campaign is approved and goes live, an escrow allocation is created. |
-| Campaign → Payments | `milestone_verified` | When a campaign milestone is verified, triggers disbursement workflow. |
-| Campaign → Payments | `campaign_failed` | When a campaign fails (deadline reached, goal not met), triggers full refund of all contributions. |
-| Campaign → Payments | `campaign_cancelled` | When a campaign is cancelled by administrators, triggers full refund. |
-| Payments → Campaign | `contribution_received` | Confirms a new contribution has been captured and added to escrow. |
-| Payments → Campaign | `disbursement_completed` | Confirms milestone disbursement has been transferred. |
-| Payments → Campaign | `escrow_balance` | Current escrow balance for a campaign (on request). |
+| Direction           | Event / Data             | Description                                                                                        |
+| ------------------- | ------------------------ | -------------------------------------------------------------------------------------------------- |
+| Campaign → Payments | `escrow_create`          | When a campaign is approved and goes live, an escrow allocation is created.                        |
+| Campaign → Payments | `milestone_verified`     | When a campaign milestone is verified, triggers disbursement workflow.                             |
+| Campaign → Payments | `campaign_failed`        | When a campaign fails (deadline reached, goal not met), triggers full refund of all contributions. |
+| Campaign → Payments | `campaign_cancelled`     | When a campaign is cancelled by administrators, triggers full refund.                              |
+| Payments → Campaign | `contribution_received`  | Confirms a new contribution has been captured and added to escrow.                                 |
+| Payments → Campaign | `disbursement_completed` | Confirms milestone disbursement has been transferred.                                              |
+| Payments → Campaign | `escrow_balance`         | Current escrow balance for a campaign (on request).                                                |
 
 ### 13.2 Interface with [Donor](L4-003)
 
-| Direction | Event / Data | Description |
-| --- | --- | --- |
-| Donor → Payments | `contribution_initiated` | Donor has chosen to contribute; payment processing begins. |
-| Payments → Donor | `contribution_confirmed` | Payment captured successfully; contribution recorded. |
-| Payments → Donor | `contribution_failed` | Payment failed; donor should retry or use a different method. |
-| Payments → Donor | `refund_initiated` | Refund processing has begun. |
-| Payments → Donor | `refund_completed` | Refund confirmed; funds returned. |
-| Payments → Donor | `tax_receipt_data` | Financial data for tax receipt generation (see Section 11). |
+| Direction        | Event / Data             | Description                                                   |
+| ---------------- | ------------------------ | ------------------------------------------------------------- |
+| Donor → Payments | `contribution_initiated` | Donor has chosen to contribute; payment processing begins.    |
+| Payments → Donor | `contribution_confirmed` | Payment captured successfully; contribution recorded.         |
+| Payments → Donor | `contribution_failed`    | Payment failed; donor should retry or use a different method. |
+| Payments → Donor | `refund_initiated`       | Refund processing has begun.                                  |
+| Payments → Donor | `refund_completed`       | Refund confirmed; funds returned.                             |
+| Payments → Donor | `tax_receipt_data`       | Financial data for tax receipt generation (see Section 11).   |
 
 ### 13.3 Interface with [KYC](L4-005)
 
-| Direction | Event / Data | Description |
-| --- | --- | --- |
-| Payments → KYC | `kyc_status_check` | Before disbursement, payments verifies the creator's KYC status is current. |
-| KYC → Payments | `kyc_status_response` | Confirmed/denied — gates disbursement processing. |
+| Direction      | Event / Data          | Description                                                                 |
+| -------------- | --------------------- | --------------------------------------------------------------------------- |
+| Payments → KYC | `kyc_status_check`    | Before disbursement, payments verifies the creator's KYC status is current. |
+| KYC → Payments | `kyc_status_response` | Confirmed/denied — gates disbursement processing.                           |
 
 ### 13.4 Interface with [Audit](L3-006)
 
@@ -441,10 +441,10 @@ The audit event schema for payment events includes: event type, correlation ID, 
 
 ### 13.5 Interface with [Account](L4-001)
 
-| Direction | Event / Data | Description |
-| --- | --- | --- |
-| Account → Payments | Authenticated identity | All payment operations receive the authenticated account ID from the session context. Payment methods are managed within the Payments domain, not Account. |
-| Payments → Account | `escrow_status` | During account deactivation, [Account](L4-001) queries Payments for active escrow positions associated with the account. Active contributions in escrow are not affected by deactivation — the escrow lifecycle continues. |
+| Direction          | Event / Data           | Description                                                                                                                                                                                                                |
+| ------------------ | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Account → Payments | Authenticated identity | All payment operations receive the authenticated account ID from the session context. Payment methods are managed within the Payments domain, not Account.                                                                 |
+| Payments → Account | `escrow_status`        | During account deactivation, [Account](L4-001) queries Payments for active escrow positions associated with the account. Active contributions in escrow are not affected by deactivation — the escrow lifecycle continues. |
 
 Reference: [Account](L4-001), Section 8.4.
 
@@ -518,8 +518,8 @@ Reference: [Account](L4-001), Section 8.4.
 
 ## Change Log
 
-| Date | Version | Author | Summary |
-| --- | --- | --- | --- |
-| March 2026 | 0.1 | — | Initial stub. |
-| March 2026 | 0.2 | — | Resolved OQ-1: Stripe selected as primary payment gateway. Updated tokenisation references to Stripe Elements. |
-| March 2026 | 0.3 | — | Resolved all remaining open questions: USD single currency (OQ-2), segregated escrow accounts (OQ-3), interest passed to campaign (OQ-4), milestone-based donor refund policy (OQ-5), no stored payment methods (OQ-6), tax-deductible entity (OQ-7), immediate capture (OQ-8). Simplified contribution states for immediate capture model. Added Section 8.5 donor-initiated refund policy. |
+| Date       | Version | Author | Summary                                                                                                                                                                                                                                                                                                                                                                                      |
+| ---------- | ------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| March 2026 | 0.1     | —      | Initial stub.                                                                                                                                                                                                                                                                                                                                                                                |
+| March 2026 | 0.2     | —      | Resolved OQ-1: Stripe selected as primary payment gateway. Updated tokenisation references to Stripe Elements.                                                                                                                                                                                                                                                                               |
+| March 2026 | 0.3     | —      | Resolved all remaining open questions: USD single currency (OQ-2), segregated escrow accounts (OQ-3), interest passed to campaign (OQ-4), milestone-based donor refund policy (OQ-5), no stored payment methods (OQ-6), tax-deductible entity (OQ-7), immediate capture (OQ-8). Simplified contribution states for immediate capture model. Added Section 8.5 donor-initiated refund policy. |

@@ -49,11 +49,7 @@ export function ProgressBar({ value, complete = false, label, className }: Progr
       className={className}
       style={trackStyle}
     >
-      <div style={fillStyle}>
-        {clamped > 0 && (
-          <div style={dotStyle} />
-        )}
-      </div>
+      <div style={fillStyle}>{clamped > 0 && <div style={dotStyle} />}</div>
     </div>
   )
 }

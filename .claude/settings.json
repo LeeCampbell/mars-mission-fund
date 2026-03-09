@@ -43,13 +43,8 @@
       "Bash(prettier:*)",
       "Bash(tsc:*)"
     ],
-    "deny": [
-      "Bash(git branch -D:*)",
-      "Bash(gh pr merge:*)"
-    ]
+    "deny": ["Bash(git branch -D:*)", "Bash(gh pr merge:*)"]
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "playwright"
-  ]
+  "enabledMcpjsonServers": ["playwright"]
 }

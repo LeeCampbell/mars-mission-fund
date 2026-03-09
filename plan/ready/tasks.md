@@ -56,7 +56,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All six WOFF2 files exist in `src/assets/fonts/` and are non-zero bytes (`ls -lh src/assets/fonts/`).
   - **Brief ref**: Scope — "Self-hosted WOFF2 fonts"; Approach step 4 — "Fonts"
 
-- [ ] TASK-05: Create `src/fonts.css` with @font-face declarations
+- [x] TASK-05: Create `src/fonts.css` with @font-face declarations
   - **Goal**: Declare all three font families via `@font-face` so the browser loads them locally.
   - **Details**:
     - Create `src/fonts.css`.

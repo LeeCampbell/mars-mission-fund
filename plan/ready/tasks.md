@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File created. `npm run build` passes. Renders gradient bg, correct font families, correct sub-text colours.
   - **Brief ref**: §Approach step 3
 
-- [ ] TASK-05: SectionLabel primitive
+- [x] TASK-05: SectionLabel primitive
   - **Goal**: Implement `src/components/ui/SectionLabel.tsx` — a numbered section header rendered in Space Mono.
   - **Details**: Props: `number: number | string`, `title: string`. Renders the string `"<number> — <title>"` in a single element (e.g. `<p>` or `<span>`). Font: Space Mono via `--font-mono`. Uppercase via `text-transform: uppercase`. Colour: `--color-text-accent`. Letter spacing: `--tracking-wide` (or equivalent token). No hardcoded values.
   - **Files**: `src/components/ui/SectionLabel.tsx`

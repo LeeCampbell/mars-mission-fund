@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Section 9.1 no longer references manually downloading files or "Font files served in WOFF2 format" as a bare bullet; it documents the @fontsource npm approach with rationale. No Tier 1 token or CDN references introduced. One sentence per line throughout.
   - **Brief ref**: Brief § Approach — Divergence 1; § Files to Create/Modify row 1.
 
-- [ ] TASK-02: Update frontend.md Section 2.1 — document inline CSSProperties styling pattern
+- [x] TASK-02: Update frontend.md Section 2.1 — document inline CSSProperties styling pattern
   - **Goal**: Add a paragraph to Section 2.1 "Token Consumption" documenting that design system primitives and composite components use inline `React.CSSProperties` style objects with `var(--semantic-token)` references, and that Tailwind is not used for component-level styles.
   - **Details**: In `specs/tech/frontend.md` Section 2.1, after the existing lint rule list (after the `A build-time lint rule must enforce this constraint` paragraph and its bullet list), add a new paragraph block that: (1) states the implementation pattern — design system primitives define a `const xyzStyle: React.CSSProperties` object per visual state and apply it via the `style` prop; (2) states Tailwind is not used for component-level styles — it is imported for CSS reset and normalisation only; (3) adds rationale: inline style objects are co-located with the component, type-safe via `React.CSSProperties`, and structurally enforce the semantic token rule because the TypeScript type does not accept arbitrary strings that could be hardcoded colours. Follow one-sentence-per-line rule (L3-007).
   - **Files**: `specs/tech/frontend.md`

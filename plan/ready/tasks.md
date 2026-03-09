@@ -81,7 +81,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; compiles; `<main id="main-content">` present in rendered DOM; `document.title` updates on navigation; Header and Footer appear on all routes
   - **Brief ref**: Approach → Layout; Files table; Verification → all three routes show Header/Footer
 
-- [ ] TASK-12: Wire Layout into App.tsx
+- [x] TASK-12: Wire Layout into App.tsx
   - **Goal**: Replace the existing placeholder routes in `src/App.tsx` with the `Layout` component as a React Router v7 layout route wrapping all three page routes
   - **Details**: Read current `src/App.tsx`. Replace the route structure so `Layout` is the parent route (using `<Outlet>`) and `/`, `/about`, `/contact` are child routes rendering placeholder `<div>` elements (actual page components are Issue #4). Use React Router v7 `createBrowserRouter` + `RouterProvider` or the JSX `<Routes>`/`<Route>` pattern — match whichever pattern is already in the file. Add `<Suspense>` wrapper if lazy-loading is used. Ensure all three routes are accessible.
   - **Files**: `src/App.tsx`

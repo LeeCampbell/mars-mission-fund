@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes with zero errors. All token names referenced in the brief (`--color-action-*`, `--color-border-accent`, `--color-status-*`, `--gradient-surface-stat`, `--radius-card`, `--motion-hover`, `--breakpoint-*`) exist in the stylesheet.
   - **Brief ref**: §Approach "Prerequisite", §Dependencies
 
-- [ ] TASK-02: Button primitive
+- [x] TASK-02: Button primitive
   - **Goal**: Implement `src/components/ui/Button.tsx` — a stateless primitive that renders as `<button>` by default or as `<a>` when `href` is provided, with three visual variants (primary / secondary / ghost).
   - **Details**: Props: `variant: 'primary' | 'secondary' | 'ghost'` (default `'primary'`), `href?: string`, `disabled?: boolean`, `children`, standard button/anchor HTML attributes. Render `<a>` when `href` is set, else `<button>`. Apply variant styles via `style` prop or Tailwind arbitrary values referencing only Tier 2 tokens. Disabled state uses `--color-action-disabled` for bg/text and sets `aria-disabled` + `pointer-events: none`. Hover transition uses `--motion-hover`. Focus ring uses `--color-border-accent` (2px solid offset ring per L2-001 §5.3).
   - **Files**: `src/components/ui/Button.tsx`

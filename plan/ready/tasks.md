@@ -64,7 +64,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cd server && npx tsc --noEmit` passes; each file exports the expected symbol.
   - **Brief ref**: Directory structure — `middleware/`; Key design decisions — Correlation ID, Error envelope, Logging.
 
-- [ ] TASK-06: Create campaigns/routes.ts — Express Router factory
+- [x] TASK-06: Create campaigns/routes.ts — Express Router factory
   - **Goal**: Implement `createCampaignRouter(pool)` returning an Express Router with `GET /` and `GET /:id` handlers.
   - **Details**:
     - Create `server/src/campaigns/routes.ts`.

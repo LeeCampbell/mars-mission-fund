@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `package.json` contains all 6 new devDependencies and all 5 new scripts with correct values
   - **Brief ref**: Section "1. Install packages" and "5. npm scripts"
 
-- [ ] TASK-02: Create eslint.config.js
+- [x] TASK-02: Create eslint.config.js
   - **Goal**: Configure ESLint 9 flat config with TypeScript and React support
   - **Details**: Create `eslint.config.js` using ESM imports (project has `"type": "module"`). Apply `tseslint.configs.recommended`, `eslint-plugin-react`, `eslint-plugin-react-hooks`. Disable `react/react-in-jsx-scope`. Target only `**/*.{ts,tsx}`. Ignore `dist/` and `node_modules/`
   - **Files**: `eslint.config.js`

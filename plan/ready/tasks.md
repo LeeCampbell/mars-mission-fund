@@ -82,7 +82,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component exists; `npm run build` passes; no `<form>` element in output; contact details visible
   - **Brief ref**: "ContactPage structure" and Files table
 
-- [ ] TASK-11: Wire pages into App.tsx and verify routing
+- [x] TASK-11: Wire pages into App.tsx and verify routing
   - **Goal**: Replace placeholder stubs in `src/App.tsx` with real page imports and verify navigation works
   - **Details**: Open `src/App.tsx`. Remove the inline placeholder `HomePage`, `AboutPage`, and `ContactPage` stub components. Add import statements for `./pages/HomePage`, `./pages/AboutPage`, and `./pages/ContactPage`. Confirm the route definitions already reference these component names (they should — only the definitions change, not the route config). Run `npm run build` to confirm zero TypeScript errors. Then do a visual browser check: start dev server, navigate between all three pages via header links, confirm document titles update and no full-page reloads occur.
   - **Files**: `src/App.tsx`

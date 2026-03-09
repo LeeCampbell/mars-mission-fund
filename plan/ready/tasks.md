@@ -68,7 +68,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; `App.tsx` contains the `/campaigns` route; `Header.tsx` `navLinks` array contains the new entry.
   - **Brief ref**: Section "6 — Routing & navigation"
 
-- [ ] TASK-07: Final verification — build, lint, and tests
+- [x] TASK-07: Final verification — build, lint, and tests
   - **Goal**: Confirm the full implementation compiles cleanly, passes linting, and does not break existing tests.
   - **Details**:
     - Run `npm run build` and confirm zero TypeScript errors.

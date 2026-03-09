@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm install` exits 0; `npx tsc --version` works; no peer-dependency errors
   - **Brief ref**: Dependencies table; Approach — project creation
 
-- [ ] TASK-02: Download and place WOFF2 font files
+- [x] TASK-02: Download and place WOFF2 font files
   - **Goal**: Self-host all required font weights as WOFF2 files under `src/assets/fonts/`
   - **Details**: Fetch WOFF2 subsets for: Bebas Neue 400, DM Sans 400/500/600/700 (latin subset), Space Mono 400. Use `curl` or `wget` to download from Google Fonts CSS API or a tool like `google-webfonts-helper`. Filenames should be descriptive (e.g. `bebas-neue-400.woff2`, `dm-sans-400.woff2`, etc.). No CDN runtime dependency — all files must be committed assets.
   - **Files**: `src/assets/fonts/bebas-neue-400.woff2`, `src/assets/fonts/dm-sans-400.woff2`, `src/assets/fonts/dm-sans-500.woff2`, `src/assets/fonts/dm-sans-600.woff2`, `src/assets/fonts/dm-sans-700.woff2`, `src/assets/fonts/space-mono-400.woff2`

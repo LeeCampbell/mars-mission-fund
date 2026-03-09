@@ -59,7 +59,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; component is exported; loading/error/success branches all present in source.
   - **Brief ref**: Section "5 — CampaignsPage"
 
-- [ ] TASK-06: Wire up route and navigation link
+- [x] TASK-06: Wire up route and navigation link
   - **Goal**: Register the `/campaigns` route in the router and add the "Explore Missions" nav link to the header so both desktop and mobile menus include it automatically.
   - **Details**:
     - `src/App.tsx`: import `CampaignsPage` and add `<Route path="/campaigns" element={<CampaignsPage />} />` inside the existing `<Route element={<Layout />}>` wrapper.

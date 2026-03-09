@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File created. `npm run build` passes. Renders "01 — SECTION NAME" in orange Space Mono.
   - **Brief ref**: §Approach step 4
 
-- [ ] TASK-06: Badge primitive
+- [x] TASK-06: Badge primitive
   - **Goal**: Implement `src/components/ui/Badge.tsx` — a status badge with three variants (funded / active / new) each with a coloured dot indicator.
   - **Details**: Props: `variant: 'funded' | 'active' | 'new'`. Each variant maps to its own set of tokens from L2-001 §3.5: bg, text, border, dot colour. Dot is a small circle rendered before the label text; dot element has `aria-hidden="true"`. Badge text is the capitalised variant name (or accept a `label` prop). Border: 1px solid variant border token. Rounding: `--radius-badge` or `--radius-full`.
   - **Files**: `src/components/ui/Badge.tsx`

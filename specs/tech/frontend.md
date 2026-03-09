@@ -1,7 +1,7 @@
 # Frontend Standards
 
 > **Spec ID**: L3-005
-> **Version**: 0.3
+> **Version**: 0.4
 > **Status**: Approved
 > **Rate of Change**: Sprint-level / tech decisions
 > **Depends On**: L2-001 (Brand Application Standard), L2-002 (Engineering Standard), L3-001 (Architecture)
@@ -118,6 +118,24 @@ The following constraints apply regardless of implementation detail:
 - Protected routes enforce authentication state before rendering; unauthenticated users are redirected to login.
 - Route transitions use `--motion-page` semantic token for animation timing.
 
+**Lazy loading pattern**: Non-marketing routes (e.g., campaign detail, contribute) use `React.lazy` + `Suspense` for route-level code splitting. A root `<Suspense>` with a fallback UI wraps the entire `<Routes>` tree so that any lazy-loaded route is covered without individual `<Suspense>` wrappers at each route definition.
+
+```tsx
+// Route definitions (src/App.tsx or router config)
+const CampaignDetail = React.lazy(() => import('./pages/CampaignDetail'));
+const Contribute = React.lazy(() => import('./pages/Contribute'));
+
+// Root layout
+<Suspense fallback={<PageSpinner />}>
+  <Routes>
+    <Route path="/campaigns/:id" element={<CampaignDetail />} />
+    <Route path="/campaigns/:id/contribute" element={<Contribute />} />
+  </Routes>
+</Suspense>
+```
+
+Marketing pages (landing, public campaign list) may be statically pre-rendered and do not require lazy loading.
+
 ### 1.5 API Communication
 
 - All API communication goes through a centralised HTTP client that enforces:
@@ -127,6 +145,39 @@ The following constraints apply regardless of implementation detail:
   - Request/response logging (no sensitive data — per [Engineering Standard](L2-002) Section 6.1).
 - API response types are generated from or validated against the API's machine-readable documentation (per [Engineering Standard](L2-002) Section 5.5).
 - No component may call an API endpoint directly — all calls go through the centralised client.
+
+**API / hooks layering convention** (established during issues #40–#43):
+
+| Layer | Location | Responsibility |
+| --- | --- | --- |
+| **API functions** | `src/api/<domain>.ts` | Plain `fetch` wrappers; TypeScript types inferred from Zod schemas; no React dependency |
+| **Query hooks** | `src/hooks/use<Domain>.ts` | TanStack Query `useQuery` (and `useMutation`) hooks that wrap the API layer; expose loading, error, and data states |
+| **Page components** | `src/pages/` | Import hooks only — never import from `src/api/` directly |
+
+Example structure:
+
+```text
+src/
+  api/
+    campaigns.ts       # fetchCampaign(), fetchCampaigns(), etc.
+  hooks/
+    useCampaign.ts     # useQuery wrapping fetchCampaign()
+  pages/
+    CampaignDetail.tsx # imports useCampaign(), never fetchCampaign()
+```
+
+**Vite dev-server proxy**: `vite.config.ts` includes a `server.proxy` entry that forwards all `/v1` requests to `http://localhost:3000` during local development. This allows the frontend to call `/v1/campaigns` without CORS issues while the Express API server runs on port 3000.
+
+```ts
+// vite.config.ts (relevant excerpt)
+server: {
+  proxy: {
+    '/v1': 'http://localhost:3000',
+  },
+},
+```
+
+This proxy is a development-only concern; in production the frontend and API are co-hosted or the API URL is injected via environment variables.
 
 ---
 
@@ -533,6 +584,7 @@ Domain specs may not introduce visual properties that bypass this spec's token a
 | March 2026 | 0.1     | —      | Initial stub. Frontend architecture constraints, component library standards, performance budgets, accessibility implementation, responsive design, animation constraints, browser support, dark mode implementation, asset optimisation, and testing strategy. Framework selection and specific breakpoints deferred as open decisions.                                                                                                                                                  |
 | March 2026 | 0.2     | —      | Resolved OQ-1: React 19.x selected as frontend framework per L3-008.                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | March 2026 | 0.3     | —      | Resolved OQ-2 through OQ-9: Mobile-first responsive strategy with breakpoints at 640/768/1024/1280px. Bundle size budgets established. TanStack Query + React built-in state for state management. Inline SVG React components for icons. Vitest + React Testing Library + Playwright + MSW + Supertest for testing (with Playwright MCP for AI agent integration). SPA with selective static pre-rendering for SEO pages. Graceful degradation for no-JS with branded noscript fallback. |
+| 2026-03-09 | 0.4     | —      | Documented patterns introduced in issues #40–#43 (Public Campaign Pages milestone): (1) Section 1.4 — lazy loading pattern for non-marketing routes using `React.lazy` + `Suspense` with a root `<Suspense>` wrapping `<Routes>`; (2) Section 1.5 — api/hooks layering convention (`src/api/<domain>.ts` for fetch functions, `src/hooks/use<Domain>.ts` for TanStack Query hooks, page components consume hooks only); (3) Section 1.5 — Vite dev-server proxy forwarding `/v1` to `http://localhost:3000` for local development. |
 
 ---
 

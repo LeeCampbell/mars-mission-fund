@@ -44,3 +44,11 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 
 - Placing `<noscript>` in the `<head>` of `index.html` causes a parse5 build error: "disallowed-content-in-noscript-in-head".
 - Resolution: Move `<noscript>` to `<body>` instead.
+
+## Issues #40–#43: Public Campaign Pages — Tooling Notes
+
+- The `server/` directory is a **separate Node.js project** with its own `package.json`, `tsconfig.json`, and `vitest.config.ts`. It is entirely independent of the root frontend build and test commands; run `npm test` inside `server/` to execute server-side tests.
+- The server `tsconfig.json` uses `"module": "NodeNext"` and `"moduleResolution": "NodeNext"`. This requires **`.js` file extensions on all TypeScript import paths**, even though the actual source files are `.ts` (e.g. `import { createApp } from '../app.js'`). Omitting the extension causes a runtime `ERR_MODULE_NOT_FOUND`.
+- The server `vitest.config.ts` only needs `environment: 'node'`; no special ESM transforms are required because `server/package.json` sets `"type": "module"`, which makes Node treat all `.js` output as ESM.
+- **Express 5 + SuperTest testability**: the app is built as a factory function `createApp(pool: Pool): Express` that accepts the database pool via dependency injection. This pattern is required so tests can pass a mock pool without side effects from real DB connections or port binding.
+- The `src/api/<domain>.ts` layer falls back to inline mock data when the API returns a non-OK response or is unreachable. This makes the frontend fully functional during local development even when the Express server is not running.

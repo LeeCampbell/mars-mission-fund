@@ -1,7 +1,7 @@
 # Tech Stack
 
 > **Spec ID:** L3-008
-> **Version:** 0.1.0
+> **Version:** 0.2.0
 > **Status:** Approved
 > **Rate of change:** Slow (changes at major technology decisions)
 > **Depends on:** L1-001, L2-002, L3-001
@@ -175,6 +175,51 @@ No external search provider is required.
 
 ---
 
+## Local Development
+
+`docker-compose.dev.yml` provides the local development backing services.
+
+### Docker Compose
+
+- Runs `postgres:16-alpine` on port **5432** for local development.
+- Only the database is managed by Docker Compose; the Express server is run separately (see below).
+
+### Database Migrations (DBMate)
+
+- DBMate applies migrations from `server/db/migrations/`.
+- Invoke via a local DBMate install or:
+
+  ```sh
+  docker run --rm --network host \
+    -e DATABASE_URL="postgres://..." \
+    -v "$(pwd)/server/db:/db" \
+    ghcr.io/amacneil/dbmate up
+  ```
+
+- Migration file naming convention: `YYYYMMDDHHMMSS_<snake_case_description>.sql`
+  (e.g. `20260301120000_create_campaigns.sql`).
+
+### Express Server
+
+Run separately from Docker Compose:
+
+```sh
+cd server && npm run dev
+```
+
+### Server Directory Layout
+
+```text
+server/
+└── src/
+    ├── campaigns/     # Campaign domain handlers and routes
+    ├── db/            # Database client, migration helpers, migrations/
+    ├── middleware/     # Express middleware (logging, error handling)
+    └── __tests__/     # Integration and unit tests
+```
+
+---
+
 ## Testing
 
 | Technology                | Version       | Purpose                                          |
@@ -249,3 +294,4 @@ No external search provider is required.
 | 2026-03-04 | —      | Expanded PostHog role to cover feature flags, product analytics, and web analytics. Added posthog-node for backend feature flag evaluation. Added Feature Flags & Product Operations and Developer Observability sections. |
 | 2026-03-04 | —      | Added Stripe as payment gateway (Stripe Elements, stripe Node SDK).                                                                                                                                                        |
 | 2026-03-09 | Claude | Clarified Tailwind CSS actual usage: CSS reset and normalisation layer only; component-level styling uses inline `React.CSSProperties` with `var()` semantic token references.                                             |
+| 2026-03-09 | Claude | Added Local Development section: `docker-compose.dev.yml` (postgres:16-alpine), DBMate migration invocation and naming convention, Express server run-separately pattern, `server/src/` directory layout. Bumped to 0.2.0. |

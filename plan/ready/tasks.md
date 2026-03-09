@@ -83,7 +83,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Both sections render; 3 contact cards visible; 3 social links present; no form; `/contact` route works; `npm run build` passes
   - **Brief ref**: Contact page section
 
-- [ ] TASK-11: Cross-page verification and token audit
+- [x] TASK-11: Cross-page verification and token audit
   - **Goal**: Final integration check — responsive layout, navigation, focus states, and token audit across all pages
   - **Details**: Run the dev server (`npm run dev`). Manually verify or use Playwright to check:
     - All three routes (`/`, `/about`, `/contact`) render without console errors

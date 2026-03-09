@@ -82,7 +82,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; `CampaignUpdatesSection` shows empty-state when updates is `[]`; `TeamSection` renders name/role/bio for each member
   - **Brief ref**: `CampaignUpdatesSection` and `TeamSection` rows in Files table
 
-- [ ] TASK-07: Create `CampaignDetailPage`
+- [x] TASK-07: Create `CampaignDetailPage`
   - **Goal**: Assemble all section components into the full campaign detail layout, reading `:id` from the URL
   - **Details**:
     - Create `src/pages/CampaignDetailPage.tsx`

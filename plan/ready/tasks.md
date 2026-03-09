@@ -74,7 +74,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Two sections render; no form element; all links are real anchor elements; `npm run build` succeeds
   - **Brief ref**: Implementation note 7; Scope — "ContactPage.tsx … contact info and social links (no form)"
 
-- [ ] TASK-11: Wire pages into `App.tsx` and verify full build
+- [x] TASK-11: Wire pages into `App.tsx` and verify full build
   - **Goal**: Replace stub page components in `App.tsx` with real imports from `src/pages/` and confirm everything builds and runs
   - **Details**: Modify `src/App.tsx` — remove the inline stub components (or inline JSX) for `/`, `/about`, `/contact` routes and replace with `import HomePage from './pages/HomePage'`, `import AboutPage from './pages/AboutPage'`, `import ContactPage from './pages/ContactPage'`. Run `npm run build` to confirm zero TypeScript or Vite errors.
   - **Files**: `src/App.tsx`

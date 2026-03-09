@@ -235,3 +235,21 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+
+/* ============================================================
+   HEADER RESPONSIVE BEHAVIOUR
+   ============================================================ */
+@media (max-width: 767px) {
+  .header-desktop-nav {
+    display: none !important;
+  }
+  .header-hamburger {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-mobile-nav {
+    display: none !important;
+  }
+}

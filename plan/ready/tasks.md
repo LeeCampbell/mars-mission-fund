@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File created. `npm run build` passes. Logo renders at all three sizes with no external network request.
   - **Brief ref**: §Approach step 7, §Dependencies "Assets"
 
-- [ ] TASK-09: Header component
+- [x] TASK-09: Header component
   - **Goal**: Implement `src/components/Header.tsx` — sticky site header with skip-to-content link, logo + wordmark, and responsive nav with mobile hamburger.
   - **Details**: Structure: `<header>` as first element, skip-to-content `<a href="#main-content">` as first focusable child (visually hidden until focused, then shown per standard skip-link pattern using tokens). Logo (`size="sm"`) + "MARS MISSION FUND" wordmark text in Bebas Neue (`--font-display`). Nav: `<nav aria-label="Main navigation">` with React Router `NavLink` components for Home (`/`), About (`/about`), Contact (`/contact`). Active `NavLink` gets `--color-border-accent` underline/colour. Header position: `sticky top-0` with `z-index` above page content; background `--color-surface-header` (or `--color-surface-overlay`). Mobile (below `--breakpoint-md` / 768px): hamburger button toggles nav visibility via `useState`; hamburger uses `aria-expanded` and `aria-controls`. Focus ring on all interactive elements per L2-001 §5.3. No hardcoded colours, sizes, or font stacks.
   - **Files**: `src/components/Header.tsx`

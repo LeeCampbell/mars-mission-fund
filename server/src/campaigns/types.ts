@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const CampaignStatusSchema = z.enum([
   'Draft',
@@ -13,7 +13,7 @@ export const CampaignStatusSchema = z.enum([
   'Settlement',
   'Complete',
   'Cancelled',
-]);
+])
 
 export const CampaignCategorySchema = z.enum([
   'Propulsion',
@@ -26,7 +26,7 @@ export const CampaignCategorySchema = z.enum([
   'Radiation Protection',
   'Robotics & Automation',
   'Communications & Navigation',
-]);
+])
 
 // Summary shape returned by the list endpoint
 export const CampaignSummarySchema = z.object({
@@ -37,7 +37,7 @@ export const CampaignSummarySchema = z.object({
   goal_amount: z.coerce.number().int(),
   raised_amount: z.coerce.number().int(),
   created_at: z.coerce.date(),
-});
+})
 
 // Full campaign row returned by the detail endpoint
 export const CampaignSchema = z.object({
@@ -59,20 +59,20 @@ export const CampaignSchema = z.object({
   launched_at: z.coerce.date().nullable(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
-});
+})
 
 export const RouteParamsSchema = z.object({
   id: z.string().uuid(),
-});
+})
 
 export const ListQuerySchema = z.object({
   status: CampaignStatusSchema.optional(),
   category: CampaignCategorySchema.optional(),
-});
+})
 
-export type CampaignStatus = z.infer<typeof CampaignStatusSchema>;
-export type CampaignCategory = z.infer<typeof CampaignCategorySchema>;
-export type CampaignSummary = z.infer<typeof CampaignSummarySchema>;
-export type Campaign = z.infer<typeof CampaignSchema>;
-export type RouteParams = z.infer<typeof RouteParamsSchema>;
-export type ListQuery = z.infer<typeof ListQuerySchema>;
+export type CampaignStatus = z.infer<typeof CampaignStatusSchema>
+export type CampaignCategory = z.infer<typeof CampaignCategorySchema>
+export type CampaignSummary = z.infer<typeof CampaignSummarySchema>
+export type Campaign = z.infer<typeof CampaignSchema>
+export type RouteParams = z.infer<typeof RouteParamsSchema>
+export type ListQuery = z.infer<typeof ListQuerySchema>

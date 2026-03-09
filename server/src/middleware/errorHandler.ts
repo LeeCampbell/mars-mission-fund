@@ -1,9 +1,9 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express'
 
 interface AppError extends Error {
-  status?: number;
-  code?: string;
-  details?: Record<string, unknown>;
+  status?: number
+  code?: string
+  details?: Record<string, unknown>
 }
 
 export function errorHandler(
@@ -11,10 +11,10 @@ export function errorHandler(
   req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  next: NextFunction,
+  next: NextFunction
 ): void {
-  const status = err.status ?? 500;
-  const correlationId = res.locals['correlationId'] as string | undefined;
+  const status = err.status ?? 500
+  const correlationId = res.locals['correlationId'] as string | undefined
 
   res.status(status).json({
     error: {
@@ -23,5 +23,5 @@ export function errorHandler(
       correlation_id: correlationId,
       details: err.details ?? {},
     },
-  });
+  })
 }

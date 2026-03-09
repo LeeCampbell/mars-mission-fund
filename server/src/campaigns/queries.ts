@@ -1,24 +1,21 @@
-import { Pool } from 'pg';
-import { Campaign, CampaignSummary, ListQuery } from './types.js';
+import { Pool } from 'pg'
+import { Campaign, CampaignSummary, ListQuery } from './types.js'
 
-export async function listCampaigns(
-  pool: Pool,
-  filters: ListQuery,
-): Promise<CampaignSummary[]> {
-  const conditions: string[] = [];
-  const params: string[] = [];
+export async function listCampaigns(pool: Pool, filters: ListQuery): Promise<CampaignSummary[]> {
+  const conditions: string[] = []
+  const params: string[] = []
 
   if (filters.status !== undefined) {
-    params.push(filters.status);
-    conditions.push(`status = $${params.length}`);
+    params.push(filters.status)
+    conditions.push(`status = $${params.length}`)
   }
 
   if (filters.category !== undefined) {
-    params.push(filters.category);
-    conditions.push(`category = $${params.length}`);
+    params.push(filters.category)
+    conditions.push(`category = $${params.length}`)
   }
 
-  const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+  const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
 
   const sql = `
     SELECT
@@ -32,16 +29,13 @@ export async function listCampaigns(
     FROM campaigns
     ${where}
     ORDER BY created_at DESC
-  `;
+  `
 
-  const result = await pool.query<CampaignSummary>(sql, params);
-  return result.rows;
+  const result = await pool.query<CampaignSummary>(sql, params)
+  return result.rows
 }
 
-export async function getCampaignById(
-  pool: Pool,
-  id: string,
-): Promise<Campaign | null> {
+export async function getCampaignById(pool: Pool, id: string): Promise<Campaign | null> {
   const sql = `
     SELECT
       id,
@@ -64,11 +58,11 @@ export async function getCampaignById(
       updated_at
     FROM campaigns
     WHERE id = $1
-  `;
+  `
 
-  const result = await pool.query<Campaign>(sql, [id]);
+  const result = await pool.query<Campaign>(sql, [id])
   if (result.rowCount === 0) {
-    return null;
+    return null
   }
-  return result.rows[0];
+  return result.rows[0]
 }

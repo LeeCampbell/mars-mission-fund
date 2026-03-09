@@ -1,12 +1,12 @@
-import pino from 'pino';
-import { pool } from './db/pool.js';
-import { createApp } from './app.js';
+import pino from 'pino'
+import { pool } from './db/pool.js'
+import { createApp } from './app.js'
 
-const logger = pino({ name: 'server' });
-const PORT = process.env.PORT ?? '3000';
+const logger = pino({ name: 'server' })
+const PORT = process.env.PORT ?? '3000'
 
-const app = createApp(pool);
+const app = createApp(pool)
 
 app.listen(Number(PORT), () => {
-  logger.info({ port: PORT }, 'Server listening');
-});
+  logger.info({ port: PORT }, 'Server listening')
+})

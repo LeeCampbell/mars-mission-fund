@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
 import { Button } from './components/ui/Button'
+import { Card } from './components/ui/Card'
 
 function HomePage() {
   return (
@@ -17,6 +18,17 @@ function HomePage() {
       </div>
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
         <Button href="/about" variant="primary">Link Button (href)</Button>
+      </div>
+      <h2>Card Component — TASK-02</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', maxWidth: '800px' }}>
+        <Card>
+          <h3 style={{ margin: 0 }}>Card without accent</h3>
+          <p style={{ margin: '0.5rem 0 0' }}>Standard card surface with subtle border.</p>
+        </Card>
+        <Card accent>
+          <h3 style={{ margin: 0 }}>Card with accent</h3>
+          <p style={{ margin: '0.5rem 0 0' }}>Top gradient accent bar visible above.</p>
+        </Card>
       </div>
     </main>
   )

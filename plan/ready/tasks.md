@@ -19,7 +19,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; all three variants render with token-based styles; focus ring visible; disabled state styled correctly; `href` prop renders an anchor tag
   - **Brief ref**: Brief "Scope" — Button; "Approach" — TASK-01; "Key token constraints"
 
-- [ ] TASK-02: Create Card component
+- [x] TASK-02: Create Card component
   - **Goal**: Implement the Card design system primitive with optional top accent bar
   - **Details**:
     - Create `src/components/ui/Card.tsx`

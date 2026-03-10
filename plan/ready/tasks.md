@@ -57,7 +57,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The injected CSS contains `clamp(2rem, 9vw, 6rem)` (or an equivalent step-ladder starting at ≤32 px). No `48px` font-size value remains in the file.
   - **Brief ref**: Step 4 — Fix hero H1 responsive sizing
 
-- [ ] TASK-05: Build verification and visual QA
+- [x] TASK-05: Build verification and visual QA
   - **Goal**: Confirm the codebase builds cleanly, tests pass, and visual checks confirm correct fonts and layout at both desktop and 375 px mobile.
   - **Details**:
     1. Run `npm run build` from the repo root; confirm zero TypeScript or lint errors.

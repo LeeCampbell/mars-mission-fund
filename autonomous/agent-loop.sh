@@ -148,7 +148,7 @@ determine_state() {
   elif [ -f "plan/ready/tasks.md" ]; then
     if grep -q '^\- \[ \]' "plan/ready/tasks.md"; then
       echo "execute-tasks"
-    elif [ -f "plan/.pr-number" ]; then
+    elif [ -f "plan/.finalized" ]; then
       echo "await-ci"
     else
       echo "finalize-pr"
@@ -362,6 +362,7 @@ Branch: ${BRANCH}"
 
     # Persist PR number for await-ci state (do NOT archive plan yet — needed for remediation)
     echo "$PR_NUMBER" > plan/.pr-number
+    touch plan/.finalized
     clear_state
     echo ">>> PR #${PR_NUMBER} finalized for issue #${ISSUE_NUMBER}, transitioning to await-ci"
     exit 1  # iterate again into await-ci

@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Fix dead `href="#"` links in HeroSection, ClosingCtaSection, and MissionCard
+- [x] TASK-01: Fix dead `href="#"` links in HeroSection, ClosingCtaSection, and MissionCard
   - **Goal**: Replace all placeholder `href="#"` with `href="/campaigns"` on the three homepage components
   - **Details**:
     - In `HeroSection.tsx` (~line 105): change `href="#"` → `href="/campaigns"` on the "Explore Missions" button

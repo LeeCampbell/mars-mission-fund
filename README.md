@@ -59,27 +59,9 @@ For the full technology inventory, see [specs/tech/tech-stack.md](./specs/tech/t
 ## Getting Started
 
 ```bash
-# Clone the repository
 git clone https://github.com/LeeCampbell/mars-mission-fund.git
 cd mars-mission-fund
-
-# Install dependencies
-npm install
-
-# Start local infrastructure (PostgreSQL)
-docker compose -f docker-compose.dev.yml up -d
-
-# Run database migrations
-docker run --rm --network host \
-  -e DATABASE_URL="postgresql://mmf:mmf@localhost:5432/mmf?sslmode=disable" \
-  -v "$(pwd)/packages/server/db:/db" \
-  ghcr.io/amacneil/dbmate up
-
-# Start the frontend dev server
-npm run dev
-
-# Start the backend dev server (in a separate terminal)
-npm run dev:server
+./scripts/run-local.sh
 ```
 
 > **Note:** External services (Stripe, Clerk, Veriff, AWS SES) are stubbed or mocked for local development.

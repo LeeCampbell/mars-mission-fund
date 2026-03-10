@@ -125,7 +125,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm test -w @mmf/client` exits 0 with all tests passing.
   - **Brief ref**: §7 Update tests (client)
 
-- [ ] TASK-08: Final build and integration verification
+- [x] TASK-08: Final build and integration verification
   - **Goal**: Full monorepo build succeeds and all workspace tests pass.
   - **Details**:
     - Run `npm run build` from the repo root and confirm it succeeds for all workspaces (shared, server, client).

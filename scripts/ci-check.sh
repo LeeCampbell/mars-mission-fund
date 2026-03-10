@@ -9,7 +9,7 @@ echo "=== Install (lockfile check) ==="
 npm ci
 
 echo "=== Type-check ==="
-npx tsc -b --noEmit
+npm run build -w @mmf/shared && npx tsc -b --noEmit && npx tsc --noEmit -p packages/server/tsconfig.json
 
 echo "=== Lint ==="
 npm run lint

@@ -26,7 +26,7 @@ jobs:
         run: npm ci
 
       - name: Type-check
-        run: npx tsc -b --noEmit && npx tsc --noEmit -p packages/server/tsconfig.json
+        run: npm run build -w @mmf/shared && npx tsc -b --noEmit && npx tsc --noEmit -p packages/server/tsconfig.json
 
       - name: Lint
         run: npm run lint

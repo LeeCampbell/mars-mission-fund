@@ -12,9 +12,9 @@ set -euo pipefail
 REQUEST="${1:-}"
 
 if [ -n "$REQUEST" ]; then
-  echo "Follow ./prompts/PLAN.md — ${REQUEST}" \
+  echo "Follow ./scripts/PLAN.md — ${REQUEST}" \
     | claude 2>&1
 else
-  echo "Follow ./prompts/PLAN.md" \
+  echo "Follow ./scripts/PLAN.md" \
     | claude 2>&1
 fi

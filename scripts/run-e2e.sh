@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Start the full local development environment.
-# Prerequisites: Node.js 22.x, Docker
+# Run the full local stack, execute Playwright e2e tests, then tear down.
+# Exits 0 on success, non-zero on failure.
 
-# --- Cleanup on exit (Ctrl+C or any termination) ---
 cleanup() {
   echo ""
-  echo "Shutting down…"
-  # Kill background jobs (server, vite) started by this script
+  echo "Tearing down…"
   kill $(jobs -p) 2>/dev/null || true
   wait 2>/dev/null || true
   docker compose -f docker-compose.dev.yml down
@@ -38,9 +36,15 @@ docker run --rm --network host \
   -v "$(pwd)/packages/server/db:/db" \
   ghcr.io/amacneil/dbmate up
 
-# Start both dev servers in the background
+# Start the backend dev server in the background
 npm run dev:server &
-npm run dev &
 
-# Wait for any background job to exit (Ctrl+C triggers the EXIT trap)
-wait
+# Wait for backend to accept connections
+echo "Waiting for backend…"
+until curl -sf http://localhost:3001/v1/campaigns > /dev/null 2>&1; do
+  sleep 1
+done
+echo "Backend is ready."
+
+# Run Playwright e2e tests (Playwright starts the Vite dev server itself)
+npx playwright test

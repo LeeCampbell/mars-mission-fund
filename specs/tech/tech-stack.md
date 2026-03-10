@@ -1,7 +1,7 @@
 # Tech Stack
 
 > **Spec ID:** L3-008
-> **Version:** 0.2.0
+> **Version:** 0.3.0
 > **Status:** Approved
 > **Rate of change:** Slow (changes at major technology decisions)
 > **Depends on:** L1-001, L2-002, L3-001
@@ -186,13 +186,13 @@ No external search provider is required.
 
 ### Database Migrations (DBMate)
 
-- DBMate applies migrations from `server/db/migrations/`.
+- DBMate applies migrations from `packages/server/db/migrations/`.
 - Invoke via a local DBMate install or:
 
   ```sh
   docker run --rm --network host \
     -e DATABASE_URL="postgres://..." \
-    -v "$(pwd)/server/db:/db" \
+    -v "$(pwd)/packages/server/db:/db" \
     ghcr.io/amacneil/dbmate up
   ```
 
@@ -204,13 +204,13 @@ No external search provider is required.
 Run separately from Docker Compose:
 
 ```sh
-cd server && npm run dev
+npm run dev:server
 ```
 
 ### Server Directory Layout
 
 ```text
-server/
+packages/server/
 └── src/
     ├── campaigns/     # Campaign domain handlers and routes
     ├── db/            # Database client, migration helpers, migrations/
@@ -295,3 +295,4 @@ server/
 | 2026-03-04 | —      | Added Stripe as payment gateway (Stripe Elements, stripe Node SDK).                                                                                                                                                        |
 | 2026-03-09 | Claude | Clarified Tailwind CSS actual usage: CSS reset and normalisation layer only; component-level styling uses inline `React.CSSProperties` with `var()` semantic token references.                                             |
 | 2026-03-09 | Claude | Added Local Development section: `docker-compose.dev.yml` (postgres:16-alpine), DBMate migration invocation and naming convention, Express server run-separately pattern, `server/src/` directory layout. Bumped to 0.2.0. |
+| 2026-03-10 | Claude | Updated Local Development section: DBMate volume path `server/db` → `packages/server/db`; Express run command `cd server && npm run dev` → `npm run dev:server` (from repo root); Server Directory Layout root label `server/` → `packages/server/`. Bumped to 0.3.0. |

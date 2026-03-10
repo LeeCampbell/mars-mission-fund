@@ -89,7 +89,7 @@ const titleRowStyle: React.CSSProperties = {
 
 const titleStyle: React.CSSProperties = {
   fontFamily: 'var(--font-heading)',
-  fontSize: 'var(--type-hero-heading-size)',
+  fontSize: 'var(--type-page-title-size)',
   fontWeight: 'var(--type-hero-heading-weight)' as React.CSSProperties['fontWeight'],
   letterSpacing: 'var(--type-hero-heading-spacing)',
   lineHeight: 'var(--type-hero-heading-leading)',

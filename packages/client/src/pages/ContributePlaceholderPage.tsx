@@ -18,7 +18,7 @@ const cardContentStyle: React.CSSProperties = {
 
 const headingStyle: React.CSSProperties = {
   fontFamily: 'var(--font-heading)',
-  fontSize: 'var(--type-hero-heading-size)',
+  fontSize: 'var(--type-page-title-size)',
   fontWeight: 'var(--type-hero-heading-weight)' as React.CSSProperties['fontWeight'],
   color: 'var(--color-text-primary)',
   margin: '0 0 var(--space-4)',

@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Search the file for `--type-hero:` and confirm all 13 tokens are present with correct values.
   - **Brief ref**: Step 1
 
-- [ ] TASK-02: Fix undefined `--type-hero-heading-size` token references
+- [x] TASK-02: Fix undefined `--type-hero-heading-size` token references
   - **Goal**: Replace the two references to the non-existent `--type-hero-heading-size` token with `--type-page-title-size`
   - **Details**: In `CampaignDetailPage.tsx` (line ~92) and `ContributePlaceholderPage.tsx` (line ~21), find `var(--type-hero-heading-size)` and replace with `var(--type-page-title-size)`.
   - **Files**: `packages/client/src/pages/CampaignDetailPage.tsx`, `packages/client/src/pages/ContributePlaceholderPage.tsx`

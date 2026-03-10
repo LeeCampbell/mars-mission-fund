@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File compiles. On a campaign detail page: description renders as formatted HTML, hero image has non-empty alt text, and browser tab title shows `<Campaign Title> — Mars Mission Fund`.
   - **Brief ref**: Approach step 5; Scope items 2 and 5
 
-- [ ] TASK-05: Add `/campaigns` route title to Layout
+- [x] TASK-05: Add `/campaigns` route title to Layout
   - **Goal**: The campaigns list page shows the correct document title
   - **Details**:
     - In `Layout.tsx` (~line 11): add `'/campaigns': 'Explore Missions — Mars Mission Fund'` to the `routeTitles` map

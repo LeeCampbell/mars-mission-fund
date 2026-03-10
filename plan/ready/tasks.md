@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists at the correct path and contains at least five TASK entries corresponding to each spec/code change.
   - **Brief ref**: Approach §1
 
-- [ ] TASK-02: Update specs/tech/architecture.md — success envelope and camelCase convention
+- [x] TASK-02: Update specs/tech/architecture.md — success envelope and camelCase convention
   - **Goal**: Document the `{ "data": ... }` success response envelope and the camelCase API field naming convention in Section 6.1 (Synchronous Communication).
   - **Details**:
     - In Section 6.1, immediately before the existing `#### Error Response Format` subsection, add a new `#### Success Response Envelope` subsection with the JSON example showing both single-resource (`{ "data": { ... } }`) and collection (`{ "data": [ ... ] }`) forms, and a note that this is implemented in `packages/server/src/campaigns/routes.ts`.
@@ -52,9 +52,9 @@ Brief: plan/ready/brief.md
   - **Goal**: Capture the gotchas discovered during issues #65 and #66 so future agents avoid repeating them.
   - **Details**: Append four new `##` sections to `specs/learnings.md`:
     1. **Port mismatch** — Vite proxy target port must match `PORT` in `packages/server/.env`; they drifted (3001 vs 3000); always keep in sync.
-    2. **camelCase transformation** — Server aliases snake_case DB columns to camelCase in SQL `SELECT` (e.g. `min_funding_target_usd AS minFundingTargetUsd`); shared Zod schemas must use camelCase to match API responses.
-    3. **Nested entity queries** — Campaign detail endpoint fetches milestones, stretch goals, team members, and updates via separate SQL queries, assembles in application code, and returns a single `CampaignDetail`; this avoids complex joins.
-    4. **Mock data removal** — Client API layer previously fell back to inline mock data on any error; after integration this fallback is removed and the UI renders loading/error states instead; required for E2E tests to reliably detect server-error states.
+    1. **camelCase transformation** — Server aliases snake_case DB columns to camelCase in SQL `SELECT` (e.g. `min_funding_target_usd AS minFundingTargetUsd`); shared Zod schemas must use camelCase to match API responses.
+    1. **Nested entity queries** — Campaign detail endpoint fetches milestones, stretch goals, team members, and updates via separate SQL queries, assembles in application code, and returns a single `CampaignDetail`; this avoids complex joins.
+    1. **Mock data removal** — Client API layer previously fell back to inline mock data on any error; after integration this fallback is removed and the UI renders loading/error states instead; required for E2E tests to reliably detect server-error states.
   - **Files**: `specs/learnings.md` (modify)
   - **Verify**: File contains all four new `##` sections; `npm run lint` (markdownlint) passes.
   - **Brief ref**: Approach §4

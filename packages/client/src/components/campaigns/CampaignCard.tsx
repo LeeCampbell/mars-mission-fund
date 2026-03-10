@@ -8,7 +8,7 @@ const titleStyle: React.CSSProperties = {
   fontFamily: 'var(--type-card-title)',
   color: 'var(--color-text-primary)',
   margin: '12px 0 8px',
-  fontSize: '18px',
+  fontSize: 'var(--type-card-title-size)',
   fontWeight: 700,
   lineHeight: 1.3,
 }

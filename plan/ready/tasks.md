@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Grep each file and confirm no `36px` remains in `headingStyle`. Confirm `var(--type-section-heading-size)` appears in each file.
   - **Brief ref**: §Approach 2 — Fix section heading font sizes
 
-- [ ] TASK-03: Fix card title font sizes in MissionCard and CampaignCard
+- [x] TASK-03: Fix card title font sizes in MissionCard and CampaignCard
   - **Goal**: Replace hardcoded `18px` font sizes with the `--type-card-title-size` token in `MissionCard` and `CampaignCard`.
   - **Details**: In each of the two files, find the `titleStyle` object with `fontSize: '18px'` and change it to `fontSize: 'var(--type-card-title-size)'`. This makes card titles render at 24px (via `--text-lg`) per spec.
   - **Files**: `packages/client/src/components/MissionCard.tsx`, `packages/client/src/components/campaigns/CampaignCard.tsx`

@@ -4,6 +4,18 @@ set -euo pipefail
 # Start the full local development environment.
 # Prerequisites: Node.js 22.x, Docker
 
+# --- Cleanup on exit (Ctrl+C or any termination) ---
+cleanup() {
+  echo ""
+  echo "Shutting down…"
+  # Kill background jobs (server, vite) started by this script
+  kill $(jobs -p) 2>/dev/null || true
+  wait 2>/dev/null || true
+  docker compose -f docker-compose.dev.yml down
+  echo "Done."
+}
+trap cleanup EXIT
+
 # Install dependencies
 npm ci
 
@@ -26,8 +38,9 @@ docker run --rm --network host \
   -v "$(pwd)/packages/server/db:/db" \
   ghcr.io/amacneil/dbmate up
 
-# Start the backend dev server in the background
+# Start both dev servers in the background
 npm run dev:server &
+npm run dev &
 
-# Start the frontend dev server
-npm run dev
+# Wait for any background job to exit (Ctrl+C triggers the EXIT trap)
+wait

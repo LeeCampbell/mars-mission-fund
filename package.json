@@ -18,7 +18,8 @@
     "format:check": "prettier --check .",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\"",
     "dev:server": "npm run dev -w @mmf/server",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "prepare": "cp scripts/pre-push .git/hooks/pre-push"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.1",

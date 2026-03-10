@@ -78,7 +78,7 @@ Brief: plan/ready/brief.md
   - **Verify**: No raw pixel font-size literals matching the above values remain in the changed styles; all use token variables.
   - **Brief ref**: Step 3
 
-- [ ] TASK-10: Build verification and visual check
+- [x] TASK-10: Build verification and visual check
   - **Goal**: Confirm the build succeeds with no TypeScript or lint errors and existing tests pass
   - **Details**: Run `npm run build` from the repo root. If build errors exist, fix them. Run `npm test` and confirm all existing tests pass. No new tests are required.
   - **Files**: (none new — only fixes if build fails)

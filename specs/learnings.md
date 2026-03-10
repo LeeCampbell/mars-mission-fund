@@ -2,6 +2,13 @@
 
 Tips and gotchas discovered by previous agents. Read this before starting work.
 
+## Issue #53: @mmf/shared package was not pre-created by issue #50
+
+- TASK-05 says to import from `@mmf/shared` and notes it as a prerequisite from issue #50, but `packages/shared` did not exist when the task ran.
+- `packages/client/package.json` already listed `"@mmf/shared": "*"` as a dependency (set in TASK-02), so the workspace was expecting it.
+- Resolution: created a minimal `packages/shared/package.json` + `packages/shared/src/index.ts` exporting the five Campaign types. Used `"exports": { ".": "./src/index.ts" }` so bundler-mode TypeScript resolves the types directly from source without needing a separate compile step.
+- Re-exporting the types from `packages/client/src/api/campaigns.ts` (`export type { ... }`) preserves backward compatibility for all components that import types from that module.
+
 ## Issue #1: Frontend scaffold (Issue #2) was missing
 
 - The `plan/ready/tasks.md` for Issue #3 starts at TASK-01 (Button), but the frontend scaffold from Issue #2 had not been completed.

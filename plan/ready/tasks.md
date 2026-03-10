@@ -27,7 +27,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File compiles. Any campaign with `raisedAmount >= goalAmount` should show a green progress bar on the campaigns list page.
   - **Brief ref**: Approach step 4; Scope item 3
 
-- [ ] TASK-03: Fix nested `<main>` in AboutPage and ContactPage
+- [x] TASK-03: Fix nested `<main>` in AboutPage and ContactPage
   - **Goal**: Remove duplicate `<main>` elements — `Layout` already provides one
   - **Details**:
     - In `AboutPage.tsx`: change the root `<main id="main-content">` element to a React fragment `<>` (and close with `</>`)

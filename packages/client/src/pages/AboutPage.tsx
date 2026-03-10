@@ -102,7 +102,7 @@ const personas = [
 
 export function AboutPage() {
   return (
-    <main id="main-content">
+    <>
       {/* Section 1: Mission Statement */}
       <section style={sectionStyle} aria-labelledby="mission-heading">
         <div style={innerStyle}>
@@ -187,6 +187,6 @@ export function AboutPage() {
           </div>
         </div>
       </section>
-    </main>
+    </>
   )
 }

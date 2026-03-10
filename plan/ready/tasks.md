@@ -36,7 +36,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File parses without TypeScript errors (`npx tsc --noEmit`). Running `npm run test:e2e` against a live stack completes all four tests (Tests 1–3 pass; Test 4 result depends on integration-fix state).
   - **Brief ref**: Approach / Test file
 
-- [ ] TASK-05: Update .github/workflows/ci.yml with E2E job steps
+- [x] TASK-05: Update .github/workflows/ci.yml with E2E job steps
   - **Goal**: Add PostgreSQL service container, DBMate migration step, Playwright browser install, Express server start, and E2E test run to the CI workflow.
   - **Details**:
     - Add `services.postgres` block to the existing `ci` job (image `postgres:16-alpine`, env `POSTGRES_USER/PASSWORD/DB`, port `5432:5432`, health-check options as specified in brief).

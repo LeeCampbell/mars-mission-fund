@@ -40,16 +40,6 @@ const itemStyle: React.CSSProperties = {
   background: 'var(--color-surface-card)',
 }
 
-const itemTitleStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-heading)',
-  fontSize: 'var(--type-card-title-size)',
-  fontWeight: 'var(--type-card-title-weight)' as React.CSSProperties['fontWeight'],
-  letterSpacing: 'var(--type-card-title-spacing)',
-  lineHeight: 'var(--type-card-title-leading)',
-  color: 'var(--color-text-primary)',
-  margin: 0,
-}
-
 const dateStyle: React.CSSProperties = {
   fontFamily: 'var(--font-body)',
   fontSize: 'var(--type-label-size)',
@@ -73,8 +63,8 @@ const emptyStyle: React.CSSProperties = {
   margin: 0,
 }
 
-function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('en-US', {
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -91,9 +81,8 @@ export function CampaignUpdatesSection({ updates, className }: CampaignUpdatesSe
         <ul style={listStyle}>
           {updates.map((update) => (
             <li key={update.id} style={itemStyle}>
-              <h4 style={itemTitleStyle}>{update.title}</h4>
-              <time style={dateStyle} dateTime={update.date}>
-                {formatDate(update.date)}
+              <time style={dateStyle} dateTime={update.postedAt.toISOString()}>
+                {formatDate(update.postedAt)}
               </time>
               <p style={bodyStyle}>{update.body}</p>
             </li>

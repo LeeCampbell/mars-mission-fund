@@ -3,11 +3,11 @@ import {
   CampaignStatusSchema,
   CampaignCategorySchema,
   CampaignSummarySchema,
-  CampaignSchema,
+  CampaignDetailSchema,
 } from '@mmf/shared'
 
-export { CampaignStatusSchema, CampaignCategorySchema, CampaignSummarySchema, CampaignSchema }
-export type { CampaignStatus, CampaignCategory, CampaignSummary, Campaign } from '@mmf/shared'
+export { CampaignStatusSchema, CampaignCategorySchema, CampaignSummarySchema, CampaignDetailSchema }
+export type { CampaignStatus, CampaignCategory, CampaignSummary, CampaignDetail } from '@mmf/shared'
 
 export const RouteParamsSchema = z.object({
   id: z.string().uuid(),

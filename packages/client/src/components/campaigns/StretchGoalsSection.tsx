@@ -93,10 +93,10 @@ const lockedBadgeStyle: React.CSSProperties = {
   letterSpacing: 'var(--type-label-spacing)',
 }
 
-const descriptionStyle: React.CSSProperties = {
+const deliverablesStyle: React.CSSProperties = {
   fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-body-size)',
-  color: 'var(--color-text-secondary)',
+  fontSize: 'var(--type-body-small-size)',
+  color: 'var(--color-text-tertiary)',
   margin: 0,
 }
 
@@ -119,12 +119,12 @@ export function StretchGoalsSection({ stretchGoals, className }: StretchGoalsSec
         {stretchGoals.map((goal) => (
           <li key={goal.id} style={goal.unlocked ? unlockedStyle : lockedStyle}>
             <div style={itemHeaderStyle}>
-              <h4 style={titleStyle}>{goal.title}</h4>
+              <h4 style={titleStyle}>{goal.description}</h4>
               <span style={goal.unlocked ? unlockedBadgeStyle : lockedBadgeStyle}>
                 {goal.unlocked ? 'Unlocked' : 'Locked'}
               </span>
             </div>
-            <p style={descriptionStyle}>{goal.description}</p>
+            {goal.deliverables && <p style={deliverablesStyle}>{goal.deliverables}</p>}
             <span style={amountStyle}>Target: {formatCurrency(goal.targetAmount)}</span>
           </li>
         ))}

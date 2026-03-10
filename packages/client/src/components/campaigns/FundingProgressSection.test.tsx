@@ -1,22 +1,27 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { FundingProgressSection } from './FundingProgressSection'
-import type { Campaign } from '../../api/campaigns'
+import type { CampaignDetail } from '../../api/campaigns'
 
-const mockCampaign: Campaign = {
+const mockCampaign: CampaignDetail = {
   id: '1',
   title: 'Test Campaign',
   summary: 'A test campaign',
-  description: 'A test campaign',
-  heroImageUrl: '',
-  status: 'active',
-  category: 'Technology',
+  description: 'A test campaign description',
+  heroImageUrl: null,
+  status: 'Live',
+  category: 'Propulsion',
   raisedAmount: 50000,
   goalAmount: 100000,
-  fundingProgressPct: 50,
-  targetAmount: 100000,
   contributorCount: 250,
-  deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+  deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+  createdAt: new Date('2024-01-01T00:00:00.000Z'),
+  slug: 'test-campaign',
+  alignmentStatement: 'Aligned with mission.',
+  tags: [],
+  maxFundingCapUsd: 200000,
+  launchedAt: new Date('2024-01-01T00:00:00.000Z'),
+  updatedAt: new Date('2024-01-01T00:00:00.000Z'),
   milestones: [],
   stretchGoals: [],
   teamMembers: [],

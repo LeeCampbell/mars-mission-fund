@@ -7,18 +7,22 @@ const mockMilestones: Milestone[] = [
   {
     id: 'm1',
     title: 'Design Phase',
-    targetDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
+    description: 'Complete the design phase.',
+    targetDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
     fundingPercentage: 100,
     verificationCriteria: 'CAD files reviewed.',
-    status: 'completed',
+    status: 'Verified',
+    sortOrder: 1,
   },
   {
     id: 'm2',
     title: 'Prototype Build',
-    targetDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
+    description: 'Build the prototype.',
+    targetDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
     fundingPercentage: 50,
     verificationCriteria: 'Prototype passes pressure test.',
-    status: 'active',
+    status: 'Submitted',
+    sortOrder: 2,
   },
 ]
 
@@ -42,7 +46,7 @@ describe('MilestonesSection', () => {
 
   it('renders status badge for each milestone', () => {
     render(<MilestonesSection milestones={mockMilestones} />)
-    expect(screen.getByText('Completed')).toBeInTheDocument()
-    expect(screen.getByText('Active')).toBeInTheDocument()
+    expect(screen.getByText('Verified')).toBeInTheDocument()
+    expect(screen.getByText('Submitted')).toBeInTheDocument()
   })
 })

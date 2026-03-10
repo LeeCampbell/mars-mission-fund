@@ -6,22 +6,24 @@ import type { StretchGoal } from '../../api/campaigns'
 const mockGoals: StretchGoal[] = [
   {
     id: 'sg1',
-    title: 'Extra Life Support Module',
-    description: 'Adds redundant life-support.',
+    description: 'Extra Life Support Module',
+    deliverables: 'Adds redundant life-support.',
     targetAmount: 2_500_000,
     unlocked: false,
+    sortOrder: 1,
   },
   {
     id: 'sg2',
-    title: 'Advanced Navigation System',
-    description: 'Enhanced navigation for long trips.',
+    description: 'Advanced Navigation System',
+    deliverables: 'Enhanced navigation for long trips.',
     targetAmount: 3_000_000,
     unlocked: true,
+    sortOrder: 2,
   },
 ]
 
 describe('StretchGoalsSection', () => {
-  it('renders stretch goal title when goals are present', () => {
+  it('renders stretch goal description as heading when goals are present', () => {
     render(<StretchGoalsSection stretchGoals={mockGoals} />)
     expect(screen.getByText('Extra Life Support Module')).toBeInTheDocument()
     expect(screen.getByText('Advanced Navigation System')).toBeInTheDocument()

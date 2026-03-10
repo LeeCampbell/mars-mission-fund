@@ -2,7 +2,7 @@ import { Card } from '../ui/Card'
 import { Badge } from '../ui/Badge'
 import { ProgressBar } from '../ui/ProgressBar'
 import { Button } from '../ui/Button'
-import type { Campaign } from '../../api/campaigns'
+import type { CampaignSummary } from '../../api/campaigns'
 
 const titleStyle: React.CSSProperties = {
   fontFamily: 'var(--type-card-title)',
@@ -43,10 +43,10 @@ function formatUSD(amount: number): string {
   }).format(amount)
 }
 
-function getTimeRemaining(deadline: string): string {
-  const deadlineDate = new Date(deadline)
+function getTimeRemaining(deadline: Date | null): string {
+  if (!deadline) return 'No deadline'
   const now = new Date()
-  const diffMs = deadlineDate.getTime() - now.getTime()
+  const diffMs = deadline.getTime() - now.getTime()
   if (diffMs <= 0) return 'Ended'
   const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
   return `${diffDays} day${diffDays === 1 ? '' : 's'} left`
@@ -58,13 +58,14 @@ function truncateSummary(summary: string, maxLength = 120): string {
 }
 
 interface CampaignCardProps {
-  campaign: Campaign
+  campaign: CampaignSummary
 }
 
 export function CampaignCard({ campaign }: CampaignCardProps) {
   const excerpt = truncateSummary(campaign.summary)
   const raised = formatUSD(campaign.raisedAmount)
   const goal = formatUSD(campaign.goalAmount)
+  const fundingPct = Math.min(100, (campaign.raisedAmount / campaign.goalAmount) * 100)
   const timeRemaining = getTimeRemaining(campaign.deadline)
 
   return (
@@ -73,8 +74,8 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
       <h3 style={titleStyle}>{campaign.title}</h3>
       <p style={summaryStyle}>{excerpt}</p>
       <ProgressBar
-        value={campaign.fundingProgressPct}
-        label={`${campaign.title} funding progress: ${campaign.fundingProgressPct}% funded`}
+        value={fundingPct}
+        label={`${campaign.title} funding progress: ${Math.round(fundingPct)}% funded`}
       />
       <p style={fundingStatusStyle}>
         Raised {raised} of {goal}

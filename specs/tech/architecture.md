@@ -1,7 +1,7 @@
 # Architecture
 
 > **Spec ID**: L3-001
-> **Version**: 0.5
+> **Version**: 0.6
 > **Status**: Approved
 > **Rate of Change**: Sprint-level / tech decisions
 > **Depends On**: L1-001 (Product Vision & Mission), L2-002 (Engineering Standard), L3-008 (Tech Stack)
@@ -185,6 +185,31 @@ Per [Engineering Standard](L2-002), Section 5.1, all APIs are versioned from day
 
 - **Scheme**: URL path versioning (`/v1/resource`).
 - **Deprecation periods**: Minimum 90 days for external APIs, 30 days for internal APIs per [Engineering Standard](L2-002), Section 5.1.
+
+#### Success Response Envelope
+
+All successful API responses are wrapped in a `data` envelope:
+
+- Single-resource endpoints return `{ "data": { ... } }`.
+- Collection endpoints return `{ "data": [ ... ] }`.
+
+```json
+{ "data": { "id": "...", "title": "..." } }
+```
+
+```json
+{ "data": [ { "id": "...", "title": "..." }, { "id": "...", "title": "..." } ] }
+```
+
+This envelope is implemented in `packages/server/src/campaigns/routes.ts` (`res.json({ data: ... })`).
+
+#### Field Naming Convention
+
+- DB columns use `snake_case` (PostgreSQL convention).
+- All API JSON responses use `camelCase` field names.
+- The server query layer is responsible for aliasing column names before returning data to routes
+  (e.g. `SELECT min_funding_target_usd AS "minFundingTargetUsd" FROM ...`).
+- Shared Zod schemas in `@mmf/shared` must use camelCase to match API responses.
 
 #### Error Response Format
 
@@ -426,3 +451,4 @@ This spec shares boundaries with every other L3 spec and several L4 specs.
 | March 2026 | 0.3     | —      | Resolved all remaining open questions (2–6, 10–12). Established CQRS/Event Sourcing as core pattern (Section 6.2). Selected REST over HTTPS with URL-path versioning (Section 6.1). Selected PostHog for feature flags, product analytics, and web analytics (Sections 3.2, 8, 9). CloudWatch + Pino for developer observability (Section 8). Service discovery and service-to-service auth noted as not applicable for single deployment unit (Sections 6.1, 6.3). Filled container & orchestration strategy (Section 5.4). |
 | 2026-03-09 | 0.4     | —      | Clarified local demo topology in Section 1: `docker-compose.dev.yml` starts PostgreSQL only; the Express server (`server/`) is run separately via `npm run dev` — it is not part of the Docker Compose stack.                                                                                                                                                                                                                                                                                                                  |
 | 2026-03-10 | 0.5     | —      | Corrected Section 1 local demo scope note: updated Express server path from `server/` to `packages/server/` and run command to `npm run dev:server` from the repo root (or `npm run dev` inside `packages/server/`), reflecting the completed npm workspaces monorepo restructuring.                                                                                                                                                                                                                                          |
+| 2026-03-10 | 0.6     | Claude | Added Success Response Envelope and Field Naming Convention subsections to Section 6.1, documenting the `{ "data": ... }` wrapper and camelCase API field naming convention introduced by issue #65.                                                                                                                                                                                                                                                                                                                         |

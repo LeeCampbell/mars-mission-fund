@@ -1,7 +1,7 @@
 # Tech Stack
 
 > **Spec ID:** L3-008
-> **Version:** 0.3.0
+> **Version:** 0.4.0
 > **Status:** Approved
 > **Rate of change:** Slow (changes at major technology decisions)
 > **Depends on:** L1-001, L2-002, L3-001
@@ -230,6 +230,15 @@ packages/server/
 | MSW (Mock Service Worker) | Latest stable | API mocking for frontend tests                   |
 | Playwright                | Latest stable | End-to-end browser tests (root `e2e/` directory) |
 
+### Playwright CI Requirements
+
+The Playwright E2E suite requires the following CI environment setup (introduced by issue #66):
+
+- A `postgres:16-alpine` service must be running before the suite starts.
+- DBMate migrations must run against the CI database before the test suite executes.
+- A seed SQL script must be applied to the CI database before E2E tests run.
+- Playwright configuration lives at `e2e/playwright.config.ts`; tests live at `e2e/*.spec.ts`.
+
 ### Quality Gates
 
 - Unit test coverage: 90%+ for business logic / domain
@@ -296,3 +305,4 @@ packages/server/
 | 2026-03-09 | Claude | Clarified Tailwind CSS actual usage: CSS reset and normalisation layer only; component-level styling uses inline `React.CSSProperties` with `var()` semantic token references.                                             |
 | 2026-03-09 | Claude | Added Local Development section: `docker-compose.dev.yml` (postgres:16-alpine), DBMate migration invocation and naming convention, Express server run-separately pattern, `server/src/` directory layout. Bumped to 0.2.0. |
 | 2026-03-10 | Claude | Updated Local Development section: DBMate volume path `server/db` → `packages/server/db`; Express run command `cd server && npm run dev` → `npm run dev:server` (from repo root); Server Directory Layout root label `server/` → `packages/server/`. Bumped to 0.3.0. |
+| 2026-03-10 | Claude | Added Playwright CI Requirements subsection documenting `postgres:16-alpine` service, DBMate migrations, seed script, and config/test file locations. Bumped to 0.4.0. |

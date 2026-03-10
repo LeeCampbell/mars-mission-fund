@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchCampaign, type Campaign } from '../api/campaigns'
+import { fetchCampaign } from '../api/campaigns'
+import type { CampaignDetail } from '@mmf/shared'
 
 export function useCampaign(id: string) {
-  return useQuery<Campaign, Error>({
+  return useQuery<CampaignDetail, Error>({
     queryKey: ['campaign', id],
     queryFn: () => fetchCampaign(id),
     staleTime: 0,

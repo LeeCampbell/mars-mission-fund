@@ -35,7 +35,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run typecheck` passes; all exported type names are intact; new schemas are exported from `packages/shared/src/index.ts` (add exports there if missing).
   - **Brief ref**: Approach §3
 
-- [ ] TASK-04: Update packages/client/src/api/campaigns.ts — import from @mmf/shared, remove mock fallbacks
+- [x] TASK-04: Update packages/client/src/api/campaigns.ts — import from @mmf/shared, remove mock fallbacks
   - **Goal**: Replace the client's duplicate inline type definitions with imports from `@mmf/shared`, and remove the mock-data fallback that masks real server errors.
   - **Details**:
     - Remove the inline `Milestone`, `StretchGoal`, `TeamMember`, `CampaignUpdate`, and `Campaign` interface declarations.

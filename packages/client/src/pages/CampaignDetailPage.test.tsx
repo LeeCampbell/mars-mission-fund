@@ -2,22 +2,27 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { CampaignDetailPage } from './CampaignDetailPage'
-import type { Campaign } from '../api/campaigns'
+import type { CampaignDetail } from '@mmf/shared'
 
-const mockCampaign: Campaign = {
-  id: '1',
+const mockCampaign: CampaignDetail = {
+  id: '00000000-0000-0000-0000-000000000001',
+  slug: 'mars-habitat-alpha',
   title: 'Mars Habitat Alpha',
   summary: 'A test campaign about Mars.',
   description: 'A test campaign about Mars.',
-  heroImageUrl: '',
-  status: 'active',
-  category: 'Habitat',
-  raisedAmount: 1_250_000,
-  goalAmount: 2_000_000,
-  fundingProgressPct: 63,
-  targetAmount: 2_000_000,
+  alignmentStatement: 'Aligned with Mars mission',
+  category: 'Habitats & Construction',
+  tags: [],
+  status: 'Live',
+  heroImageUrl: null,
+  minFundingTargetUsd: 2_000_000,
+  maxFundingCapUsd: 2_000_000,
+  currentAmountUsd: 1_250_000,
   contributorCount: 4_382,
-  deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+  deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+  launchedAt: null,
+  createdAt: new Date(),
+  updatedAt: new Date(),
   milestones: [
     {
       id: 'm1',
@@ -84,6 +89,6 @@ describe('CampaignDetailPage', () => {
         </Routes>
       </MemoryRouter>
     )
-    expect(screen.getByText('Habitat')).toBeInTheDocument()
+    expect(screen.getByText('Habitats & Construction')).toBeInTheDocument()
   })
 })

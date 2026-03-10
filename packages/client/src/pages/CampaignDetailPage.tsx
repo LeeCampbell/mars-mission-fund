@@ -7,22 +7,38 @@ import { MilestonesSection } from '../components/campaigns/MilestonesSection'
 import { StretchGoalsSection } from '../components/campaigns/StretchGoalsSection'
 import { CampaignUpdatesSection } from '../components/campaigns/CampaignUpdatesSection'
 import { TeamSection } from '../components/campaigns/TeamSection'
-import type { Campaign } from '../api/campaigns'
+import type { CampaignDetail } from '@mmf/shared'
 
 type BadgeVariant = 'funded' | 'active' | 'new'
 
-const statusBadgeVariant: Record<Campaign['status'], BadgeVariant> = {
-  completed: 'funded',
-  active: 'active',
-  draft: 'new',
-  failed: 'new',
+const statusBadgeVariant: Record<CampaignDetail['status'], BadgeVariant> = {
+  Draft: 'new',
+  Submitted: 'new',
+  'Under Review': 'new',
+  Approved: 'new',
+  Rejected: 'new',
+  Live: 'active',
+  Funded: 'funded',
+  Suspended: 'new',
+  Failed: 'new',
+  Settlement: 'funded',
+  Complete: 'funded',
+  Cancelled: 'new',
 }
 
-const statusLabel: Record<Campaign['status'], string> = {
-  completed: 'Completed',
-  active: 'Active',
-  draft: 'Draft',
-  failed: 'Failed',
+const statusLabel: Record<CampaignDetail['status'], string> = {
+  Draft: 'Draft',
+  Submitted: 'Submitted',
+  'Under Review': 'Under Review',
+  Approved: 'Approved',
+  Rejected: 'Rejected',
+  Live: 'Live',
+  Funded: 'Funded',
+  Suspended: 'Suspended',
+  Failed: 'Failed',
+  Settlement: 'Settlement',
+  Complete: 'Complete',
+  Cancelled: 'Cancelled',
 }
 
 const pageStyle: React.CSSProperties = {

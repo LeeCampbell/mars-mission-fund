@@ -1,9 +1,9 @@
-import { type Campaign } from '../../api/campaigns'
+import type { CampaignDetail } from '@mmf/shared'
 import { Button } from '../ui/Button'
 import { ProgressBar } from '../ui/ProgressBar'
 
 interface FundingProgressSectionProps {
-  campaign: Campaign
+  campaign: CampaignDetail
   className?: string
 }
 
@@ -11,9 +11,10 @@ function formatCurrency(amount: number): string {
   return '$' + amount.toLocaleString('en-US')
 }
 
-function getTimeRemaining(deadline: string): string {
+function getTimeRemaining(deadline: Date | null): string {
+  if (!deadline) return 'No deadline'
   const now = Date.now()
-  const end = new Date(deadline).getTime()
+  const end = deadline.getTime()
   const diffMs = end - now
   if (diffMs <= 0) return 'Ended'
   const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
@@ -86,14 +87,17 @@ const percentageStyle: React.CSSProperties = {
 }
 
 export function FundingProgressSection({ campaign, className }: FundingProgressSectionProps) {
-  const percentage = Math.min(100, (campaign.raisedAmount / campaign.targetAmount) * 100)
+  const percentage =
+    campaign.maxFundingCapUsd > 0
+      ? Math.min(100, (campaign.currentAmountUsd / campaign.maxFundingCapUsd) * 100)
+      : 0
   const isComplete = percentage >= 100
 
   return (
     <div style={sectionStyle} className={className}>
       <div style={amountsStyle}>
-        <span style={raisedStyle}>{formatCurrency(campaign.raisedAmount)}</span>
-        <span style={targetStyle}>raised of {formatCurrency(campaign.targetAmount)} goal</span>
+        <span style={raisedStyle}>{formatCurrency(campaign.currentAmountUsd)}</span>
+        <span style={targetStyle}>raised of {formatCurrency(campaign.maxFundingCapUsd)} goal</span>
       </div>
 
       <div>

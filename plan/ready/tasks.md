@@ -19,7 +19,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `grep -r "3001" packages/server/src/index.ts packages/client/vite.config.ts` shows the correct port in both files; `cat packages/shared/package.json` shows `"exports": "./src/index.ts"`; `cat packages/client/package.json` contains `"@mmf/shared"`.
   - **Brief ref**: §1 Fix port, §2 Fix `@mmf/shared` package resolution
 
-- [ ] TASK-02: Rewrite `@mmf/shared` campaign types to camelCase with nested schemas
+- [x] TASK-02: Rewrite `@mmf/shared` campaign types to camelCase with nested schemas
   - **Goal**: Replace all snake_case field names with camelCase; add `MilestoneSchema`, `StretchGoalSchema`, `TeamMemberSchema`, `CampaignUpdateSchema`, extended `CampaignSummarySchema`, and `CampaignDetailSchema`.
   - **Details**:
     - Keep `CampaignStatusSchema` and `CampaignCategorySchema` enums unchanged.

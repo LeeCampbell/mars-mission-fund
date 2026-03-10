@@ -28,40 +28,78 @@ export const CampaignCategorySchema = z.enum([
   'Communications & Navigation',
 ])
 
+export const MilestoneStatusSchema = z.enum(['Pending', 'Submitted', 'Verified'])
+
+export const MilestoneSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string(),
+  description: z.string(),
+  targetDate: z.coerce.date().nullable(),
+  fundingPercentage: z.coerce.number(),
+  verificationCriteria: z.string().nullable(),
+  status: MilestoneStatusSchema,
+  sortOrder: z.number().int(),
+})
+
+export const StretchGoalSchema = z.object({
+  id: z.string().uuid(),
+  targetAmount: z.coerce.number().int(),
+  description: z.string(),
+  deliverables: z.string().nullable(),
+  unlocked: z.boolean(),
+  sortOrder: z.number().int(),
+})
+
+export const TeamMemberSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  role: z.string(),
+  bio: z.string().nullable(),
+  sortOrder: z.number().int(),
+})
+
+export const CampaignUpdateSchema = z.object({
+  id: z.string().uuid(),
+  body: z.string(),
+  postedAt: z.coerce.date(),
+})
+
 // Summary shape returned by the list endpoint
 export const CampaignSummarySchema = z.object({
   id: z.string().uuid(),
   title: z.string(),
+  summary: z.string(),
   status: CampaignStatusSchema,
   category: CampaignCategorySchema,
-  goal_amount: z.coerce.number().int(),
-  raised_amount: z.coerce.number().int(),
-  created_at: z.coerce.date(),
+  heroImageUrl: z.string().url().nullable(),
+  goalAmount: z.coerce.number().int(),
+  raisedAmount: z.coerce.number().int(),
+  contributorCount: z.number().int(),
+  deadline: z.coerce.date().nullable(),
+  createdAt: z.coerce.date(),
 })
 
-// Full campaign row returned by the detail endpoint
-export const CampaignSchema = z.object({
-  id: z.string().uuid(),
+// Full campaign returned by the detail endpoint
+export const CampaignDetailSchema = CampaignSummarySchema.extend({
   slug: z.string(),
-  title: z.string(),
-  summary: z.string(),
   description: z.string(),
-  alignment_statement: z.string(),
-  category: CampaignCategorySchema,
+  alignmentStatement: z.string(),
   tags: z.array(z.string()),
-  status: CampaignStatusSchema,
-  hero_image_url: z.string().url().nullable(),
-  min_funding_target_usd: z.coerce.number().int(),
-  max_funding_cap_usd: z.coerce.number().int(),
-  current_amount_usd: z.coerce.number().int(),
-  contributor_count: z.number().int(),
-  deadline: z.coerce.date().nullable(),
-  launched_at: z.coerce.date().nullable(),
-  created_at: z.coerce.date(),
-  updated_at: z.coerce.date(),
+  maxFundingCapUsd: z.coerce.number().int(),
+  launchedAt: z.coerce.date().nullable(),
+  updatedAt: z.coerce.date(),
+  milestones: z.array(MilestoneSchema),
+  stretchGoals: z.array(StretchGoalSchema),
+  teamMembers: z.array(TeamMemberSchema),
+  updates: z.array(CampaignUpdateSchema),
 })
 
 export type CampaignStatus = z.infer<typeof CampaignStatusSchema>
 export type CampaignCategory = z.infer<typeof CampaignCategorySchema>
+export type MilestoneStatus = z.infer<typeof MilestoneStatusSchema>
+export type Milestone = z.infer<typeof MilestoneSchema>
+export type StretchGoal = z.infer<typeof StretchGoalSchema>
+export type TeamMember = z.infer<typeof TeamMemberSchema>
+export type CampaignUpdate = z.infer<typeof CampaignUpdateSchema>
 export type CampaignSummary = z.infer<typeof CampaignSummarySchema>
-export type Campaign = z.infer<typeof CampaignSchema>
+export type CampaignDetail = z.infer<typeof CampaignDetailSchema>

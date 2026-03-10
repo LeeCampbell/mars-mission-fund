@@ -1,3 +1,7 @@
+import {
+  CampaignSummarySchema,
+  CampaignDetailSchema,
+} from '@mmf/shared'
 import type {
   CampaignSummary,
   CampaignDetail,
@@ -16,12 +20,12 @@ export async function fetchCampaigns(): Promise<CampaignSummary[]> {
   const response = await fetch('/v1/campaigns')
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
   const json = await response.json()
-  return json.data as CampaignSummary[]
+  return (json.data as unknown[]).map((item) => CampaignSummarySchema.parse(item))
 }
 
 export async function fetchCampaign(id: string): Promise<CampaignDetail> {
   const response = await fetch(`/v1/campaigns/${id}`)
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
   const json = await response.json()
-  return json.data as CampaignDetail
+  return CampaignDetailSchema.parse(json.data)
 }

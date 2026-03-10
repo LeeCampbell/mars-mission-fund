@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Replace forbidden language in AboutPage.tsx
+- [x] TASK-01: Replace forbidden language in AboutPage.tsx
   - **Goal**: Remove all 3 "invest*" occurrences in AboutPage.tsx with spec-compliant alternatives
   - **Details**:
     - Line 66: `Space investment is no longer reserved for billionaires` → `Space exploration funding is no longer reserved for billionaires`

@@ -29,7 +29,7 @@ Brief: plan/ready/brief.md
   - **Verify**: No occurrence of bare `server/` (without `packages/`) remains in the Local Development section; version is `0.3.0`; change log entry present; `npm run lint:md` passes.
   - **Brief ref**: Step 3 of the Approach section.
 
-- [ ] TASK-04: Update specs/README.md — add specs/adrs/ to layout and tooling table
+- [x] TASK-04: Update specs/README.md — add specs/adrs/ to layout and tooling table
   - **Goal**: Make the specs index reflect the new `specs/adrs/` directory and link to the ADR tooling.
   - **Details**: In `specs/README.md`:
     1. File System Layout code block: add `├── adrs/` with a nested entry `│   └── 0001-npm-workspaces-monorepo.md  ← ADR-0001` after `├── README.md` and before `├── learnings.md` (or wherever it fits alphabetically / logically in the tree).

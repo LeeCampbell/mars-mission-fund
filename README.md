@@ -60,20 +60,23 @@ For the full technology inventory, see [specs/tech/tech-stack.md](./specs/tech/t
 
 ```bash
 # Clone the repository
-git clone https://github.com/LeeCampbell/mars-missionfund.git
+git clone https://github.com/LeeCampbell/mars-mission-fund.git
 cd mars-mission-fund
 
 # Install dependencies
 npm install
 
-# Start local infrastructure (PostgreSQL, etc.)
-docker compose up -d
+# Start local infrastructure (PostgreSQL)
+docker compose -f docker-compose.dev.yml up -d
 
-# Run database migrations
-npm run migrate
+# Run database migrations (requires DBMate)
+dbmate -d packages/server/db/migrations up
 
-# Start the development server
+# Start the frontend dev server
 npm run dev
+
+# Start the backend dev server (in a separate terminal)
+npm run dev:server
 ```
 
 > **Note:** External services (Stripe, Clerk, Veriff, AWS SES) are stubbed or mocked for local development.
@@ -84,9 +87,12 @@ npm run dev
 ## Project Structure
 
 ```text
+packages/client/    React frontend (Vite + Tailwind)
+packages/server/    Express API server
+packages/shared/    Shared TypeScript types
 specs/              Product and technical specifications (start here)
-src/                Application source code
-e2e/                Playwright end-to-end tests
+scripts/            Development and CI utility scripts
+autonomous/         Autonomous agent system (Dockerfile, prompts)
 ```
 
 ---

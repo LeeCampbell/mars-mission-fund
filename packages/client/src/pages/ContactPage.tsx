@@ -19,7 +19,7 @@ const innerStyle: CSSProperties = {
 
 const headingStyle: CSSProperties = {
   fontFamily: 'var(--type-section-heading)',
-  fontSize: '36px',
+  fontSize: 'var(--type-section-heading-size)',
   color: 'var(--color-text-primary)',
   marginBottom: '32px',
   textTransform: 'uppercase',
@@ -28,7 +28,7 @@ const headingStyle: CSSProperties = {
 
 const cardTitleStyle: CSSProperties = {
   fontFamily: 'var(--type-section-heading)',
-  fontSize: '14px',
+  fontSize: 'var(--type-button-size)',
   color: 'var(--color-text-secondary)',
   textTransform: 'uppercase',
   letterSpacing: '0.08em',
@@ -37,7 +37,7 @@ const cardTitleStyle: CSSProperties = {
 
 const cardValueStyle: CSSProperties = {
   fontFamily: 'var(--type-body)',
-  fontSize: '16px',
+  fontSize: 'var(--type-body-size)',
   color: 'var(--color-text-primary)',
   lineHeight: '1.6',
 }
@@ -45,7 +45,7 @@ const cardValueStyle: CSSProperties = {
 const socialLinkStyle: CSSProperties = {
   display: 'block',
   fontFamily: 'var(--type-body)',
-  fontSize: '15px',
+  fontSize: 'var(--type-body-size)',
   color: 'var(--color-text-accent)',
   textDecoration: 'none',
   marginTop: '8px',
@@ -53,7 +53,7 @@ const socialLinkStyle: CSSProperties = {
 
 const socialPlatformTitleStyle: CSSProperties = {
   fontFamily: 'var(--type-section-heading)',
-  fontSize: '18px',
+  fontSize: 'var(--type-card-title-size)',
   color: 'var(--color-text-primary)',
   textTransform: 'uppercase',
   marginBottom: '4px',
@@ -61,7 +61,7 @@ const socialPlatformTitleStyle: CSSProperties = {
 
 const socialHandleStyle: CSSProperties = {
   fontFamily: 'var(--type-body)',
-  fontSize: '14px',
+  fontSize: 'var(--type-button-size)',
   color: 'var(--color-text-secondary)',
 }
 
@@ -135,7 +135,7 @@ export function ContactPage() {
               <p
                 style={{
                   fontFamily: 'var(--type-body)',
-                  fontSize: '16px',
+                  fontSize: 'var(--type-body-size)',
                   color: 'var(--color-text-secondary)',
                   lineHeight: '1.7',
                   marginBottom: '16px',
@@ -148,7 +148,7 @@ export function ContactPage() {
               <p
                 style={{
                   fontFamily: 'var(--type-body)',
-                  fontSize: '16px',
+                  fontSize: 'var(--type-body-size)',
                   color: 'var(--color-text-secondary)',
                   lineHeight: '1.7',
                 }}

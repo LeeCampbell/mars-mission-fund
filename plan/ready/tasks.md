@@ -68,7 +68,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File contains token references for all three sizes; no raw `14px`, `11px`, or `13px` font-size literals remain in those styles.
   - **Brief ref**: Step 3
 
-- [ ] TASK-09: Fix typography in pages (`CampaignsPage.tsx`, `AboutPage.tsx`, `ContactPage.tsx`)
+- [x] TASK-09: Fix typography in pages (`CampaignsPage.tsx`, `AboutPage.tsx`, `ContactPage.tsx`)
   - **Goal**: Replace all hardcoded font sizes in the three pages with token variables
   - **Details**:
     - `CampaignsPage.tsx` heading: `32px` → `var(--type-section-heading-size)`

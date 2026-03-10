@@ -9,7 +9,7 @@ const pageStyle: React.CSSProperties = {
 
 const headingStyle: React.CSSProperties = {
   fontFamily: 'var(--type-hero)',
-  fontSize: '32px',
+  fontSize: 'var(--type-section-heading-size)',
   fontWeight: 700,
   color: 'var(--color-text-primary)',
   marginBottom: '8px',

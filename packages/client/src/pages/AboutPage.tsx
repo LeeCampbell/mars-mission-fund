@@ -19,7 +19,7 @@ const innerStyle: CSSProperties = {
 
 const headingStyle: CSSProperties = {
   fontFamily: 'var(--type-section-heading)',
-  fontSize: '36px',
+  fontSize: 'var(--type-section-heading-size)',
   color: 'var(--color-text-primary)',
   marginBottom: '32px',
   textTransform: 'uppercase',
@@ -28,7 +28,7 @@ const headingStyle: CSSProperties = {
 
 const bodyStyle: CSSProperties = {
   fontFamily: 'var(--type-body)',
-  fontSize: '18px',
+  fontSize: 'var(--type-body-size)',
   color: 'var(--color-text-secondary)',
   lineHeight: '1.7',
   maxWidth: '720px',
@@ -36,7 +36,7 @@ const bodyStyle: CSSProperties = {
 
 const cardTitleStyle: CSSProperties = {
   fontFamily: 'var(--type-section-heading)',
-  fontSize: '20px',
+  fontSize: 'var(--type-card-title-size)',
   color: 'var(--color-text-primary)',
   textTransform: 'uppercase',
   marginBottom: '12px',
@@ -44,7 +44,7 @@ const cardTitleStyle: CSSProperties = {
 
 const cardBodyStyle: CSSProperties = {
   fontFamily: 'var(--type-body)',
-  fontSize: '15px',
+  fontSize: 'var(--type-body-size)',
   color: 'var(--color-text-secondary)',
   lineHeight: '1.6',
 }

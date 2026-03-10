@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `grep -rn '\bserver/' autonomous/prompts/ autonomous/prompts/ | grep -v 'packages/server'` and equivalent for `client/` return no matches.
   - **Brief ref**: Approach step 3
 
-- [ ] TASK-05: Audit and confirm `scripts/` directory — no stale paths
+- [x] TASK-05: Audit and confirm `scripts/` directory — no stale paths
   - **Goal**: Confirm all scripts are already workspace-aware; record the audit result.
   - **Details**: Review `scripts/ci-check.sh`, `scripts/run-local.sh`, and `scripts/implement-milestone.sh` for stale pre-monorepo path references. If any are found, update them. (Pre-audit confirms all scripts are already clean — no code changes expected.)
   - **Files**: `scripts/*.sh` (modify only if stale refs found)

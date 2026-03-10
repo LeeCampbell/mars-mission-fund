@@ -17,7 +17,7 @@ const cardStyle: CSSProperties = {
 
 const labelStyle: CSSProperties = {
   fontFamily: 'var(--type-body-small)',
-  fontSize: '11px',
+  fontSize: 'var(--type-label-size)',
   fontWeight: 500,
   color: 'var(--color-text-tertiary)',
   textTransform: 'uppercase',
@@ -27,7 +27,7 @@ const labelStyle: CSSProperties = {
 
 const valueStyle: CSSProperties = {
   fontFamily: 'var(--type-stat-value)',
-  fontSize: '40px',
+  fontSize: 'var(--type-stat-value-size)',
   lineHeight: 1,
   color: 'var(--color-text-primary)',
   marginBottom: '4px',
@@ -36,12 +36,12 @@ const valueStyle: CSSProperties = {
 const subTextVariantStyles: Record<'positive' | 'neutral', CSSProperties> = {
   positive: {
     color: 'var(--color-status-success)',
-    fontSize: '12px',
+    fontSize: 'var(--type-input-label-size)',
     fontFamily: 'var(--type-body-small)',
   },
   neutral: {
     color: 'var(--color-text-secondary)',
-    fontSize: '12px',
+    fontSize: 'var(--type-input-label-size)',
     fontFamily: 'var(--type-body-small)',
   },
 }

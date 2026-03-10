@@ -8,7 +8,7 @@ interface SectionLabelProps {
 
 const labelStyle: CSSProperties = {
   fontFamily: 'var(--type-section-label)',
-  fontSize: '11px',
+  fontSize: 'var(--type-section-label-size)',
   fontWeight: 400,
   letterSpacing: '0.3em',
   textTransform: 'uppercase',

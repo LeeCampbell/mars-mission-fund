@@ -50,7 +50,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File references `var(--type-stat-value-compact-size)`, `var(--type-button-size)`, and `var(--type-body-size)` where font sizes were previously hardcoded.
   - **Brief ref**: Step 3
 
-- [ ] TASK-07: Fix typography in UI primitives (`SectionLabel.tsx`, `StatCard.tsx`, `Button.tsx`)
+- [x] TASK-07: Fix typography in UI primitives (`SectionLabel.tsx`, `StatCard.tsx`, `Button.tsx`)
   - **Goal**: Replace hardcoded font sizes in shared UI components with token variables
   - **Details**:
     - `SectionLabel.tsx`: `11px` → `var(--type-section-label-size)`

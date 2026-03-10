@@ -23,7 +23,7 @@ const baseStyle: React.CSSProperties = {
   padding: '12px 24px',
   borderRadius: 'var(--radius-button)',
   fontFamily: 'var(--type-button)',
-  fontSize: '14px',
+  fontSize: 'var(--type-button-size)',
   fontWeight: 600,
   letterSpacing: '0.01em',
   lineHeight: 1,

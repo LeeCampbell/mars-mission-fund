@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Add `--type-*` font-family shorthand tokens to `tokens.css`
+- [x] TASK-01: Add `--type-*` font-family shorthand tokens to `tokens.css`
   - **Goal**: Define all 13 missing `--type-*` CSS custom properties so that component `fontFamily: 'var(--type-*)'` references resolve to the correct web font.
   - **Details**: In `packages/client/src/tokens.css`, locate the `/* --- 2.8 Typography --- */` section. After the existing per-property tokens, add the following shorthand aliases:
     - `--type-hero: var(--font-display)`

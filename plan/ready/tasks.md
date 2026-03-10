@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Grep each file and confirm no `18px` remains in `titleStyle`. Confirm `var(--type-card-title-size)` appears in each file.
   - **Brief ref**: §Approach 3 — Fix card title font sizes
 
-- [ ] TASK-04: Fix hero H1 responsive sizing and letter-spacing
+- [x] TASK-04: Fix hero H1 responsive sizing and letter-spacing
   - **Goal**: Update `HeroSection.tsx` so the hero H1 uses a 32px base on mobile (prevents 375px overflow), adds a 48px breakpoint at 640px, keeps 72px at 768px and 96px at 1280px+, and corrects letter-spacing from `0.02em` to `var(--type-hero-spacing)` (0.03em).
   - **Details**: Find the injected CSS for `.hero-heading` in `HeroSection.tsx`. Change the base font-size to `32px`, add a `@media (min-width: 640px)` rule at `48px`, keep `@media (min-width: 768px)` at `72px` and `@media (min-width: 1280px)` at `96px` (or `var(--type-hero-size)`). Change `letter-spacing` from `0.02em` to `var(--type-hero-spacing)`.
   - **Files**: `packages/client/src/components/HeroSection.tsx`

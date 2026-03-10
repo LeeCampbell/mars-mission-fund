@@ -18,12 +18,12 @@ seed data), and runs the tests.
   Vite dev server that already proxies `/v1` to Express).
 - `e2e/campaigns.spec.ts` with four tests:
   1. Campaign list happy path — `/campaigns` loads real seeded data from the DB.
-  2. Campaign detail happy path — `/campaigns/<seeded-uuid>` shows the full detail
+  1. Campaign detail happy path — `/campaigns/<seeded-uuid>` shows the full detail
      page including nested entities (milestones, team members) when they exist in the
      seed.
-  3. 404 page — `/campaigns/00000000-dead-0000-0000-000000000000` (valid UUID, no
+  1. 404 page — `/campaigns/00000000-dead-0000-0000-000000000000` (valid UUID, no
      matching row) navigates to a page that surfaces an error or not-found state.
-  4. Server error state — Playwright route interception forces `/v1/campaigns` to
+  1. Server error state — Playwright route interception forces `/v1/campaigns` to
      return HTTP 500; the UI must show the error alert, not fall back to mock data.
      This test is a **prerequisite gate**: it verifies the mock-fallback removal that
      belongs to the "Fix client-server integration" issue.
@@ -77,33 +77,33 @@ Use this UUID and title as stable assertion anchors in the tests.
 **Test 1 — Campaign list happy path:**
 
 1. Navigate to `/campaigns`.
-2. Wait for the `aria-label="Campaign listings"` grid to be visible.
-3. Assert at least one `CampaignCard` link is visible.
-4. Assert the seeded campaign title "Open Source Climate Prediction Model" appears
+1. Wait for the `aria-label="Campaign listings"` grid to be visible.
+1. Assert at least one `CampaignCard` link is visible.
+1. Assert the seeded campaign title "Open Source Climate Prediction Model" appears
    in the list.
 
 **Test 2 — Campaign detail happy path:**
 
 1. Navigate to `/campaigns/00000000-0001-0000-0000-000000000001`.
-2. Assert the `<h1>` contains "Open Source Climate Prediction Model".
-3. Assert the category label is visible.
-4. Assert the funding progress section (`FundingProgressSection`) is visible.
+1. Assert the `<h1>` contains "Open Source Climate Prediction Model".
+1. Assert the category label is visible.
+1. Assert the funding progress section (`FundingProgressSection`) is visible.
    If the seed includes milestones for this campaign, also assert the milestones
    section heading is present.
 
 **Test 3 — 404 for non-existent campaign:**
 
 1. Navigate to `/campaigns/00000000-dead-0000-0000-000000000000`.
-2. Assert the page shows the error state ("Failed to load campaign" text from
+1. Assert the page shows the error state ("Failed to load campaign" text from
    `CampaignDetailPage`).
 
 **Test 4 — Server error state (no mock fallback):**
 
 1. Intercept `**/v1/campaigns` via `page.route` and fulfill with status 500.
-2. Navigate to `/campaigns`.
-3. Assert the `role="alert"` element is visible and contains the error message
+1. Navigate to `/campaigns`.
+1. Assert the `role="alert"` element is visible and contains the error message
    ("couldn't load missions" from `CampaignsPage`).
-4. Assert the campaign grid is **not** visible (i.e., mock data is not rendered).
+1. Assert the campaign grid is **not** visible (i.e., mock data is not rendered).
 
 > Note: Test 4 will only produce the correct assertion if the mock-data fallback has
 > been removed from `fetchCampaigns` in `packages/client/src/api/campaigns.ts`.
@@ -146,14 +146,14 @@ After the existing `Install dependencies` step, add:
        ghcr.io/amacneil/dbmate up
    ```
 
-2. **Install Playwright browsers** (Chromium only):
+1. **Install Playwright browsers** (Chromium only):
 
    ```yaml
    - name: Install Playwright browsers
      run: npx playwright install --with-deps chromium
    ```
 
-3. **Start Express server in background**:
+1. **Start Express server in background**:
 
    ```yaml
    - name: Start server
@@ -163,7 +163,7 @@ After the existing `Install dependencies` step, add:
      run: npm run dev:server &
    ```
 
-4. **Run E2E tests** (Playwright starts Vite via `webServer`):
+1. **Run E2E tests** (Playwright starts Vite via `webServer`):
 
    ```yaml
    - name: E2E tests

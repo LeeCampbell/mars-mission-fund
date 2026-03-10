@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx playwright --version` prints a version number; `npm run test:e2e -- --help` exits without error.
   - **Brief ref**: Dependencies / Files to Create/Modify (`package.json`)
 
-- [ ] TASK-02: Create playwright.config.ts at repo root
+- [x] TASK-02: Create playwright.config.ts at repo root
   - **Goal**: Configure Playwright with the correct baseURL, single Chromium project, one `webServer` entry (Vite dev server), and `workers: 1`.
   - **Details**: Create `playwright.config.ts` in the repo root. Set `baseURL: 'http://localhost:5173'`, `use: { headless: true }`, `workers: 1`, no retries. Add a `webServer` entry: `command: 'npm run dev -w @mmf/client'`, `url: 'http://localhost:5173'`, `reuseExistingServer: !process.env.CI`. Ensure the config covers only Chromium. Do **not** add this file to the Vite build.
   - **Files**: `playwright.config.ts`
@@ -42,9 +42,9 @@ Brief: plan/ready/brief.md
     - Add `services.postgres` block to the existing `ci` job (image `postgres:16-alpine`, env `POSTGRES_USER/PASSWORD/DB`, port `5432:5432`, health-check options as specified in brief).
     - After the `Install dependencies` step, insert in order:
       1. **Run DB migrations** step using `docker run --rm --network host ghcr.io/amacneil/dbmate up` with `DATABASE_URL: postgres://mmf:mmf@localhost:5432/mmf_test`.
-      2. **Install Playwright browsers**: `npx playwright install --with-deps chromium`.
-      3. **Start server**: `npm run dev:server &` with env `DATABASE_URL` and `PORT: 3000`.
-      4. **E2E tests**: `npm run test:e2e` with env `DATABASE_URL`.
+      1. **Install Playwright browsers**: `npx playwright install --with-deps chromium`.
+      1. **Start server**: `npm run dev:server &` with env `DATABASE_URL` and `PORT: 3000`.
+      1. **E2E tests**: `npm run test:e2e` with env `DATABASE_URL`.
     - Place these steps after the existing `Test coverage` step and before `Audit`.
   - **Files**: `.github/workflows/ci.yml`
   - **Verify**: The YAML is valid (no syntax errors). CI run shows a passing `E2E tests` step.

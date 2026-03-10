@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Create plan/client-server-integration/tasks/03-close.tasks.md
+- [x] TASK-01: Create plan/client-server-integration/tasks/03-close.tasks.md
   - **Goal**: Establish the task file that documents this housekeeping work in the milestone's task history.
   - **Details**: Create directory `plan/client-server-integration/tasks/` if it doesn't exist. Write `03-close.tasks.md` listing individual TASK entries (one per spec change) that mirror the work done in TASK-02 through TASK-06 of this checklist. Follow the task-file format used in earlier milestone task files (TASK-XX header, Goal, Files, Notes).
   - **Files**: `plan/client-server-integration/tasks/03-close.tasks.md` (create)

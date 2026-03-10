@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists at `specs/adrs/0001-npm-workspaces-monorepo.md`; status is `Accepted`; ADR covers both decisions (npm workspaces vs Turborepo/Nx, and `packages/` vs `src/`); `npm run lint:md` passes on the file.
   - **Brief ref**: Step 1 of the Approach section.
 
-- [ ] TASK-02: Update specs/tech/architecture.md — fix server/ path in Section 1
+- [x] TASK-02: Update specs/tech/architecture.md — fix server/ path in Section 1
   - **Goal**: Correct the local demo scope note in Section 1 to reference the monorepo path and workspace-aware run command.
   - **Details**: In `specs/tech/architecture.md` Section 1 (Purpose), update the `> **Local demo scope**` blockquote. Change `the Express server (\`server/\`)` to `the Express server (\`packages/server/\`)`. Change the run command from `` `npm run dev` inside the `server/` directory `` to `` `npm run dev:server` from the repo root (or `npm run dev` inside `packages/server/`) ``. Bump the spec version from `0.4` to `0.5` in the frontmatter. Add a change log entry for today's date (2026-03-10) summarising the path correction.
   - **Files**: `specs/tech/architecture.md`

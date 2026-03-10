@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Search for `36px` in the listed files — none should remain. Search for `headingStyle` — all should reference `var(--type-section-heading-size)`.
   - **Brief ref**: Step 2 — Fix hardcoded section-heading font sizes
 
-- [ ] TASK-03: Fix `MissionCard` card-title font size
+- [x] TASK-03: Fix `MissionCard` card-title font size
   - **Goal**: Replace the hardcoded `18px` font size in `MissionCard` with the correct token so card titles render at 24 px per the design spec.
   - **Details**: In `MissionCard.tsx`, find `titleStyle` and change `fontSize: '18px'` to `fontSize: 'var(--type-card-title-size)'`.
   - **Files**: `packages/client/src/components/MissionCard.tsx`

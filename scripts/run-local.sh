@@ -17,9 +17,12 @@ until docker compose -f docker-compose.dev.yml exec -T db pg_isready -U mmf > /d
 done
 echo "PostgreSQL is ready."
 
+# Database connection used by both dbmate and the server
+export DATABASE_URL="postgresql://mmf:mmf@localhost:5432/mmf?sslmode=disable"
+
 # Run database migrations
 docker run --rm --network host \
-  -e DATABASE_URL="postgresql://mmf:mmf@localhost:5432/mmf?sslmode=disable" \
+  -e DATABASE_URL="${DATABASE_URL}" \
   -v "$(pwd)/packages/server/db:/db" \
   ghcr.io/amacneil/dbmate up
 

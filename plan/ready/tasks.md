@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Section 1 blockquote contains `packages/server/` and `npm run dev:server`; no bare `server/` path reference remains in the modified text; version is `0.5`; change log entry present; `npm run lint:md` passes.
   - **Brief ref**: Step 2 of the Approach section.
 
-- [ ] TASK-03: Update specs/tech/tech-stack.md — fix Local Development section
+- [x] TASK-03: Update specs/tech/tech-stack.md — fix Local Development section
   - **Goal**: Update the Local Development section to reflect the monorepo directory structure.
   - **Details**: In `specs/tech/tech-stack.md`, make these changes to the Local Development section:
     1. DBMate invocation: change `-v "$(pwd)/server/db:/db"` to `-v "$(pwd)/packages/server/db:/db"` and update the prose line `DBMate applies migrations from \`server/db/migrations/\`.` to `DBMate applies migrations from \`packages/server/db/migrations/\`.`

@@ -1,6 +1,6 @@
 -- migrate:up
 
--- Seed 10 campaigns covering 5+ categories and multiple statuses
+-- Seed 10 campaigns covering 7 categories and multiple statuses
 -- Using fixed UUIDs for FK references within this file
 
 -- Campaigns
@@ -12,244 +12,244 @@ INSERT INTO campaigns (
 ) VALUES
   (
     '00000000-0001-0000-0000-000000000001',
-    'open-source-climate-model',
-    'Open Source Climate Prediction Model',
-    'Building a free, community-driven climate prediction model accessible to all researchers worldwide.',
-    '<p>Climate science should not be locked behind expensive proprietary software. We are building a fully open-source climate prediction model that any researcher, educator, or policymaker can use for free. Our team of climate scientists and software engineers will create a modular, well-documented codebase that runs on commodity hardware.</p>',
-    'This project directly advances environmental research access and scientific transparency, empowering communities most vulnerable to climate change to model and plan for local impacts.',
-    'Technology',
-    ARRAY['climate', 'open-source', 'research', 'software'],
+    'methane-bipropellant-engine',
+    'Methane Bi-Propellant Engine Testbed',
+    'Building and flight-qualifying a full-flow staged-combustion methane/LOX engine optimised for Mars ascent.',
+    '<p>A reliable methane/LOX engine is the lynchpin of Mars return missions because methane can be manufactured on Mars from atmospheric CO₂ and subsurface water ice. Our team of propulsion engineers is designing a full-flow staged-combustion engine targeting 300 kN thrust with a specific impulse above 360 s. The testbed will be open-hardware so any launch provider can iterate on the design.</p>',
+    'An open-source, Mars-return-capable engine directly enables the ''get there and back'' foundation that every other Mars mission depends on.',
+    'Propulsion',
+    ARRAY['propulsion', 'methane', 'engine', 'open-hardware'],
     'Live',
-    'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1200',
+    'https://images.unsplash.com/photo-1517976487492-5750f3195933?w=1200',
     500000000, 2000000000, 1250000000,
     4200, '2026-09-30 23:59:59+00', '2026-01-15 09:00:00+00'
   ),
   (
     '00000000-0002-0000-0000-000000000002',
-    'urban-vertical-farms',
-    'Urban Vertical Farms Network',
-    'Creating a network of community-owned vertical farms in food deserts across 10 US cities.',
-    '<p>Food deserts affect 23.5 million Americans. Our urban vertical farm network will bring fresh produce directly into the communities that need it most. Each farm is designed to be community-owned, operated by local workers, and profitable within 18 months of launch.</p>',
-    'Providing nutritious food access to underserved communities addresses a core human need and reduces health inequities rooted in systemic poverty.',
-    'Environment',
-    ARRAY['food', 'urban', 'sustainability', 'community'],
+    'aeroshell-heat-shield',
+    'Adaptive Aeroshell Heat Shield',
+    'Developing a deployable aeroshell heat shield rated for crewed Mars entry, descent, and landing.',
+    '<p>Landing anything heavier than a rover on Mars requires a heat shield far larger than any flown to date. Our inflatable aeroshell design deploys from a 4 m stowed diameter to 16 m, giving enough drag to decelerate a 20-tonne crewed lander through the thin Martian atmosphere. Wind-tunnel and arc-jet testing is complete; this campaign funds the orbital demonstration flight.</p>',
+    'Solving the Mars EDL mass problem is a gate that must open before any crewed surface mission can proceed.',
+    'Entry, Descent & Landing',
+    ARRAY['edl', 'heat-shield', 'aeroshell', 'landing'],
     'Funded',
-    'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1200',
+    'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1200',
     300000000, 1000000000, 875000000,
     3100, '2026-03-01 23:59:59+00', '2025-10-01 09:00:00+00'
   ),
   (
     '00000000-0003-0000-0000-000000000003',
-    'rural-coding-bootcamps',
-    'Rural Coding Bootcamps Initiative',
-    'Free 12-week coding bootcamps in rural communities, bridging the digital divide with job placement support.',
-    '<p>Rural Americans are being left behind in the digital economy. Our initiative brings intensive, industry-aligned coding bootcamps to rural towns with populations under 10,000. We cover tuition, provide laptops, and guarantee job placement support for every graduate.</p>',
-    'Economic mobility through tech education directly addresses geographic inequality and creates pathways out of poverty for rural Americans.',
-    'Education',
-    ARRAY['coding', 'rural', 'education', 'jobs', 'tech'],
+    'kilopower-reactor-array',
+    'Kilopower Fission Reactor Array',
+    'Scaling a 10 kWe space-rated fission reactor into a field-deployable array providing 40 kWe for a Mars surface base.',
+    '<p>Solar panels on Mars produce roughly 40% of their Earth output and nothing at all during month-long dust storms. A compact fission reactor array provides reliable baseload power for life support, ISRU, and communications regardless of weather or season. Our design chains four 10 kWe Stirling-cycle units with shared heat rejection, fitting inside a single lander cargo bay.</p>',
+    'Reliable power is the single largest enabler of sustained human presence on Mars; without it, every other surface system fails.',
+    'Power & Energy',
+    ARRAY['fission', 'reactor', 'power', 'kilopower', 'stirling'],
     'Live',
-    'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200',
+    'https://images.unsplash.com/photo-1536408745983-0f03be6e8858?w=1200',
     200000000, 600000000, 310000000,
     1850, '2026-07-15 23:59:59+00', '2026-02-01 09:00:00+00'
   ),
   (
     '00000000-0004-0000-0000-000000000004',
-    'mental-health-app-teens',
-    'Teen Mental Health Support Platform',
-    'A free, therapist-reviewed mental health app designed specifically for teenagers aged 13–18.',
-    '<p>Teen mental health is at a crisis point. Our platform provides evidence-based CBT exercises, peer support communities moderated by licensed therapists, and direct connection to crisis resources. All features are free, with parental transparency controls built in.</p>',
-    'Accessible mental health support for teenagers addresses an urgent public health crisis and prevents long-term harm to individuals and communities.',
-    'Health',
-    ARRAY['mental-health', 'teens', 'app', 'therapy', 'wellness'],
+    'inflatable-hab-module',
+    'Inflatable Habitat Module',
+    'Designing and pressure-testing an inflatable habitat module providing 330 m³ of crew living space on the Martian surface.',
+    '<p>Rigid habitat modules are constrained by launch-fairing diameter. Our inflatable design launches compactly and expands on-site to provide a two-storey pressurised volume with integrated radiation shielding, a galley, crew quarters for six, a medical bay, and an EVA airlock. The multi-layer shell uses Vectran restraint layers and boron-loaded polyethylene for secondary cosmic-ray protection.</p>',
+    'Liveable crew volume is a prerequisite for any mission longer than 30 days; an inflatable architecture dramatically reduces launch mass per habitable cubic metre.',
+    'Habitats & Construction',
+    ARRAY['habitat', 'inflatable', 'crew', 'construction'],
     'Complete',
-    'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200',
+    'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=1200',
     150000000, 500000000, 498000000,
     5600, '2025-12-31 23:59:59+00', '2025-06-01 09:00:00+00'
   ),
   (
     '00000000-0005-0000-0000-000000000005',
-    'community-arts-hub-detroit',
-    'Detroit Community Arts Hub',
-    'Transforming a vacant warehouse into a free community arts center in Detroit''s North End neighborhood.',
-    '<p>Detroit''s North End has lost 80% of its arts venues in the past decade. We are converting a 15,000 sq ft vacant warehouse into a vibrant community arts hub featuring studio spaces, a performance venue, a gallery, and free after-school programs for youth.</p>',
-    'Art and culture are essential to community identity and healing. This hub will restore creative infrastructure to a neighborhood rebuilding after decades of disinvestment.',
-    'Arts',
-    ARRAY['arts', 'community', 'detroit', 'renovation', 'youth'],
+    'closed-loop-life-support',
+    'Closed-Loop Life Support System',
+    'Building a bioregenerative life support system that recycles 98% of water and 75% of oxygen for a six-person Mars crew.',
+    '<p>Resupply from Earth is not an option for a Mars surface crew. Our closed-loop environmental control and life support system (ECLSS) combines physicochemical CO₂ removal with a bioregenerative algae loop for O₂ regeneration and greywater recycling. The system targets 98% water recovery and 75% O₂ closure, dramatically reducing the consumables mass budget for a 500-day surface stay.</p>',
+    'Life support closure rate directly determines mission duration and crew safety; higher closure means longer, safer missions with less launched mass.',
+    'Life Support & Crew Health',
+    ARRAY['life-support', 'eclss', 'water', 'oxygen', 'bioregenerative'],
     'Live',
-    'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1200',
+    'https://images.unsplash.com/photo-1628126235206-5260b9ea6441?w=1200',
     400000000, 800000000, 523000000,
     2700, '2026-06-30 23:59:59+00', '2026-01-20 09:00:00+00'
   ),
   (
     '00000000-0006-0000-0000-000000000006',
-    'accessible-prosthetics-open-design',
-    'Open Design Affordable Prosthetics',
-    'Open-source 3D-printable prosthetic limb designs, cutting cost from $10,000 to under $100.',
-    '<p>Prosthetic limbs cost $10,000–$70,000, putting them out of reach for billions worldwide. Our team of biomedical engineers and prosthetists is creating a full library of open-source, 3D-printable prosthetic designs certified for safety and effectiveness. Anyone with a 3D printer can manufacture them locally.</p>',
-    'Democratizing access to prosthetic technology directly addresses disability-based inequality on a global scale, restoring mobility and independence to millions.',
-    'Health',
-    ARRAY['prosthetics', 'open-source', '3d-printing', 'accessibility', 'health'],
+    'greenhouse-dome-prototype',
+    'Mars Greenhouse Dome Prototype',
+    'Prototyping a pressurised greenhouse dome capable of growing 50% of a six-person crew''s caloric needs using Martian regolith.',
+    '<p>A self-sustaining Mars base must grow food locally. Our greenhouse dome is a 12 m diameter inflatable structure with UV-filtering panels, LED supplemental lighting, and hydroponic/aeroponic grow beds. Regolith-based growing media is processed on-site to remove perchlorates. The prototype will be tested in a Mars-analog environment in Iceland for 12 months to validate crop yield projections.</p>',
+    'Local food production is essential for crew nutrition, morale, and reducing dependence on Earth resupply for missions beyond 18 months.',
+    'Food & Water Production',
+    ARRAY['greenhouse', 'food', 'agriculture', 'regolith', 'hydroponic'],
     'Funded',
-    'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=1200',
+    'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1200',
     250000000, 750000000, 720000000,
     4800, '2026-02-28 23:59:59+00', '2025-09-01 09:00:00+00'
   ),
   (
     '00000000-0007-0000-0000-000000000007',
-    'indigenous-language-preservation',
-    'Indigenous Language Preservation Archive',
-    'Recording, digitising, and teaching 50 endangered indigenous languages with community-led teams.',
-    '<p>Over 3,000 languages are at critical risk of extinction. We are partnering with 50 indigenous communities to record fluent elders, create learning materials, and build free online courses. All materials are owned by and controlled by the communities themselves.</p>',
-    'Preserving indigenous languages maintains cultural diversity, transmits ecological knowledge, and upholds the rights of indigenous peoples to their heritage.',
-    'Education',
-    ARRAY['indigenous', 'language', 'preservation', 'culture', 'archive'],
+    'sabatier-propellant-plant',
+    'Sabatier Propellant Production Plant',
+    'Building a pilot-scale ISRU plant that converts Martian CO₂ and water ice into methane propellant and oxygen.',
+    '<p>Manufacturing propellant on Mars eliminates the need to launch return-trip fuel from Earth, cutting mission mass by more than half. Our Sabatier reactor combines atmospheric CO₂ with hydrogen (electrolysed from subsurface water ice) to produce methane and water. The water is recycled back into the electrolysis loop. This campaign funds the first integrated pilot plant rated for 1 kg/hr methane output.</p>',
+    'In-situ propellant production is the economic keystone of a sustainable Mars programme — without it, every return trip requires launching fuel from Earth at enormous cost.',
+    'In-Situ Resource Utilisation',
+    ARRAY['isru', 'sabatier', 'propellant', 'methane', 'mining'],
     'Live',
-    'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=1200',
+    'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200',
     180000000, 500000000, 195000000,
     1200, '2026-08-31 23:59:59+00', '2026-02-15 09:00:00+00'
   ),
   (
     '00000000-0008-0000-0000-000000000008',
-    'solar-microgrids-rural-africa',
-    'Solar Microgrids for Rural Africa',
-    'Installing community-owned solar microgrids in 100 off-grid villages across sub-Saharan Africa.',
-    '<p>600 million Africans live without reliable electricity. Our programme installs solar microgrids in villages of 500–2,000 people, trains local technicians for maintenance, and structures ownership so the community builds equity. Each installation powers homes, schools, and health clinics.</p>',
-    'Energy access is foundational to education, health, and economic development. Community-owned infrastructure ensures benefits flow to local people rather than external investors.',
-    'Environment',
-    ARRAY['solar', 'energy', 'africa', 'microgrids', 'community'],
+    'superconducting-radiation-shelter',
+    'Superconducting Radiation Shelter',
+    'Developing a superconducting-magnet active radiation shield to protect crew during transit and solar particle events.',
+    '<p>Galactic cosmic rays and solar particle events are the top health risk for Mars-transit crews. Passive shielding alone would require impractical mass. Our active shield uses high-temperature superconducting coils cooled by a cryocooler to generate a 5 T magnetic dipole field that deflects charged particles. The shelter doubles as a storm shelter during solar events, reducing crew dose to below NASA career limits for a 2.5-year round trip.</p>',
+    'Radiation exposure is the primary biomedical constraint on deep-space missions; an active shield converts an infeasible dose budget into an acceptable one.',
+    'Radiation Protection',
+    ARRAY['radiation', 'shielding', 'superconducting', 'magnet', 'crew-safety'],
     'Complete',
-    'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200',
+    'https://images.unsplash.com/photo-1581822261290-991b38693d1b?w=1200',
     1000000000, 3000000000, 2850000000,
     9200, '2025-11-30 23:59:59+00', '2025-01-01 09:00:00+00'
   ),
   (
     '00000000-0009-0000-0000-000000000009',
-    'public-interest-investigative-news',
-    'Public Interest Investigative Newsroom',
-    'A reader-funded investigative newsroom covering corruption, environmental crimes, and corporate accountability.',
-    '<p>Quality investigative journalism has been gutted by the collapse of ad-supported media. We are launching a fully independent, reader-funded newsroom with no advertising or corporate ownership. Our team of 15 investigative journalists will cover stories that matter to the public but that commercial media ignores.</p>',
-    'An informed democracy requires independent journalism. Reader funding eliminates the conflicts of interest that prevent reporting on powerful institutions.',
-    'Arts',
-    ARRAY['journalism', 'investigative', 'media', 'democracy', 'accountability'],
+    'autonomous-regolith-excavator',
+    'Autonomous Regolith Excavator',
+    'Building an autonomous excavation rover that prepares landing pads, berms, and foundation trenches from Martian regolith.',
+    '<p>Before a crew arrives, robotic systems must prepare the surface: levelling landing pads, building regolith berms for blast protection, and trenching foundations for habitat anchoring. Our excavator uses a drum-cutter head, autonomous path planning, and a LiDAR terrain model to operate without real-time Earth control. The rover is solar-powered with a RTG backup for dust-storm operations.</p>',
+    'Autonomous site preparation is a prerequisite for safe crewed landing and habitat deployment; every surface architecture plan depends on earthmoving capability arriving first.',
+    'Robotics & Automation',
+    ARRAY['robotics', 'excavation', 'autonomous', 'regolith', 'rover'],
     'Live',
-    'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200',
+    'https://images.unsplash.com/photo-1485460310769-1c83f7c4f69e?w=1200',
     120000000, 400000000, 118000000,
     890, '2026-05-31 23:59:59+00', '2026-02-20 09:00:00+00'
   ),
   (
     '00000000-0010-0000-0000-000000000010',
-    'maternal-health-clinics-appalachia',
-    'Appalachian Maternal Health Clinics',
-    'Opening 5 free maternal health clinics in counties with no OB/GYN within 50 miles.',
-    '<p>Appalachia has some of the worst maternal mortality rates in the developed world. Five counties in our target region have no OB/GYN provider within 50 miles. We are opening fully staffed maternal health clinics with telehealth connections to regional hospitals, serving low-income mothers regardless of insurance status.</p>',
-    'Maternal mortality in the richest nation on earth is a moral failure. Providing free, local care addresses both geographic and economic barriers to health equity.',
-    'Health',
-    ARRAY['maternal-health', 'appalachia', 'clinics', 'rural', 'equity'],
+    'laser-optical-relay-network',
+    'Laser Optical Relay Network',
+    'Deploying a constellation of three Mars-orbit relay satellites for high-bandwidth laser-optical comms with Earth.',
+    '<p>Current Mars communication relies on ageing orbiters with radio links capped at 2 Mbps. Our laser-optical relay network places three satellites in areostationary orbit, providing continuous 100 Mbps links to Earth ground stations via 1550 nm laser terminals. The constellation also carries UHF transponders for surface-to-orbit relay, replacing dependency on NASA''s Mars Relay Network. This campaign funds the flight units and rideshare launch.</p>',
+    'High-bandwidth, low-latency communication is essential for crew safety, scientific return, and public engagement with Mars exploration.',
+    'Communications & Navigation',
+    ARRAY['comms', 'laser', 'optical', 'relay', 'satellite'],
     'Funded',
-    'https://images.unsplash.com/photo-1631815588090-d4bfec5b1b89?w=1200',
+    'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200',
     600000000, 1500000000, 1420000000,
     6300, '2026-01-31 23:59:59+00', '2025-07-01 09:00:00+00'
   )
 ON CONFLICT DO NOTHING;
 
--- Milestones for campaign 1: Open Source Climate Model
+-- Milestones for campaign 1: Methane Bi-Propellant Engine
 INSERT INTO campaign_milestones (id, campaign_id, title, description, target_date, funding_pct, verification_criteria, status, sort_order) VALUES
-  ('10000000-0001-0001-0000-000000000001', '00000000-0001-0000-0000-000000000001', 'Core Engine & Data Pipeline', 'Build the core atmospheric simulation engine and data ingestion pipeline for NOAA/NASA datasets.', '2026-04-30', 25, 'GitHub repo with passing CI, benchmark report showing model runs on standard hardware, documented API.', 'Pending', 1),
-  ('10000000-0001-0002-0000-000000000001', '00000000-0001-0000-0000-000000000001', 'Regional Calibration & Validation', 'Calibrate and validate the model against historical climate data for 5 global regions.', '2026-07-31', 35, 'Published validation report comparing model output to ERA5 reanalysis data; RMSE within accepted range.', 'Pending', 2),
-  ('10000000-0001-0003-0000-000000000001', '00000000-0001-0000-0000-000000000001', 'Web Interface & Documentation', 'Launch a web-based interface and comprehensive documentation for non-technical users.', '2026-09-30', 40, 'Live website with at least 3 preset scenario templates; docs site passing link-checker; 50 beta testers confirmed.', 'Pending', 3)
+  ('10000000-0001-0001-0000-000000000001', '00000000-0001-0000-0000-000000000001', 'Injector & Turbopump Prototype', 'Design and fabricate the injector head and turbopump assembly; complete cold-flow testing.', '2026-04-30', 25, 'Fabrication completion report; cold-flow test data showing target mass-flow rates within 5% tolerance; peer review sign-off.', 'Pending', 1),
+  ('10000000-0001-0002-0000-000000000001', '00000000-0001-0000-0000-000000000001', 'Short-Duration Hot-Fire Tests', 'Conduct 10 hot-fire tests of 15 s duration at the Stennis E-1 test stand; validate thrust and Isp targets.', '2026-07-31', 35, 'Telemetry data from 10 firings; thrust ≥ 280 kN sustained; nozzle inspection showing acceptable erosion.', 'Pending', 2),
+  ('10000000-0001-0003-0000-000000000001', '00000000-0001-0000-0000-000000000001', 'Full-Duration Qualification Burn', 'Complete a 240 s full-duration burn simulating Mars ascent profile; publish open-hardware design package.', '2026-09-30', 40, 'Full-duration burn telemetry; Isp ≥ 360 s confirmed; open-hardware repo published with CAD, BOM, and test reports.', 'Pending', 3)
 ON CONFLICT DO NOTHING;
 
--- Milestones for campaign 2: Urban Vertical Farms
+-- Milestones for campaign 2: Aeroshell Heat Shield
 INSERT INTO campaign_milestones (id, campaign_id, title, description, target_date, funding_pct, verification_criteria, status, sort_order) VALUES
-  ('10000000-0002-0001-0000-000000000002', '00000000-0002-0000-0000-000000000002', 'Site Selection & Permitting', 'Identify and secure leases for 3 pilot farm locations; obtain all necessary permits.', '2025-11-30', 20, 'Signed leases for 3 locations, copies of issued permits from local authorities.', 'Verified', 1),
-  ('10000000-0002-0002-0000-000000000002', '00000000-0002-0000-0000-000000000002', 'Equipment Installation & Staff Training', 'Install hydroponic systems and complete training of 30 local staff members.', '2026-01-31', 40, 'Photo/video documentation of installed systems; certificates of completion for all trainees.', 'Verified', 2),
-  ('10000000-0002-0003-0000-000000000002', '00000000-0002-0000-0000-000000000002', 'First Harvest & Community Distribution', 'Complete first full harvest cycle and distribute produce to at least 500 households.', '2026-02-28', 40, 'Distribution records showing 500+ unique households; produce quality report; local news coverage.', 'Submitted', 3)
+  ('10000000-0002-0001-0000-000000000002', '00000000-0002-0000-0000-000000000002', 'Arc-Jet Material Qualification', 'Complete arc-jet testing of all TPS material candidates at Mars-entry heat flux levels.', '2025-11-30', 20, 'Arc-jet test reports for 5 material samples; selection memo signed by chief engineer.', 'Verified', 1),
+  ('10000000-0002-0002-0000-000000000002', '00000000-0002-0000-0000-000000000002', 'Subscale Inflation & Wind-Tunnel Tests', 'Fabricate and test a 4 m subscale inflatable aeroshell in hypersonic wind tunnel.', '2026-01-31', 40, 'Wind-tunnel data at Mach 20–30; structural integrity confirmed; drag coefficient within 8% of CFD prediction.', 'Verified', 2),
+  ('10000000-0002-0003-0000-000000000002', '00000000-0002-0000-0000-000000000002', 'Orbital Demonstration Flight', 'Launch full-scale 16 m aeroshell on a suborbital reentry trajectory to validate integrated TPS and deployment.', '2026-02-28', 40, 'Flight telemetry; recovered hardware inspection; TPS recession within design margins; post-flight report published.', 'Submitted', 3)
 ON CONFLICT DO NOTHING;
 
--- Milestones for campaign 3: Rural Coding Bootcamps
+-- Milestones for campaign 3: Kilopower Reactor Array
 INSERT INTO campaign_milestones (id, campaign_id, title, description, target_date, funding_pct, verification_criteria, status, sort_order) VALUES
-  ('10000000-0003-0001-0000-000000000003', '00000000-0003-0000-0000-000000000003', 'Curriculum Development & Partnerships', 'Finalise 12-week curriculum and establish employer partnerships for job placement.', '2026-03-31', 30, 'Published curriculum syllabus; signed MOUs with at least 10 employers committing to interview graduates.', 'Pending', 1),
-  ('10000000-0003-0002-0000-000000000003', '00000000-0003-0000-0000-000000000003', 'First Cohort Completion', 'Graduate first cohort of 50 students from 3 rural locations.', '2026-06-30', 40, 'Graduation ceremony documentation; roster of 50 graduates with contact info; assessment scores.', 'Pending', 2),
-  ('10000000-0003-0003-0000-000000000003', '00000000-0003-0000-0000-000000000003', 'Job Placement Outcomes', 'Achieve 70% job placement rate within 90 days of graduation for cohort 1.', '2026-09-30', 30, 'Employment verification letters from graduates; aggregate salary data; third-party outcome audit.', 'Pending', 3)
+  ('10000000-0003-0001-0000-000000000003', '00000000-0003-0000-0000-000000000003', 'Single-Unit Criticality Test', 'Achieve first criticality on a single 10 kWe reactor unit at the Nevada National Security Site.', '2026-03-31', 30, 'Criticality test report; 10 kWe sustained output for 28 days; radiation survey within exclusion-zone limits.', 'Pending', 1),
+  ('10000000-0003-0002-0000-000000000003', '00000000-0003-0000-0000-000000000003', 'Four-Unit Array Integration', 'Integrate four reactor units with shared heat-rejection radiator panels and power management system.', '2026-06-30', 40, 'Integrated power output ≥ 38 kWe; thermal balance test in vacuum chamber; EMI compatibility confirmed.', 'Pending', 2),
+  ('10000000-0003-0003-0000-000000000003', '00000000-0003-0000-0000-000000000003', 'Environmental Qualification & Delivery', 'Complete vibration, thermal-vacuum, and radiation qualification; deliver flight unit to integration facility.', '2026-09-30', 30, 'Qualification test reports; flight unit acceptance review passed; shipping documentation.', 'Pending', 3)
 ON CONFLICT DO NOTHING;
 
--- Milestones for campaign 4: Teen Mental Health App (Complete)
+-- Milestones for campaign 4: Inflatable Habitat Module (Complete)
 INSERT INTO campaign_milestones (id, campaign_id, title, description, target_date, funding_pct, verification_criteria, status, sort_order) VALUES
-  ('10000000-0004-0001-0000-000000000004', '00000000-0004-0000-0000-000000000004', 'Beta App Launch', 'Launch beta version with core CBT exercises and crisis resources to 1,000 test users.', '2025-08-31', 25, 'App store listing; 1,000 registered beta users; bug report showing <5 critical issues.', 'Verified', 1),
-  ('10000000-0004-0002-0000-000000000004', '00000000-0004-0000-0000-000000000004', 'Therapist Review & Clinical Validation', 'Complete clinical review of all content by licensed therapists; publish validation report.', '2025-10-31', 35, 'Signed review from 5+ licensed therapists; published clinical advisory board statement.', 'Verified', 2),
-  ('10000000-0004-0003-0000-000000000004', '00000000-0004-0000-0000-000000000004', 'Full Public Launch', 'Launch publicly on iOS and Android with peer community features and 24/7 crisis chat.', '2025-12-31', 40, '100,000+ downloads; App Store rating ≥ 4.5; 24/7 crisis response coverage confirmed.', 'Verified', 3)
+  ('10000000-0004-0001-0000-000000000004', '00000000-0004-0000-0000-000000000004', 'Shell Fabrication & Pressure Test', 'Fabricate the multi-layer shell and pressurize to 1.5x nominal for burst-margin validation.', '2025-08-31', 25, 'Shell fabrication report; pressure test data showing hold at 150 kPa for 72 h with zero measurable leak rate.', 'Verified', 1),
+  ('10000000-0004-0002-0000-000000000004', '00000000-0004-0000-0000-000000000004', 'Integrated Fit-Out & Systems Test', 'Install galley, crew quarters, medical bay, ECLSS interfaces, and airlock; conduct integrated systems test.', '2025-10-31', 35, 'Systems test report; all subsystems nominal; simulated EVA egress/ingress cycle completed.', 'Verified', 2),
+  ('10000000-0004-0003-0000-000000000004', '00000000-0004-0000-0000-000000000004', 'Crew-in-the-Loop Analog Mission', 'Six crew members live in the habitat for 60 days at a Mars-analog site in Utah; collect human-factors data.', '2025-12-31', 40, 'Analog mission completion report; crew survey data; medical monitoring records; lessons-learned document published.', 'Verified', 3)
 ON CONFLICT DO NOTHING;
 
--- Milestones for campaign 5: Detroit Arts Hub
+-- Milestones for campaign 5: Closed-Loop Life Support
 INSERT INTO campaign_milestones (id, campaign_id, title, description, target_date, funding_pct, verification_criteria, status, sort_order) VALUES
-  ('10000000-0005-0001-0000-000000000005', '00000000-0005-0000-0000-000000000005', 'Building Acquisition & Architectural Plans', 'Secure purchase of the warehouse and complete architectural plans approved by the city.', '2026-03-31', 20, 'Signed deed of transfer; approved architectural drawings stamped by city planning dept.', 'Pending', 1),
-  ('10000000-0005-0002-0000-000000000005', '00000000-0005-0000-0000-000000000005', 'Renovation Phase 1: Structure & Utilities', 'Complete structural repairs, electrical, plumbing, and HVAC installation.', '2026-05-31', 45, 'Building inspection certificates for structural, electrical, and plumbing; progress photo documentation.', 'Pending', 2),
-  ('10000000-0005-0003-0000-000000000005', '00000000-0005-0000-0000-000000000005', 'Grand Opening & Programming Launch', 'Open to the public with inaugural exhibition, first performance, and youth programme enrolment.', '2026-06-30', 35, 'Grand opening event documentation; at least 200 attendees; 50 youth enrolled in after-school programme.', 'Pending', 3)
+  ('10000000-0005-0001-0000-000000000005', '00000000-0005-0000-0000-000000000005', 'CO₂ Removal & O₂ Regeneration Loop', 'Demonstrate the integrated CO₂ scrubber and algal O₂ regeneration loop at full crew-equivalent throughput.', '2026-03-31', 20, 'Loop closure data showing ≥ 75% O₂ recovery; CO₂ partial pressure maintained below 5.3 mmHg for 30 days.', 'Pending', 1),
+  ('10000000-0005-0002-0000-000000000005', '00000000-0005-0000-0000-000000000005', 'Water Recovery Subsystem', 'Integrate and test the greywater recycling loop targeting 98% water recovery rate.', '2026-05-31', 45, 'Water quality analysis (meeting NASA potable standards); 98% recovery demonstrated over 14-day continuous run.', 'Pending', 2),
+  ('10000000-0005-0003-0000-000000000005', '00000000-0005-0000-0000-000000000005', 'Full ECLSS Integration Test', 'Run the complete integrated ECLSS with six crew-equivalent metabolic simulators for 90 days.', '2026-06-30', 35, '90-day run log with no critical failures; consumables mass budget validated; maintenance schedule published.', 'Pending', 3)
 ON CONFLICT DO NOTHING;
 
--- Milestones for campaign 6: Open Design Prosthetics
+-- Milestones for campaign 6: Mars Greenhouse Dome
 INSERT INTO campaign_milestones (id, campaign_id, title, description, target_date, funding_pct, verification_criteria, status, sort_order) VALUES
-  ('10000000-0006-0001-0000-000000000006', '00000000-0006-0000-0000-000000000006', 'Design Library v1: Upper Limb', 'Release certified 3D-printable designs for 5 upper limb prosthetic variants.', '2025-11-30', 30, 'GitHub release with STL files; ISO 22523 conformance report; 3 independent print tests documented.', 'Verified', 1),
-  ('10000000-0006-0002-0000-000000000006', '00000000-0006-0000-0000-000000000006', 'Design Library v2: Lower Limb', 'Release certified designs for 4 lower limb prosthetic variants including a walking prosthetic foot.', '2026-01-31', 35, 'GitHub release with STL files; gait analysis report; 50 test fittings in 3 countries documented.', 'Verified', 2),
-  ('10000000-0006-0003-0000-000000000006', '00000000-0006-0000-0000-000000000006', 'Global Maker Network Launch', 'Launch a network of 200 maker spaces in 30 countries equipped and trained to produce prosthetics.', '2026-02-28', 35, 'Directory of 200 maker spaces; training completion records; 500 devices produced and fitted.', 'Pending', 3)
+  ('10000000-0006-0001-0000-000000000006', '00000000-0006-0000-0000-000000000006', 'Regolith Processing & Growth Media', 'Develop and validate a perchlorate-removal process for Martian regolith simulant to produce safe growth media.', '2025-11-30', 30, 'Perchlorate levels below 0.01 ppm in processed media; crop germination rates ≥ 90% in treated simulant.', 'Verified', 1),
+  ('10000000-0006-0002-0000-000000000006', '00000000-0006-0000-0000-000000000006', 'Dome Fabrication & Pressurisation', 'Fabricate the 12 m dome, install UV-filtering panels and LED arrays, and validate pressure integrity.', '2026-01-31', 35, 'Dome holds 101 kPa for 30 days; UV transmission spectrum confirmed; LED photon flux at canopy level measured.', 'Verified', 2),
+  ('10000000-0006-0003-0000-000000000006', '00000000-0006-0000-0000-000000000006', 'Iceland Analog 12-Month Grow Trial', 'Operate the greenhouse in Iceland for 12 months, measuring crop yields against caloric-need targets.', '2026-02-28', 35, 'Monthly harvest logs; total caloric output ≥ 50% of six-person crew requirement; peer-reviewed paper submitted.', 'Pending', 3)
 ON CONFLICT DO NOTHING;
 
--- Milestones for campaign 7: Indigenous Language Preservation
+-- Milestones for campaign 7: Sabatier Propellant Plant
 INSERT INTO campaign_milestones (id, campaign_id, title, description, target_date, funding_pct, verification_criteria, status, sort_order) VALUES
-  ('10000000-0007-0001-0000-000000000007', '00000000-0007-0000-0000-000000000007', 'Community Partnerships & Recording Phase', 'Establish partnerships with 50 communities and complete audio/video recordings with 150+ elders.', '2026-05-31', 35, 'Signed community agreements; archive of 1,000+ hours of recordings deposited with community trustees.', 'Pending', 1),
-  ('10000000-0007-0002-0000-000000000007', '00000000-0007-0000-0000-000000000007', 'Learning Materials Development', 'Create beginner-to-intermediate learning materials (lessons, audio, exercises) for all 50 languages.', '2026-07-31', 35, 'Published lesson sets for all 50 languages; reviewed by community language coordinators.', 'Pending', 2),
-  ('10000000-0007-0003-0000-000000000007', '00000000-0007-0000-0000-000000000007', 'Online Platform Launch', 'Launch a free online platform with courses, archive access, and community forums for all 50 languages.', '2026-08-31', 30, 'Live platform; 1,000 registered learners in first month; positive feedback from 80%+ of community partners.', 'Pending', 3)
+  ('10000000-0007-0001-0000-000000000007', '00000000-0007-0000-0000-000000000007', 'Sabatier Reactor Bench Test', 'Demonstrate the Sabatier reaction at target conversion efficiency with Mars-simulant CO₂ feedstock.', '2026-05-31', 35, 'Reactor test data showing ≥ 95% CO₂ conversion; methane purity ≥ 99%; thermal management validated.', 'Pending', 1),
+  ('10000000-0007-0002-0000-000000000007', '00000000-0007-0000-0000-000000000007', 'Electrolyser & Water Loop Integration', 'Integrate the water electrolyser with the Sabatier reactor to close the hydrogen loop.', '2026-07-31', 35, 'Closed-loop operation for 7 days; hydrogen recovery ≥ 90%; system mass and power budgets confirmed.', 'Pending', 2),
+  ('10000000-0007-0003-0000-000000000007', '00000000-0007-0000-0000-000000000007', 'Pilot Plant 1 kg/hr Demonstration', 'Operate the full pilot plant at 1 kg/hr methane output for 30 continuous days.', '2026-08-31', 30, '30-day operations log; 720 kg methane produced; maintenance downtime < 5%; public design package released.', 'Pending', 3)
 ON CONFLICT DO NOTHING;
 
--- Milestones for campaign 8: Solar Microgrids Africa (Complete)
+-- Milestones for campaign 8: Superconducting Radiation Shelter (Complete)
 INSERT INTO campaign_milestones (id, campaign_id, title, description, target_date, funding_pct, verification_criteria, status, sort_order) VALUES
-  ('10000000-0008-0001-0000-000000000008', '00000000-0008-0000-0000-000000000008', 'Phase 1: 20 Villages Online', 'Install and commission microgrids in 20 villages, train local technicians.', '2025-04-30', 20, 'Commissioning reports for 20 villages; 20 technician certifications; 30-day uptime logs showing ≥95%.', 'Verified', 1),
-  ('10000000-0008-0002-0000-000000000008', '00000000-0008-0000-0000-000000000008', 'Phase 2: 50 Villages Online', 'Scale to 50 villages with revised installation playbook from phase 1 lessons.', '2025-07-31', 30, 'Commissioning reports for 50 total villages; updated installation guide; independent energy audit.', 'Verified', 2),
-  ('10000000-0008-0003-0000-000000000008', '00000000-0008-0000-0000-000000000008', 'Phase 3: 100 Villages & Community Ownership Transfer', 'Complete all 100 installations and transfer ownership documentation to village cooperatives.', '2025-11-30', 50, '100 villages commissioned; ownership transfer deeds; 6-month impact report with electricity access data.', 'Verified', 3)
+  ('10000000-0008-0001-0000-000000000008', '00000000-0008-0000-0000-000000000008', 'HTS Coil Fabrication & Cryotest', 'Fabricate high-temperature superconducting coils and validate performance at operating temperature (40 K).', '2025-04-30', 20, 'Coil critical-current measurements; 5 T field achieved; cryocooler steady-state power draw confirmed.', 'Verified', 1),
+  ('10000000-0008-0002-0000-000000000008', '00000000-0008-0000-0000-000000000008', 'Particle-Beam Shielding Validation', 'Test the magnetic shield effectiveness against proton beams at Brookhaven National Laboratory.', '2025-07-31', 30, 'Dose-reduction factor ≥ 10x for 100 MeV protons; beam test report; Monte Carlo simulation validation.', 'Verified', 2),
+  ('10000000-0008-0003-0000-000000000008', '00000000-0008-0000-0000-000000000008', 'Flight-Qualifiable Shelter Module', 'Deliver a flight-qualifiable shelter module with integrated cryocooler, quench protection, and crew interfaces.', '2025-11-30', 50, 'Qualification test reports; crew dose budget for 2.5-year mission below NASA limits; design review passed.', 'Verified', 3)
 ON CONFLICT DO NOTHING;
 
--- Milestones for campaign 9: Investigative Newsroom
+-- Milestones for campaign 9: Autonomous Regolith Excavator
 INSERT INTO campaign_milestones (id, campaign_id, title, description, target_date, funding_pct, verification_criteria, status, sort_order) VALUES
-  ('10000000-0009-0001-0000-000000000009', '00000000-0009-0000-0000-000000000009', 'Team Hiring & Legal Setup', 'Hire 15 journalists and support staff; complete 501(c)(3) incorporation.', '2026-03-31', 25, 'Published staff page with bios; IRS 501(c)(3) determination letter; editorial independence charter published.', 'Pending', 1),
-  ('10000000-0009-0002-0000-000000000009', '00000000-0009-0000-0000-000000000009', 'Website Launch & First Stories', 'Launch news website and publish first 10 investigative pieces.', '2026-04-30', 35, 'Live website; 10 published investigations; 5,000 email subscribers; 3 story pickups by major outlets.', 'Pending', 2),
-  ('10000000-0009-0003-0000-000000000009', '00000000-0009-0000-0000-000000000009', 'Year 1 Impact Report', 'Publish full-year impact report covering stories, reach, and policy outcomes influenced.', '2026-05-31', 40, 'Published impact report; at least 2 documented policy changes linked to investigations; 50,000+ readers.', 'Pending', 3)
+  ('10000000-0009-0001-0000-000000000009', '00000000-0009-0000-0000-000000000009', 'Mobility Platform & Drum Cutter', 'Build the mobility chassis and drum-cutter head; validate digging performance in Mars-regolith simulant.', '2026-03-31', 25, 'Excavation rate ≥ 2 m³/hr in JSC Mars-1A simulant; mobility over 15° slopes confirmed; power budget validated.', 'Pending', 1),
+  ('10000000-0009-0002-0000-000000000009', '00000000-0009-0000-0000-000000000009', 'Autonomous Navigation & Planning', 'Integrate LiDAR-based terrain mapping and autonomous path planning; complete 10 km autonomous traverse.', '2026-04-30', 35, '10 km traverse in desert analog with zero human interventions; terrain model accuracy < 5 cm RMSE; obstacle avoidance log.', 'Pending', 2),
+  ('10000000-0009-0003-0000-000000000009', '00000000-0009-0000-0000-000000000009', 'Landing Pad Construction Demo', 'Autonomously construct a 30 m diameter levelled landing pad from regolith simulant at a desert test site.', '2026-05-31', 40, 'Completed landing pad survey showing ≤ 2 cm elevation deviation; time-lapse documentation; after-action report.', 'Pending', 3)
 ON CONFLICT DO NOTHING;
 
--- Milestones for campaign 10: Appalachian Maternal Health
+-- Milestones for campaign 10: Laser Optical Relay Network
 INSERT INTO campaign_milestones (id, campaign_id, title, description, target_date, funding_pct, verification_criteria, status, sort_order) VALUES
-  ('10000000-0010-0001-0000-000000000010', '00000000-0010-0000-0000-000000000010', 'Clinic Staffing & Equipment', 'Recruit and credential OB/GYN and midwifery staff for all 5 clinics; procure medical equipment.', '2025-09-30', 25, 'Credentialing certificates for all clinical staff; equipment delivery invoices and inspection records.', 'Verified', 1),
-  ('10000000-0010-0002-0000-000000000010', '00000000-0010-0000-0000-000000000010', 'Clinic Openings (All 5)', 'Open all 5 clinics and begin seeing patients; establish telehealth connections to regional hospitals.', '2025-11-30', 40, 'Clinic opening records; first patient intake documentation; telehealth system test reports.', 'Verified', 2),
-  ('10000000-0010-0003-0000-000000000010', '00000000-0010-0000-0000-000000000010', '6-Month Outcomes Report', 'Publish 6-month report on patients served, outcomes, and maternal mortality reduction.', '2026-01-31', 35, 'Published outcomes report; data showing ≥500 patients served per clinic; zero preventable maternal deaths.', 'Submitted', 3)
+  ('10000000-0010-0001-0000-000000000010', '00000000-0010-0000-0000-000000000010', 'Laser Terminal Prototype', 'Build and test a 1550 nm laser terminal prototype achieving 100 Mbps over a 500 km free-space link.', '2025-09-30', 25, 'Link budget closure at 100 Mbps; BER < 10⁻⁹; pointing accuracy ≤ 1 µrad demonstrated.', 'Verified', 1),
+  ('10000000-0010-0002-0000-000000000010', '00000000-0010-0000-0000-000000000010', 'Satellite Bus Integration', 'Integrate laser terminals and UHF transponders onto three satellite buses; complete thermal-vacuum testing.', '2025-11-30', 40, 'Thermal-vacuum test reports for all three satellites; RF compatibility confirmed; mass and power margins positive.', 'Verified', 2),
+  ('10000000-0010-0003-0000-000000000010', '00000000-0010-0000-0000-000000000010', 'Rideshare Launch & Commissioning', 'Launch all three satellites and complete on-orbit commissioning including end-to-end data relay test.', '2026-01-31', 35, 'On-orbit checkout reports; 100 Mbps link demonstrated Earth-to-orbit; UHF surface relay validated; constellation declared operational.', 'Submitted', 3)
 ON CONFLICT DO NOTHING;
 
 -- Stretch goals for campaigns 1, 2, and 5
 INSERT INTO campaign_stretch_goals (id, campaign_id, target_usd, description, deliverables, sort_order) VALUES
-  ('20000000-0001-0001-0000-000000000001', '00000000-0001-0000-0000-000000000001', 1500000000, 'Mobile App for Field Scientists', 'Build a companion mobile app allowing field scientists to run localised simulations offline and sync results back to the main model.', 1),
-  ('20000000-0001-0002-0000-000000000001', '00000000-0001-0000-0000-000000000001', 2000000000, 'Real-Time Data Integration', 'Integrate live satellite and sensor data feeds for real-time model updates, enabling nowcasting alongside projections.', 2),
-  ('20000000-0002-0001-0000-000000000002', '00000000-0002-0000-0000-000000000002', 750000000, 'Expand to 5 Additional Cities', 'Scale the network from the initial 10 cities to 15, prioritising cities with the highest food insecurity rates.', 1),
-  ('20000000-0005-0001-0000-000000000005', '00000000-0005-0000-0000-000000000005', 600000000, 'Outdoor Amphitheatre', 'Add an outdoor amphitheatre in the adjacent lot, expanding performance capacity and enabling free community concerts.', 1),
-  ('20000000-0005-0002-0000-000000000005', '00000000-0005-0000-0000-000000000005', 750000000, 'Artist-in-Residence Programme', 'Fund 10 annual artist-in-residence positions, providing free studio space and a $20,000 stipend to local artists.', 2)
+  ('20000000-0001-0001-0000-000000000001', '00000000-0001-0000-0000-000000000001', 1500000000, 'Deep-Throttle Capability', 'Add 10:1 deep-throttle capability for precision hover and landing, extending the engine''s use from ascent to descent stages.', 1),
+  ('20000000-0001-0002-0000-000000000001', '00000000-0001-0000-0000-000000000001', 2000000000, 'Reusability Test Programme', 'Fund a 10-flight reusability test programme to validate engine life beyond single-use, reducing per-mission cost by up to 80%.', 2),
+  ('20000000-0002-0001-0000-000000000002', '00000000-0002-0000-0000-000000000002', 750000000, 'Precision Landing Guidance', 'Integrate terrain-relative navigation and hazard avoidance into the aeroshell, enabling pinpoint landing within 100 m of a target.', 1),
+  ('20000000-0005-0001-0000-000000000005', '00000000-0005-0000-0000-000000000005', 600000000, 'Crop Variety Expansion', 'Add a dedicated growth chamber for high-calorie crops (potatoes, soybeans) and medicinal herbs, increasing dietary diversity.', 1),
+  ('20000000-0005-0002-0000-000000000005', '00000000-0005-0000-0000-000000000005', 750000000, 'Aquaponics Integration', 'Integrate a tilapia aquaponics loop for protein production, using fish waste as fertiliser for the hydroponic beds.', 2)
 ON CONFLICT DO NOTHING;
 
 -- Campaign updates for campaigns 2, 4, and 8
 INSERT INTO campaign_updates (id, campaign_id, body, posted_at) VALUES
   ('30000000-0002-0001-0000-000000000002', '00000000-0002-0000-0000-000000000002',
-   'We have signed leases for our first three farm locations in Chicago, Detroit, and Baltimore. The permitting process in Chicago took longer than expected but we received final approval this week. Equipment installation begins next month — stay tuned for photos!',
+   'Arc-jet testing is complete! All five TPS material candidates survived Mars-entry heat flux levels. We have selected the PICA-X derivative for the flight article based on mass efficiency and manufacturability. Subscale shell fabrication begins next week.',
    '2025-11-15 14:00:00+00'),
   ('30000000-0002-0002-0000-000000000002', '00000000-0002-0000-0000-000000000002',
-   'All three farms are now fully installed and our 30 staff members have completed their hydroponic cultivation training. First crops are in the ground — lettuce, spinach, and herbs. We expect first harvest in 6 weeks.',
+   'Wind-tunnel campaign wrapped up at AEDC Tunnel 9. The 4 m subscale aeroshell matched CFD predictions within 6% on drag coefficient — well within our 8% tolerance. We are now fabricating the full 16 m flight article for the orbital demo.',
    '2026-01-20 10:00:00+00'),
   ('30000000-0004-0001-0000-000000000004', '00000000-0004-0000-0000-000000000004',
-   'Our beta launched with 1,200 users — above our target of 1,000! Early feedback has been overwhelmingly positive. The most-used feature is the guided breathing exercises. We''re working on three new CBT modules based on user requests.',
+   'The habitat shell passed its burst-margin test with flying colours — held 150 kPa for 72 hours with zero measurable leak rate. The Vectran restraint layers performed exactly as modelled. Interior fit-out begins next month.',
    '2025-09-05 09:00:00+00'),
   ('30000000-0004-0002-0000-000000000004', '00000000-0004-0000-0000-000000000004',
-   'We hit 100,000 downloads in our first week of public launch — far beyond our expectations. Our clinical advisory board has issued a formal endorsement. We have partnered with 3 school districts to make the app available to all students.',
+   'Our six-person crew has completed the 60-day analog mission in Utah! Crew morale remained high throughout, and the habitat systems operated nominally. We are now analysing the human-factors data and will publish the full report by end of January.',
    '2026-01-07 11:00:00+00'),
   ('30000000-0008-0001-0000-000000000008', '00000000-0008-0000-0000-000000000008',
-   'Phase 1 complete! All 20 villages are online and our technician training programme has been certified by the African Development Bank. Average uptime across all sites is 97.3% — exceeding our 95% target.',
+   'First criticality achieved on our HTS coil assembly. The cryocooler stabilised at 38 K and the coils reached the design field of 5 T with margin. The Brookhaven beam test is scheduled for July — we are on track.',
    '2025-05-10 08:00:00+00'),
   ('30000000-0008-0002-0000-000000000008', '00000000-0008-0000-0000-000000000008',
-   'We have reached all 100 villages ahead of schedule. Ownership transfer ceremonies have taken place in each village — these were incredibly moving events. Our final impact report will be published next month. Thank you to every contributor who made this possible.',
+   'Particle-beam tests at Brookhaven confirmed a dose-reduction factor of 12x for 100 MeV protons — exceeding our 10x target. The flight-qualifiable module has passed design review and is now in final assembly. Thank you to every contributor who made this breakthrough possible.',
    '2025-11-01 12:00:00+00')
 ON CONFLICT DO NOTHING;
 
@@ -286,14 +286,14 @@ DELETE FROM campaign_milestones WHERE campaign_id IN (
 );
 
 DELETE FROM campaigns WHERE slug IN (
-  'open-source-climate-model',
-  'urban-vertical-farms',
-  'rural-coding-bootcamps',
-  'mental-health-app-teens',
-  'community-arts-hub-detroit',
-  'accessible-prosthetics-open-design',
-  'indigenous-language-preservation',
-  'solar-microgrids-rural-africa',
-  'public-interest-investigative-news',
-  'maternal-health-clinics-appalachia'
+  'methane-bipropellant-engine',
+  'aeroshell-heat-shield',
+  'kilopower-reactor-array',
+  'inflatable-hab-module',
+  'closed-loop-life-support',
+  'greenhouse-dome-prototype',
+  'sabatier-propellant-plant',
+  'superconducting-radiation-shelter',
+  'autonomous-regolith-excavator',
+  'laser-optical-relay-network'
 );

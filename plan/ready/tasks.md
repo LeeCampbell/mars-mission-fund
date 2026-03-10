@@ -61,7 +61,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Each file contains the corresponding token variable; no raw `11px`, `40px`, `12px`, or `14px` font-size literals remain in the changed styles.
   - **Brief ref**: Step 3
 
-- [ ] TASK-08: Fix typography in `Footer.tsx`
+- [x] TASK-08: Fix typography in `Footer.tsx`
   - **Goal**: Replace hardcoded font sizes in the footer with token variables
   - **Details**: Body text `14px` → `var(--type-button-size)`. Label `11px` → `var(--type-section-label-size)`. Copyright `13px` → `var(--type-body-small-size)`.
   - **Files**: `packages/client/src/components/Footer.tsx`

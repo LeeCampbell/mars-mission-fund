@@ -25,7 +25,7 @@ const brandColStyle: React.CSSProperties = {
 
 const taglineStyle: React.CSSProperties = {
   fontFamily: 'var(--type-body)',
-  fontSize: '14px',
+  fontSize: 'var(--type-button-size)',
   color: 'var(--color-text-secondary)',
   maxWidth: '240px',
   lineHeight: 1.5,
@@ -39,7 +39,7 @@ const navColStyle: React.CSSProperties = {
 
 const navLabelStyle: React.CSSProperties = {
   fontFamily: 'var(--type-section-label)',
-  fontSize: '11px',
+  fontSize: 'var(--type-section-label-size)',
   letterSpacing: '0.15em',
   textTransform: 'uppercase',
   color: 'var(--color-text-tertiary)',
@@ -48,7 +48,7 @@ const navLabelStyle: React.CSSProperties = {
 
 const linkStyle: React.CSSProperties = {
   fontFamily: 'var(--type-body)',
-  fontSize: '14px',
+  fontSize: 'var(--type-button-size)',
   color: 'var(--color-text-secondary)',
   textDecoration: 'none',
   transition: 'color var(--motion-hover)',
@@ -59,7 +59,7 @@ const copyrightStyle: React.CSSProperties = {
   borderTop: '1px solid var(--color-border-subtle)',
   paddingTop: '24px',
   fontFamily: 'var(--type-body)',
-  fontSize: '13px',
+  fontSize: 'var(--type-body-small-size)',
   color: 'var(--color-text-tertiary)',
 }
 

@@ -1,9 +1,23 @@
 {
   "name": "@mmf/shared",
+  "version": "0.1.0",
   "private": true,
-  "version": "0.0.1",
   "type": "module",
+  "main": "./dist/index.js",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "typescript": "^5"
   }
 }

@@ -90,7 +90,7 @@ Two changes:
      run: npx tsc -b --noEmit && npx tsc --noEmit -p packages/server/tsconfig.json
    ```
 
-2. **Build and Test coverage steps**: no YAML changes needed — the updated root `package.json` scripts already use `--workspaces --if-present`, so CI automatically picks up all packages when it runs `npm run build` and `npm run test:coverage`.
+1. **Build and Test coverage steps**: no YAML changes needed — the updated root `package.json` scripts already use `--workspaces --if-present`, so CI automatically picks up all packages when it runs `npm run build` and `npm run test:coverage`.
 
 ### 4. Prettier verification
 

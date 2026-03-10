@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run lint` from repo root exits 0 with no errors for files in both `packages/client` and `packages/server`
   - **Brief ref**: Section "1. `eslint.config.js` (root)"
 
-- [ ] TASK-02: Update root `package.json` scripts
+- [x] TASK-02: Update root `package.json` scripts
   - **Goal**: Make root npm scripts drive all workspaces and remove redundant delegation scripts
   - **Details**: Update scripts as follows — `build`: `"npm run build --workspaces --if-present"`; `test`: `"npm run test --workspaces --if-present"`; `test:coverage`: `"npm run test:coverage --workspaces --if-present"`; `lint`: `"eslint ."`; `lint:fix`: `"eslint . --fix"`. Remove `test:server` (subsumed by `--workspaces`). Remove any per-workspace delegation script such as `lint: "npm run lint -w @mmf/client"`. Keep `dev`, `dev:server`, `format`, `format:check`, and `lint:md` unchanged.
   - **Files**: `package.json`

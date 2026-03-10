@@ -67,16 +67,14 @@ clear_state() {
 }
 
 archive_plan() {
-  # Archive plan: move ready → done, then remove plan dir entirely.
-  # Plans are preserved in git history but kept out of the current tree.
-  mkdir -p plan/done
-  if [ -d "plan/ready" ]; then
-    mv plan/ready/* plan/done/ 2>/dev/null || true
+  # Remove plan files from the branch — they're preserved in git history.
+  if git ls-files --error-unmatch plan/ &>/dev/null; then
+    git rm -r plan/
+    git commit -m "chore: remove plan files after PR merged"
+    git push origin "$BRANCH" --force-with-lease
   fi
+  # Clean up any untracked plan files left on disk
   rm -rf plan/
-  git add plan/ 2>/dev/null || true
-  git commit -m "chore: remove plan files after PR creation" 2>/dev/null || true
-  git push origin "$BRANCH" --force-with-lease 2>/dev/null || true
 }
 
 STATE=$(determine_state)

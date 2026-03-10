@@ -105,7 +105,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm test -w @mmf/server` exits 0 with all tests passing.
   - **Brief ref**: §7 Update tests (server)
 
-- [ ] TASK-07: Update client tests for new type shapes
+- [x] TASK-07: Update client tests for new type shapes
   - **Goal**: All client test files compile and pass with mock data updated to match `CampaignDetail` / `CampaignSummary` field names.
   - **Details**:
     - `CampaignDetailPage.test.tsx`: update mock object to `CampaignDetail` shape — correct status value to `'Live'`, milestone statuses to `'Pending'`/`'Verified'`, use `goalAmount`/`raisedAmount`, add required nested arrays.

@@ -42,23 +42,23 @@ The changes are small and surgical. Work through each file in order:
    out of sync. The block already guards on the presence of `package.json`, so no other
    logic changes are needed.
 
-2. **`.claude/settings.json`** — The `allow` array grants permissions for local Claude Code
+1. **`.claude/settings.json`** — The `allow` array grants permissions for local Claude Code
    sessions. Currently `Bash(npm install:*)` is listed but `Bash(npm ci:*)` is not.
    Add `Bash(npm ci:*)` and remove `Bash(npm install:*)` (swap in place to keep the list
    tidy). `npm ci` is the standard install in both `scripts/ci-check.sh` and
    `scripts/run-local.sh`, so local Claude sessions need it.
 
-3. **`autonomous/prompts/*.md`** — Read each prompt for hardcoded pre-monorepo paths
+1. **`autonomous/prompts/*.md`** — Read each prompt for hardcoded pre-monorepo paths
    (`server/`, `client/`, etc.). The `execute-tasks.md` prompt is the most likely
    candidate (it references `npm run dev` and `localhost:5173`, which are unchanged).
    Update any stale paths found; no changes expected if paths are already workspace-aware.
 
-4. **`autonomous/Dockerfile`** — The Dockerfile uses `FROM mcr.microsoft.com/playwright:v1.52.0-noble`
+1. **`autonomous/Dockerfile`** — The Dockerfile uses `FROM mcr.microsoft.com/playwright:v1.52.0-noble`
    which ships Node 20 + npm 10; npm workspaces are fully supported without any code
    change. Add a brief inline comment confirming workspace support so future agents do
    not second-guess it.
 
-5. **`scripts/` audit** — `ci-check.sh` already uses `npm ci`; `run-local.sh` already
+1. **`scripts/` audit** — `ci-check.sh` already uses `npm ci`; `run-local.sh` already
    uses `npm ci` and `packages/server/db`; `implement-milestone.sh` has no project-path
    references. No code changes expected — just confirm and record in the brief.
 

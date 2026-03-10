@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Create specs/adrs/ directory and write ADR-0001
+- [x] TASK-01: Create specs/adrs/ directory and write ADR-0001
   - **Goal**: Establish the `specs/adrs/` directory and document the npm workspaces architectural decision.
   - **Details**: Create `specs/adrs/0001-npm-workspaces-monorepo.md` using the ADR template from L3-001 Section 7.2. The ADR must have status `Accepted` (the decision is already implemented), explain why npm workspaces was chosen over Turborepo/Nx (simpler, no build orchestration overhead, sufficient for a monorepo of this size), and why `packages/` was chosen over `src/` (industry convention, clearer signal of publishable/installable units). Follow L3-007: one sentence per line, no trailing whitespace, proper heading levels, no bare URLs.
   - **Files**: `specs/adrs/0001-npm-workspaces-monorepo.md` (create new file and new directory)

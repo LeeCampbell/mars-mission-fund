@@ -17,7 +17,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All three files compile. Homepage buttons no longer have `href="#"`.
   - **Brief ref**: Approach steps 1–3; Scope item 1
 
-- [ ] TASK-02: Pass `complete` prop to `ProgressBar` in `CampaignCard`
+- [x] TASK-02: Pass `complete` prop to `ProgressBar` in `CampaignCard`
   - **Goal**: Fully-funded campaigns display the green gradient progress bar
   - **Details**:
     - In `CampaignCard.tsx` (~line 76): add `complete={fundingPct >= 100}` to the `<ProgressBar>` JSX element

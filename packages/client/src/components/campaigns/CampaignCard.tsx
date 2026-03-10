@@ -75,6 +75,7 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
       <p style={summaryStyle}>{excerpt}</p>
       <ProgressBar
         value={fundingPct}
+        complete={fundingPct >= 100}
         label={`${campaign.title} funding progress: ${Math.round(fundingPct)}% funded`}
       />
       <p style={fundingStatusStyle}>

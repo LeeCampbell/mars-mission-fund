@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Replace `npm install` with `npm ci` in `autonomous/entrypoint.sh`
+- [x] TASK-01: Replace `npm install` with `npm ci` in `autonomous/entrypoint.sh`
   - **Goal**: Switch the warm-cache dependency install step to use `npm ci` for reproducible, lockfile-driven workspace installs.
   - **Details**: On line 85 of `autonomous/entrypoint.sh`, inside the `if [ -f package.json ]` block, change `npm install` to `npm ci`. No other logic changes needed.
   - **Files**: `autonomous/entrypoint.sh`

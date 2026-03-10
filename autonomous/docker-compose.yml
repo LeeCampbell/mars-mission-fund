@@ -15,17 +15,6 @@ services:
       timeout: 5s
       retries: 10
 
-  migrate:
-    image: ghcr.io/amacneil/dbmate:latest
-    command: up
-    depends_on:
-      db:
-        condition: service_healthy
-    volumes:
-      - ../server/db:/db
-    environment:
-      DATABASE_URL: postgresql://mmf:mmf@db:5432/mmf
-
   agent:
     build: .
     container_name: ${CONTAINER_NAME:-autonomous-agent}
@@ -42,8 +31,8 @@ services:
     mem_limit: 4g
     cpus: 2
     depends_on:
-      migrate:
-        condition: service_completed_successfully
+      db:
+        condition: service_healthy
 
 volumes:
   pgdata:

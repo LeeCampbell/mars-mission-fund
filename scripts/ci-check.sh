@@ -5,6 +5,9 @@ set -euo pipefail
 # Exit 0 = all pass, non-zero = failure.
 # Usage: ./scripts/ci-check.sh
 
+echo "=== Install (lockfile check) ==="
+npm ci
+
 echo "=== Type-check ==="
 npx tsc -b --noEmit
 

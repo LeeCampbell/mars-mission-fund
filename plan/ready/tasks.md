@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Add font-family shorthand tokens to tokens.css
+- [x] TASK-01: Add font-family shorthand tokens to tokens.css
   - **Goal**: Add 13 `--type-*` CSS custom properties in the Tier 2 §2.8 Typography block so `var(--type-hero)` etc. resolve to the correct font families instead of falling back to body font.
   - **Details**: In `packages/client/src/tokens.css`, find the `/* --- 2.8 Typography --- */` block and immediately after the comment `/* These semantic aliases make component code intent-expressive. */`, add the 13 font-family shorthand tokens as listed in the brief (4 display tokens mapping to `var(--font-display)`, 4 body tokens mapping to `var(--font-body)`, 4 data tokens mapping to `var(--font-data)`).
   - **Files**: `packages/client/src/tokens.css`

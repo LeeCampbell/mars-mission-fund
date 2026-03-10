@@ -195,6 +195,21 @@
   --font-heading: var(--font-display);
   --font-mono: var(--font-data);
 
+  /* Font-family shorthand tokens — map --type-* names to font-family identity tokens */
+  --type-hero: var(--font-display);
+  --type-page-title: var(--font-display);
+  --type-section-heading: var(--font-display);
+  --type-stat-value: var(--font-display);
+  --type-stat-value-compact: var(--font-display);
+  --type-card-title: var(--font-body);
+  --type-body: var(--font-body);
+  --type-body-small: var(--font-body);
+  --type-button: var(--font-body);
+  --type-label: var(--font-data);
+  --type-section-label: var(--font-data);
+  --type-data: var(--font-data);
+  --type-input-label: var(--font-data);
+
   /* --- 2.8 Typography — Type Scale Semantic Tokens --- */
   /* Each type-style token encodes font-size, line-height, letter-spacing for use
      as individual properties. Components apply: font-family, font-size,

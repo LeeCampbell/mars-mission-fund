@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The `Type-check` step YAML contains both `npx tsc -b --noEmit` and `npx tsc --noEmit -p packages/server/tsconfig.json`; running `npx tsc --noEmit -p packages/server/tsconfig.json` locally exits 0
   - **Brief ref**: Section "3. `.github/workflows/ci.yml`"
 
-- [ ] TASK-04: Verify Prettier coverage and run full integration check
+- [x] TASK-04: Verify Prettier coverage and run full integration check
   - **Goal**: Confirm `.prettierrc` and `.prettierignore` are adequate for all packages, then do a final end-to-end verification of all updated tooling
   - **Details**: Read `.prettierrc` and `.prettierignore` to confirm they apply repo-wide (no source changes expected). Then run the full suite from repo root: `npm run build`, `npm run lint`, `npm run test`, `npm run test:coverage`, `npm run format:check`, `npx tsc -b --noEmit`, `npx tsc --noEmit -p packages/server/tsconfig.json`. Fix any issues discovered (lint errors, type errors, test failures) without adding rules or plugins beyond what the brief specifies.
   - **Files**: Read-only: `.prettierrc`, `.prettierignore` (no changes expected)

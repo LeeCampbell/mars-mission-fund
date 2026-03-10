@@ -59,7 +59,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File contains all four new `##` sections; `npm run lint` (markdownlint) passes.
   - **Brief ref**: Approach §4
 
-- [ ] TASK-06: Update specs/tech/tech-stack.md — Playwright CI requirements, bump to 0.4.0
+- [x] TASK-06: Update specs/tech/tech-stack.md — Playwright CI requirements, bump to 0.4.0
   - **Goal**: Document the CI infrastructure requirements added by issue #66 so future contributors know what the test environment needs.
   - **Details**:
     - Locate the existing Playwright row/paragraph in the Testing section.

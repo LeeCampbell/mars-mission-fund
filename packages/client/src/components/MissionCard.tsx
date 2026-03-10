@@ -16,7 +16,7 @@ const titleStyle: React.CSSProperties = {
   fontFamily: 'var(--type-card-title)',
   color: 'var(--color-text-primary)',
   margin: '12px 0 8px',
-  fontSize: '18px',
+  fontSize: 'var(--type-card-title-size)',
   fontWeight: 700,
   lineHeight: 1.3,
 }
@@ -24,7 +24,7 @@ const titleStyle: React.CSSProperties = {
 const descriptionStyle: React.CSSProperties = {
   fontFamily: 'var(--type-body)',
   color: 'var(--color-text-secondary)',
-  fontSize: '14px',
+  fontSize: 'var(--type-body-size)',
   lineHeight: 1.6,
   margin: '0 0 16px',
 }
@@ -32,7 +32,7 @@ const descriptionStyle: React.CSSProperties = {
 const fundingStatusStyle: React.CSSProperties = {
   fontFamily: 'var(--type-data)',
   color: 'var(--color-text-tertiary)',
-  fontSize: '12px',
+  fontSize: 'var(--type-data-size)',
   margin: '8px 0 16px',
 }
 

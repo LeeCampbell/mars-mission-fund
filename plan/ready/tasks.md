@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File contains `var(--type-body-size)` for subtitle and `var(--type-hero-size)` for desktop; no `18px` or `96px` font-size literals remain.
   - **Brief ref**: Steps 3 & 4
 
-- [ ] TASK-04: Fix typography in `MissionCard.tsx`
+- [x] TASK-04: Fix typography in `MissionCard.tsx`
   - **Goal**: Replace 3 hardcoded font-size values with token variables
   - **Details**: `titleStyle`: `18px` → `var(--type-card-title-size)`. `descriptionStyle`: `14px` → `var(--type-body-size)`. `fundingStatusStyle`: `12px` → `var(--type-data-size)`.
   - **Files**: `packages/client/src/components/MissionCard.tsx`

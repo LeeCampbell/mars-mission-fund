@@ -9,6 +9,7 @@ REPO_DIR="/workspace/repo"
 PROMPTS_DIR="/usr/local/share/prompts"
 LOG_DIR="/workspace/logs"
 SCREENSHOT_DIR="/screenshots"
+MAX_REMEDIATION_ATTEMPTS=3
 
 mkdir -p "$LOG_DIR" "$SCREENSHOT_DIR"
 cd "$REPO_DIR"
@@ -23,11 +24,115 @@ for var in ISSUE_NUMBER ISSUE_TITLE BRANCH FORK_URL UPSTREAM_REPO UPSTREAM_BASE_
   fi
 done
 
-FORK_OWNER=$(echo "$FORK_URL" | sed 's|github.com/||;s|/.*||')
+FORK_OWNER=$(echo "$FORK_URL" | sed 's|.*github.com/||;s|/.*||')
 if [ -z "$FORK_OWNER" ]; then
   echo "!!! Could not extract fork owner from FORK_URL: ${FORK_URL}"
   exit 2
 fi
+
+# ── Helpers ───────────────────────────────────────────────────
+
+# Run Claude with standard flags. Caller supplies extra args (e.g. --output-format).
+# Usage: run_claude [extra-flags...] -p "prompt text"
+run_claude() {
+  timeout "$TIMEOUT" claude \
+    --dangerously-skip-permissions \
+    --print \
+    --verbose \
+    "$@" \
+    2>&1 | tee "$LOG_FILE" || true
+}
+
+# Increment the remediation attempt counter and exit 2 (stuck) if exhausted.
+# Usage: check_remediation_attempts "description"
+check_remediation_attempts() {
+  local description="$1"
+  local attempts_file="plan/.ci-attempts"
+  local attempts
+  attempts=$(cat "$attempts_file" 2>/dev/null || echo 0)
+
+  if [ "$attempts" -ge "$MAX_REMEDIATION_ATTEMPTS" ]; then
+    echo "!!! ${description} after ${MAX_REMEDIATION_ATTEMPTS} attempts"
+    exit 2
+  fi
+
+  echo $((attempts + 1)) > "$attempts_file"
+  echo ">>> ${description} — attempt $((attempts + 1))/${MAX_REMEDIATION_ATTEMPTS}"
+}
+
+# Classify CI status for a PR into: pending, passing, failing, or conflicting.
+poll_ci_status() {
+  local pr_number="$1"
+
+  # Check for merge conflicts first (separate from CI checks)
+  local mergeable
+  mergeable=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr view "$pr_number" \
+    --repo "$UPSTREAM_REPO" --json mergeable --jq '.mergeable' 2>/dev/null) || true
+
+  if [ "$mergeable" = "CONFLICTING" ]; then
+    echo "conflicting"
+    return
+  fi
+
+  local ci_raw
+  ci_raw=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr checks "$pr_number" \
+    --repo "$UPSTREAM_REPO" --json state --jq '.[].state' 2>&1) || true
+
+  if echo "$ci_raw" | grep -qiE 'IN_PROGRESS|QUEUED|PENDING'; then
+    echo "pending"
+  elif echo "$ci_raw" | grep -qiE 'FAILURE|ERROR|CANCELLED|ACTION_REQUIRED|TIMED_OUT|STARTUP_FAILURE'; then
+    echo "failing"
+  elif echo "$ci_raw" | grep -qiE 'SUCCESS|SKIPPED|NEUTRAL'; then
+    echo "passing"
+  else
+    echo ">>> CI status unclear (raw: ${ci_raw}), treating as pending" >&2
+    echo "pending"
+  fi
+}
+
+# Upload screenshots for an issue as a PR comment.
+upload_screenshots() {
+  local pr_number="$1"
+  local gh_token_fork="$2"
+
+  if ! ls "${SCREENSHOT_DIR}/ISSUE-${ISSUE_NUMBER}-"*.png 1>/dev/null 2>&1; then
+    return
+  fi
+
+  local comment_body="## Screenshots\n\n"
+  local fork_repo
+  fork_repo=$(echo "$FORK_URL" | sed 's|.*github.com/||;s|\.git$||')
+
+  # Ensure screenshots branch exists on fork
+  if ! GH_TOKEN="$gh_token_fork" gh api "repos/${fork_repo}/git/ref/heads/screenshots" &>/dev/null; then
+    local default_sha
+    default_sha=$(GH_TOKEN="$gh_token_fork" gh api "repos/${fork_repo}/git/ref/heads/main" --jq '.object.sha')
+    GH_TOKEN="$gh_token_fork" gh api "repos/${fork_repo}/git/refs" \
+      -X POST -f ref="refs/heads/screenshots" -f sha="$default_sha" 2>/dev/null || true
+  fi
+
+  for img in "${SCREENSHOT_DIR}/ISSUE-${ISSUE_NUMBER}-"*.png; do
+    local fname
+    fname=$(basename "$img")
+    # Upload via contents API. Pipe base64 through jq to avoid Linux MAX_ARG_STRLEN limit.
+    (base64 -w0 "$img" 2>/dev/null || base64 "$img") \
+    | tr -d '\n' \
+    | jq -Rs \
+      --arg msg "chore: add screenshot ${fname}" \
+      --arg branch "screenshots" \
+      '{message: $msg, content: ., branch: $branch}' \
+    | GH_TOKEN="$gh_token_fork" gh api \
+      "repos/${fork_repo}/contents/screenshots/PR-${pr_number}/${fname}" \
+      -X PUT --input - \
+    || echo "!!! Failed to upload screenshot: ${fname}"
+
+    local raw_url="https://raw.githubusercontent.com/${fork_repo}/screenshots/screenshots/PR-${pr_number}/${fname}"
+    comment_body="${comment_body}### ${fname}\n![${fname}](${raw_url})\n\n"
+  done
+
+  echo -e "$comment_body" | GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr comment "$pr_number" \
+    --repo "$UPSTREAM_REPO" --body-file - || true
+}
 
 # ── State detection ──────────────────────────────────────────
 # Uses plan/.state lock file as the primary indicator when present,
@@ -43,7 +148,7 @@ determine_state() {
   elif [ -f "plan/ready/tasks.md" ]; then
     if grep -q '^\- \[ \]' "plan/ready/tasks.md"; then
       echo "execute-tasks"
-    elif [ -f "plan/.pr-url" ]; then
+    elif [ -f "plan/.pr-number" ]; then
       echo "await-ci"
     else
       echo "finalize-pr"
@@ -77,6 +182,21 @@ archive_plan() {
   rm -rf plan/
 }
 
+# Resolve PR number from plan file or by querying upstream.
+resolve_pr_number() {
+  local pr_number=""
+  if [ -f "plan/.pr-number" ]; then
+    pr_number=$(cat plan/.pr-number)
+  fi
+  if [ -z "$pr_number" ]; then
+    pr_number=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr list --repo "$UPSTREAM_REPO" \
+      --head "${FORK_OWNER}:${BRANCH}" --json number --jq '.[0].number' 2>/dev/null || true)
+  fi
+  echo "$pr_number"
+}
+
+# ── Main ─────────────────────────────────────────────────────
+
 STATE=$(determine_state)
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 LOG_FILE="${LOG_DIR}/issue-${ISSUE_NUMBER}-${STATE}-${TIMESTAMP}.log"
@@ -89,18 +209,13 @@ case "$STATE" in
   create-brief)
     set_state "create-brief"
     mkdir -p plan/planning
-    timeout "$TIMEOUT" claude \
-      --dangerously-skip-permissions \
-      --print \
-      --verbose \
+    run_claude \
       -p "$(cat "${PROMPTS_DIR}/create-brief.md")
 
 Issue number: #${ISSUE_NUMBER}
 Issue title: ${ISSUE_TITLE}
-Upstream repo: ${UPSTREAM_REPO}" \
-      2>&1 | tee "$LOG_FILE" || true
+Upstream repo: ${UPSTREAM_REPO}"
 
-    # Check if brief was created and approved (moved to ready)
     if [ -f "plan/ready/brief.md" ]; then
       echo ">>> Brief approved, ready for task creation"
       clear_state
@@ -117,12 +232,7 @@ Upstream repo: ${UPSTREAM_REPO}" \
 
   apply-review)
     set_state "apply-review"
-    timeout "$TIMEOUT" claude \
-      --dangerously-skip-permissions \
-      --print \
-      --verbose \
-      -p "$(cat "${PROMPTS_DIR}/apply-review.md")" \
-      2>&1 | tee "$LOG_FILE" || true
+    run_claude -p "$(cat "${PROMPTS_DIR}/apply-review.md")"
 
     if [ -f "plan/ready/brief.md" ]; then
       echo ">>> Review applied, brief approved"
@@ -137,12 +247,7 @@ Upstream repo: ${UPSTREAM_REPO}" \
 
   create-tasks)
     set_state "create-tasks"
-    timeout "$TIMEOUT" claude \
-      --dangerously-skip-permissions \
-      --print \
-      --verbose \
-      -p "$(cat "${PROMPTS_DIR}/create-tasks.md")" \
-      2>&1 | tee "$LOG_FILE" || true
+    run_claude -p "$(cat "${PROMPTS_DIR}/create-tasks.md")"
 
     if [ -f "plan/ready/tasks.md" ]; then
       echo ">>> Tasks created"
@@ -190,11 +295,8 @@ Upstream repo: ${UPSTREAM_REPO}" \
     BEFORE=$(grep -c '^\- \[ \]' "plan/ready/tasks.md" || true)
     BEFORE=${BEFORE:-0}
 
-    timeout "$TIMEOUT" claude \
-      --dangerously-skip-permissions \
-      --print --output-format stream-json --verbose \
-      -p "$(cat "${PROMPTS_DIR}/execute-tasks.md")" \
-      2>&1 | tee "$LOG_FILE" || true
+    run_claude --output-format stream-json \
+      -p "$(cat "${PROMPTS_DIR}/execute-tasks.md")"
 
     # Count unchecked after
     AFTER=$(grep -c '^\- \[ \]' "plan/ready/tasks.md" || true)
@@ -215,12 +317,7 @@ Upstream repo: ${UPSTREAM_REPO}" \
 
     clear_state
 
-    # Check if more tasks remain
-    if [ "$AFTER" -gt 0 ]; then
-      exit 1
-    fi
-
-    # All tasks done — fall through to next iteration for finalize-pr
+    # More tasks or all done — either way, iterate again
     exit 1
     ;;
 
@@ -232,16 +329,7 @@ Upstream repo: ${UPSTREAM_REPO}" \
       echo "!!! Push failed — branch may have diverged"
     fi
 
-    # Resolve PR number: from plan file (created in create-tasks), or query upstream
-    PR_NUMBER=""
-    if [ -f "plan/.pr-number" ]; then
-      PR_NUMBER=$(cat plan/.pr-number)
-    fi
-    if [ -z "$PR_NUMBER" ]; then
-      PR_NUMBER=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr list --repo "$UPSTREAM_REPO" \
-        --head "${FORK_OWNER}:${BRANCH}" --json number --jq '.[0].number' 2>/dev/null || true)
-    fi
-
+    PR_NUMBER=$(resolve_pr_number)
     if [ -z "$PR_NUMBER" ]; then
       echo "!!! No draft PR found — cannot finalize"
       clear_state
@@ -256,64 +344,24 @@ Upstream repo: ${UPSTREAM_REPO}" \
     # Claude will run `gh pr edit --repo UPSTREAM_REPO` which needs upstream token
     export GH_TOKEN="$GH_TOKEN_UPSTREAM"
 
-    # Let Claude update the PR title and description
-    timeout "$TIMEOUT" claude \
-      --dangerously-skip-permissions \
-      --print \
-      --verbose \
+    run_claude \
       -p "$(cat "${PROMPTS_DIR}/finalize-pr.md")
 
 Issue number: #${ISSUE_NUMBER}
 Issue title: ${ISSUE_TITLE}
 Upstream repo: ${UPSTREAM_REPO}
 PR number: ${PR_NUMBER}
-Branch: ${BRANCH}" \
-      2>&1 | tee "$LOG_FILE" || true
+Branch: ${BRANCH}"
 
     # Mark PR as ready for review (deterministic — not delegated to Claude)
     GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr ready "$PR_NUMBER" \
       --repo "$UPSTREAM_REPO" 2>&1 | tee -a "$LOG_FILE" || true
     echo ">>> PR #${PR_NUMBER} marked ready for review"
 
-    # Upload screenshots as a PR comment
-    if ls /screenshots/ISSUE-${ISSUE_NUMBER}-*.png 1>/dev/null 2>&1; then
-      COMMENT_BODY="## Screenshots\n\n"
-      FORK_REPO=$(echo "$FORK_URL" | sed 's|.*github.com/||;s|\.git$||')
+    upload_screenshots "$PR_NUMBER" "$GH_TOKEN_FORK"
 
-      # Ensure screenshots branch exists on fork
-      if ! GH_TOKEN="$GH_TOKEN_FORK" gh api "repos/${FORK_REPO}/git/ref/heads/screenshots" &>/dev/null; then
-        DEFAULT_SHA=$(GH_TOKEN="$GH_TOKEN_FORK" gh api "repos/${FORK_REPO}/git/ref/heads/main" --jq '.object.sha')
-        GH_TOKEN="$GH_TOKEN_FORK" gh api "repos/${FORK_REPO}/git/refs" \
-          -X POST -f ref="refs/heads/screenshots" -f sha="$DEFAULT_SHA" 2>/dev/null || true
-      fi
-
-      for img in /screenshots/ISSUE-${ISSUE_NUMBER}-*.png; do
-        FNAME=$(basename "$img")
-        # Upload to fork repo screenshots branch via contents API (uses fork token)
-        # Pipe base64 via stdin to jq, then pipe JSON to gh api, to avoid
-        # Linux MAX_ARG_STRLEN (128KB) limit on individual command-line args.
-        (base64 -w0 "$img" 2>/dev/null || base64 "$img") \
-        | tr -d '\n' \
-        | jq -Rs \
-          --arg msg "chore: add screenshot ${FNAME}" \
-          --arg branch "screenshots" \
-          '{message: $msg, content: ., branch: $branch}' \
-        | GH_TOKEN="$GH_TOKEN_FORK" gh api \
-          "repos/${FORK_REPO}/contents/screenshots/PR-${PR_NUMBER}/${FNAME}" \
-          -X PUT --input - \
-        || echo "!!! Failed to upload screenshot: ${FNAME}"
-
-        RAW_URL="https://raw.githubusercontent.com/${FORK_REPO}/screenshots/screenshots/PR-${PR_NUMBER}/${FNAME}"
-        COMMENT_BODY="${COMMENT_BODY}### ${FNAME}\n![${FNAME}](${RAW_URL})\n\n"
-      done
-
-      # Post comment on upstream PR with screenshots (uses upstream token)
-      echo -e "$COMMENT_BODY" | GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr comment "$PR_NUMBER" \
-        --repo "$UPSTREAM_REPO" --body-file - || true
-    fi
-
-    # Write PR number for await-ci state (do NOT archive plan yet — needed for remediation)
-    echo "$PR_NUMBER" > plan/.pr-url
+    # Persist PR number for await-ci state (do NOT archive plan yet — needed for remediation)
+    echo "$PR_NUMBER" > plan/.pr-number
     clear_state
     echo ">>> PR #${PR_NUMBER} finalized for issue #${ISSUE_NUMBER}, transitioning to await-ci"
     exit 1  # iterate again into await-ci
@@ -322,74 +370,30 @@ Branch: ${BRANCH}" \
   await-ci)
     set_state "await-ci"
 
-    PR_NUMBER=$(cat plan/.pr-url)
+    PR_NUMBER=$(cat plan/.pr-number)
     echo ">>> Monitoring CI for PR #${PR_NUMBER}"
 
-    # Check for merge conflicts first (separate from CI checks)
-    MERGEABLE=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr view "$PR_NUMBER" \
-      --repo "$UPSTREAM_REPO" --json mergeable --jq '.mergeable' 2>/dev/null) || true
-
-    if [ "$MERGEABLE" = "CONFLICTING" ]; then
-      echo ">>> PR has merge conflicts"
-      CI_STATUS="conflicting"
-    else
-      # Poll CI status (using upstream token since PR is on upstream)
-      # Map check states to pending/passing/failing
-      CI_RAW=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr checks "$PR_NUMBER" \
-        --repo "$UPSTREAM_REPO" --json state --jq '.[].state' 2>&1) || true
-
-      if echo "$CI_RAW" | grep -qiE 'IN_PROGRESS|QUEUED|PENDING'; then
-        CI_STATUS="pending"
-      elif echo "$CI_RAW" | grep -qiE 'FAILURE|ERROR|CANCELLED|ACTION_REQUIRED|TIMED_OUT|STARTUP_FAILURE'; then
-        # Only failing if nothing is still pending
-        CI_STATUS="failing"
-      elif echo "$CI_RAW" | grep -qiE 'SUCCESS|SKIPPED|NEUTRAL'; then
-        CI_STATUS="passing"
-      else
-        # No checks found yet or unexpected output — treat as pending
-        echo ">>> CI status unclear (raw: ${CI_RAW}), treating as pending"
-        CI_STATUS="pending"
-      fi
-    fi
-
+    CI_STATUS=$(poll_ci_status "$PR_NUMBER")
     echo ">>> CI status: ${CI_STATUS}"
 
     case "$CI_STATUS" in
       pending)
-        # CI still running — exit 1, outer loop retries after cooldown
         echo ">>> CI still running, will retry after cooldown"
         exit 1
         ;;
       passing)
-        # CI passed — archive plan and exit 0
         echo ">>> CI passed! Archiving plan."
         archive_plan
         echo ">>> Issue #${ISSUE_NUMBER} complete"
         exit 0
         ;;
       conflicting)
-        # Track remediation attempts (shared counter with CI failures)
-        ATTEMPTS_FILE="plan/.ci-attempts"
-        ATTEMPTS=$(cat "$ATTEMPTS_FILE" 2>/dev/null || echo 0)
-        MAX_CI_ATTEMPTS=3
+        check_remediation_attempts "Merge conflict remediation failed"
 
-        if [ "$ATTEMPTS" -ge "$MAX_CI_ATTEMPTS" ]; then
-          echo "!!! Merge conflict remediation failed after ${MAX_CI_ATTEMPTS} attempts"
-          exit 2  # stuck
-        fi
-
-        echo $((ATTEMPTS + 1)) > "$ATTEMPTS_FILE"
-        echo ">>> Merge conflict — remediation attempt $((ATTEMPTS + 1))/${MAX_CI_ATTEMPTS}"
-
-        # Fetch latest base branch so rebase has up-to-date refs
         git fetch origin "$UPSTREAM_BASE_BRANCH" 2>&1 | tee -a "$LOG_FILE" || true
 
-        # Invoke Claude with remediate-ci prompt (merge conflict mode)
         REMEDIATE_PROMPT=$(cat "${PROMPTS_DIR}/remediate-ci.md")
-        timeout "$TIMEOUT" claude \
-          --dangerously-skip-permissions \
-          --print \
-          --verbose \
+        run_claude \
           -p "${REMEDIATE_PROMPT}
 
 PR number: #${PR_NUMBER}
@@ -398,49 +402,31 @@ Branch: ${BRANCH}
 Base branch: ${UPSTREAM_BASE_BRANCH}
 
 Failure type: MERGE_CONFLICT
-The PR has merge conflicts with the base branch (${UPSTREAM_BASE_BRANCH}). The base branch has already been fetched. Rebase onto origin/${UPSTREAM_BASE_BRANCH} and resolve all conflicts." \
-          2>&1 | tee "$LOG_FILE" || true
+The PR has merge conflicts with the base branch (${UPSTREAM_BASE_BRANCH}). The base branch has already been fetched. Rebase onto origin/${UPSTREAM_BASE_BRANCH} and resolve all conflicts."
 
-        # Push rebased branch (force required after rebase)
         git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE" || true
 
         clear_state
         echo ">>> Conflict resolution pushed, will re-check after cooldown"
-        exit 1  # re-enter await-ci after cooldown
+        exit 1
         ;;
       failing)
-        # Track remediation attempts
-        ATTEMPTS_FILE="plan/.ci-attempts"
-        ATTEMPTS=$(cat "$ATTEMPTS_FILE" 2>/dev/null || echo 0)
-        MAX_CI_ATTEMPTS=3
+        check_remediation_attempts "CI remediation failed"
 
-        if [ "$ATTEMPTS" -ge "$MAX_CI_ATTEMPTS" ]; then
-          echo "!!! CI remediation failed after ${MAX_CI_ATTEMPTS} attempts"
-          exit 2  # stuck
-        fi
-
-        echo $((ATTEMPTS + 1)) > "$ATTEMPTS_FILE"
-        echo ">>> CI failing — remediation attempt $((ATTEMPTS + 1))/${MAX_CI_ATTEMPTS}"
-
-        # Get the failed run ID (filter to failing checks only)
+        # Get the failed run ID
         RUN_ID=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr checks "$PR_NUMBER" \
           --repo "$UPSTREAM_REPO" --json state,link \
           --jq '.[] | select(.state == "FAILURE") | .link' \
           | head -1 | grep -oE '[0-9]+$') || true
 
-        # Get failure logs
         FAILED_LOG=""
         if [ -n "$RUN_ID" ]; then
           FAILED_LOG=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh run view "$RUN_ID" \
             --repo "$UPSTREAM_REPO" --log-failed 2>&1 | tail -200) || true
         fi
 
-        # Invoke Claude with remediate-ci prompt
         REMEDIATE_PROMPT=$(cat "${PROMPTS_DIR}/remediate-ci.md")
-        timeout "$TIMEOUT" claude \
-          --dangerously-skip-permissions \
-          --print \
-          --verbose \
+        run_claude \
           -p "${REMEDIATE_PROMPT}
 
 PR number: #${PR_NUMBER}
@@ -451,15 +437,13 @@ Failure type: CI_FAILURE
 CI failure logs:
 \`\`\`
 ${FAILED_LOG}
-\`\`\`" \
-          2>&1 | tee "$LOG_FILE" || true
+\`\`\`"
 
-        # Push fix
         git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE" || true
 
         clear_state
         echo ">>> Remediation pushed, will re-check CI after cooldown"
-        exit 1  # re-enter await-ci after cooldown
+        exit 1
         ;;
     esac
     ;;

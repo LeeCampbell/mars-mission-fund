@@ -35,7 +35,7 @@
       "Bash(gh pr:*)",
       "Bash(gh api:*)",
       "Bash(gh repo:*)",
-      "Bash(npm install:*)",
+      "Bash(npm ci:*)",
       "Bash(npm run:*)",
       "Bash(npx:*)",
       "Bash(node:*)",

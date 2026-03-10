@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `grep -n 'npm ci' autonomous/entrypoint.sh` shows the change on line 85; `grep 'npm install' autonomous/entrypoint.sh` returns no matches (other than global install in Dockerfile, which is separate).
   - **Brief ref**: Approach step 1
 
-- [ ] TASK-02: Update `.claude/settings.json` permissions — swap `npm install` for `npm ci`
+- [x] TASK-02: Update `.claude/settings.json` permissions — swap `npm install` for `npm ci`
   - **Goal**: Ensure local Claude Code sessions are allowed to run `npm ci` (the standard install command) and no longer list the deprecated `npm install` permission.
   - **Details**: In `.claude/settings.json`, in the `allow` array, replace `"Bash(npm install:*)"` with `"Bash(npm ci:*)"` (swap in place to preserve list order).
   - **Files**: `.claude/settings.json`

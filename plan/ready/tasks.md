@@ -43,7 +43,7 @@ Brief: plan/ready/brief.md
   - **Verify**: None of these files contain raw `36px` or `40px` font-size literals; all use the appropriate token variables.
   - **Brief ref**: Step 3
 
-- [ ] TASK-06: Fix typography in `Header.tsx`
+- [x] TASK-06: Fix typography in `Header.tsx`
   - **Goal**: Replace all hardcoded font sizes with token variables
   - **Details**: Wordmark `20px` → `var(--type-stat-value-compact-size)`. Nav links at `14px` → `var(--type-button-size)`. Nav links at `16px` → `var(--type-body-size)`.
   - **Files**: `packages/client/src/components/Header.tsx`

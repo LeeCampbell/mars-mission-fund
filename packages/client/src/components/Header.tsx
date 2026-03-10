@@ -31,7 +31,7 @@ const brandStyle: React.CSSProperties = {
 
 const wordmarkStyle: React.CSSProperties = {
   fontFamily: 'var(--type-hero)',
-  fontSize: '20px',
+  fontSize: 'var(--type-stat-value-compact-size)',
   letterSpacing: '0.08em',
   color: 'var(--color-text-primary)',
   lineHeight: 1,
@@ -48,7 +48,7 @@ const navStyle: React.CSSProperties = {
 
 const navLinkBase: React.CSSProperties = {
   fontFamily: 'var(--type-button)',
-  fontSize: '14px',
+  fontSize: 'var(--type-button-size)',
   fontWeight: 500,
   color: 'var(--color-text-secondary)',
   textDecoration: 'none',
@@ -70,7 +70,7 @@ const skipLinkStyle: React.CSSProperties = {
   background: 'var(--color-action-primary)',
   color: 'var(--color-action-primary-text)',
   fontFamily: 'var(--type-button)',
-  fontSize: '14px',
+  fontSize: 'var(--type-button-size)',
   fontWeight: 600,
   borderRadius: 'var(--radius-button)',
   zIndex: 9999,
@@ -118,7 +118,7 @@ const mobileNavStyle: React.CSSProperties = {
 
 const mobileNavLinkBase: React.CSSProperties = {
   fontFamily: 'var(--type-button)',
-  fontSize: '16px',
+  fontSize: 'var(--type-body-size)',
   fontWeight: 500,
   color: 'var(--color-text-secondary)',
   textDecoration: 'none',

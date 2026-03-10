@@ -60,7 +60,7 @@ jobs:
 
       - name: Run DB migrations
         env:
-          DATABASE_URL: postgres://mmf:mmf@localhost:5432/mmf_test
+          DATABASE_URL: postgres://mmf:mmf@localhost:5432/mmf_test?sslmode=disable
         run: >
           docker run --rm --network host
           -e DATABASE_URL=$DATABASE_URL
@@ -72,13 +72,13 @@ jobs:
 
       - name: Start server
         env:
-          DATABASE_URL: postgres://mmf:mmf@localhost:5432/mmf_test
+          DATABASE_URL: postgres://mmf:mmf@localhost:5432/mmf_test?sslmode=disable
           PORT: 3000
         run: npm run dev:server &
 
       - name: E2E tests
         env:
-          DATABASE_URL: postgres://mmf:mmf@localhost:5432/mmf_test
+          DATABASE_URL: postgres://mmf:mmf@localhost:5432/mmf_test?sslmode=disable
         run: npm run test:e2e
 
       - name: Audit

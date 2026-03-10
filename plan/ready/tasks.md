@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Fix port mismatch and shared package resolution
+- [x] TASK-01: Fix port mismatch and shared package resolution
   - **Goal**: Ensure the server listens on port 3001, the Vite proxy targets port 3001, and `@mmf/shared` resolves from TypeScript source (no missing `dist/`).
   - **Details**:
     - `packages/server/src/index.ts`: change `process.env.PORT || '3000'` → `'3001'`
@@ -45,9 +45,9 @@ Brief: plan/ready/brief.md
       - `listCampaigns`: add `AS` aliases for every selected column to match `CampaignSummary` field names (e.g., `hero_image_url AS "heroImageUrl"`, `min_funding_target_usd AS "goalAmount"`, `current_amount_usd AS "raisedAmount"`, `contributor_count AS "contributorCount"`, `created_at AS "createdAt"`); add `summary`, `hero_image_url`, `deadline`, `contributor_count` to SELECT if not already present.
       - `getCampaignById`: after fetching the campaign row (with same camelCase aliases), run four additional `pool.query` calls:
         1. `campaign_milestones` ordered by `sort_order` — alias columns to camelCase
-        2. `campaign_stretch_goals` ordered by `sort_order` — alias columns; compute `unlocked` as `goal.target_usd <= campaign.current_amount_usd`
-        3. `campaign_team_members` ordered by `sort_order` — alias columns
-        4. `campaign_updates` ordered by `posted_at DESC` — alias columns
+        1. `campaign_stretch_goals` ordered by `sort_order` — alias columns; compute `unlocked` as `goal.target_usd <= campaign.current_amount_usd`
+        1. `campaign_team_members` ordered by `sort_order` — alias columns
+        1. `campaign_updates` ordered by `posted_at DESC` — alias columns
       - Return assembled `CampaignDetail`-shaped object.
     - `packages/server/src/campaigns/types.ts`: import `CampaignSummary` and `CampaignDetail` from `@mmf/shared`; remove any local re-exports that are now mismatched.
   - **Files**:

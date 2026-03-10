@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build`, `npm run test`, and `npm run lint` all exit 0; `package.json` no longer contains `test:server`
   - **Brief ref**: Section "2. `package.json` (root)"
 
-- [ ] TASK-03: Update CI workflow to type-check `packages/server`
+- [x] TASK-03: Update CI workflow to type-check `packages/server`
   - **Goal**: Extend the `Type-check` step in CI to also validate `packages/server`
   - **Details**: In `.github/workflows/ci.yml`, find the `Type-check` step and change its `run` command to: `npx tsc -b --noEmit && npx tsc --noEmit -p packages/server/tsconfig.json`. No other YAML changes are needed — the build and test:coverage steps automatically expand via the updated root scripts from TASK-02.
   - **Files**: `.github/workflows/ci.yml`

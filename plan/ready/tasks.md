@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Grep the file for `0.02em` and confirm it no longer appears. Confirm `32px` appears as the base and `640px` breakpoint is present.
   - **Brief ref**: §Approach 4 — Fix hero H1 responsive sizing
 
-- [ ] TASK-05: Build, typecheck, and verify tests pass
+- [x] TASK-05: Build, typecheck, and verify tests pass
   - **Goal**: Confirm all code changes are valid — TypeScript compiles, build succeeds, and existing tests are not broken.
   - **Details**: Run `npm run build -w packages/client` to build the client package. Run `npm run typecheck -w packages/client` to confirm no TypeScript errors introduced. Run `npm test -w packages/client` to confirm existing tests still pass.
   - **Files**: (no file changes — verification only)

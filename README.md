@@ -71,7 +71,7 @@ docker compose -f docker-compose.dev.yml up -d
 
 # Run database migrations
 docker run --rm --network host \
-  -e DATABASE_URL="postgresql://mmf:mmf@localhost:5432/mmf" \
+  -e DATABASE_URL="postgresql://mmf:mmf@localhost:5432/mmf?sslmode=disable" \
   -v "$(pwd)/packages/server/db:/db" \
   ghcr.io/amacneil/dbmate up
 

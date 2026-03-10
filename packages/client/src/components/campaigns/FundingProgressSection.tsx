@@ -1,4 +1,4 @@
-import type { CampaignDetail } from '@mmf/shared'
+import { type CampaignDetail } from '../../api/campaigns'
 import { Button } from '../ui/Button'
 import { ProgressBar } from '../ui/ProgressBar'
 
@@ -87,17 +87,14 @@ const percentageStyle: React.CSSProperties = {
 }
 
 export function FundingProgressSection({ campaign, className }: FundingProgressSectionProps) {
-  const percentage =
-    campaign.maxFundingCapUsd > 0
-      ? Math.min(100, (campaign.currentAmountUsd / campaign.maxFundingCapUsd) * 100)
-      : 0
+  const percentage = Math.min(100, (campaign.raisedAmount / campaign.goalAmount) * 100)
   const isComplete = percentage >= 100
 
   return (
     <div style={sectionStyle} className={className}>
       <div style={amountsStyle}>
-        <span style={raisedStyle}>{formatCurrency(campaign.currentAmountUsd)}</span>
-        <span style={targetStyle}>raised of {formatCurrency(campaign.maxFundingCapUsd)} goal</span>
+        <span style={raisedStyle}>{formatCurrency(campaign.raisedAmount)}</span>
+        <span style={targetStyle}>raised of {formatCurrency(campaign.goalAmount)} goal</span>
       </div>
 
       <div>

@@ -2,44 +2,47 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { CampaignDetailPage } from './CampaignDetailPage'
-import type { CampaignDetail } from '@mmf/shared'
+import type { CampaignDetail } from '../api/campaigns'
 
 const mockCampaign: CampaignDetail = {
-  id: '00000000-0000-0000-0000-000000000001',
-  slug: 'mars-habitat-alpha',
+  id: '1',
   title: 'Mars Habitat Alpha',
   summary: 'A test campaign about Mars.',
   description: 'A test campaign about Mars.',
-  alignmentStatement: 'Aligned with Mars mission',
-  category: 'Habitats & Construction',
-  tags: [],
-  status: 'Live',
   heroImageUrl: null,
-  minFundingTargetUsd: 2_000_000,
-  maxFundingCapUsd: 2_000_000,
-  currentAmountUsd: 1_250_000,
+  status: 'Live',
+  category: 'Habitats & Construction',
+  raisedAmount: 1_250_000,
+  goalAmount: 2_000_000,
   contributorCount: 4_382,
   deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-  launchedAt: null,
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date('2024-01-01T00:00:00.000Z'),
+  slug: 'mars-habitat-alpha',
+  alignmentStatement: 'Aligned with Mars mission.',
+  tags: [],
+  maxFundingCapUsd: 4_000_000,
+  launchedAt: new Date('2024-01-01T00:00:00.000Z'),
+  updatedAt: new Date('2024-01-01T00:00:00.000Z'),
   milestones: [
     {
       id: 'm1',
       title: 'Design Phase',
-      targetDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
+      description: 'Complete the design phase.',
+      targetDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
       fundingPercentage: 100,
       verificationCriteria: 'CAD files reviewed.',
-      status: 'completed',
+      status: 'Pending',
+      sortOrder: 1,
     },
   ],
   stretchGoals: [
     {
       id: 'sg1',
-      title: 'Extra Module',
-      description: 'Adds extra module.',
+      description: 'Extra Module',
+      deliverables: 'Adds extra module.',
       targetAmount: 2_500_000,
       unlocked: false,
+      sortOrder: 1,
     },
   ],
   teamMembers: [
@@ -48,13 +51,13 @@ const mockCampaign: CampaignDetail = {
       name: 'Dr. Elena Vasquez',
       role: 'Chief Engineer',
       bio: 'Experienced engineer.',
+      sortOrder: 1,
     },
   ],
   updates: [
     {
       id: 'u1',
-      title: 'First Update',
-      date: '2024-01-15T00:00:00.000Z',
+      postedAt: new Date('2024-01-15T00:00:00.000Z'),
       body: 'Things are going well.',
     },
   ],

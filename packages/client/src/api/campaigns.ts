@@ -1,8 +1,16 @@
-import type { CampaignSummary, CampaignDetail } from '@mmf/shared'
+import type {
+  CampaignSummary,
+  CampaignDetail,
+  Milestone,
+  StretchGoal,
+  TeamMember,
+  CampaignUpdate,
+} from '@mmf/shared'
 
-export type { Milestone, StretchGoal, TeamMember, CampaignUpdate } from '@mmf/shared'
-// Backward-compatible alias: old code imported Campaign which had milestone/team arrays
-export type { CampaignDetail as Campaign, CampaignSummary } from '@mmf/shared'
+export type { CampaignSummary, CampaignDetail, Milestone, StretchGoal, TeamMember, CampaignUpdate }
+
+// Backward-compat alias — components will be updated in TASK-05
+export type Campaign = CampaignDetail
 
 export async function fetchCampaigns(): Promise<CampaignSummary[]> {
   const response = await fetch('/v1/campaigns')

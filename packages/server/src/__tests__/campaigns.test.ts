@@ -12,32 +12,26 @@ const TEST_UUID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
 const mockCampaignSummary = {
   id: TEST_UUID,
   title: 'Mars Habitat Project',
+  summary: 'Building a habitat on Mars',
   status: 'Live',
   category: 'Habitats & Construction',
-  goal_amount: 500000,
-  raised_amount: 125000,
-  created_at: new Date('2024-01-15T10:00:00.000Z'),
+  heroImageUrl: null,
+  goalAmount: 500000,
+  raisedAmount: 125000,
+  contributorCount: 42,
+  deadline: null,
+  createdAt: new Date('2024-01-15T10:00:00.000Z'),
 }
 
-const mockCampaign = {
-  id: TEST_UUID,
+const mockCampaignRow = {
+  ...mockCampaignSummary,
   slug: 'mars-habitat-project',
-  title: 'Mars Habitat Project',
-  summary: 'Building a habitat on Mars',
   description: 'Detailed description of the Mars Habitat Project',
-  alignment_statement: 'Aligned with Mars colonization goals',
-  category: 'Habitats & Construction',
+  alignmentStatement: 'Aligned with Mars colonization goals',
   tags: ['habitat', 'mars', 'construction'],
-  status: 'Live',
-  hero_image_url: null,
-  min_funding_target_usd: 500000,
-  max_funding_cap_usd: 1000000,
-  current_amount_usd: 125000,
-  contributor_count: 42,
-  deadline: null,
-  launched_at: new Date('2024-01-20T00:00:00.000Z'),
-  created_at: new Date('2024-01-15T10:00:00.000Z'),
-  updated_at: new Date('2024-01-20T10:00:00.000Z'),
+  maxFundingCapUsd: 1000000,
+  launchedAt: new Date('2024-01-20T00:00:00.000Z'),
+  updatedAt: new Date('2024-01-20T10:00:00.000Z'),
 }
 
 describe('Campaign Routes', () => {
@@ -84,7 +78,11 @@ describe('Campaign Routes', () => {
 
   describe('GET /v1/campaigns/:id', () => {
     it('returns 200 with campaign data when found', async () => {
-      mockQuery.mockResolvedValueOnce({ rows: [mockCampaign], rowCount: 1 })
+      mockQuery.mockResolvedValueOnce({ rows: [mockCampaignRow], rowCount: 1 })
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // milestones
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // stretch goals
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // team members
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // updates
 
       const res = await request(app).get(`/v1/campaigns/${TEST_UUID}`)
 

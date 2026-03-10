@@ -7,37 +7,37 @@ import { MilestonesSection } from '../components/campaigns/MilestonesSection'
 import { StretchGoalsSection } from '../components/campaigns/StretchGoalsSection'
 import { CampaignUpdatesSection } from '../components/campaigns/CampaignUpdatesSection'
 import { TeamSection } from '../components/campaigns/TeamSection'
-import type { CampaignDetail } from '@mmf/shared'
+import type { CampaignStatus } from '@mmf/shared'
 
 type BadgeVariant = 'funded' | 'active' | 'new'
 
-const statusBadgeVariant: Record<CampaignDetail['status'], BadgeVariant> = {
-  Draft: 'new',
-  Submitted: 'new',
-  'Under Review': 'new',
-  Approved: 'new',
-  Rejected: 'new',
-  Live: 'active',
-  Funded: 'funded',
-  Suspended: 'new',
-  Failed: 'new',
-  Settlement: 'funded',
+const statusBadgeVariant: Record<CampaignStatus, BadgeVariant> = {
   Complete: 'funded',
+  Funded: 'funded',
+  Live: 'active',
+  Approved: 'active',
+  'Under Review': 'active',
+  Submitted: 'active',
+  Draft: 'new',
+  Rejected: 'new',
+  Failed: 'new',
+  Suspended: 'new',
+  Settlement: 'new',
   Cancelled: 'new',
 }
 
-const statusLabel: Record<CampaignDetail['status'], string> = {
-  Draft: 'Draft',
-  Submitted: 'Submitted',
-  'Under Review': 'Under Review',
-  Approved: 'Approved',
-  Rejected: 'Rejected',
-  Live: 'Live',
-  Funded: 'Funded',
-  Suspended: 'Suspended',
-  Failed: 'Failed',
-  Settlement: 'Settlement',
+const statusLabel: Record<CampaignStatus, string> = {
   Complete: 'Complete',
+  Funded: 'Funded',
+  Live: 'Live',
+  Approved: 'Approved',
+  'Under Review': 'Under Review',
+  Submitted: 'Submitted',
+  Draft: 'Draft',
+  Rejected: 'Rejected',
+  Failed: 'Failed',
+  Suspended: 'Suspended',
+  Settlement: 'Settlement',
   Cancelled: 'Cancelled',
 }
 

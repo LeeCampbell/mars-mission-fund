@@ -17,9 +17,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\"",
-    "dev:server": "npm run dev -w @mmf/server"
+    "dev:server": "npm run dev -w @mmf/server",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.1",
     "eslint": "^9",
     "eslint-plugin-react": "^7",
     "eslint-plugin-react-hooks": "^5",

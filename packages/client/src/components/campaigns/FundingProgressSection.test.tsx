@@ -1,27 +1,27 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { FundingProgressSection } from './FundingProgressSection'
-import type { CampaignDetail } from '@mmf/shared'
+import type { CampaignDetail } from '../../api/campaigns'
 
 const mockCampaign: CampaignDetail = {
-  id: '00000000-0000-0000-0000-000000000001',
-  slug: 'test-campaign',
+  id: '1',
   title: 'Test Campaign',
   summary: 'A test campaign',
-  description: 'A test campaign',
-  alignmentStatement: 'Aligned with Mars mission',
-  category: 'Habitats & Construction',
-  tags: [],
-  status: 'Live',
+  description: 'A test campaign description',
   heroImageUrl: null,
-  minFundingTargetUsd: 100000,
-  maxFundingCapUsd: 100000,
-  currentAmountUsd: 50000,
+  status: 'Live',
+  category: 'Propulsion',
+  raisedAmount: 50000,
+  goalAmount: 100000,
   contributorCount: 250,
   deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-  launchedAt: null,
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date('2024-01-01T00:00:00.000Z'),
+  slug: 'test-campaign',
+  alignmentStatement: 'Aligned with mission.',
+  tags: [],
+  maxFundingCapUsd: 200000,
+  launchedAt: new Date('2024-01-01T00:00:00.000Z'),
+  updatedAt: new Date('2024-01-01T00:00:00.000Z'),
   milestones: [],
   stretchGoals: [],
   teamMembers: [],
@@ -48,7 +48,7 @@ describe('FundingProgressSection', () => {
     render(<FundingProgressSection campaign={mockCampaign} />)
     const link = screen.getByRole('link', { name: 'Contribute Now' })
     expect(link).toBeInTheDocument()
-    expect(link).toHaveAttribute('href', '/contribute/00000000-0000-0000-0000-000000000001')
+    expect(link).toHaveAttribute('href', '/contribute/1')
   })
 
   it('renders time remaining', () => {

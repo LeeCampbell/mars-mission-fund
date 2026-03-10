@@ -1,7 +1,4 @@
-import {
-  CampaignSummarySchema,
-  CampaignDetailSchema,
-} from '@mmf/shared'
+import { CampaignSummarySchema, CampaignDetailSchema } from '@mmf/shared'
 import type {
   CampaignSummary,
   CampaignDetail,

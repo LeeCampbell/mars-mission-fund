@@ -17,7 +17,7 @@ Brief: plan/ready/brief.md
   - **Verify**: On the home page, clicking "Explore Missions", "Browse All Missions", and any "View Mission" card button navigates to `/campaigns`.
   - **Brief ref**: Section 1 — Dead homepage links
 
-- [ ] TASK-02: Fix nested `<main>` elements on About and Contact pages
+- [x] TASK-02: Fix nested `<main>` elements on About and Contact pages
   - **Goal**: Remove invalid nested `<main>` elements by changing the root element of `AboutPage` and `ContactPage` to `<div>`.
   - **Details**:
     - In `AboutPage.tsx`, change the outermost `<main id="main-content">` to `<div>` (remove the `id` attribute as well — Layout's `<main id="main-content">` already provides it).

@@ -90,7 +90,7 @@ const socialPlatforms = [
 
 export function ContactPage() {
   return (
-    <main id="main-content">
+    <div>
       {/* Section 1: Contact Details */}
       <section style={sectionStyle} aria-labelledby="contact-heading">
         <div style={innerStyle}>
@@ -187,6 +187,6 @@ export function ContactPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   )
 }

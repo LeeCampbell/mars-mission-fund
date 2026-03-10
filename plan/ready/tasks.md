@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit` succeeds after `e2e/campaigns.spec.ts` is created in TASK-04.
   - **Brief ref**: Verification / Type-check
 
-- [ ] TASK-04: Create e2e/campaigns.spec.ts with four tests
+- [x] TASK-04: Create e2e/campaigns.spec.ts with four tests
   - **Goal**: Implement all four E2E tests as specified in the brief.
   - **Details**:
     - **Test 1 (list happy path)**: Navigate to `/campaigns`; wait for `aria-label="Campaign listings"` grid; assert at least one campaign card link is visible; assert text "Open Source Climate Prediction Model" is present.

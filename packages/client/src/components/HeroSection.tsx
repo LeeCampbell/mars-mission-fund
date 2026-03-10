@@ -22,7 +22,7 @@ const contentStyle: React.CSSProperties = {
 const subtextStyle: React.CSSProperties = {
   fontFamily: 'var(--type-body)',
   color: 'var(--color-text-secondary)',
-  fontSize: '18px',
+  fontSize: 'var(--type-body-size)',
   lineHeight: 1.6,
   margin: '24px auto 40px',
   maxWidth: '600px',
@@ -59,7 +59,7 @@ const heroStyles = `
   }
   @media (min-width: 1280px) {
     .${heroHeadingClass} {
-      font-size: 96px;
+      font-size: var(--type-hero-size);
     }
   }
   .hero-glow {

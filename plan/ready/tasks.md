@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `grep -r "type-hero-heading-size" packages/client/src` returns no results.
   - **Brief ref**: Step 2
 
-- [ ] TASK-03: Fix typography in `HeroSection.tsx`
+- [x] TASK-03: Fix typography in `HeroSection.tsx`
   - **Goal**: Replace hardcoded `18px` subtitle font size and desktop `96px` hero H1 size with token variables
   - **Details**: In `subtextStyle`, change `fontSize: '18px'` → `fontSize: 'var(--type-body-size)'`. In heroStyles for desktop breakpoint (≥1280px), change `fontSize: '96px'` → `fontSize: 'var(--type-hero-size)'`. The `fontFamily: 'var(--type-hero)'` and `fontFamily: 'var(--type-body)'` references will now resolve correctly after TASK-01. Leave 72px (tablet) and 48px (mobile) as literals per brief.
   - **Files**: `packages/client/src/components/HeroSection.tsx`

@@ -69,8 +69,11 @@ npm install
 # Start local infrastructure (PostgreSQL)
 docker compose -f docker-compose.dev.yml up -d
 
-# Run database migrations (requires DBMate)
-dbmate -d packages/server/db/migrations up
+# Run database migrations
+docker run --rm --network host \
+  -e DATABASE_URL="postgresql://mmf:mmf@localhost:5432/mmf" \
+  -v "$(pwd)/packages/server/db:/db" \
+  ghcr.io/amacneil/dbmate up
 
 # Start the frontend dev server
 npm run dev

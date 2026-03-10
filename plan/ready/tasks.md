@@ -38,7 +38,7 @@ Brief: plan/ready/brief.md
   - **Verify**: A campaign card where `fundingPct >= 100` shows the `var(--color-progress-complete)` gradient on the progress bar.
   - **Brief ref**: Section 3 — ProgressBar `complete` prop in CampaignCard
 
-- [ ] TASK-04: Fix CampaignDetailPage — HTML description, hero alt text, and dynamic page title
+- [x] TASK-04: Fix CampaignDetailPage — HTML description, hero alt text, and dynamic page title
   - **Goal**: Campaign descriptions render as formatted HTML; hero image has meaningful alt text; the browser tab shows the campaign title.
   - **Details**:
     - **Description**: At line ~217, replace `<p style={descriptionStyle}>{campaign.description}</p>` with `<div style={descriptionStyle} dangerouslySetInnerHTML={{ __html: campaign.description }} />`. (Content comes from the internal API and is safe to render without additional sanitisation per the brief.)

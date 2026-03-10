@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p tsconfig.json` (or a dedicated `tsconfig.e2e.json`) passes without errors on `playwright.config.ts`.
   - **Brief ref**: Approach / Playwright configuration
 
-- [ ] TASK-03: Add e2e TypeScript config coverage
+- [x] TASK-03: Add e2e TypeScript config coverage
   - **Goal**: Ensure `playwright.config.ts` and `e2e/**/*.spec.ts` are type-checked by TypeScript without breaking the existing client/server builds.
   - **Details**: Check the root `tsconfig.json` `include` array. If `e2e/**` and `playwright.config.ts` are not included, either extend the root tsconfig or create a `tsconfig.e2e.json` that includes them and references `@playwright/test` types. Confirm `@playwright/test` ships its own types (it does — no separate `@types` package needed).
   - **Files**: `tsconfig.json` (modify) or `tsconfig.e2e.json` (create)

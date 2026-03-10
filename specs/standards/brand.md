@@ -227,25 +227,29 @@ These are the only tokens components may reference. Each maps to a Tier 1 identi
 
 ### 2.8 Typography — Semantic
 
-| Semantic Token              | Maps To          | Size | Weight | Additional                                      |
-| --------------------------- | ---------------- | ---- | ------ | ----------------------------------------------- |
-| `--type-hero`               | `--font-display` | 96px | 400    | letter-spacing: 0.03em. Landing page hero only. |
-| `--type-page-title`         | `--font-display` | 56px | 400    | letter-spacing: 0.04em                          |
-| `--type-section-heading`    | `--font-display` | 40px | 400    | letter-spacing: 0.04em                          |
-| `--type-card-title`         | `--font-body`    | 24px | 700    |                                                 |
-| `--type-body`               | `--font-body`    | 16px | 400    | line-height: 1.7                                |
-| `--type-body-small`         | `--font-body`    | 13px | 400    | line-height: 1.7                                |
-| `--type-button`             | `--font-body`    | 14px | 600    | letter-spacing: 0.01em                          |
-| `--type-label`              | `--font-data`    | 11px | 400    | letter-spacing: 0.2em, uppercase                |
-| `--type-section-label`      | `--font-data`    | 11px | 400    | letter-spacing: 0.3em, uppercase                |
-| `--type-data`               | `--font-data`    | 14px | 400    | Mission codes, financial figures, timestamps    |
-| `--type-stat-value`         | `--font-display` | 40px | 400    | letter-spacing: 0.03em                          |
-| `--type-stat-value-compact` | `--font-display` | 28px | 400    | letter-spacing: 0.05em                          |
-| `--type-input-label`        | `--font-data`    | 12px | 600    | letter-spacing: 0.05em, uppercase               |
+**Split-property token convention**: Each type-scale entry in this table expands into five property-specific CSS variables: `--type-*-size`, `--type-*-weight`, `--type-*-leading`, `--type-*-spacing`, and `--type-*-family`. Components apply each property individually rather than relying on a CSS shorthand. The `-family` tokens map each type-scale entry to the relevant brand font-family token.
+
+| Semantic Token              | `-family` Token                    | Font Family      | Size | Weight | Additional                                      |
+| --------------------------- | ---------------------------------- | ---------------- | ---- | ------ | ----------------------------------------------- |
+| `--type-hero`               | `--type-hero-family`               | `--font-display` | 96px | 400    | letter-spacing: 0.03em. Landing page hero only. |
+| `--type-page-title`         | `--type-page-title-family`         | `--font-display` | 56px | 400    | letter-spacing: 0.04em                          |
+| `--type-section-heading`    | `--type-section-heading-family`    | `--font-display` | 40px | 400    | letter-spacing: 0.04em                          |
+| `--type-card-title`         | `--type-card-title-family`         | `--font-body`    | 24px | 700    |                                                 |
+| `--type-body`               | `--type-body-family`               | `--font-body`    | 16px | 400    | line-height: 1.7                                |
+| `--type-body-small`         | `--type-body-small-family`         | `--font-body`    | 13px | 400    | line-height: 1.7                                |
+| `--type-button`             | `--type-button-family`             | `--font-body`    | 14px | 600    | letter-spacing: 0.01em                          |
+| `--type-label`              | `--type-label-family`              | `--font-data`    | 11px | 400    | letter-spacing: 0.2em, uppercase                |
+| `--type-section-label`      | `--type-section-label-family`      | `--font-data`    | 11px | 400    | letter-spacing: 0.3em, uppercase                |
+| `--type-data`               | `--type-data-family`               | `--font-data`    | 14px | 400    | Mission codes, financial figures, timestamps    |
+| `--type-stat-value`         | `--type-stat-value-family`         | `--font-display` | 40px | 400    | letter-spacing: 0.03em                          |
+| `--type-stat-value-compact` | `--type-stat-value-compact-family` | `--font-display` | 28px | 400    | letter-spacing: 0.05em                          |
+| `--type-input-label`        | `--type-input-label-family`        | `--font-data`    | 12px | 600    | letter-spacing: 0.05em, uppercase               |
 
 **Rule**: The type scale is a closed set. No intermediate sizes or custom font assignments. If a design requires a size not in this scale, it must be added to this spec before implementation.
 
 **Rule**: `--font-display` (Bebas Neue) is always uppercase. Never set it in mixed case or lowercase.
+
+> **Named Exception — Hero H1 Responsive Sizing**: The `--type-hero-size` token defines the base desktop size as 96px, but the hero H1 uses an approved responsive sizing ladder that overrides `--type-hero-size` at breakpoints: 32px (mobile baseline) → 48px (sm, 640px+) → 72px (lg, 1024px+) → 96px (xl, 1280px+). This breakpoint ladder is implemented via media query overrides and does not introduce new type-scale entries. It is the only approved responsive override of a fixed type-scale token.
 
 ### 2.9 Motion — Semantic
 

@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Update brand.md §2.8 — document split token convention and add -family column
+- [x] TASK-01: Update brand.md §2.8 — document split token convention and add -family column
   - **Goal**: Align the spec's typography token table with how `tokens.css` actually defines CSS variables (four property-specific suffixes: `-size`, `-weight`, `-leading`, `-spacing`) and add the new `-family` tokens introduced in Issue #80.
   - **Details**:
     - Read `specs/standards/brand.md` and `src/styles/tokens.css` (or equivalent) to confirm the exact token names in use.

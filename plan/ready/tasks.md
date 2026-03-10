@@ -38,7 +38,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cd packages/shared && npx tsc --noEmit` passes (or `npm run build` if a build script exists); all new type names are present in the file.
   - **Brief ref**: §3 Rewrite `@mmf/shared/src/campaign.ts`
 
-- [ ] TASK-03: Update server queries with camelCase SQL aliases and nested entity fetching
+- [x] TASK-03: Update server queries with camelCase SQL aliases and nested entity fetching
   - **Goal**: `listCampaigns` returns camelCase field names; `getCampaignById` fetches milestones, stretch goals, team members, and updates and stitches them into a `CampaignDetail` response.
   - **Details**:
     - `packages/server/src/campaigns/queries.ts`:

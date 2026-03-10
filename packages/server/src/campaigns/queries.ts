@@ -1,5 +1,6 @@
 import { Pool } from 'pg'
-import { Campaign, CampaignSummary, ListQuery } from './types.js'
+import { CampaignSummary, CampaignDetail } from './types.js'
+import { ListQuery } from './types.js'
 
 export async function listCampaigns(pool: Pool, filters: ListQuery): Promise<CampaignSummary[]> {
   const conditions: string[] = []
@@ -21,11 +22,15 @@ export async function listCampaigns(pool: Pool, filters: ListQuery): Promise<Cam
     SELECT
       id,
       title,
+      summary,
       status,
       category,
-      min_funding_target_usd AS goal_amount,
-      current_amount_usd AS raised_amount,
-      created_at
+      hero_image_url AS "heroImageUrl",
+      min_funding_target_usd AS "goalAmount",
+      current_amount_usd AS "raisedAmount",
+      contributor_count AS "contributorCount",
+      deadline,
+      created_at AS "createdAt"
     FROM campaigns
     ${where}
     ORDER BY created_at DESC
@@ -35,34 +40,102 @@ export async function listCampaigns(pool: Pool, filters: ListQuery): Promise<Cam
   return result.rows
 }
 
-export async function getCampaignById(pool: Pool, id: string): Promise<Campaign | null> {
-  const sql = `
+export async function getCampaignById(pool: Pool, id: string): Promise<CampaignDetail | null> {
+  const campaignSql = `
     SELECT
       id,
-      slug,
       title,
       summary,
-      description,
-      alignment_statement,
-      category,
-      tags,
       status,
-      hero_image_url,
-      min_funding_target_usd,
-      max_funding_cap_usd,
-      current_amount_usd,
-      contributor_count,
+      category,
+      hero_image_url AS "heroImageUrl",
+      min_funding_target_usd AS "goalAmount",
+      current_amount_usd AS "raisedAmount",
+      contributor_count AS "contributorCount",
       deadline,
-      launched_at,
-      created_at,
-      updated_at
+      created_at AS "createdAt",
+      slug,
+      description,
+      alignment_statement AS "alignmentStatement",
+      tags,
+      max_funding_cap_usd AS "maxFundingCapUsd",
+      launched_at AS "launchedAt",
+      updated_at AS "updatedAt"
     FROM campaigns
     WHERE id = $1
   `
 
-  const result = await pool.query<Campaign>(sql, [id])
-  if (result.rowCount === 0) {
+  const campaignResult = await pool.query(campaignSql, [id])
+  if (campaignResult.rowCount === 0) {
     return null
   }
-  return result.rows[0] ?? null
+  const campaign = campaignResult.rows[0]
+
+  const milestonesResult = await pool.query(
+    `SELECT
+      id,
+      title,
+      description,
+      target_date AS "targetDate",
+      funding_pct AS "fundingPercentage",
+      verification_criteria AS "verificationCriteria",
+      status,
+      sort_order AS "sortOrder"
+    FROM campaign_milestones
+    WHERE campaign_id = $1
+    ORDER BY sort_order`,
+    [id]
+  )
+
+  const stretchGoalsResult = await pool.query(
+    `SELECT
+      id,
+      target_usd AS "targetAmount",
+      description,
+      deliverables,
+      sort_order AS "sortOrder"
+    FROM campaign_stretch_goals
+    WHERE campaign_id = $1
+    ORDER BY sort_order`,
+    [id]
+  )
+
+  const teamMembersResult = await pool.query(
+    `SELECT
+      id,
+      name,
+      role,
+      bio,
+      sort_order AS "sortOrder"
+    FROM campaign_team_members
+    WHERE campaign_id = $1
+    ORDER BY sort_order`,
+    [id]
+  )
+
+  const updatesResult = await pool.query(
+    `SELECT
+      id,
+      body,
+      posted_at AS "postedAt"
+    FROM campaign_updates
+    WHERE campaign_id = $1
+    ORDER BY posted_at DESC`,
+    [id]
+  )
+
+  const stretchGoals = stretchGoalsResult.rows.map((goal) => ({
+    ...goal,
+    unlocked: goal.targetAmount <= campaign.raisedAmount,
+  }))
+
+  const detail: CampaignDetail = {
+    ...campaign,
+    milestones: milestonesResult.rows,
+    stretchGoals,
+    teamMembers: teamMembersResult.rows,
+    updates: updatesResult.rows,
+  }
+
+  return detail
 }

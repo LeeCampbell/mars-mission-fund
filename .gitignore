@@ -19,6 +19,8 @@ coverage/
 # Playwright
 playwright-report/
 test-results/
+.[Pp]laywright/
+.[Pp]laywright-mcp/
 
 # Docker
 .docker/

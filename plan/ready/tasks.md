@@ -28,7 +28,7 @@ Brief: plan/ready/brief.md
   - **Verify**: In browser DevTools on `/about` and `/contact`, confirm there is only one `<main>` element in the DOM tree (from Layout).
   - **Brief ref**: Section 4 — Nested `<main>` on About and Contact pages
 
-- [ ] TASK-03: Pass `complete` prop to `ProgressBar` in `CampaignCard`
+- [x] TASK-03: Pass `complete` prop to `ProgressBar` in `CampaignCard`
   - **Goal**: Fully-funded campaigns display the green complete gradient on their progress bar.
   - **Details**:
     - In `CampaignCard.tsx`, locate the `<ProgressBar value={fundingPct} ...>` call (around line 76-79).

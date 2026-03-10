@@ -14,7 +14,7 @@ const innerStyle: CSSProperties = {
 
 const headingStyle: CSSProperties = {
   fontFamily: 'var(--type-section-heading)',
-  fontSize: '40px',
+  fontSize: 'var(--type-section-heading-size)',
   color: 'var(--color-text-primary)',
   textTransform: 'uppercase',
   letterSpacing: '0.02em',

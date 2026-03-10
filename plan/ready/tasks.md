@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File contains all three token references; no `18px`, `14px`, or `12px` font-size literals in those styles.
   - **Brief ref**: Step 3
 
-- [ ] TASK-05: Fix typography in section-level components
+- [x] TASK-05: Fix typography in section-level components
   - **Goal**: Replace hardcoded font sizes in `StatsSection.tsx`, `HowItWorksSection.tsx`, `ClosingCtaSection.tsx`, and `FeaturedMissionsSection.tsx`
   - **Details**:
     - `StatsSection.tsx`: `36px` → `var(--type-section-heading-size)`

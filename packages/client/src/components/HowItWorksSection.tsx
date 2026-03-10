@@ -14,7 +14,7 @@ const innerStyle: CSSProperties = {
 
 const headingStyle: CSSProperties = {
   fontFamily: 'var(--type-section-heading)',
-  fontSize: '36px',
+  fontSize: 'var(--type-section-heading-size)',
   color: 'var(--color-text-primary)',
   marginBottom: '48px',
   textTransform: 'uppercase',
@@ -32,7 +32,7 @@ const stepNumberStyle: CSSProperties = {
 
 const stepTitleStyle: CSSProperties = {
   fontFamily: 'var(--type-section-heading)',
-  fontSize: '24px',
+  fontSize: 'var(--type-card-title-size)',
   color: 'var(--color-text-primary)',
   textTransform: 'uppercase',
   marginBottom: '12px',

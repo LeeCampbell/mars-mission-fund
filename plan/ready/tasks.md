@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Install @playwright/test and add test:e2e script
+- [x] TASK-01: Install @playwright/test and add test:e2e script
   - **Goal**: Add the Playwright dependency and npm script so the toolchain is available for subsequent tasks.
   - **Details**: In the root `package.json`, add `@playwright/test` as a devDependency (latest stable). Add `"test:e2e": "playwright test"` to the `scripts` section. Run `npm install` to update `package-lock.json`.
   - **Files**: `package.json`, `package-lock.json`

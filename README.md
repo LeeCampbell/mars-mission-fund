@@ -59,21 +59,9 @@ For the full technology inventory, see [specs/tech/tech-stack.md](./specs/tech/t
 ## Getting Started
 
 ```bash
-# Clone the repository
-git clone https://github.com/LeeCampbell/mars-missionfund.git
+git clone https://github.com/LeeCampbell/mars-mission-fund.git
 cd mars-mission-fund
-
-# Install dependencies
-npm install
-
-# Start local infrastructure (PostgreSQL, etc.)
-docker compose up -d
-
-# Run database migrations
-npm run migrate
-
-# Start the development server
-npm run dev
+./scripts/run-local.sh
 ```
 
 > **Note:** External services (Stripe, Clerk, Veriff, AWS SES) are stubbed or mocked for local development.
@@ -84,9 +72,12 @@ npm run dev
 ## Project Structure
 
 ```text
+packages/client/    React frontend (Vite + Tailwind)
+packages/server/    Express API server
+packages/shared/    Shared TypeScript types
 specs/              Product and technical specifications (start here)
-src/                Application source code
-e2e/                Playwright end-to-end tests
+scripts/            Development and CI utility scripts
+autonomous/         Autonomous agent system (Dockerfile, prompts)
 ```
 
 ---

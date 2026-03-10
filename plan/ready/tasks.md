@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Fix dead `href="#"` links in homepage components
+- [x] TASK-01: Fix dead `href="#"` links in homepage components
   - **Goal**: Replace all five placeholder `href="#"` values with real `/campaigns` routes so homepage buttons navigate correctly.
   - **Details**:
     - In `HeroSection.tsx`, change `href="#"` → `href="/campaigns"` on the "Explore Missions" `<Button>`.

@@ -41,7 +41,9 @@
       "Bash(node:*)",
       "Bash(eslint:*)",
       "Bash(prettier:*)",
-      "Bash(tsc:*)"
+      "Bash(tsc:*)",
+      "Bash(./scripts/:*)",
+      "mcp__playwright__*"
     ],
     "deny": ["Bash(git branch -D:*)", "Bash(gh pr merge:*)"]
   },

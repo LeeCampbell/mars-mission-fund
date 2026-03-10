@@ -26,6 +26,7 @@ Milestone          → The deliverable (what stakeholders care about)
 Read the user's request. Then read relevant specifications:
 
 - `specs/README.md` — spec index
+- `specs/tooling/github.md` - how to create milestones correctly with GitHub's API and CLI
 - Any domain specs referenced by the request
 
 ### Step 2: Socratic Elicitation

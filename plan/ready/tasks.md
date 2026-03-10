@@ -48,7 +48,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run typecheck` passes; `npm run lint` passes; no inline interface declarations remain; fetch functions unwrap `data` envelope.
   - **Brief ref**: Approach §3
 
-- [ ] TASK-05: Update specs/learnings.md — add four learnings from issues #65 and #66
+- [x] TASK-05: Update specs/learnings.md — add four learnings from issues #65 and #66
   - **Goal**: Capture the gotchas discovered during issues #65 and #66 so future agents avoid repeating them.
   - **Details**: Append four new `##` sections to `specs/learnings.md`:
     1. **Port mismatch** — Vite proxy target port must match `PORT` in `packages/server/.env`; they drifted (3001 vs 3000); always keep in sync.

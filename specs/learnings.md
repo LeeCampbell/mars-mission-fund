@@ -65,3 +65,23 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 - The server `vitest.config.ts` only needs `environment: 'node'`; no special ESM transforms are required because `server/package.json` sets `"type": "module"`, which makes Node treat all `.js` output as ESM.
 - **Express 5 + SuperTest testability**: the app is built as a factory function `createApp(pool: Pool): Express` that accepts the database pool via dependency injection. This pattern is required so tests can pass a mock pool without side effects from real DB connections or port binding.
 - The `src/api/<domain>.ts` layer falls back to inline mock data when the API returns a non-OK response or is unreachable. This makes the frontend fully functional during local development even when the Express server is not running.
+
+## Issues #65–#66: Port mismatch between Vite proxy and server
+
+- Vite's `server.proxy` target port must exactly match the `PORT` value in `packages/server/.env`. During issues #65/#66 these drifted (proxy pointed to 3001, server listened on 3000), causing all API calls to silently fail.
+- Resolution: always verify both values are identical before starting development. Prefer committing a `.env.example` with the canonical port so developers and CI stay in sync.
+
+## Issues #65–#66: camelCase transformation for API responses
+
+- DB columns use `snake_case` (e.g. `min_funding_target_usd`). All API JSON responses must use `camelCase`. The server aliases column names directly in SQL `SELECT` clauses (e.g. `min_funding_target_usd AS "minFundingTargetUsd"`).
+- Shared Zod schemas in `@mmf/shared` must use camelCase field names to match the API responses; any `snake_case` field name in a Zod schema will fail to parse real API data at runtime.
+
+## Issues #65–#66: Nested entity queries for campaign detail
+
+- The campaign detail endpoint (`GET /api/campaigns/:slug`) fetches milestones, stretch goals, team members, and campaign updates via separate SQL queries, then assembles them into a single `CampaignDetail` object in application code.
+- This avoids complex multi-table JOINs and keeps each query simple and independently testable. Future contributors should follow the same pattern rather than adding large JOIN queries.
+
+## Issues #65–#66: Mock data removal enables reliable error-state testing
+
+- The client API layer previously caught all fetch errors and returned inline mock data as a fallback. While convenient for local development, this masked real server errors and made E2E tests unable to verify error states.
+- Resolution: remove the catch-block fallbacks and re-throw errors instead. The UI renders loading/error states using React state, and E2E tests can now reliably detect when the server returns an error.

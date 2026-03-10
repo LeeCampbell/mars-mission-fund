@@ -153,19 +153,22 @@ Upstream repo: ${UPSTREAM_REPO}" \
       git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE" || true
 
       # Create draft PR (once — this state only runs once)
-      PR_NUMBER=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr create \
+      PR_URL=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr create \
         --repo "$UPSTREAM_REPO" \
         --base "$UPSTREAM_BASE_BRANCH" \
         --head "${FORK_OWNER}:${BRANCH}" \
         --title "feat: ${ISSUE_TITLE}" \
         --body "Work in progress for #${ISSUE_NUMBER}" \
-        --draft --json number --jq '.number' 2>&1) || true
+        --draft 2>&1) || true
 
-      if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" -eq "$PR_NUMBER" ] 2>/dev/null; then
+      # Extract PR number from the URL (e.g. https://github.com/owner/repo/pull/123)
+      PR_NUMBER=$(echo "$PR_URL" | grep -oE '/pull/[0-9]+' | grep -oE '[0-9]+' | tail -1)
+
+      if [ -n "$PR_NUMBER" ]; then
         echo "$PR_NUMBER" > plan/.pr-number
         echo ">>> Draft PR #${PR_NUMBER} created"
       else
-        echo "!!! Draft PR creation failed (non-fatal): ${PR_NUMBER}"
+        echo "!!! Draft PR creation failed (non-fatal): ${PR_URL}"
       fi
 
       clear_state

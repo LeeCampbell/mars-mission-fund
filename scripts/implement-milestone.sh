@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Start the autonomous agent in Docker for a given milestone.
 # Launches one container per issue, processing them in dependency order.
-# Usage: ./scripts/implement-milestone.sh [milestone-title]
+# Usage: ./scripts/implement-milestone.sh [milestone-number]
 #
 # Compatible with Bash 3.2+ (macOS default). No associative arrays.
 
@@ -24,13 +24,14 @@ set +a
 
 # ── Milestone selection ──────────────────────────────────────
 if [ -n "${1:-}" ]; then
-  # Title provided — look up its number
-  MILESTONE_NUMBER=$(gh api "repos/${UPSTREAM_REPO}/milestones" --jq ".[] | select(.title == \"$1\") | .number")
-  if [ -z "$MILESTONE_NUMBER" ]; then
-    echo "ERROR: No milestone found with title: $1"
+  # Milestone number provided — validate it exists
+  MILESTONE_NUMBER="$1"
+  MILESTONE_TITLE=$(gh api "repos/${UPSTREAM_REPO}/milestones/${MILESTONE_NUMBER}" --jq '.title' 2>/dev/null || true)
+  if [ -z "$MILESTONE_TITLE" ]; then
+    echo "ERROR: No milestone found with number: ${MILESTONE_NUMBER}"
     exit 1
   fi
-  echo ">>> Milestone: $1 (#${MILESTONE_NUMBER})"
+  echo ">>> Milestone: ${MILESTONE_TITLE} (#${MILESTONE_NUMBER})"
 else
   # No arg — query open milestones
   MILESTONES=$(gh api "repos/${UPSTREAM_REPO}/milestones?state=open" --jq '.[] | "\(.number)\t\(.title)"')

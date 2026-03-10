@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `grep -n 'workspace' autonomous/Dockerfile` shows the new comment.
   - **Brief ref**: Approach step 4
 
-- [ ] TASK-04: Audit and confirm `autonomous/prompts/*.md` — no stale paths
+- [x] TASK-04: Audit and confirm `autonomous/prompts/*.md` — no stale paths
   - **Goal**: Confirm all prompt files are already workspace-aware (no pre-monorepo `server/` or `client/` path references); record the audit result.
   - **Details**: Read each prompt file (`create-brief.md`, `create-tasks.md`, `execute-tasks.md`, `apply-review.md`, `remediate-ci.md`, `finalize-pr.md`). If any stale paths are found (bare `server/` or `client/` without `packages/` prefix), update them. If all are clean, add a one-line comment at the top of this task confirming the audit. (Pre-audit indicates all prompts are already clean — no code changes expected.)
   - **Files**: `autonomous/prompts/*.md` (modify only if stale refs found)

@@ -70,7 +70,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Front-matter version reads `0.4.0`; Testing section contains the new CI requirements note; change-log has a new entry; `npm run lint` passes.
   - **Brief ref**: Approach §5
 
-- [ ] TASK-07: Verify full build, typecheck, lint, and tests
+- [x] TASK-07: Verify full build, typecheck, lint, and tests
   - **Goal**: Confirm all workspace packages build and pass quality gates after the schema and type changes.
   - **Details**:
     - Run `npm run build` from the repo root; confirm zero errors.

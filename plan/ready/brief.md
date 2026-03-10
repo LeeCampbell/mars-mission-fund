@@ -28,13 +28,13 @@ Work in this order:
 
 1. Create `specs/adrs/` directory and write `0001-npm-workspaces-monorepo.md` using the ADR template defined in L3-001 Section 7.2.
    The ADR must explain why npm workspaces was chosen over Turborepo/Nx, and why `packages/` was chosen over `src/`.
-2. Update `specs/tech/architecture.md` — change the local demo scope note in Section 1 from `server/` to `packages/server/`, update the run command to use the workspace script (`npm run dev:server` from the repo root or `npm run dev` inside `packages/server/`), and bump the version and change log.
-3. Update `specs/tech/tech-stack.md` — in the Local Development section:
+1. Update `specs/tech/architecture.md` — change the local demo scope note in Section 1 from `server/` to `packages/server/`, update the run command to use the workspace script (`npm run dev:server` from the repo root or `npm run dev` inside `packages/server/`), and bump the version and change log.
+1. Update `specs/tech/tech-stack.md` — in the Local Development section:
    - DBMate invocation: `server/db/migrations/` → `packages/server/db/migrations/` and Docker volume `-v "$(pwd)/server/db:/db"` → `-v "$(pwd)/packages/server/db:/db"`
    - Express server run command: `cd server && npm run dev` → `npm run dev:server` (from repo root) — this matches the root `package.json` `dev:server` script
    - Server Directory Layout code block: `server/` → `packages/server/`
    - Bump version and change log
-4. Update `specs/README.md` to add the `specs/adrs/` entry to the File System Layout diagram and add a Tooling table row for ADRs.
+1. Update `specs/README.md` to add the `specs/adrs/` entry to the File System Layout diagram and add a Tooling table row for ADRs.
 
 All edits must comply with L3-007 (one sentence per line, no trailing whitespace, proper heading levels, no bare URLs).
 

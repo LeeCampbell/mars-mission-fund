@@ -63,7 +63,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File compiles. Navigating to `/campaigns` sets the page title to "Explore Missions — Mars Mission Fund".
   - **Brief ref**: Approach step 8; Scope item 6
 
-- [ ] TASK-06: Build verification and smoke test
+- [x] TASK-06: Build verification and smoke test
   - **Goal**: Confirm all changes compile cleanly and no existing tests regress
   - **Details**:
     - Run `npm run build --workspace=packages/client` (or `npm run build`) and confirm zero TypeScript errors

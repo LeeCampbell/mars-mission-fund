@@ -9,12 +9,14 @@ const mockMembers: TeamMember[] = [
     name: 'Dr. Elena Vasquez',
     role: 'Chief Systems Engineer',
     bio: 'Former NASA engineer with 15 years experience.',
+    sortOrder: 1,
   },
   {
     id: 'tm2',
     name: 'Marcus Okafor',
     role: 'Materials Scientist',
     bio: 'Specialises in radiation-shielding composites.',
+    sortOrder: 2,
   },
 ]
 

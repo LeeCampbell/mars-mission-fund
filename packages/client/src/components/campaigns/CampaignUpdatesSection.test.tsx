@@ -6,23 +6,21 @@ import type { CampaignUpdate } from '../../api/campaigns'
 const mockUpdates: CampaignUpdate[] = [
   {
     id: 'u1',
-    title: 'Milestone Achieved',
-    date: '2024-01-15T00:00:00.000Z',
+    postedAt: new Date('2024-01-15T00:00:00.000Z'),
     body: 'We completed the first milestone successfully.',
   },
   {
     id: 'u2',
-    title: 'Progress Report',
-    date: '2024-02-01T00:00:00.000Z',
+    postedAt: new Date('2024-02-01T00:00:00.000Z'),
     body: 'Things are going well.',
   },
 ]
 
 describe('CampaignUpdatesSection', () => {
-  it('renders update titles when updates are present', () => {
+  it('renders update body text when updates are present', () => {
     render(<CampaignUpdatesSection updates={mockUpdates} />)
-    expect(screen.getByText('Milestone Achieved')).toBeInTheDocument()
-    expect(screen.getByText('Progress Report')).toBeInTheDocument()
+    expect(screen.getByText('We completed the first milestone successfully.')).toBeInTheDocument()
+    expect(screen.getByText('Things are going well.')).toBeInTheDocument()
   })
 
   it('renders "No updates yet." when updates array is empty', () => {

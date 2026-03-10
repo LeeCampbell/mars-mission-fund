@@ -56,7 +56,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles without errors in `packages/server`; query file contains the four nested query calls; `types.ts` imports from `@mmf/shared`.
   - **Brief ref**: §4 Update server queries
 
-- [ ] TASK-04: Rewrite client API module and update `useCampaign` hook
+- [x] TASK-04: Rewrite client API module and update `useCampaign` hook
   - **Goal**: `packages/client/src/api/campaigns.ts` imports types from `@mmf/shared`, unwraps `data` envelope, throws on HTTP error, and has no mock fallback. `useCampaign` hook uses `CampaignDetail`.
   - **Details**:
     - `packages/client/src/api/campaigns.ts`:

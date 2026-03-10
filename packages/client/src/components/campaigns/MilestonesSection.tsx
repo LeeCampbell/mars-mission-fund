@@ -7,8 +7,9 @@ interface MilestonesSectionProps {
   className?: string
 }
 
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-US', {
+function formatDate(date: Date | null): string {
+  if (!date) return 'TBD'
+  return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -98,15 +99,15 @@ const progressRowStyle: React.CSSProperties = {
 type BadgeVariant = 'funded' | 'active' | 'new'
 
 const statusBadgeVariant: Record<Milestone['status'], BadgeVariant> = {
-  completed: 'funded',
-  active: 'active',
-  pending: 'new',
+  Verified: 'funded',
+  Submitted: 'active',
+  Pending: 'new',
 }
 
 const statusLabel: Record<Milestone['status'], string> = {
-  completed: 'Completed',
-  active: 'Active',
-  pending: 'Pending',
+  Verified: 'Verified',
+  Submitted: 'Submitted',
+  Pending: 'Pending',
 }
 
 export function MilestonesSection({ milestones, className }: MilestonesSectionProps) {

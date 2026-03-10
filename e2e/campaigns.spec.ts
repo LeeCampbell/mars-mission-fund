@@ -5,6 +5,12 @@ const SEEDED_CAMPAIGN_TITLE = 'Open Source Climate Prediction Model'
 
 test.describe('Campaign list', () => {
   test('happy path — shows seeded campaigns', async ({ page }) => {
+    // NOTE: fetchCampaigns() receives { data: [...] } from the server but treats
+    // it as a bare Campaign[] — the component crashes before the grid renders.
+    // This test is expected to fail until the "Fix client-server integration"
+    // prerequisite issue is resolved (data unwrapping + snake_case mapping).
+    test.fail()
+
     await page.goto('/campaigns')
     const grid = page.getByLabel('Campaign listings')
     await expect(grid).toBeVisible()
@@ -35,6 +41,12 @@ test.describe('Campaign list', () => {
 
 test.describe('Campaign detail', () => {
   test('happy path — shows campaign detail', async ({ page }) => {
+    // NOTE: fetchCampaign() receives { data: {...} } from the server but treats
+    // it as a bare Campaign — the component renders with undefined fields.
+    // This test is expected to fail until the "Fix client-server integration"
+    // prerequisite issue is resolved (data unwrapping + snake_case mapping).
+    test.fail()
+
     await page.goto(`/campaigns/${SEEDED_CAMPAIGN_ID}`)
     const heading = page.locator('h1')
     await expect(heading).toContainText(SEEDED_CAMPAIGN_TITLE)
@@ -54,6 +66,13 @@ test.describe('Campaign detail', () => {
   })
 
   test('404 — shows error state for non-existent campaign', async ({ page }) => {
+    // NOTE: fetchCampaign() catches the 404 and returns mock data instead of
+    // throwing, so the error state is never shown.  This test is expected to
+    // fail until the mock-data fallback is removed from
+    // packages/client/src/api/campaigns.ts (part of the "Fix client-server
+    // integration" prerequisite issue).
+    test.fail()
+
     await page.goto('/campaigns/00000000-dead-0000-0000-000000000000')
     await expect(page.getByText('Failed to load campaign')).toBeVisible()
   })

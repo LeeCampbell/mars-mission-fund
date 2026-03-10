@@ -72,7 +72,7 @@ Brief: plan/ready/brief.md
   - **Verify**: No local type definitions remain in `api/campaigns.ts`; file imports from `@mmf/shared`; `useCampaign.ts` references `CampaignDetail`.
   - **Brief ref**: §5 Rewrite client API module
 
-- [ ] TASK-05: Update client campaign components for new type shapes
+- [x] TASK-05: Update client campaign components for new type shapes
   - **Goal**: All campaign UI components use the new camelCase field names and import types from `@mmf/shared` (or re-exports from the API module).
   - **Details**:
     - `CampaignCard.tsx`: compute progress bar as `(campaign.raisedAmount / campaign.goalAmount) * 100` instead of `fundingProgressPct`; update import.

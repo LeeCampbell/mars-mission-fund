@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Update root `eslint.config.js` to multi-block flat config
+- [x] TASK-01: Update root `eslint.config.js` to multi-block flat config
   - **Goal**: Replace the single-block ESLint config (which ignores `server/`) with a multi-block flat config covering both `packages/client` and `packages/server`
   - **Details**: Replace current config with `tseslint.config(...)` using three blocks: (1) ignores block for `**/dist/` and `**/node_modules/`; (2) base TS rules for all `**/*.{ts,tsx}` files using `js.configs.recommended` and `tseslint.configs.recommended`; (3) client-only block scoped to `packages/client/**/*.{ts,tsx}` with `eslint-plugin-react`, `eslint-plugin-react-hooks`, and `react/react-in-jsx-scope: 'off'`. Remove any stale `server/` ignore entry. All required plugins are already in root `devDependencies`.
   - **Files**: `eslint.config.js`

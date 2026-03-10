@@ -22,7 +22,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `grep -i "invest" packages/client/src/pages/ContactPage.tsx` returns no matches
   - **Brief ref**: Scope > ContactPage.tsx; Approach > Specific replacements
 
-- [ ] TASK-03: Build verification and grep check
+- [x] TASK-03: Build verification and grep check
   - **Goal**: Confirm no TypeScript/lint errors and no remaining forbidden language in both files
   - **Details**:
     - Run `npm run build` from the repo root (or `packages/client`) and confirm it succeeds

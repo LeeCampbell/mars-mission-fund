@@ -82,7 +82,7 @@ fi
 # ── Warm dependency cache ────────────────────────────────────
 if [ -f package.json ]; then
   echo ">>> Installing dependencies"
-  npm install
+  npm ci
 fi
 
 # ── Run agent loop for this single issue ─────────────────────

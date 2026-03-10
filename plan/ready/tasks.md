@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `grep 'npm ci' .claude/settings.json` shows the new entry; `grep 'npm install' .claude/settings.json` returns no matches.
   - **Brief ref**: Approach step 2
 
-- [ ] TASK-03: Add workspace-support comment to `autonomous/Dockerfile`
+- [x] TASK-03: Add workspace-support comment to `autonomous/Dockerfile`
   - **Goal**: Document that the base image ships npm 10 (Node 20), which fully supports npm workspaces, so future agents don't second-guess the install strategy.
   - **Details**: In `autonomous/Dockerfile`, add a brief inline comment near the `FROM` line or the `npm install -g` line confirming that the Playwright base image ships Node 20 + npm 10, and that `npm ci` with workspaces is fully supported. Keep the comment concise (one line).
   - **Files**: `autonomous/Dockerfile`

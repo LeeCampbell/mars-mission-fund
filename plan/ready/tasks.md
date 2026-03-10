@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Open the file and confirm `titleStyle` no longer contains a hardcoded px value for `fontSize`.
   - **Brief ref**: Step 3 — Fix MissionCard card-title font size
 
-- [ ] TASK-04: Fix hero H1 responsive sizing to prevent 375 px overflow
+- [x] TASK-04: Fix hero H1 responsive sizing to prevent 375 px overflow
   - **Goal**: Replace the three-step px ladder in `HeroSection.tsx` with a fluid `clamp()` so the H1 is 96 px at desktop and does not overflow at 375 px mobile.
   - **Details**: In `HeroSection.tsx`, locate the injected CSS rule block for `.hero-heading`. Replace the existing `font-size` declarations (including any `@media` overrides) with:
     ```css

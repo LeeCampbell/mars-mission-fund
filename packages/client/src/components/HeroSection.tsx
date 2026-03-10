@@ -46,21 +46,11 @@ const heroStyles = `
   .${heroHeadingClass} {
     font-family: var(--type-hero);
     color: var(--color-text-primary);
-    font-size: 48px;
+    font-size: clamp(2rem, 9vw, 6rem);
     line-height: 1;
     letter-spacing: 0.02em;
     margin: 0;
     text-transform: uppercase;
-  }
-  @media (min-width: 768px) {
-    .${heroHeadingClass} {
-      font-size: 72px;
-    }
-  }
-  @media (min-width: 1280px) {
-    .${heroHeadingClass} {
-      font-size: 96px;
-    }
   }
   .hero-glow {
     position: absolute;

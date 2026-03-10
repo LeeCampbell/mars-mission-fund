@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { useCampaign } from '../hooks/useCampaign'
 import { Badge } from '../components/ui/Badge'
@@ -148,6 +149,12 @@ export function CampaignDetailPage() {
 
   const { data: campaign, isLoading, isError } = useCampaign(id ?? '')
 
+  useEffect(() => {
+    if (campaign) {
+      document.title = `${campaign.title} — Mars Mission Fund`
+    }
+  }, [campaign])
+
   if (isLoading) {
     return (
       <div style={pageStyle}>
@@ -192,7 +199,11 @@ export function CampaignDetailPage() {
         <div style={heroWrapperStyle}>
           <div style={heroBgStyle} />
           {campaign.heroImageUrl && (
-            <img src={campaign.heroImageUrl} alt="" aria-hidden="true" style={heroImgStyle} />
+            <img
+              src={campaign.heroImageUrl}
+              alt={`${campaign.title} hero image`}
+              style={heroImgStyle}
+            />
           )}
           <div style={heroOverlayStyle} />
         </div>
@@ -214,7 +225,10 @@ export function CampaignDetailPage() {
             {/* Main column */}
             <div className="campaign-main">
               <Card>
-                <p style={descriptionStyle}>{campaign.description}</p>
+                <div
+                  style={descriptionStyle}
+                  dangerouslySetInnerHTML={{ __html: campaign.description }}
+                />
               </Card>
 
               <div style={sectionSpacingStyle}>

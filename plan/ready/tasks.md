@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Files compile. DOM inspection of `/about` and `/contact` shows exactly one `<main>` element per page.
   - **Brief ref**: Approach steps 6–7; Scope item 4
 
-- [ ] TASK-04: Fix CampaignDetailPage — HTML description, alt text, and document.title
+- [x] TASK-04: Fix CampaignDetailPage — HTML description, alt text, and document.title
   - **Goal**: Campaign detail page renders HTML descriptions, has descriptive hero alt text, and sets the page title dynamically
   - **Details**:
     - Import `useEffect` from React (add to existing React import if not present)

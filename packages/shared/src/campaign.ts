@@ -34,9 +34,9 @@ export const CampaignSummarySchema = z.object({
   title: z.string(),
   status: CampaignStatusSchema,
   category: CampaignCategorySchema,
-  goal_amount: z.coerce.number().int(),
-  raised_amount: z.coerce.number().int(),
-  created_at: z.coerce.date(),
+  goalAmount: z.coerce.number().int(),
+  raisedAmount: z.coerce.number().int(),
+  createdAt: z.coerce.date(),
 })
 
 // Full campaign row returned by the detail endpoint
@@ -46,22 +46,65 @@ export const CampaignSchema = z.object({
   title: z.string(),
   summary: z.string(),
   description: z.string(),
-  alignment_statement: z.string(),
+  alignmentStatement: z.string(),
   category: CampaignCategorySchema,
   tags: z.array(z.string()),
   status: CampaignStatusSchema,
-  hero_image_url: z.string().url().nullable(),
-  min_funding_target_usd: z.coerce.number().int(),
-  max_funding_cap_usd: z.coerce.number().int(),
-  current_amount_usd: z.coerce.number().int(),
-  contributor_count: z.number().int(),
+  heroImageUrl: z.string().url().nullable(),
+  minFundingTargetUsd: z.coerce.number().int(),
+  maxFundingCapUsd: z.coerce.number().int(),
+  currentAmountUsd: z.coerce.number().int(),
+  contributorCount: z.number().int(),
   deadline: z.coerce.date().nullable(),
-  launched_at: z.coerce.date().nullable(),
-  created_at: z.coerce.date(),
-  updated_at: z.coerce.date(),
+  launchedAt: z.coerce.date().nullable(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+})
+
+export const MilestoneSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  targetDate: z.string(),
+  fundingPercentage: z.number(),
+  verificationCriteria: z.string(),
+  status: z.enum(['pending', 'active', 'completed']),
+})
+
+export const StretchGoalSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string(),
+  targetAmount: z.number(),
+  unlocked: z.boolean(),
+})
+
+export const TeamMemberSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  role: z.string(),
+  bio: z.string(),
+})
+
+export const CampaignUpdateSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  date: z.string(),
+  body: z.string(),
+})
+
+export const CampaignDetailSchema = CampaignSchema.extend({
+  milestones: z.array(MilestoneSchema),
+  stretchGoals: z.array(StretchGoalSchema),
+  teamMembers: z.array(TeamMemberSchema),
+  updates: z.array(CampaignUpdateSchema),
 })
 
 export type CampaignStatus = z.infer<typeof CampaignStatusSchema>
 export type CampaignCategory = z.infer<typeof CampaignCategorySchema>
 export type CampaignSummary = z.infer<typeof CampaignSummarySchema>
 export type Campaign = z.infer<typeof CampaignSchema>
+export type Milestone = z.infer<typeof MilestoneSchema>
+export type StretchGoal = z.infer<typeof StretchGoalSchema>
+export type TeamMember = z.infer<typeof TeamMemberSchema>
+export type CampaignUpdate = z.infer<typeof CampaignUpdateSchema>
+export type CampaignDetail = z.infer<typeof CampaignDetailSchema>

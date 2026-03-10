@@ -22,7 +22,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Section 6.1 contains both new subsections; front-matter version reads `0.6`; change-log has a new entry.
   - **Brief ref**: Approach §2
 
-- [ ] TASK-03: Update packages/shared/src/campaign.ts — camelCase fields and nested schemas
+- [x] TASK-03: Update packages/shared/src/campaign.ts — camelCase fields and nested schemas
   - **Goal**: Align shared Zod schemas with the camelCase field names emitted by the implemented server API, and add nested entity schemas needed for the campaign detail endpoint.
   - **Details**:
     - In `CampaignSummarySchema`: rename `goal_amount` → `goalAmount`, `raised_amount` → `raisedAmount`, `created_at` → `createdAt`.

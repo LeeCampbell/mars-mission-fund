@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Grep the file for `--type-hero` and confirm the property exists with value `var(--font-display)`. Confirm all 13 tokens are present.
   - **Brief ref**: §Approach 1 — Add font-family shorthand tokens
 
-- [ ] TASK-02: Fix section heading font sizes in three components
+- [x] TASK-02: Fix section heading font sizes in three components
   - **Goal**: Replace hardcoded `36px` font sizes with the `--type-section-heading-size` token in `FeaturedMissionsSection`, `HowItWorksSection`, and `StatsSection`.
   - **Details**: In each of the three files, find the `headingStyle` object with `fontSize: '36px'` and change it to `fontSize: 'var(--type-section-heading-size)'`. This makes the headings render at 40px (via `--text-2xl`) per spec.
   - **Files**: `packages/client/src/components/FeaturedMissionsSection.tsx`, `packages/client/src/components/HowItWorksSection.tsx`, `packages/client/src/components/StatsSection.tsx`

@@ -14,7 +14,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `grep -i "invest" packages/client/src/pages/AboutPage.tsx` returns no matches
   - **Brief ref**: Scope > AboutPage.tsx; Approach > Specific replacements
 
-- [ ] TASK-02: Replace forbidden language in ContactPage.tsx
+- [x] TASK-02: Replace forbidden language in ContactPage.tsx
   - **Goal**: Remove the 1 "investor" occurrence in ContactPage.tsx with spec-compliant alternative
   - **Details**:
     - Line 144: `an investor seeking opportunities` → `a backer seeking opportunities`

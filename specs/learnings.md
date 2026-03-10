@@ -52,6 +52,12 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 - Placing `<noscript>` in the `<head>` of `index.html` causes a parse5 build error: "disallowed-content-in-noscript-in-head".
 - Resolution: Move `<noscript>` to `<body>` instead.
 
+## Issue #54: Root vitest exclude must cover packages/**
+
+- Moving server files from `server/` to `packages/server/` causes root vitest to pick up server tests (e.g. `packages/server/src/__tests__/campaigns.test.ts`) because `vite.config.ts` only excluded `server/**`.
+- The root `vite.config.ts` `test.exclude` must include `packages/**` to prevent the frontend test runner from finding workspace package tests.
+- Resolution: add `'packages/**'` to the `exclude` array in `vite.config.ts`.
+
 ## Issues #40–#43: Public Campaign Pages — Tooling Notes
 
 - The `server/` directory is a **separate Node.js project** with its own `package.json`, `tsconfig.json`, and `vitest.config.ts`. It is entirely independent of the root frontend build and test commands; run `npm test` inside `server/` to execute server-side tests.

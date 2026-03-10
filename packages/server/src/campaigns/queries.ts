@@ -64,5 +64,5 @@ export async function getCampaignById(pool: Pool, id: string): Promise<Campaign 
   if (result.rowCount === 0) {
     return null
   }
-  return result.rows[0]
+  return result.rows[0] ?? null
 }

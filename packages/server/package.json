@@ -1,5 +1,5 @@
 {
-  "name": "mars-mission-fund-server",
+  "name": "@mmf/server",
   "version": "0.0.1",
   "type": "module",
   "scripts": {
@@ -9,6 +9,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@mmf/shared": "*",
     "cors": "^2",
     "dotenv": "^16.4.5",
     "express": "^5",

@@ -67,16 +67,14 @@ clear_state() {
 }
 
 archive_plan() {
-  # Archive plan: move ready → done, then remove plan dir entirely.
-  # Plans are preserved in git history but kept out of the current tree.
-  mkdir -p plan/done
-  if [ -d "plan/ready" ]; then
-    mv plan/ready/* plan/done/ 2>/dev/null || true
+  # Remove plan files from the branch — they're preserved in git history.
+  if git ls-files --error-unmatch plan/ &>/dev/null; then
+    git rm -r plan/
+    git commit -m "chore: remove plan files after PR merged"
+    git push origin "$BRANCH" --force-with-lease
   fi
+  # Clean up any untracked plan files left on disk
   rm -rf plan/
-  git add plan/ 2>/dev/null || true
-  git commit -m "chore: remove plan files after PR creation" 2>/dev/null || true
-  git push origin "$BRANCH" --force-with-lease 2>/dev/null || true
 }
 
 STATE=$(determine_state)
@@ -149,26 +147,35 @@ Upstream repo: ${UPSTREAM_REPO}" \
     if [ -f "plan/ready/tasks.md" ]; then
       echo ">>> Tasks created"
 
+      # Advance state before side-effects (push/PR) so a failure doesn't
+      # leave us stuck in create-tasks.
+      clear_state
+
+      # Commit plan files so they're included in the push
+      git add plan/
+      git commit -m "chore: add plan for #${ISSUE_NUMBER}" || true
+
       # Push branch to fork so we can create a draft PR for visibility
       git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE" || true
 
       # Create draft PR (once — this state only runs once)
-      PR_NUMBER=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr create \
+      PR_URL=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr create \
         --repo "$UPSTREAM_REPO" \
         --base "$UPSTREAM_BASE_BRANCH" \
         --head "${FORK_OWNER}:${BRANCH}" \
         --title "feat: ${ISSUE_TITLE}" \
         --body "Work in progress for #${ISSUE_NUMBER}" \
-        --draft --json number --jq '.number' 2>&1) || true
+        --draft 2>&1) || true
 
-      if [ -n "$PR_NUMBER" ] && [ "$PR_NUMBER" -eq "$PR_NUMBER" ] 2>/dev/null; then
+      # Extract PR number from the URL (e.g. https://github.com/owner/repo/pull/123)
+      PR_NUMBER=$(echo "$PR_URL" | grep -oE '/pull/[0-9]+' | grep -oE '[0-9]+' | tail -1 || true)
+
+      if [ -n "$PR_NUMBER" ]; then
         echo "$PR_NUMBER" > plan/.pr-number
         echo ">>> Draft PR #${PR_NUMBER} created"
       else
-        echo "!!! Draft PR creation failed (non-fatal): ${PR_NUMBER}"
+        echo "!!! Draft PR creation failed (non-fatal): ${PR_URL}"
       fi
-
-      clear_state
     else
       echo "!!! No tasks produced"
       clear_state

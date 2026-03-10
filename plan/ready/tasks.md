@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `grep -rn '\bserver/\|\bclient/' scripts/` returns no matches (or only legitimate `packages/` prefixed ones).
   - **Brief ref**: Approach step 5
 
-- [ ] TASK-06: Final verification — build and permissions check
+- [x] TASK-06: Final verification — build and permissions check
   - **Goal**: Confirm all changes are coherent and the repo is in a valid state.
   - **Details**: Run `npm run build` from the repo root to verify workspace resolution. Check that `.claude/settings.json` has `npm ci` and not `npm install`. Confirm `autonomous/entrypoint.sh` line 85 reads `npm ci`. Confirm the Dockerfile comment is present. No Docker build required in CI (Docker build is a manual verification step).
   - **Files**: None (verification only)

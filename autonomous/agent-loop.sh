@@ -149,6 +149,14 @@ Upstream repo: ${UPSTREAM_REPO}" \
     if [ -f "plan/ready/tasks.md" ]; then
       echo ">>> Tasks created"
 
+      # Advance state before side-effects (push/PR) so a failure doesn't
+      # leave us stuck in create-tasks.
+      clear_state
+
+      # Commit plan files so they're included in the push
+      git add plan/
+      git commit -m "chore: add plan for #${ISSUE_NUMBER}" || true
+
       # Push branch to fork so we can create a draft PR for visibility
       git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE" || true
 
@@ -162,7 +170,7 @@ Upstream repo: ${UPSTREAM_REPO}" \
         --draft 2>&1) || true
 
       # Extract PR number from the URL (e.g. https://github.com/owner/repo/pull/123)
-      PR_NUMBER=$(echo "$PR_URL" | grep -oE '/pull/[0-9]+' | grep -oE '[0-9]+' | tail -1)
+      PR_NUMBER=$(echo "$PR_URL" | grep -oE '/pull/[0-9]+' | grep -oE '[0-9]+' | tail -1 || true)
 
       if [ -n "$PR_NUMBER" ]; then
         echo "$PR_NUMBER" > plan/.pr-number
@@ -170,8 +178,6 @@ Upstream repo: ${UPSTREAM_REPO}" \
       else
         echo "!!! Draft PR creation failed (non-fatal): ${PR_URL}"
       fi
-
-      clear_state
     else
       echo "!!! No tasks produced"
       clear_state

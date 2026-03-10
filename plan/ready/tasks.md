@@ -24,7 +24,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Open `tokens.css` and confirm all 13 `--type-*` properties are present and map to the correct Tier 1 token.
   - **Brief ref**: Step 1 — Add font-family shorthand tokens to `tokens.css`
 
-- [ ] TASK-02: Fix hardcoded section-heading font sizes in section components
+- [x] TASK-02: Fix hardcoded section-heading font sizes in section components
   - **Goal**: Replace hardcoded `fontSize` values with the token reference so section headings are consistently 40 px and driven by the design system.
   - **Details**:
     - In `StatsSection.tsx`: change `headingStyle` `fontSize: '36px'` → `fontSize: 'var(--type-section-heading-size)'`

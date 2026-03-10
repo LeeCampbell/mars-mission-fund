@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Add font-family shorthand tokens to `tokens.css`
+- [x] TASK-01: Add font-family shorthand tokens to `tokens.css`
   - **Goal**: Define the 13 missing `--type-*` font-family CSS custom properties so component `fontFamily` declarations resolve correctly
   - **Details**: In `packages/client/src/tokens.css`, locate the Section 2.8 block (after `--font-heading` / `--font-mono` aliases). Add each token from the mapping table in the brief (e.g. `--type-hero: var(--font-display);`, `--type-body: var(--font-body);`, etc.) for all 13 entries.
   - **Files**: `packages/client/src/tokens.css`

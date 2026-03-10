@@ -93,7 +93,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/client` compiles without TypeScript errors; no references to removed fields (`fundingProgressPct`, `targetAmount` in progress section, `update.date`, `update.title`, `goal.title`) remain.
   - **Brief ref**: §6 Update client components
 
-- [ ] TASK-06: Update server tests for new type shapes and multi-query mocks
+- [x] TASK-06: Update server tests for new type shapes and multi-query mocks
   - **Goal**: Server test suite passes with updated mock data (camelCase) and mocked sequential `pool.query` calls for the detail endpoint.
   - **Details**:
     - `packages/server/src/__tests__/campaigns.test.ts`:

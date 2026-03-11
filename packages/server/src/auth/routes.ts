@@ -44,6 +44,8 @@ export function createAuthRouter(pool: Pool): Router {
         return
       }
 
+      // DEMO STUB: token is signed with JWT_SECRET env var, not a Clerk signing key.
+      // No refresh token and no expiry revocation. Production would use Clerk.
       const token = jwt.sign({ id: account.id, email: account.email, role: account.role }, secret, {
         expiresIn: '8h',
       })
@@ -65,9 +67,8 @@ export function createAuthRouter(pool: Pool): Router {
   })
 
   // POST /v1/auth/logout
-  // Deviation from L4-001 §5.2: no server-side session revocation in this demo stub.
-  // JWT is stateless; actual token discard is client-side only.
-  // Production systems should implement a token revocation blocklist (e.g. Redis).
+  // DEMO STUB: this handler is a no-op — the client discards the token locally.
+  // Production requires server-side session revocation.
   router.post('/logout', authenticate, (_req, res) => {
     res.json({ data: { message: 'Logged out' } })
   })

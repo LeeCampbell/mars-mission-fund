@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `README.md` contains a `## Demo accounts` heading, a table with three rows (Backer, Creator, Administrator), and a localStorage disclaimer sentence.
   - **Brief ref**: Approach §2 "Add demo credentials to README.md"
 
-- [ ] TASK-04: Add DEMO STUB comments to server auth middleware and routes
+- [x] TASK-04: Add DEMO STUB comments to server auth middleware and routes
   - **Goal**: Document the two largest deviations from spec (stateless JWT and no-op logout) at their source.
   - **Details**: Using the confirmed file paths from TASK-02:
     1. In `packages/server/src/middleware/auth.ts`, prepend a `// DEMO STUB:` block at the top of the middleware function explaining that it validates a stateless JWT rather than a Clerk session, and that production (L3-002) requires Clerk-managed sessions with revocation.

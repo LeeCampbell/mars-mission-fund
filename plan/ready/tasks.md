@@ -56,7 +56,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All four entries are present under "## Auth Patterns". File passes markdownlint rules (one sentence per line, asterisk emphasis).
   - **Brief ref**: Step 5 — learnings.md
 
-- [ ] TASK-07: Verify specs/README.md spec index completeness
+- [x] TASK-07: Verify specs/README.md spec index completeness
   - **Goal**: Confirm every `.md` file under `specs/` has a corresponding entry in `specs/README.md`; no changes expected but the check is required by the issue.
   - **Details**: List all `.md` files under `specs/` recursively. Cross-reference each against the entries in `specs/README.md`. Report any missing entries. No new spec files were added this milestone so the index should already be current. If a gap is found, add the missing entry; otherwise leave the file unchanged.
   - **Files**: `specs/README.md` (verify; modify only if gaps found)

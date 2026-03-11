@@ -62,6 +62,8 @@ const mockCampaign: CampaignDetail = {
       body: 'Things are going well.',
     },
   ],
+  creatorId: null,
+  reviewerId: null,
 }
 
 vi.mock('../hooks/useCampaign', () => ({
@@ -70,6 +72,16 @@ vi.mock('../hooks/useCampaign', () => ({
     isLoading: false,
     isError: false,
     error: null,
+  }),
+}))
+
+vi.mock('../context/AuthContext', () => ({
+  useAuthContext: () => ({
+    user: null,
+    token: null,
+    isAuthenticated: false,
+    login: vi.fn(),
+    logout: vi.fn(),
   }),
 }))
 

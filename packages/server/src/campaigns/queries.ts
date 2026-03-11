@@ -21,6 +21,46 @@ function randomHex(bytes: number): string {
   return randomBytes(bytes).toString('hex')
 }
 
+export interface AuditEventInput {
+  campaignId: string
+  actorId: string
+  eventType: string
+  previousState: string | null
+  newState: string
+  metadata?: Record<string, unknown>
+}
+
+export interface NotificationInput {
+  userId: string
+  campaignId?: string | null
+  type: string
+  title: string
+  message: string
+}
+
+export interface CampaignRow {
+  id: string
+  title: string
+  summary: string
+  status: string
+  category: string
+  heroImageUrl: string | null
+  goalAmount: number
+  raisedAmount: number
+  contributorCount: number
+  deadline: Date | null
+  createdAt: Date
+  slug: string
+  description: string
+  alignmentStatement: string
+  tags: string[]
+  maxFundingCapUsd: number
+  launchedAt: Date | null
+  updatedAt: Date
+  creatorId: string | null
+  reviewerId: string | null
+}
+
 export async function listCampaigns(
   pool: Pool,
   filters: ListQuery,
@@ -90,7 +130,9 @@ export async function getCampaignById(pool: Pool, id: string): Promise<CampaignD
       tags,
       max_funding_cap_usd AS "maxFundingCapUsd",
       launched_at AS "launchedAt",
-      updated_at AS "updatedAt"
+      updated_at AS "updatedAt",
+      creator_id AS "creatorId",
+      reviewer_id AS "reviewerId"
     FROM campaigns
     WHERE id = $1
   `
@@ -420,4 +462,175 @@ export async function submitCampaign(
 
   const campaign = await getCampaignById(pool, id)
   return { campaign, errors: [] }
+}
+
+const CAMPAIGN_ROW_COLUMNS = `
+  id,
+  title,
+  summary,
+  status,
+  category,
+  hero_image_url AS "heroImageUrl",
+  min_funding_target_usd AS "goalAmount",
+  current_amount_usd AS "raisedAmount",
+  contributor_count AS "contributorCount",
+  deadline,
+  created_at AS "createdAt",
+  slug,
+  description,
+  alignment_statement AS "alignmentStatement",
+  tags,
+  max_funding_cap_usd AS "maxFundingCapUsd",
+  launched_at AS "launchedAt",
+  updated_at AS "updatedAt",
+  creator_id AS "creatorId",
+  reviewer_id AS "reviewerId"
+`
+
+export async function getReviewQueue(pool: Pool): Promise<CampaignSummary[]> {
+  const sql = `
+    SELECT
+      id,
+      title,
+      summary,
+      status,
+      category,
+      hero_image_url AS "heroImageUrl",
+      min_funding_target_usd AS "goalAmount",
+      current_amount_usd AS "raisedAmount",
+      contributor_count AS "contributorCount",
+      deadline,
+      created_at AS "createdAt",
+      created_by AS "createdBy"
+    FROM campaigns
+    WHERE status = 'Submitted'
+    ORDER BY created_at ASC
+  `
+  const result = await pool.query<CampaignSummary>(sql)
+  return result.rows
+}
+
+export async function claimCampaign(
+  pool: Pool,
+  id: string,
+  reviewerId: string
+): Promise<CampaignRow | null> {
+  const sql = `
+    UPDATE campaigns
+    SET status = 'Under Review', reviewer_id = $2
+    WHERE id = $1
+    RETURNING ${CAMPAIGN_ROW_COLUMNS}
+  `
+  const result = await pool.query<CampaignRow>(sql, [id, reviewerId])
+  return result.rows[0] ?? null
+}
+
+export async function approveCampaign(
+  pool: Pool,
+  id: string,
+  reviewerId: string
+): Promise<CampaignRow | null> {
+  const sql = `
+    UPDATE campaigns
+    SET status = 'Approved'
+    WHERE id = $1 AND reviewer_id = $2
+    RETURNING ${CAMPAIGN_ROW_COLUMNS}
+  `
+  const result = await pool.query<CampaignRow>(sql, [id, reviewerId])
+  return result.rows[0] ?? null
+}
+
+export async function rejectCampaign(
+  pool: Pool,
+  id: string,
+  reviewerId: string
+): Promise<CampaignRow | null> {
+  const sql = `
+    UPDATE campaigns
+    SET status = 'Rejected'
+    WHERE id = $1 AND reviewer_id = $2
+    RETURNING ${CAMPAIGN_ROW_COLUMNS}
+  `
+  const result = await pool.query<CampaignRow>(sql, [id, reviewerId])
+  return result.rows[0] ?? null
+}
+
+export async function resubmitCampaign(
+  pool: Pool,
+  id: string,
+  creatorId: string
+): Promise<CampaignRow | null> {
+  const sql = `
+    UPDATE campaigns
+    SET status = 'Draft', reviewer_id = NULL
+    WHERE id = $1 AND creator_id = $2
+    RETURNING ${CAMPAIGN_ROW_COLUMNS}
+  `
+  const result = await pool.query<CampaignRow>(sql, [id, creatorId])
+  return result.rows[0] ?? null
+}
+
+export async function createAuditEvent(pool: Pool, event: AuditEventInput): Promise<void> {
+  const sql = `
+    INSERT INTO campaign_audit_events (campaign_id, event_type, actor_id, previous_state, new_state, metadata)
+    VALUES ($1, $2, $3, $4, $5, $6)
+  `
+  await pool.query(sql, [
+    event.campaignId,
+    event.eventType,
+    event.actorId,
+    event.previousState,
+    event.newState,
+    JSON.stringify(event.metadata ?? {}),
+  ])
+}
+
+export async function createNotification(
+  pool: Pool,
+  notification: NotificationInput
+): Promise<void> {
+  const sql = `
+    INSERT INTO notifications (user_id, campaign_id, type, title, message)
+    VALUES ($1, $2, $3, $4, $5)
+  `
+  await pool.query(sql, [
+    notification.userId,
+    notification.campaignId ?? null,
+    notification.type,
+    notification.title,
+    notification.message,
+  ])
+}
+
+export interface NotificationRow {
+  id: string
+  userId: string
+  campaignId: string | null
+  type: string
+  title: string
+  message: string
+  read: boolean
+  createdAt: Date
+}
+
+export async function getNotificationsForUser(
+  pool: Pool,
+  userId: string
+): Promise<NotificationRow[]> {
+  const sql = `
+    SELECT
+      id,
+      user_id AS "userId",
+      campaign_id AS "campaignId",
+      type,
+      title,
+      message,
+      read,
+      created_at AS "createdAt"
+    FROM notifications
+    WHERE user_id = $1
+    ORDER BY created_at DESC
+  `
+  const result = await pool.query<NotificationRow>(sql, [userId])
+  return result.rows
 }

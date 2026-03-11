@@ -105,3 +105,9 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 
 - Demo accounts use known passwords (e.g. `password123`) stored as bcrypt hashes in seed SQL.
 - These are workshop-only; never use known seed passwords in a production system.
+
+## Issue #111: Playwright browser binary missing in workspace environment
+
+- If `npm run test:e2e` fails with "Executable doesn't exist" after a Playwright version bump, run `npx playwright install chromium` to download the new browser binaries.
+- The `ci-check.sh` script does not include E2E tests — only `./scripts/e2e-check.sh` or `./scripts/e2e-check-docker.sh` run E2E tests with the full stack.
+- E2E tests require a running PostgreSQL + backend + frontend stack; Docker is the simplest way to achieve this (use `./scripts/e2e-check-docker.sh`).

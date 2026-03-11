@@ -42,3 +42,16 @@ export const ListQuerySchema = z.object({
 export type RouteParams = z.infer<typeof RouteParamsSchema>
 export type SubmitRouteParams = z.infer<typeof SubmitRouteParamsSchema>
 export type ListQuery = z.infer<typeof ListQuerySchema>
+
+export const ClaimBodySchema = z.object({})
+export const ApproveBodySchema = z.object({ notes: z.string().min(1) })
+export const RejectBodySchema = z.object({
+  rationale: z.string().min(1),
+  guidance: z.string().min(1),
+})
+export const ResubmitBodySchema = z.object({})
+
+export type ClaimBody = z.infer<typeof ClaimBodySchema>
+export type ApproveBody = z.infer<typeof ApproveBodySchema>
+export type RejectBody = z.infer<typeof RejectBodySchema>
+export type ResubmitBody = z.infer<typeof ResubmitBodySchema>

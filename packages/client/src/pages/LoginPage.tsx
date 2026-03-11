@@ -29,6 +29,12 @@ const DEMO_USERS: DemoUser[] = [
     password: 'admin-demo-pass',
     role: 'Administrator',
   },
+  {
+    name: 'Demo Reviewer',
+    email: 'reviewer@example.com',
+    password: 'reviewer-demo-pass',
+    role: 'Reviewer',
+  },
 ]
 
 const pageStyle: CSSProperties = {

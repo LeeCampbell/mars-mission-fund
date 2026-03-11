@@ -7,6 +7,8 @@ import {
   SubmitRouteParamsSchema,
   CreateCampaignRequestSchema,
   UpdateCampaignRequestSchema,
+  ApproveBodySchema,
+  RejectBodySchema,
 } from './types.js'
 import {
   listCampaigns,
@@ -15,6 +17,13 @@ import {
   updateCampaign,
   deleteCampaign,
   submitCampaign,
+  getReviewQueue,
+  claimCampaign,
+  approveCampaign,
+  rejectCampaign,
+  resubmitCampaign,
+  createAuditEvent,
+  createNotification,
 } from './queries.js'
 import { authenticate } from '../middleware/authenticate.js'
 import { requireRole } from '../middleware/requireRole.js'
@@ -260,6 +269,16 @@ export function createCampaignRouter(pool: Pool): Router {
     }
   })
 
+  // Must be registered before /:id to avoid UUID param collision
+  router.get('/review-queue', authenticate, requireRole('Reviewer'), async (_req, res, next) => {
+    try {
+      const campaigns = await getReviewQueue(pool)
+      res.json({ data: campaigns })
+    } catch (err) {
+      next(err)
+    }
+  })
+
   router.get('/:id', async (req, res, next) => {
     const parsed = RouteParamsSchema.safeParse(req.params)
     if (!parsed.success) {
@@ -282,6 +301,291 @@ export function createCampaignRouter(pool: Pool): Router {
         return next(err)
       }
       res.json({ data: campaign })
+    } catch (err) {
+      next(err)
+    }
+  })
+
+  router.post('/:id/claim', authenticate, requireRole('Reviewer'), async (req, res, next) => {
+    const parsed = RouteParamsSchema.safeParse(req.params)
+    if (!parsed.success) {
+      const err = Object.assign(new Error('Invalid campaign ID'), {
+        status: 400,
+        code: 'INVALID_CAMPAIGN_ID',
+        details: parsed.error.flatten(),
+      })
+      return next(err)
+    }
+
+    const actor = res.locals['user'] as { id: string }
+    const { id } = parsed.data
+
+    try {
+      const campaign = await getCampaignById(pool, id)
+      if (campaign === null) {
+        const err = Object.assign(new Error('Campaign not found'), {
+          status: 404,
+          code: 'CAMPAIGN_NOT_FOUND',
+          details: {},
+        })
+        return next(err)
+      }
+
+      if (campaign.status !== 'Submitted') {
+        const err = Object.assign(new Error('Invalid campaign status for this action'), {
+          status: 409,
+          code: 'INVALID_CAMPAIGN_STATUS',
+          details: {},
+        })
+        return next(err)
+      }
+
+      const previousStatus = campaign.status
+      const updated = await claimCampaign(pool, id, actor.id)
+      if (updated === null) {
+        return next(new Error('Failed to claim campaign'))
+      }
+
+      await createAuditEvent(pool, {
+        campaignId: id,
+        actorId: actor.id,
+        eventType: 'campaign.claim',
+        previousState: previousStatus,
+        newState: 'Under Review',
+      })
+
+      if (campaign.creatorId) {
+        await createNotification(pool, {
+          userId: campaign.creatorId,
+          campaignId: id,
+          type: 'campaign.claimed',
+          title: 'Campaign Under Review',
+          message: `Your campaign "${campaign.title}" is now under review.`,
+        })
+      }
+
+      res.json({ data: updated })
+    } catch (err) {
+      next(err)
+    }
+  })
+
+  router.post('/:id/approve', authenticate, requireRole('Reviewer'), async (req, res, next) => {
+    const parsedParams = RouteParamsSchema.safeParse(req.params)
+    if (!parsedParams.success) {
+      const err = Object.assign(new Error('Invalid campaign ID'), {
+        status: 400,
+        code: 'INVALID_CAMPAIGN_ID',
+        details: parsedParams.error.flatten(),
+      })
+      return next(err)
+    }
+
+    const parsedBody = ApproveBodySchema.safeParse(req.body)
+    if (!parsedBody.success) {
+      const err = Object.assign(new Error('Invalid request body'), {
+        status: 400,
+        code: 'INVALID_REQUEST_BODY',
+        details: parsedBody.error.flatten(),
+      })
+      return next(err)
+    }
+
+    const actor = res.locals['user'] as { id: string }
+    const { id } = parsedParams.data
+    const { notes } = parsedBody.data
+
+    try {
+      const campaign = await getCampaignById(pool, id)
+      if (campaign === null) {
+        const err = Object.assign(new Error('Campaign not found'), {
+          status: 404,
+          code: 'CAMPAIGN_NOT_FOUND',
+          details: {},
+        })
+        return next(err)
+      }
+
+      if (campaign.status !== 'Under Review') {
+        const err = Object.assign(new Error('Invalid campaign status for this action'), {
+          status: 409,
+          code: 'INVALID_CAMPAIGN_STATUS',
+          details: {},
+        })
+        return next(err)
+      }
+
+      if (campaign.reviewerId !== actor.id) {
+        res.status(403).json({ error: { code: 'FORBIDDEN' } })
+        return
+      }
+
+      const previousStatus = campaign.status
+      const updated = await approveCampaign(pool, id, actor.id)
+      if (updated === null) {
+        return next(new Error('Failed to approve campaign'))
+      }
+
+      await createAuditEvent(pool, {
+        campaignId: id,
+        actorId: actor.id,
+        eventType: 'campaign.approve',
+        previousState: previousStatus,
+        newState: 'Approved',
+        metadata: { notes },
+      })
+
+      if (campaign.creatorId) {
+        await createNotification(pool, {
+          userId: campaign.creatorId,
+          campaignId: id,
+          type: 'campaign.approved',
+          title: 'Campaign Approved',
+          message: `Your campaign "${campaign.title}" has been approved.`,
+        })
+      }
+
+      res.json({ data: updated })
+    } catch (err) {
+      next(err)
+    }
+  })
+
+  router.post('/:id/reject', authenticate, requireRole('Reviewer'), async (req, res, next) => {
+    const parsedParams = RouteParamsSchema.safeParse(req.params)
+    if (!parsedParams.success) {
+      const err = Object.assign(new Error('Invalid campaign ID'), {
+        status: 400,
+        code: 'INVALID_CAMPAIGN_ID',
+        details: parsedParams.error.flatten(),
+      })
+      return next(err)
+    }
+
+    const parsedBody = RejectBodySchema.safeParse(req.body)
+    if (!parsedBody.success) {
+      const err = Object.assign(new Error('Invalid request body'), {
+        status: 400,
+        code: 'INVALID_REQUEST_BODY',
+        details: parsedBody.error.flatten(),
+      })
+      return next(err)
+    }
+
+    const actor = res.locals['user'] as { id: string }
+    const { id } = parsedParams.data
+    const { rationale, guidance } = parsedBody.data
+
+    try {
+      const campaign = await getCampaignById(pool, id)
+      if (campaign === null) {
+        const err = Object.assign(new Error('Campaign not found'), {
+          status: 404,
+          code: 'CAMPAIGN_NOT_FOUND',
+          details: {},
+        })
+        return next(err)
+      }
+
+      if (campaign.status !== 'Under Review') {
+        const err = Object.assign(new Error('Invalid campaign status for this action'), {
+          status: 409,
+          code: 'INVALID_CAMPAIGN_STATUS',
+          details: {},
+        })
+        return next(err)
+      }
+
+      if (campaign.reviewerId !== actor.id) {
+        res.status(403).json({ error: { code: 'FORBIDDEN' } })
+        return
+      }
+
+      const previousStatus = campaign.status
+      const updated = await rejectCampaign(pool, id, actor.id)
+      if (updated === null) {
+        return next(new Error('Failed to reject campaign'))
+      }
+
+      await createAuditEvent(pool, {
+        campaignId: id,
+        actorId: actor.id,
+        eventType: 'campaign.reject',
+        previousState: previousStatus,
+        newState: 'Rejected',
+        metadata: { rationale, guidance },
+      })
+
+      if (campaign.creatorId) {
+        await createNotification(pool, {
+          userId: campaign.creatorId,
+          campaignId: id,
+          type: 'campaign.rejected',
+          title: 'Campaign Rejected',
+          message: `Your campaign "${campaign.title}" has been rejected. Guidance: ${guidance}`,
+        })
+      }
+
+      res.json({ data: updated })
+    } catch (err) {
+      next(err)
+    }
+  })
+
+  router.post('/:id/resubmit', authenticate, async (req, res, next) => {
+    const parsed = RouteParamsSchema.safeParse(req.params)
+    if (!parsed.success) {
+      const err = Object.assign(new Error('Invalid campaign ID'), {
+        status: 400,
+        code: 'INVALID_CAMPAIGN_ID',
+        details: parsed.error.flatten(),
+      })
+      return next(err)
+    }
+
+    const actor = res.locals['user'] as { id: string }
+    const { id } = parsed.data
+
+    try {
+      const campaign = await getCampaignById(pool, id)
+      if (campaign === null) {
+        const err = Object.assign(new Error('Campaign not found'), {
+          status: 404,
+          code: 'CAMPAIGN_NOT_FOUND',
+          details: {},
+        })
+        return next(err)
+      }
+
+      if (campaign.status !== 'Rejected') {
+        const err = Object.assign(new Error('Invalid campaign status for this action'), {
+          status: 409,
+          code: 'INVALID_CAMPAIGN_STATUS',
+          details: {},
+        })
+        return next(err)
+      }
+
+      if (campaign.creatorId !== actor.id) {
+        res.status(403).json({ error: { code: 'FORBIDDEN' } })
+        return
+      }
+
+      const previousStatus = campaign.status
+      const updated = await resubmitCampaign(pool, id, actor.id)
+      if (updated === null) {
+        return next(new Error('Failed to resubmit campaign'))
+      }
+
+      await createAuditEvent(pool, {
+        campaignId: id,
+        actorId: actor.id,
+        eventType: 'campaign.resubmit',
+        previousState: previousStatus,
+        newState: 'Draft',
+      })
+
+      res.json({ data: updated })
     } catch (err) {
       next(err)
     }

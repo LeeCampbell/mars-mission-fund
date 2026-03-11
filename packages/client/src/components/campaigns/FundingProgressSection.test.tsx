@@ -27,6 +27,8 @@ const mockCampaign: CampaignDetail = {
   stretchGoals: [],
   teamMembers: [],
   updates: [],
+  creatorId: null,
+  reviewerId: null,
 }
 
 describe('FundingProgressSection', () => {

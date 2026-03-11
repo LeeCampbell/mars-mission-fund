@@ -26,6 +26,9 @@ const ProfilePage = React.lazy(() =>
 const AdminUsersPage = React.lazy(() =>
   import('./pages/AdminUsersPage').then((m) => ({ default: m.AdminUsersPage }))
 )
+const ReviewQueuePage = React.lazy(() =>
+  import('./pages/ReviewQueuePage').then((m) => ({ default: m.ReviewQueuePage }))
+)
 
 export default function App() {
   return (
@@ -45,6 +48,9 @@ export default function App() {
             </Route>
             <Route element={<ProtectedRoute requireAdmin />}>
               <Route path="/admin/users" element={<AdminUsersPage />} />
+            </Route>
+            <Route element={<ProtectedRoute requireReviewer />}>
+              <Route path="/review-queue" element={<ReviewQueuePage />} />
             </Route>
           </Route>
         </Routes>

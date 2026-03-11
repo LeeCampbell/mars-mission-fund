@@ -11,11 +11,11 @@ services:
       timeout: 5s
       retries: 10
 
-  ci:
+  e2e:
     build:
       context: .
-      dockerfile: Dockerfile.ci
-    entrypoint: ['/app/scripts/docker-ci-entrypoint.sh']
+      dockerfile: Dockerfile.e2e
+    entrypoint: ['/app/scripts/docker-e2e-entrypoint.sh']
     depends_on:
       db:
         condition: service_healthy

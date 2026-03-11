@@ -14,7 +14,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.ci
+      dockerfile: Dockerfile.e2e
     entrypoint: ['/app/scripts/docker-app-entrypoint.sh']
     depends_on:
       db:

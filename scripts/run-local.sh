@@ -38,6 +38,9 @@ docker run --rm --network host \
   -v "$(pwd)/packages/server/db:/db" \
   ghcr.io/amacneil/dbmate up
 
+# JWT secret for local development
+export JWT_SECRET="local-dev-jwt-secret"
+
 # Start both dev servers in the background
 npm run dev:server &
 npm run dev &

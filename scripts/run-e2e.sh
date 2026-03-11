@@ -36,6 +36,9 @@ docker run --rm --network host \
   -v "$(pwd)/packages/server/db:/db" \
   ghcr.io/amacneil/dbmate up
 
+# JWT secret for local E2E testing
+export JWT_SECRET="local-dev-jwt-secret"
+
 # Start the backend dev server in the background
 npm run dev:server &
 

@@ -11,8 +11,19 @@ interface DemoUser {
 }
 
 const DEMO_USERS: DemoUser[] = [
-  { name: 'Admin', email: 'admin@example.com', password: 'password', role: 'Admin' },
-  { name: 'Alice', email: 'alice@example.com', password: 'password', role: 'User' },
+  { name: 'Demo Backer', email: 'backer@example.com', password: 'backer-demo-pass', role: 'Backer' },
+  {
+    name: 'Demo Creator',
+    email: 'creator@example.com',
+    password: 'creator-demo-pass',
+    role: 'Creator',
+  },
+  {
+    name: 'Demo Admin',
+    email: 'admin@example.com',
+    password: 'admin-demo-pass',
+    role: 'Administrator',
+  },
 ]
 
 const pageStyle: CSSProperties = {

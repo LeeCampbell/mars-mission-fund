@@ -58,7 +58,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes; routes file exports `createReviewRouter`
   - **Brief ref**: Server layer — review module
 
-- [ ] TASK-05: Notifications server module
+- [x] TASK-05: Notifications server module
   - **Goal**: Implement `/v1/notifications` endpoints (list own, mark read)
   - **Details**:
     - `notifications/types.ts`: Zod schema for `NotificationRouteParams` (`{ id: uuid }`)

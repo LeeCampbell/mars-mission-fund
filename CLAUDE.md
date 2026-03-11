@@ -25,6 +25,7 @@ Mars Mission Fund (MMF) — a crowdfunding platform. npm workspaces monorepo wit
 
 ```bash
 ./scripts/run-local.sh          # Start full local env (Docker Postgres + migrations + both dev servers)
+./scripts/run-docker.sh         # Same as above but entirely in Docker (only requires Docker)
 npm run dev                     # Frontend dev server only (port 5173)
 npm run dev:server              # Backend dev server only (port 3001)
 ```
@@ -33,6 +34,7 @@ npm run dev:server              # Backend dev server only (port 3001)
 
 ```bash
 ./scripts/ci-check.sh           # Mirrors CI pipeline locally — run this before pushing
+./scripts/e2e-check-docker.sh   # Full CI checks + E2E tests, entirely in Docker (only requires Docker)
 ```
 
 Individual checks from that script:
@@ -54,6 +56,7 @@ npm run test:coverage                     # With coverage (80% threshold enforce
 npx vitest run packages/client/src/components/Button.test.tsx  # Single test file
 npx vitest run --reporter=verbose -w packages/client            # All client tests verbose
 npm run test:e2e                          # Playwright E2E (auto-starts frontend; backend must be running)
+./scripts/e2e-check.sh                    # Full E2E flow: starts DB, backend, runs Playwright, tears down
 ```
 
 - Client tests: Vitest + Testing Library + jsdom (`packages/client/src/**/*.test.tsx`)

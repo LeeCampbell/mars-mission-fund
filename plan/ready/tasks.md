@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Create ADR-0002 (simplified audit log)
+- [x] TASK-01: Create ADR-0002 (simplified audit log)
   - **Goal**: Document the demo's simplified `audit_log` schema versus the production event-sourcing design specified in L3-006.
   - **Details**: Create `specs/adrs/0002-audit-log-simplified-approach.md` following the structure of `specs/adrs/0001-npm-workspaces-monorepo.md`. Include: Context (L3-006 full schema vs. demo simplification), Decision (minimal table: `event_type`, `actor_id`, `payload`, `campaign_id`, `milestone_id`, `created_at`; no hash chain, no `previous_state`/`new_state`, no correlation IDs), Consequences (demo demonstrates concept without production-grade immutability; divergence is explicitly documented), and Production Path (full L3-006 schema, hash chains, WAL replication, tiered archival). Reference the actual migration file `packages/server/db/migrations/20260311000004_create_audit_log.sql` and the `writeAuditEvent` helper in `packages/server/src/campaigns/queries.ts`.
   - **Files**: `specs/adrs/0002-audit-log-simplified-approach.md` (create)

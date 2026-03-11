@@ -176,7 +176,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; page renders without errors when mock data provided
   - **Brief ref**: Frontend — Pages (DashboardPage, CampaignDetailPage)
 
-- [ ] TASK-12: CampaignNewPage and CampaignEditPage
+- [x] TASK-12: CampaignNewPage and CampaignEditPage
   - **Goal**: Implement the multi-step campaign creation and edit pages
   - **Details**:
     - `CampaignNewPage.tsx` — manages `currentStep` (1–7) and a single `formData` state object accumulating all step data; renders `StepIndicator` + the current step component; "Next" / "Back" navigation between steps 1–6; on Step 7, "Save Draft" calls `createCampaign(formData)` then navigates to `/campaigns/:id/edit`; "Submit for Review" calls `createCampaign` then `submitCampaign(id)` then shows confirmation modal; handles mutation loading/error states

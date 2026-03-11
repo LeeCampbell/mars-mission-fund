@@ -127,6 +127,27 @@ export const MilestoneEvidenceSchema = z.object({
   submittedAt: z.coerce.date(),
 })
 
+export const CreateCampaignRequestSchema = z.object({
+  title: z.string().min(1).max(200),
+  category: CampaignCategorySchema,
+  summary: z.string().max(280).optional().default(''),
+  description: z.string().optional().default(''),
+  alignmentStatement: z.string().optional().default(''),
+  tags: z.array(z.string()).optional().default([]),
+  heroImageUrl: z.string().url().nullable().optional(),
+  minFundingTargetUsd: z.number().int().positive().optional(),
+  maxFundingCapUsd: z.number().int().positive().optional(),
+  deadline: z.coerce.date().nullable().optional(),
+  riskDisclosures: z.array(z.string()).optional().default([]),
+})
+
+export const UpdateCampaignRequestSchema = CreateCampaignRequestSchema.partial()
+  .omit({ category: true })
+  .extend({ category: CampaignCategorySchema.optional() })
+
+export type CreateCampaignRequest = z.infer<typeof CreateCampaignRequestSchema>
+export type UpdateCampaignRequest = z.infer<typeof UpdateCampaignRequestSchema>
+
 export type CampaignStatus = z.infer<typeof CampaignStatusSchema>
 export type CampaignCategory = z.infer<typeof CampaignCategorySchema>
 export type MilestoneStatus = z.infer<typeof MilestoneStatusSchema>

@@ -14,7 +14,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Files exist and SQL is syntactically valid; schema.sql contains `creator_id`, `risk_disclosures`, and `campaign_audit_events`
   - **Brief ref**: Section 1 — Database migrations
 
-- [ ] TASK-02: Shared schemas — CreateCampaignRequestSchema and UpdateCampaignRequestSchema
+- [x] TASK-02: Shared schemas — CreateCampaignRequestSchema and UpdateCampaignRequestSchema
   - **Goal**: Add and export two new Zod schemas and their TypeScript types to `packages/shared/src/campaign.ts`
   - **Details**: Add `CreateCampaignRequestSchema` with all fields from the brief (title, category, summary, description, alignmentStatement, tags, heroImageUrl, minFundingTargetUsd, maxFundingCapUsd, deadline, riskDisclosures). Add `UpdateCampaignRequestSchema` as a partial extension that makes `category` optional. Export both as types `CreateCampaignRequest` and `UpdateCampaignRequest`.
   - **Files**:

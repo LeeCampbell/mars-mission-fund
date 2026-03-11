@@ -165,7 +165,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; no lint errors
   - **Brief ref**: Frontend — Components (ReviewSubmitStep, CampaignUpdateForm, MilestoneEvidenceForm)
 
-- [ ] TASK-11: DashboardPage and CampaignDetailPage update
+- [x] TASK-11: DashboardPage and CampaignDetailPage update
   - **Goal**: Build the creator dashboard page and add creator-specific sections to the campaign detail page
   - **Details**:
     - `DashboardPage.tsx` — uses `useMyCampaigns`; groups campaigns by status with a `reduce`; renders a section per status group (Draft, Submitted, Approved, Live, Funded, Settlement, Completed); each campaign row shows status badge, title, deadline, quick-action buttons: "Edit" (→ `/campaigns/:id/edit`, only Draft), "Submit for Review" (calls `useSubmitCampaign`, only Draft), "View" (→ `/campaigns/:id`); "New Campaign" CTA button at top navigates to `/campaigns/new`; loading and empty states

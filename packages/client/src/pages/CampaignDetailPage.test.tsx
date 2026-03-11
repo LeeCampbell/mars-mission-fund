@@ -86,6 +86,7 @@ vi.mock('../context/AuthContext', () => ({
     login: vi.fn(),
     logout: vi.fn(),
   }),
+  useAuthContext: () => ({ user: null, token: null, isAuthenticated: false }),
 }))
 
 describe('CampaignDetailPage', () => {

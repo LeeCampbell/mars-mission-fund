@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { useCampaign } from '../hooks/useCampaign'
+import { useAuthContext } from '../context/AuthContext'
 import { Badge } from '../components/ui/Badge'
 import { Card } from '../components/ui/Card'
 import { FundingProgressSection } from '../components/campaigns/FundingProgressSection'
@@ -9,7 +10,8 @@ import { StretchGoalsSection } from '../components/campaigns/StretchGoalsSection
 import { CampaignUpdatesSection } from '../components/campaigns/CampaignUpdatesSection'
 import { TeamSection } from '../components/campaigns/TeamSection'
 import { ReviewActionsPanel } from '../components/campaigns/ReviewActionsPanel'
-import { useAuthContext } from '../context/AuthContext'
+import { CampaignUpdateForm } from '../components/campaigns/CampaignUpdateForm'
+import { MilestoneEvidenceForm } from '../components/campaigns/MilestoneEvidenceForm'
 import type { CampaignStatus } from '@mmf/shared'
 
 type BadgeVariant = 'funded' | 'active' | 'new'
@@ -253,6 +255,26 @@ export function CampaignDetailPage() {
               <div style={sectionSpacingStyle}>
                 <ReviewActionsPanel campaign={campaign} user={user} />
               </div>
+
+              {user?.role === 'Creator' &&
+                user.id === campaign.creatorId &&
+                (campaign.status === 'Live' || campaign.status === 'Funded') && (
+                  <div style={sectionSpacingStyle}>
+                    <CampaignUpdateForm campaignId={campaign.id} />
+                  </div>
+                )}
+
+              {user?.role === 'Creator' &&
+                user.id === campaign.creatorId &&
+                campaign.status === 'Settlement' && (
+                  <div style={sectionSpacingStyle}>
+                    {campaign.milestones.map((milestone) => (
+                      <div key={milestone.id} style={{ marginBottom: 'var(--space-4)' }}>
+                        <MilestoneEvidenceForm campaignId={campaign.id} milestone={milestone} />
+                      </div>
+                    ))}
+                  </div>
+                )}
             </div>
 
             {/* Sidebar */}

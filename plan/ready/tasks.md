@@ -35,7 +35,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; existing routes using `requireRole('Admin')` still work; a new test or manual inspection confirms array form works
   - **Brief ref**: §2 Server middleware
 
-- [ ] TASK-04: Server types — add review body schemas
+- [x] TASK-04: Server types — add review body schemas
   - **Goal**: Add Zod schemas for the four new request bodies
   - **Details**: In `packages/server/src/campaigns/types.ts`, add and export:
     - `ClaimBodySchema` — `z.object({})`

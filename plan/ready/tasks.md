@@ -37,7 +37,7 @@ Brief: plan/ready/brief.md
   - **Verify**: No Clerk entry remains. `jsonwebtoken` and the confirmed bcrypt package appear in the auth section. Version incremented. New changelog entry present.
   - **Brief ref**: Step 3 — tech-stack.md (L3-008)
 
-- [ ] TASK-05: Update specs/tech/architecture.md — Section 6.3 Clerk/OIDC reference
+- [x] TASK-05: Update specs/tech/architecture.md — Section 6.3 Clerk/OIDC reference
   - **Goal**: Replace the "Clerk/OIDC infrastructure" footnote in Section 6.3 with a reference to the custom JWT implementation; increment version and add changelog entry.
   - **Details**: Read the file. Locate the Section 6.3 service-identity note that references "Clerk/OIDC infrastructure" and rewrite it to describe the custom stateless JWT approach. Increment the version field and add a dated changelog row.
   - **Files**: `specs/tech/architecture.md`

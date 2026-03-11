@@ -46,40 +46,32 @@ export async function fetchReviewQueue(): Promise<CampaignSummary[]> {
   return (json.data as unknown[]).map((item) => CampaignSummarySchema.parse(item))
 }
 
-export async function claimCampaign(id: string): Promise<CampaignDetail> {
+export async function claimCampaign(id: string): Promise<void> {
   const response = await authedFetch(`/v1/campaigns/${id}/claim`, { method: 'POST' })
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
-  const json = await response.json()
-  return CampaignDetailSchema.parse((json as { data: unknown }).data)
 }
 
-export async function approveCampaign(id: string, notes: string): Promise<CampaignDetail> {
+export async function approveCampaign(id: string, notes: string): Promise<void> {
   const response = await authedFetch(`/v1/campaigns/${id}/approve`, {
     method: 'POST',
     body: JSON.stringify({ notes }),
   })
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
-  const json = await response.json()
-  return CampaignDetailSchema.parse((json as { data: unknown }).data)
 }
 
 export async function rejectCampaign(
   id: string,
   rationale: string,
   guidance: string
-): Promise<CampaignDetail> {
+): Promise<void> {
   const response = await authedFetch(`/v1/campaigns/${id}/reject`, {
     method: 'POST',
     body: JSON.stringify({ rationale, guidance }),
   })
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
-  const json = await response.json()
-  return CampaignDetailSchema.parse((json as { data: unknown }).data)
 }
 
-export async function resubmitCampaign(id: string): Promise<CampaignDetail> {
+export async function resubmitCampaign(id: string): Promise<void> {
   const response = await authedFetch(`/v1/campaigns/${id}/resubmit`, { method: 'POST' })
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
-  const json = await response.json()
-  return CampaignDetailSchema.parse((json as { data: unknown }).data)
 }

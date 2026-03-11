@@ -44,11 +44,8 @@ test.describe('Reviewer flow', () => {
     await login(page, 'reviewer@example.com', 'reviewer-demo-pass')
     await expect(page).toHaveURL('/')
 
-    // Claim the campaign first
-    await page.goto('/review-queue')
-    await expect(page.getByText(SUBMITTED_CAMPAIGN_TITLE)).toBeVisible()
-    await page.getByRole('button', { name: `Claim campaign: ${SUBMITTED_CAMPAIGN_TITLE}` }).click()
-    await expect(page).toHaveURL(`/campaigns/${SUBMITTED_CAMPAIGN_ID}`)
+    // Campaign was claimed by previous test — go straight to detail
+    await page.goto(`/campaigns/${SUBMITTED_CAMPAIGN_ID}`)
     await expect(page.getByText('Under Review')).toBeVisible()
 
     // Approve the campaign

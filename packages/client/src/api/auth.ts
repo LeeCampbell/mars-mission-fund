@@ -3,7 +3,7 @@ import type { User } from '@mmf/shared'
 
 export type { User }
 
-function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
+export function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
   const token = localStorage.getItem('token')
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',

@@ -6,21 +6,21 @@ import type {
   StretchGoal,
   TeamMember,
   CampaignUpdate,
+  CreateCampaignInput,
+  UpdateCampaignInput,
 } from '@mmf/shared'
+import { authedFetch } from './auth.js'
 
-function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
-  const token = localStorage.getItem('token')
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    ...(init.headers as Record<string, string>),
-  }
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`
-  }
-  return fetch(path, { ...init, headers })
+export type {
+  CampaignSummary,
+  CampaignDetail,
+  Milestone,
+  StretchGoal,
+  TeamMember,
+  CampaignUpdate,
+  CreateCampaignInput,
+  UpdateCampaignInput,
 }
-
-export type { CampaignSummary, CampaignDetail, Milestone, StretchGoal, TeamMember, CampaignUpdate }
 
 // Backward-compat alias — components will be updated in TASK-05
 export type Campaign = CampaignDetail
@@ -41,6 +41,13 @@ export async function fetchCampaign(id: string): Promise<CampaignDetail> {
 
 export async function fetchReviewQueue(): Promise<CampaignSummary[]> {
   const response = await authedFetch('/v1/campaigns/review-queue')
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const json = await response.json()
+  return (json.data as unknown[]).map((item) => CampaignSummarySchema.parse(item))
+}
+
+export async function fetchMyCampaigns(): Promise<CampaignSummary[]> {
+  const response = await authedFetch('/v1/campaigns/my')
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
   const json = await response.json()
   return (json.data as unknown[]).map((item) => CampaignSummarySchema.parse(item))
@@ -73,5 +80,65 @@ export async function rejectCampaign(
 
 export async function resubmitCampaign(id: string): Promise<void> {
   const response = await authedFetch(`/v1/campaigns/${id}/resubmit`, { method: 'POST' })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function createCampaign(input: CreateCampaignInput): Promise<CampaignDetail> {
+  const response = await authedFetch('/v1/campaigns', {
+    method: 'POST',
+    body: JSON.stringify(input),
+  })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const json = await response.json()
+  return CampaignDetailSchema.parse((json as { data: unknown }).data)
+}
+
+export async function updateCampaign(
+  id: string,
+  input: UpdateCampaignInput
+): Promise<CampaignDetail> {
+  const response = await authedFetch(`/v1/campaigns/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(input),
+  })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const json = await response.json()
+  return CampaignDetailSchema.parse((json as { data: unknown }).data)
+}
+
+export async function deleteCampaign(id: string): Promise<void> {
+  const response = await authedFetch(`/v1/campaigns/${id}`, { method: 'DELETE' })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function submitCampaign(id: string): Promise<CampaignDetail> {
+  const response = await authedFetch(`/v1/campaigns/${id}/submit`, { method: 'POST' })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const json = await response.json()
+  return CampaignDetailSchema.parse((json as { data: unknown }).data)
+}
+
+export async function postCampaignUpdate(id: string, body: string): Promise<CampaignUpdate> {
+  const response = await authedFetch(`/v1/campaigns/${id}/updates`, {
+    method: 'POST',
+    body: JSON.stringify({ body }),
+  })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const json = await response.json()
+  return (json as { data: CampaignUpdate }).data
+}
+
+export async function submitMilestoneEvidence(
+  campaignId: string,
+  milestoneId: string,
+  evidenceText: string
+): Promise<void> {
+  const response = await authedFetch(
+    `/v1/campaigns/${campaignId}/milestones/${milestoneId}/evidence`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ evidenceText }),
+    }
+  )
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
 }

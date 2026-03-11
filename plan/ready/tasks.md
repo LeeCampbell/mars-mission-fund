@@ -85,7 +85,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/server` passes; all new tests green
   - **Brief ref**: Tests section
 
-- [ ] TASK-06: API client functions — fetchMyCampaigns and campaign write operations
+- [x] TASK-06: API client functions — fetchMyCampaigns and campaign write operations
   - **Goal**: Add all new API client functions for campaign write operations
   - **Details**: In `packages/client/src/api/campaigns.ts` add (all using `authedFetch`):
     - `fetchMyCampaigns()` — GET `/v1/campaigns/my`

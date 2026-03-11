@@ -220,7 +220,6 @@ describe('Campaign Routes', () => {
       mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // stretch goals
       mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // team members
       mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // updates
-      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // risks
 
       const res = await request(app).get(`/v1/campaigns/${TEST_UUID}`)
 
@@ -1612,6 +1611,37 @@ describe('Campaign Write Endpoints', () => {
 
       expect(res.status).toBe(401)
       expect(res.body.error.code).toBe('UNAUTHORIZED')
+    })
+  })
+
+  describe('GET /v1/campaigns/my', () => {
+    it('returns 401 when unauthenticated', async () => {
+      const res = await request(app).get('/v1/campaigns/my')
+
+      expect(res.status).toBe(401)
+      expect(res.body.error.code).toBe('UNAUTHORIZED')
+    })
+
+    it('returns 403 when authenticated as Backer (non-Creator)', async () => {
+      const res = await request(app)
+        .get('/v1/campaigns/my')
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 200 with creator campaigns when authenticated as Creator', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockCampaignSummary], rowCount: 1 })
+
+      const res = await request(app)
+        .get('/v1/campaigns/my')
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(200)
+      expect(res.body).toHaveProperty('data')
+      expect(Array.isArray(res.body.data)).toBe(true)
+      expect(res.body.data).toHaveLength(1)
     })
   })
 })

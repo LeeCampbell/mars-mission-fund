@@ -69,7 +69,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; `npm run build` succeeds
   - **Brief ref**: Backend section — routes
 
-- [ ] TASK-05: Backend tests — cover all new endpoints
+- [x] TASK-05: Backend tests — cover all new endpoints
   - **Goal**: Add integration tests for every new endpoint
   - **Details**: In `packages/server/src/__tests__/campaigns.test.ts`, add test cases covering:
     - `GET /v1/campaigns/my` — 401 unauthenticated, 403 non-Creator, 200 returns creator's campaigns

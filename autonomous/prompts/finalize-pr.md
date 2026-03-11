@@ -23,6 +23,8 @@ If any check fails, fix the issue, commit the fix, and re-run until all pass.
 
 Verify all tasks in `plan/ready/tasks.md` are checked `[x]`.
 
+If the brief's Verification section mentions E2E flows, check that `git diff main...HEAD --name-only` includes at least one `e2e/*.spec.ts` file. If missing, add a note to the PR description: "Note: E2E tests were expected but not found."
+
 ### Step 2: Prepare PR Description
 
 Read `plan/ready/brief.md` and `plan/ready/tasks.md` to create a PR summary:

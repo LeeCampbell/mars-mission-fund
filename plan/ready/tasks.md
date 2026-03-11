@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes with 80% threshold met
   - **Brief ref**: Server tests section
 
-- [ ] TASK-10: Run full CI check and verify
+- [x] TASK-10: Run full CI check and verify
   - **Goal**: Confirm the entire implementation passes all CI checks
   - **Details**: Run `./scripts/ci-check.sh`. Fix any type errors, lint issues, or test failures. Ensure `npm run build`, `npm run lint`, `npm run format:check`, and `npm run test:coverage` all pass cleanly.
   - **Files**: (none — verification only)

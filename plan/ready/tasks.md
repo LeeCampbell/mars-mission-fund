@@ -136,7 +136,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/pages/ReviewDetailPage.test.tsx` passes
   - **Brief ref**: Frontend layer — ReviewDetailPage
 
-- [ ] TASK-11: AdminMilestonesPage + tests
+- [x] TASK-11: AdminMilestonesPage + tests
   - **Goal**: Implement the admin milestone verification page and tests
   - **Details**:
     - `AdminMilestonesPage.tsx`: uses `useSubmittedMilestones()`; renders table with columns: campaign title, milestone title, evidence URL (clickable link), evidence notes; each row has inline text input for admin notes and "Verify" button (calls `useVerifyMilestone`) and "Return" button with feedback input (calls `useReturnMilestone`); show loading/empty states

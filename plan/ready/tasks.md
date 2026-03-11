@@ -63,7 +63,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compilation succeeds. Router exports `authRouter`.
   - **Brief ref**: Auth routes, Login flow, Logout, GET /v1/auth/me sections
 
-- [ ] TASK-08: Create user queries and types
+- [x] TASK-08: Create user queries and types
   - **Goal**: Implement DB query functions and types for the users module.
   - **Details**:
     - `queries.ts`: implement `listAccounts(pool)`, `getAccountById(pool, id)`, `updateAccount(pool, id, data)`. All SELECT queries alias columns to camelCase. `updateAccount` accepts partial `{ displayName?, bio? }` and builds a safe parameterised UPDATE returning the updated row. Return `null` from `getAccountById` when not found.

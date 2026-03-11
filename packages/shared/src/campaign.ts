@@ -89,6 +89,8 @@ export const CampaignDetailSchema = CampaignSummarySchema.extend({
   maxFundingCapUsd: z.coerce.number().int(),
   launchedAt: z.coerce.date().nullable(),
   updatedAt: z.coerce.date(),
+  creatorId: z.string().uuid().nullable(),
+  reviewerId: z.string().uuid().nullable(),
   milestones: z.array(MilestoneSchema),
   stretchGoals: z.array(StretchGoalSchema),
   teamMembers: z.array(TeamMemberSchema),

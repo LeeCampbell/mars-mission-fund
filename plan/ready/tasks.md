@@ -19,7 +19,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Run `dbmate up` against a local DB and confirm `\d campaigns` shows new columns, all three new tables exist, and seed rows are present
   - **Brief ref**: §1 Database migrations
 
-- [ ] TASK-02: Shared types — extend CampaignDetailSchema
+- [x] TASK-02: Shared types — extend CampaignDetailSchema
   - **Goal**: Add `reviewerId` and `creatorId` nullable fields to the shared `CampaignDetailSchema`
   - **Details**: In `packages/shared/src/campaign.ts`, add `reviewerId: z.string().uuid().nullable()` and `creatorId: z.string().uuid().nullable()` to `CampaignDetailSchema`. Export the updated inferred TypeScript type.
   - **Files**:

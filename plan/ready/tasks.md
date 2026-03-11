@@ -129,7 +129,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test` from `packages/server/` — all users tests pass.
   - **Brief ref**: Integration tests section, users.test.ts
 
-- [ ] TASK-14: Final build and test verification
+- [x] TASK-14: Final build and test verification
   - **Goal**: Confirm the full build and test suite passes end-to-end with no TypeScript errors or lint failures.
   - **Details**: Run `npm run build` from the repo root to verify both `packages/shared` and `packages/server` compile cleanly. Run `npm run test` from `packages/server/` to confirm all tests (campaigns + auth + users) pass. Run `npm run lint` (or equivalent) and fix any lint errors introduced by new files.
   - **Files**: No new files; fix any issues found in previously created files.

@@ -101,7 +101,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes with no new errors
   - **Brief ref**: Frontend — API layer
 
-- [ ] TASK-07: React Query hooks — useMyCampaigns and useCampaignMutations
+- [x] TASK-07: React Query hooks — useMyCampaigns and useCampaignMutations
   - **Goal**: Create the data-fetching and mutation hooks for the creator workflow
   - **Details**:
     - `packages/client/src/hooks/useMyCampaigns.ts` — `useQuery` with key `['campaigns', 'my']` wrapping `fetchMyCampaigns`

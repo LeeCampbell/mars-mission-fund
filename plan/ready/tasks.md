@@ -63,7 +63,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Every `.md` file under `specs/` appears in `specs/README.md`. If no gaps, the file is unchanged and the check is recorded as passed.
   - **Brief ref**: Step 6 — README.md spec index verification
 
-- [ ] TASK-08: Run build and lint to confirm all changes are clean
+- [x] TASK-08: Run build and lint to confirm all changes are clean
   - **Goal**: Ensure `npm run build` and `npm run lint` both pass with no errors after all spec edits.
   - **Details**: Run `npm run build` from the repo root; check exit code. Run `npm run lint` from the repo root; check exit code and output for markdownlint errors in any modified spec file. Fix any lint violations found (most likely one-sentence-per-line or emphasis style) before declaring done.
   - **Files**: None (verification only; fix any modified spec file if lint fails)

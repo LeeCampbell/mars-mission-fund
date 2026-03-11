@@ -63,7 +63,7 @@ const principles = [
   {
     title: 'Accessibility',
     description:
-      'Minimum pledges start at $10. Space investment is no longer reserved for billionaires and institutions.',
+      'Minimum pledges start at $10. Space exploration funding is no longer reserved for billionaires and institutions.',
   },
   {
     title: 'Long-Term Thinking',
@@ -91,7 +91,7 @@ const personas = [
   {
     title: 'Corporate Partners',
     description:
-      'Forward-thinking companies co-investing in breakthrough technologies that align with their long-term strategic interests and ESG commitments.',
+      'Forward-thinking companies co-funding breakthrough technologies that align with their long-term strategic interests and ESG commitments.',
   },
   {
     title: 'Research Institutions',
@@ -142,7 +142,7 @@ export function AboutPage() {
               <h3 style={cardTitleStyle}>Our Solution</h3>
               <p style={cardBodyStyle}>
                 Mars Mission Fund provides patient, community-driven capital structured around
-                mission milestones rather than quarterly earnings. Backers invest in outcomes they
+                mission milestones rather than quarterly earnings. Backers fund outcomes they
                 believe in, mission teams get the runway they need, and the platform enforces
                 accountability through transparent milestone-gated fund releases. The funding gap
                 closes one mission at a time.

@@ -25,6 +25,7 @@ test.describe('Reviewer flow', () => {
 
   test('reviewer can claim a campaign and see Under Review status', async ({ page }) => {
     await login(page, 'reviewer@example.com', 'reviewer-demo-pass')
+    await expect(page).toHaveURL('/')
 
     await page.goto('/review-queue')
     await expect(page.getByText(SUBMITTED_CAMPAIGN_TITLE)).toBeVisible()
@@ -41,6 +42,7 @@ test.describe('Reviewer flow', () => {
 
   test('reviewer can approve a claimed campaign', async ({ page }) => {
     await login(page, 'reviewer@example.com', 'reviewer-demo-pass')
+    await expect(page).toHaveURL('/')
 
     // Claim the campaign first
     await page.goto('/review-queue')
@@ -80,7 +82,7 @@ test.describe('Creator flow', () => {
     await expect(page).toHaveURL('/')
 
     await page.goto(`/campaigns/${REJECTED_CAMPAIGN_ID}`)
-    await expect(page.getByText('Rejected')).toBeVisible()
+    await expect(page.getByText('Rejected', { exact: true })).toBeVisible()
 
     const reviewPanel = page.getByLabel('Review actions')
     await reviewPanel.getByRole('button', { name: 'Resubmit' }).click()

@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: DB migrations — creator_id, campaign_risks, budget/images columns
+- [x] TASK-01: DB migrations — creator_id, campaign_risks, budget/images columns
   - **Goal**: Add all new database columns and tables required by this feature
   - **Details**: Create three migration files with timestamp prefix `20260311`:
     1. `20260311000003_add_creator_to_campaigns.sql` — `ALTER TABLE campaigns ADD COLUMN creator_id uuid REFERENCES accounts(id) ON DELETE SET NULL;`

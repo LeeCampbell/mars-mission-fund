@@ -97,6 +97,19 @@ CREATE TABLE public.campaign_updates (
 
 
 --
+-- Name: campaign_risks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.campaign_risks (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    campaign_id uuid NOT NULL,
+    description text NOT NULL,
+    mitigation text NOT NULL,
+    sort_order integer DEFAULT 0
+);
+
+
+--
 -- Name: campaigns; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -121,7 +134,9 @@ CREATE TABLE public.campaigns (
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     creator_id uuid,
     risk_disclosures text[] DEFAULT '{}'::text[] NOT NULL,
-    cancellation_requested_at timestamp with time zone
+    cancellation_requested_at timestamp with time zone,
+    budget_breakdown text,
+    additional_image_urls text[] DEFAULT '{}'::text[]
 );
 
 
@@ -262,6 +277,14 @@ ALTER TABLE ONLY public.campaign_audit_events
 
 
 --
+-- Name: campaign_risks campaign_risks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.campaign_risks
+    ADD CONSTRAINT campaign_risks_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: campaigns campaigns_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -299,6 +322,14 @@ ALTER TABLE ONLY public.campaign_audit_events
 
 ALTER TABLE ONLY public.campaign_audit_events
     ADD CONSTRAINT campaign_audit_events_campaign_id_fkey FOREIGN KEY (campaign_id) REFERENCES public.campaigns(id) ON DELETE CASCADE;
+
+
+--
+-- Name: campaign_risks campaign_risks_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.campaign_risks
+    ADD CONSTRAINT campaign_risks_campaign_id_fkey FOREIGN KEY (campaign_id) REFERENCES public.campaigns(id) ON DELETE CASCADE;
 
 
 --
@@ -384,4 +415,6 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20260311000013'),
     ('20260311000014'),
     ('20260311000015'),
-    ('20260311000016');
+    ('20260311000016'),
+    ('20260311000017'),
+    ('20260311000018');

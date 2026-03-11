@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The ADR-0002 filename/path appears in `specs/tech/audit.md`; `npm run lint:md` passes.
   - **Brief ref**: Approach §2 — Update L3-006
 
-- [ ] TASK-03: Add "Demo Stub" callouts to payments.md and kyc.md
+- [x] TASK-03: Add "Demo Stub" callouts to payments.md and kyc.md
   - **Goal**: Make the demo scope explicit in L4-004 and L4-005 so readers know what is stubbed and what a production implementation requires.
   - **Details**: Read both `specs/domain/payments.md` and `specs/domain/kyc.md`. Near the top of each file (after any front-matter or opening heading), add a clearly labelled "Demo Stub" callout block (matching the "Local demo scope" style used elsewhere). **payments.md**: contributions are recorded as `current_amount_usd` and `contributor_count` increments on the `campaigns` table; no Stripe gateway, no escrow, no tokenisation, no PCI DSS processing; settlement workflow is state transitions only; production requires Stripe Connect + escrow. **kyc.md**: creator KYC status is a field in `accounts` table, not a live verification; no external KYC provider called; reviewer/admin can manually set status; production requires a real KYC provider (e.g., Onfido, Persona) with webhook callbacks. Follow one-sentence-per-line and `*emphasis*` rules.
   - **Files**: `specs/domain/payments.md` (modify), `specs/domain/kyc.md` (modify)

@@ -12,6 +12,11 @@
 ## 1. Purpose
 
 > **Local demo scope**: The KYC verification status lifecycle and its gating effect on Creator role features are **real** — the local demo enforces KYC status checks. The actual KYC provider is **stubbed** (no real document verification). Sanctions screening, manual review workflows, document storage encryption, re-verification triggers, and jurisdictional requirements are theatre. The local demo auto-approves KYC submissions.
+>
+> **Demo Stub**: In the local demo, creator KYC status is a field on the `accounts` table — it is *not* verified by a live external provider.
+> No calls are made to a third-party KYC service during the demo.
+> A reviewer or admin can manually set the KYC status field to simulate approval or rejection.
+> Production requires integration with a real KYC provider (e.g., Onfido or Persona) including webhook callbacks for asynchronous verification results.
 
 This spec governs identity verification for Mars Mission Fund: KYC document upload, automated verification checks, sanctions screening, manual review workflows, verification status lifecycle, re-verification triggers, jurisdictional requirements, and data retention rules specific to identity documents.
 

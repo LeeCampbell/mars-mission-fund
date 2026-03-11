@@ -12,6 +12,11 @@
 ## 1. Purpose
 
 > **Local demo scope**: The payment gateway abstraction layer, contribution state machine, and escrow ledger design are **real** — they demonstrate the architectural pattern in the local demo. The actual payment gateway is **stubbed** (no real money moves). Multi-approval disbursement workflow, daily reconciliation, and refund processing are theatre. The local demo simulates payment success/failure without a live gateway.
+>
+> **Demo Stub**: In the local demo, contributions are recorded as increments to `current_amount_usd` and `contributor_count` on the `campaigns` table.
+> No Stripe gateway is connected, no real escrow account exists, no card tokenisation occurs, and no PCI DSS card data processing takes place.
+> The settlement workflow is implemented as state transitions only — no funds move.
+> Production requires Stripe Connect for marketplace fund flows, a real escrow ledger, and full PCI DSS compliance via Stripe Elements tokenisation.
 
 This spec governs all payment processing within Mars Mission Fund: how money enters the platform (contributions), how it is held (escrow), how it is released (milestone disbursement), and how it is returned (refunds).
 

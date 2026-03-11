@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles (`npx tsc --noEmit -p packages/server/tsconfig.json`). Existing tests still pass (`npm run test`).
   - **Brief ref**: Middleware
 
-- [ ] TASK-04: Add Zod schemas for new route params and request bodies
+- [x] TASK-04: Add Zod schemas for new route params and request bodies
   - **Goal**: Add `MilestoneRouteParamsSchema`, `SubmitEvidenceBodySchema`, and `ReturnMilestoneBodySchema` to the server types file
   - **Details**: In `packages/server/src/campaigns/types.ts`, add: `MilestoneRouteParamsSchema` validating `{ id: uuid, mid: uuid }`; `SubmitEvidenceBodySchema` with `evidenceDescription: z.string().min(1)` and `evidenceUrl: z.string().url().optional()`; `ReturnMilestoneBodySchema` with `feedback: z.string().min(1)`. Export all three.
   - **Files**: `packages/server/src/campaigns/types.ts`

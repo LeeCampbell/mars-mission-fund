@@ -2,8 +2,8 @@
 set -euo pipefail
 
 # Start an interactive planning session for a milestone.
-# The agent follows PLAN.prompt.md — Socratic elicitation, BRIEF.md,
-# task files, GitHub Milestone and Issues. No code is written.
+# The agent follows PLAN.md — Socratic elicitation, BRIEF.md,
+# GitHub Milestone and Issues. No code is written.
 #
 # Usage:
 #   ./scripts/plan.sh
@@ -17,4 +17,11 @@ if [ -n "$REQUEST" ]; then
 else
   echo "Follow ./scripts/PLAN.md" \
     | claude 2>&1
+fi
+
+# Clean up local planning files — agents check out origin/main fresh
+# and never see these, so they just clutter the host working tree.
+if [ -d plan ]; then
+  rm -rf plan
+  echo "Cleaned up plan/ directory."
 fi

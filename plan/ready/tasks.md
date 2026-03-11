@@ -48,7 +48,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` succeeds
   - **Brief ref**: §3 Server types
 
-- [ ] TASK-05: Server queries — review queue, state transitions, audit, notifications
+- [x] TASK-05: Server queries — review queue, state transitions, audit, notifications
   - **Goal**: Add all new DB query functions to `queries.ts`
   - **Details**: In `packages/server/src/campaigns/queries.ts`, add parameterised query functions:
     - `getReviewQueue(pool)` — SELECT campaigns WHERE status = 'Submitted' ORDER BY created_at ASC

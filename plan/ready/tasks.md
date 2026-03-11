@@ -125,7 +125,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/pages/ReviewQueuePage.test.tsx` passes
   - **Brief ref**: Frontend layer — ReviewQueuePage
 
-- [ ] TASK-10: ReviewDetailPage + tests
+- [x] TASK-10: ReviewDetailPage + tests
   - **Goal**: Implement the campaign review detail page (approve/reject forms) and tests
   - **Details**:
     - `ReviewDetailPage.tsx`: uses existing `useCampaign(id)` hook; displays full campaign detail; Approve panel: textarea for notes + submit button calling `useApproveCampaign()`; Reject panel: textarea for rationale + textarea for guidance + submit calling `useRejectCampaign()`; redirect to `/review` if not Reviewer role (use `useAuth`)

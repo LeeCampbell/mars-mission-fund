@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component renders without TypeScript errors; edit form calls mutation correctly
   - **Brief ref**: §Pages — ProfilePage
 
-- [ ] TASK-08: Create `AdminUsersPage`
+- [x] TASK-08: Create `AdminUsersPage`
   - **Goal**: Admin-only page listing all users with role badges
   - **Details**: Create `packages/client/src/pages/AdminUsersPage.tsx`. Use `useUsers()` hook. Render a list or table with columns: email, display name, roles (as `<Badge>` components). Follow loading/error pattern from `CampaignDetailPage`. No edit functionality needed.
   - **Files**: `packages/client/src/pages/AdminUsersPage.tsx` (create)

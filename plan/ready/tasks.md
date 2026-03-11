@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Database migrations — columns, audit, notifications, seed
+- [x] TASK-01: Database migrations — columns, audit, notifications, seed
   - **Goal**: Create all four migration files to extend the schema and seed demo data
   - **Details**:
     - `20260311000003_add_creator_reviewer_to_campaigns.sql`: add `creator_id` and `reviewer_id` (nullable UUID FKs to accounts) to `campaigns`; backfill `creator_id` for existing rows to `22222222-2222-2222-2222-222222222222`

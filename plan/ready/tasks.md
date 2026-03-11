@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: No TypeScript errors; context exports `AuthProvider`, `useAuthContext`
   - **Brief ref**: §AuthContext
 
-- [ ] TASK-04: Create TanStack Query auth hooks (`useAuth.ts`, `useUsers.ts`)
+- [x] TASK-04: Create TanStack Query auth hooks (`useAuth.ts`, `useUsers.ts`)
   - **Goal**: Wrap API calls in TanStack Query v5 mutations/queries for UI consumption
   - **Details**: `packages/client/src/hooks/useAuth.ts` — `useCurrentUser()`: `useQuery({ queryKey: ['currentUser'], queryFn: fetchCurrentUser, enabled: !!token })`; `useLogin()`: `useMutation` on `loginUser`, `onSuccess` stores token in `localStorage`, calls `authContext.login()`, invalidates `['currentUser']`; `useLogout()`: `useMutation` on `logoutUser`, `onSuccess` removes token from `localStorage`, calls `authContext.logout()`, resets query cache; `useUpdateProfile()`: `useMutation` on `updateProfile`, `onSuccess` invalidates `['currentUser']`. `packages/client/src/hooks/useUsers.ts` — `useUsers()`: `useQuery({ queryKey: ['users'], queryFn: fetchUsers })`.
   - **Files**: `packages/client/src/hooks/useAuth.ts` (create), `packages/client/src/hooks/useUsers.ts` (create)

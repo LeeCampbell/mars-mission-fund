@@ -22,7 +22,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/shared` succeeds; types are exported
   - **Brief ref**: Section 2 — Shared schemas
 
-- [ ] TASK-03: Server types — extend ListQuerySchema and import new schemas
+- [x] TASK-03: Server types — extend ListQuerySchema and import new schemas
   - **Goal**: Update `packages/server/src/campaigns/types.ts` to import new shared schemas and extend the list query
   - **Details**: Import and re-export `CreateCampaignRequestSchema` and `UpdateCampaignRequestSchema` from `@mmf/shared`. Add `SubmitRouteParamsSchema` (same shape as `RouteParamsSchema`). Extend `ListQuerySchema` with `createdBy: z.literal('me').optional()`.
   - **Files**:

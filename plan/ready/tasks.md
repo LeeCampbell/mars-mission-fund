@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm ls bcryptjs jsonwebtoken` from `packages/server/` shows both packages installed without errors.
   - **Brief ref**: Dependencies section
 
-- [ ] TASK-02: Create accounts DB migration
+- [x] TASK-02: Create accounts DB migration
   - **Goal**: Add the `accounts` table migration file.
   - **Details**: Create `packages/server/db/migrations/20260311000001_create_accounts.sql` with the exact SQL from the brief (migrate:up / migrate:down blocks). Include a comment noting that multi-role support and account state machine are out of scope for this demo stub.
   - **Files**: `packages/server/db/migrations/20260311000001_create_accounts.sql`

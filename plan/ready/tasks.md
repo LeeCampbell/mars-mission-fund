@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Create migration — add campaign lifecycle fields
+- [x] TASK-01: Create migration — add campaign lifecycle fields
   - **Goal**: Add `created_by`, `reviewer_id`, `rejection_rationale`, `approval_notes`, and `submitted_at` columns to the `campaigns` table
   - **Details**: Create `packages/server/db/migrations/20260311000003_add_campaign_lifecycle_fields.sql` with `ALTER TABLE campaigns ADD COLUMN` statements. All columns nullable. `created_by` and `reviewer_id` reference `accounts(id)`.
   - **Files**: `packages/server/db/migrations/20260311000003_add_campaign_lifecycle_fields.sql`

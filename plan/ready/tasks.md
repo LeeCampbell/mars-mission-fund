@@ -118,7 +118,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; no lint errors
   - **Brief ref**: Frontend — Hooks
 
-- [ ] TASK-08: ProtectedRoute, App.tsx routes, Layout.tsx titles
+- [x] TASK-08: ProtectedRoute, App.tsx routes, Layout.tsx titles
   - **Goal**: Extend routing infrastructure to support creator-only routes
   - **Details**:
     - `ProtectedRoute.tsx` — add optional `requireCreator?: boolean` prop; if true and `user.role !== 'Creator'`, redirect to `/`

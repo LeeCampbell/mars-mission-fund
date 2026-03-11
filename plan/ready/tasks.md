@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component renders without errors; form state management works correctly
   - **Brief ref**: §Pages — LoginPage
 
-- [ ] TASK-07: Create `ProfilePage`
+- [x] TASK-07: Create `ProfilePage`
   - **Goal**: Authenticated profile view/edit page
   - **Details**: Create `packages/client/src/pages/ProfilePage.tsx`. Read current user from `useAuthContext()`. Read-only display: email, roles (rendered as `<Badge>` components matching existing badge variants). Inline edit form for display name and bio fields; on submit call `useUpdateProfile()`; show success/error feedback. Wrap with loading/error states following the `CampaignDetailPage` pattern.
   - **Files**: `packages/client/src/pages/ProfilePage.tsx` (create)

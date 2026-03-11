@@ -64,6 +64,7 @@ test.describe('Reviewer flow', () => {
 test.describe('Creator flow', () => {
   test('creator sees Resubmit button on a rejected campaign', async ({ page }) => {
     await login(page, 'creator@example.com', 'creator-demo-pass')
+    await expect(page).toHaveURL('/')
 
     await page.goto(`/campaigns/${REJECTED_CAMPAIGN_ID}`)
     await expect(page.getByRole('heading', { level: 1 })).toContainText(REJECTED_CAMPAIGN_TITLE)
@@ -76,6 +77,7 @@ test.describe('Creator flow', () => {
 
   test('creator can resubmit a rejected campaign', async ({ page }) => {
     await login(page, 'creator@example.com', 'creator-demo-pass')
+    await expect(page).toHaveURL('/')
 
     await page.goto(`/campaigns/${REJECTED_CAMPAIGN_ID}`)
     await expect(page.getByText('Rejected')).toBeVisible()

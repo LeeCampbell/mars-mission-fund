@@ -500,7 +500,8 @@ export async function getReviewQueue(pool: Pool): Promise<CampaignSummary[]> {
       current_amount_usd AS "raisedAmount",
       contributor_count AS "contributorCount",
       deadline,
-      created_at AS "createdAt"
+      created_at AS "createdAt",
+      created_by AS "createdBy"
     FROM campaigns
     WHERE status = 'Submitted'
     ORDER BY created_at ASC

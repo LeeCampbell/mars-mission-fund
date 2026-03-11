@@ -90,7 +90,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; `GET /v1/notifications` with a valid JWT returns 200
   - **Brief ref**: §5 Server routes (notifications sub-section)
 
-- [ ] TASK-08: Server integration tests for review endpoints
+- [x] TASK-08: Server integration tests for review endpoints
   - **Goal**: Full integration-test coverage for all five review action endpoints and the notifications endpoint
   - **Details**: Create `packages/server/src/__tests__/campaigns.review.test.ts` following patterns in `campaigns.test.ts` (createApp + supertest + mockQuery). Cover:
     - `GET /review-queue`: 200 list; 401; 403 wrong role

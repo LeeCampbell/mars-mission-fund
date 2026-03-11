@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import { Layout } from './components/Layout'
+import { ProtectedRoute } from './components/ProtectedRoute'
 import { HomePage } from './pages/HomePage'
 import { AboutPage } from './pages/AboutPage'
 import { ContactPage } from './pages/ContactPage'
@@ -16,6 +17,15 @@ const ContributePlaceholderPage = React.lazy(() =>
     default: m.ContributePlaceholderPage,
   }))
 )
+const LoginPage = React.lazy(() =>
+  import('./pages/LoginPage').then((m) => ({ default: m.LoginPage }))
+)
+const ProfilePage = React.lazy(() =>
+  import('./pages/ProfilePage').then((m) => ({ default: m.ProfilePage }))
+)
+const AdminUsersPage = React.lazy(() =>
+  import('./pages/AdminUsersPage').then((m) => ({ default: m.AdminUsersPage }))
+)
 
 export default function App() {
   return (
@@ -29,6 +39,13 @@ export default function App() {
             <Route path="/campaigns" element={<CampaignsPage />} />
             <Route path="/campaigns/:id" element={<CampaignDetailPage />} />
             <Route path="/contribute/:id" element={<ContributePlaceholderPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/profile" element={<ProfilePage />} />
+            </Route>
+            <Route element={<ProtectedRoute requireAdmin />}>
+              <Route path="/admin/users" element={<AdminUsersPage />} />
+            </Route>
           </Route>
         </Routes>
       </Suspense>

@@ -13,6 +13,9 @@ const routeTitles: Record<string, string> = {
   '/about': 'About — Mars Mission Fund',
   '/campaigns': 'Explore Missions — Mars Mission Fund',
   '/contact': 'Contact — Mars Mission Fund',
+  '/login': 'Log In — Mars Mission Fund',
+  '/profile': 'Profile — Mars Mission Fund',
+  '/admin/users': 'Users — Mars Mission Fund',
 }
 
 export function Layout() {

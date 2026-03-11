@@ -58,6 +58,7 @@ How to verify the implementation is correct:
 - Build: `npm run build` succeeds
 - Visual: what to check in the browser at `http://localhost:5173`
 - Tests: any specific test commands
+- E2E: user flows that should have Playwright E2E tests (e.g. "navigate to /campaigns, click a card, see detail page")
 ```
 
 ### Step 3: Self-Review

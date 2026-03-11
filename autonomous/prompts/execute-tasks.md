@@ -43,11 +43,24 @@ Follow project standards:
 - **Accessibility**: Semantic HTML, focus-visible states, `prefers-reduced-motion` support
 - **File structure**: Follow component architecture from specs
 
+### E2E Test Writing Guide
+
+When the current task is an E2E test task, follow these guidelines:
+
+- **Read first**: Read `e2e/auth.spec.ts` and `e2e/campaigns.spec.ts` as canonical examples before writing any E2E tests
+- **Structure**: Import from `@playwright/test`, use `test.describe` blocks, name files `e2e/<feature>.spec.ts`
+- **Locators**: Use `getByRole`, `getByLabel`, `getByText` (accessibility-first, matching existing patterns)
+- **Coverage**: Include both happy-path and error-state tests. Use `page.route()` for error simulation
+- **Authentication**: If tests need login, define a local `login()` helper following the pattern in `auth.spec.ts`
+- **Do NOT use Playwright MCP** for E2E test authoring — write standard Playwright Test code
+
 ### Step 4: Verify
 
 Run `./scripts/ci-check.sh` before committing. Every check must pass.
 
 If any check fails, fix the issue and re-run until all pass.
+
+If the task created or modified files in `e2e/`, also run `npm run test:e2e` to verify E2E tests pass.
 
 **Visual verification**: If the task involves UI changes:
 

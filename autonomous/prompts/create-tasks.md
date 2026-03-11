@@ -52,6 +52,18 @@ Brief: plan/ready/brief.md
 - **Verification**: Every task must have a concrete verification step (build, visual check, test)
 - **No gaps**: The complete checklist should fully implement the brief — nothing missing
 - **Human-only actions**: Do NOT create tasks for closing issues, closing milestones, or merging PRs. These are handled by humans outside the agent workflow. If the issue's only deliverables are human actions, create a single task that comments on the issue listing the actions the human needs to perform.
+- **E2E tests**: If the brief's Verification section includes E2E flows, include a dedicated E2E test task near the end of the checklist (before any final cleanup task). Template:
+
+  ```text
+  - [ ] TASK-NN: Write E2E tests
+    - **Goal**: Create Playwright E2E tests covering the user flows described in the brief
+    - **Details**: Create or update files in `e2e/`. Follow patterns in existing tests (`e2e/auth.spec.ts`, `e2e/campaigns.spec.ts`). Use Playwright Test API. Tests must pass against the running local stack.
+    - **Files**: `e2e/<feature>.spec.ts`
+    - **Verify**: Run `npm run test:e2e` — all tests pass (existing + new)
+    - **Brief ref**: Verification section
+  ```
+
+  For backend-only issues with no UI flows, omit this task.
 
 ## Output Format
 

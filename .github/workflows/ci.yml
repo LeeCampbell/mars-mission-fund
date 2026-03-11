@@ -59,6 +59,7 @@ jobs:
         run: npm run test:coverage
 
       - name: Run DB migrations
+        if: github.event_name == 'push' || github.event.pull_request.draft == false
         env:
           DATABASE_URL: postgres://mmf:mmf@localhost:5432/mmf_test?sslmode=disable
         run: >
@@ -68,9 +69,11 @@ jobs:
           ghcr.io/amacneil/dbmate up
 
       - name: Install Playwright browsers
+        if: github.event_name == 'push' || github.event.pull_request.draft == false
         run: npx playwright install --with-deps chromium
 
       - name: Start server
+        if: github.event_name == 'push' || github.event.pull_request.draft == false
         env:
           DATABASE_URL: postgres://mmf:mmf@localhost:5432/mmf_test?sslmode=disable
           JWT_SECRET: test-jwt-secret
@@ -78,6 +81,7 @@ jobs:
         run: npm run dev:server &
 
       - name: E2E tests
+        if: github.event_name == 'push' || github.event.pull_request.draft == false
         env:
           DATABASE_URL: postgres://mmf:mmf@localhost:5432/mmf_test?sslmode=disable
         run: npm run test:e2e

@@ -71,6 +71,7 @@ Read the CI failure logs provided below to identify the root cause. Common failu
 - **Format errors**: Prettier violations — run `npm run format`
 - **Test failures**: Failing tests — fix the code or tests
 - **Build errors**: Build step failures — fix the build issue
+- **E2E test failures**: Playwright tests failed — read the output to identify which test and why. Common causes: selector changes (UI updated but tests reference old selectors), timing issues (add proper waits), or missing test data. Fix the E2E test or the underlying code.
 
 #### Step 2: Reproduce locally
 

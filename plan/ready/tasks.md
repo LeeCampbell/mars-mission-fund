@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: DB migrations — schema additions (003–005)
+- [x] TASK-01: DB migrations — schema additions (003–005)
   - **Goal**: Add all new columns and tables required by the review/admin/notification feature
   - **Details**:
     - `20260311000003_add_campaign_owner_and_review_fields.sql`: add `creator_id UUID REFERENCES accounts(id)`, `reviewer_id UUID REFERENCES accounts(id)`, `review_notes TEXT`, `rejection_rationale TEXT`, `rejection_guidance TEXT`, `reviewed_at TIMESTAMPTZ`, `cancellation_requested_at TIMESTAMPTZ`, `cancellation_reason TEXT` to `campaigns` (all nullable)

@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Add reviewer seed migration
+- [x] TASK-01: Add reviewer seed migration
   - **Goal**: Create a DB seed migration that inserts the `reviewer@example.com` demo account
   - **Details**: Create `packages/server/db/migrations/20260311000003_seed_reviewer.sql` with an INSERT for UUID `44444444-4444-4444-4444-444444444444`, email `reviewer@example.com`, bcrypt hash of `reviewer-demo-pass`, and role `Reviewer`. Follow the pattern of existing seed migrations in the same directory.
   - **Files**: `packages/server/db/migrations/20260311000003_seed_reviewer.sql`

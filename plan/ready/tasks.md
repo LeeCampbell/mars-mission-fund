@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Add shared `User` Zod schema and type
+- [x] TASK-01: Add shared `User` Zod schema and type
   - **Goal**: Define the `User` type in shared so all packages can import it
   - **Details**: Create `packages/shared/src/account.ts` with `UserSchema` (id, email, displayName, bio, roles). Add `export * from './account.js'` to `packages/shared/src/index.ts`.
   - **Files**: `packages/shared/src/account.ts` (create), `packages/shared/src/index.ts` (modify)

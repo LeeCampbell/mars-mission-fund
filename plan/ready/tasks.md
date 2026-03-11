@@ -73,7 +73,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript passes; `createNotificationsRouter` exported
   - **Brief ref**: Server layer — notifications module
 
-- [ ] TASK-06: Admin server module
+- [x] TASK-06: Admin server module
   - **Goal**: Implement `/v1/admin` endpoints for milestone verification and cancellation approval
   - **Details**:
     - `admin/types.ts`: Zod schemas — `VerifyBody` (`{ notes: string }`), `ReturnBody` (`{ feedback: string }`), `CancellationRouteParams` (`{ id: uuid }`), `MilestoneRouteParams` (`{ id: uuid }`)

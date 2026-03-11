@@ -3,6 +3,7 @@ import { Pool } from 'pg'
 import {
   CampaignSummary,
   CampaignDetail,
+  CampaignStatus,
   ListQuery,
   CreateCampaignRequest,
   UpdateCampaignRequest,
@@ -59,6 +60,37 @@ export interface CampaignRow {
   updatedAt: Date
   creatorId: string | null
   reviewerId: string | null
+}
+
+export interface CampaignStateRow {
+  id: string
+  status: CampaignStatus
+  creatorId: string | null
+  currentAmountUsd: number
+  minFundingTargetUsd: number
+  maxFundingCapUsd: number
+  contributorCount: number
+  deadline: Date | null
+  cancellationRequestedAt: Date | null
+  launchedAt: Date | null
+}
+
+export interface LaunchResult {
+  id: string
+  status: CampaignStatus
+  launchedAt: Date
+}
+
+export interface PostUpdateResult {
+  id: string
+  body: string
+  postedAt: Date
+}
+
+export interface ContributeResult {
+  currentAmountUsd: number
+  contributorCount: number
+  status: CampaignStatus
 }
 
 export async function listCampaigns(
@@ -633,4 +665,144 @@ export async function getNotificationsForUser(
   `
   const result = await pool.query<NotificationRow>(sql, [userId])
   return result.rows
+}
+
+export async function getCampaignState(pool: Pool, id: string): Promise<CampaignStateRow | null> {
+  const result = await pool.query<CampaignStateRow>(
+    `SELECT
+      id,
+      status,
+      creator_id AS "creatorId",
+      current_amount_usd AS "currentAmountUsd",
+      min_funding_target_usd AS "minFundingTargetUsd",
+      max_funding_cap_usd AS "maxFundingCapUsd",
+      contributor_count AS "contributorCount",
+      deadline,
+      cancellation_requested_at AS "cancellationRequestedAt",
+      launched_at AS "launchedAt"
+    FROM campaigns
+    WHERE id = $1`,
+    [id]
+  )
+  return result.rowCount === 0 ? null : (result.rows[0] ?? null)
+}
+
+export async function launchCampaign(pool: Pool, id: string): Promise<LaunchResult> {
+  const result = await pool.query<LaunchResult>(
+    `UPDATE campaigns
+     SET status = 'Live', launched_at = NOW(), updated_at = NOW()
+     WHERE id = $1
+     RETURNING id, status, launched_at AS "launchedAt"`,
+    [id]
+  )
+  return result.rows[0]!
+}
+
+export async function postCampaignUpdate(
+  pool: Pool,
+  campaignId: string,
+  body: string
+): Promise<PostUpdateResult> {
+  const result = await pool.query<PostUpdateResult>(
+    `INSERT INTO campaign_updates (campaign_id, body)
+     VALUES ($1, $2)
+     RETURNING id, body, posted_at AS "postedAt"`,
+    [campaignId, body]
+  )
+  return result.rows[0]!
+}
+
+export async function recordContribution(
+  pool: Pool,
+  id: string,
+  amountUsd: number,
+  minFundingTargetUsd: number
+): Promise<ContributeResult> {
+  const result = await pool.query<ContributeResult>(
+    `UPDATE campaigns
+     SET
+       current_amount_usd = current_amount_usd + $2,
+       contributor_count = contributor_count + 1,
+       status = CASE WHEN status = 'Live' AND (current_amount_usd + $2) >= $3 THEN 'Funded' ELSE status END,
+       updated_at = NOW()
+     WHERE id = $1
+     RETURNING
+       current_amount_usd AS "currentAmountUsd",
+       contributor_count AS "contributorCount",
+       status`,
+    [id, amountUsd, minFundingTargetUsd]
+  )
+  return result.rows[0]!
+}
+
+export async function cancelCampaign(pool: Pool, id: string): Promise<CampaignStateRow> {
+  const result = await pool.query<CampaignStateRow>(
+    `UPDATE campaigns
+     SET status = 'Cancelled', updated_at = NOW()
+     WHERE id = $1
+     RETURNING
+       id, status, creator_id AS "creatorId",
+       current_amount_usd AS "currentAmountUsd",
+       min_funding_target_usd AS "minFundingTargetUsd",
+       max_funding_cap_usd AS "maxFundingCapUsd",
+       contributor_count AS "contributorCount",
+       deadline, cancellation_requested_at AS "cancellationRequestedAt",
+       launched_at AS "launchedAt"`,
+    [id]
+  )
+  return result.rows[0]!
+}
+
+export async function requestCancellation(pool: Pool, id: string): Promise<CampaignStateRow> {
+  const result = await pool.query<CampaignStateRow>(
+    `UPDATE campaigns
+     SET cancellation_requested_at = NOW(), updated_at = NOW()
+     WHERE id = $1
+     RETURNING
+       id, status, creator_id AS "creatorId",
+       current_amount_usd AS "currentAmountUsd",
+       min_funding_target_usd AS "minFundingTargetUsd",
+       max_funding_cap_usd AS "maxFundingCapUsd",
+       contributor_count AS "contributorCount",
+       deadline, cancellation_requested_at AS "cancellationRequestedAt",
+       launched_at AS "launchedAt"`,
+    [id]
+  )
+  return result.rows[0]!
+}
+
+export async function approveCancellation(pool: Pool, id: string): Promise<CampaignStateRow> {
+  const result = await pool.query<CampaignStateRow>(
+    `UPDATE campaigns
+     SET status = 'Cancelled', cancellation_requested_at = NULL, updated_at = NOW()
+     WHERE id = $1
+     RETURNING
+       id, status, creator_id AS "creatorId",
+       current_amount_usd AS "currentAmountUsd",
+       min_funding_target_usd AS "minFundingTargetUsd",
+       max_funding_cap_usd AS "maxFundingCapUsd",
+       contributor_count AS "contributorCount",
+       deadline, cancellation_requested_at AS "cancellationRequestedAt",
+       launched_at AS "launchedAt"`,
+    [id]
+  )
+  return result.rows[0]!
+}
+
+export async function enforceDeadline(pool: Pool, id: string): Promise<CampaignStateRow> {
+  const result = await pool.query<CampaignStateRow>(
+    `UPDATE campaigns
+     SET status = 'Failed', updated_at = NOW()
+     WHERE id = $1
+     RETURNING
+       id, status, creator_id AS "creatorId",
+       current_amount_usd AS "currentAmountUsd",
+       min_funding_target_usd AS "minFundingTargetUsd",
+       max_funding_cap_usd AS "maxFundingCapUsd",
+       contributor_count AS "contributorCount",
+       deadline, cancellation_requested_at AS "cancellationRequestedAt",
+       launched_at AS "launchedAt"`,
+    [id]
+  )
+  return result.rows[0]!
 }

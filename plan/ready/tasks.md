@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Both files contain a "Demo Stub" section; `npm run lint:md` passes.
   - **Brief ref**: Approach §3 — Update L4-004 and L4-005
 
-- [ ] TASK-04: Append "Campaign Lifecycle Patterns" section to specs/learnings.md
+- [x] TASK-04: Append "Campaign Lifecycle Patterns" section to specs/learnings.md
   - **Goal**: Record the four implementation patterns introduced during the Campaign Lifecycle milestone so future contributors can find them quickly.
   - **Details**: Read `specs/learnings.md` to understand its existing structure. Append a new top-level section "Campaign Lifecycle Patterns" with four entries: (1) **TanStack Query layering rule** — `src/api/` contains plain `fetch` wrappers; `src/hooks/` wraps them in `useQuery`/`useMutation`; pages import only from `src/hooks/`; API layer stays testable outside React. (2) **`requireRole` middleware now accepts arrays** — both `requireRole('Reviewer')` and `requireRole(['Reviewer', 'Admin'])` are valid; used for endpoints where multiple roles share access. (3) **Simplified audit log pattern** — `writeAuditEvent(pool, { eventType, actorId, campaignId, milestoneId, payload })` in `packages/server/src/campaigns/queries.ts` is the only mechanism for writing audit events in the demo; see ADR-0002. (4) **Multi-step form isolation** — each step is a standalone component receiving a `defaultValues` slice and calling `onNext(data)`; steps do not read from or write to global state; parent page assembles and submits the full payload. Follow one-sentence-per-line and `*emphasis*` rules.
   - **Files**: `specs/learnings.md` (modify)

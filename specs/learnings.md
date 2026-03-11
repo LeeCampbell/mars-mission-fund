@@ -105,3 +105,30 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 
 - Demo accounts use known passwords (e.g. `password123`) stored as bcrypt hashes in seed SQL.
 - These are workshop-only; never use known seed passwords in a production system.
+
+## Campaign Lifecycle Patterns
+
+### TanStack Query layering rule
+
+- `src/api/` contains plain `fetch` wrappers with no React dependency.
+- `src/hooks/` wraps those fetch functions in `useQuery`/`useMutation`.
+- Pages import only from `src/hooks/`, never directly from `src/api/`.
+- This separation keeps the API layer testable outside React.
+
+### `requireRole` middleware now accepts arrays
+
+- Both `requireRole('Reviewer')` and `requireRole(['Reviewer', 'Admin'])` are valid call signatures.
+- Use the array form for endpoints where multiple roles share access (e.g. admin cancellation endpoints).
+
+### Simplified audit log pattern
+
+- `writeAuditEvent(pool, { eventType, actorId, campaignId, milestoneId, payload })` in
+  `packages/server/src/campaigns/queries.ts` is the only mechanism for writing audit events in the demo.
+- All server-side state mutations call it directly.
+- See ADR-0002 (`specs/adrs/0002-audit-log-simplified-approach.md`) for the full context and production path.
+
+### Multi-step form isolation
+
+- Each step of the campaign creation form is a standalone component that receives a `defaultValues` slice and calls an `onNext(data)` callback.
+- Steps do not read from or write to global state.
+- The parent page assembles all step data and submits the full payload.

@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: DB migrations — add creator_id, risk_disclosures, audit events table
+- [x] TASK-01: DB migrations — add creator_id, risk_disclosures, audit events table
   - **Goal**: Create two new DB migrations and update schema.sql to reflect them
   - **Details**: Create `20260311000003_campaign_creator_and_risk.sql` adding `creator_id uuid REFERENCES accounts(id)` (nullable) and `risk_disclosures text[] NOT NULL DEFAULT '{}'` to the `campaigns` table. Create `20260311000004_create_campaign_audit_events.sql` with the full `campaign_audit_events` table DDL. Update `packages/server/db/schema.sql` to reflect both new columns and the new table.
   - **Files**:

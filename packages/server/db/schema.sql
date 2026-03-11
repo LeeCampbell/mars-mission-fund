@@ -114,7 +114,25 @@ CREATE TABLE public.campaigns (
     deadline timestamp with time zone,
     launched_at timestamp with time zone,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp with time zone DEFAULT now() NOT NULL
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    creator_id uuid,
+    risk_disclosures text[] DEFAULT '{}'::text[] NOT NULL
+);
+
+
+--
+-- Name: campaign_audit_events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.campaign_audit_events (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    campaign_id uuid NOT NULL,
+    event_type text NOT NULL,
+    actor_id uuid,
+    previous_state text,
+    new_state text NOT NULL,
+    metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
+    occurred_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 
@@ -176,6 +194,14 @@ ALTER TABLE ONLY public.campaign_updates
 
 
 --
+-- Name: campaign_audit_events campaign_audit_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.campaign_audit_events
+    ADD CONSTRAINT campaign_audit_events_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: campaigns campaigns_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -197,6 +223,30 @@ ALTER TABLE ONLY public.campaigns
 
 ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: campaign_audit_events campaign_audit_events_actor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.campaign_audit_events
+    ADD CONSTRAINT campaign_audit_events_actor_id_fkey FOREIGN KEY (actor_id) REFERENCES public.accounts(id);
+
+
+--
+-- Name: campaign_audit_events campaign_audit_events_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.campaign_audit_events
+    ADD CONSTRAINT campaign_audit_events_campaign_id_fkey FOREIGN KEY (campaign_id) REFERENCES public.campaigns(id) ON DELETE CASCADE;
+
+
+--
+-- Name: campaigns campaigns_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.campaigns
+    ADD CONSTRAINT campaigns_creator_id_fkey FOREIGN KEY (creator_id) REFERENCES public.accounts(id);
 
 
 --
@@ -250,4 +300,6 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20260309000005'),
     ('20260309000006'),
     ('20260311000001'),
-    ('20260311000002');
+    ('20260311000002'),
+    ('20260311000003'),
+    ('20260311000004');

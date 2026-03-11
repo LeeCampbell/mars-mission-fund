@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles without errors.
   - **Brief ref**: Server types
 
-- [ ] TASK-05: Add query functions for settlement workflow
+- [x] TASK-05: Add query functions for settlement workflow
   - **Goal**: Implement the 6 new database query functions needed by the settlement routes
   - **Details**: In `packages/server/src/campaigns/queries.ts`, add: `settleCampaign(pool, campaignId)` — UPDATE campaigns SET status='Settlement'; `submitMilestoneEvidence(pool, campaignId, milestoneId, body)` — UPDATE campaign_milestones with evidence fields and status='Submitted'; `verifyMilestone(pool, campaignId, milestoneId)` — run in a DB transaction: set milestone to 'Verified', check if all milestones for this campaign are 'Verified', if so update campaign to 'Complete'; return `{ allVerified: boolean }`; `returnMilestone(pool, campaignId, milestoneId, feedback)` — set milestone status='Returned' and store feedback; `cancelSettlement(pool, campaignId)` — UPDATE campaigns SET status='Cancelled'; `insertAuditLog(pool, entry: { eventType, campaignId, milestoneId?, actorId, payload })` — INSERT into audit_log. Follow existing parameterised-query patterns.
   - **Files**: `packages/server/src/campaigns/queries.ts`

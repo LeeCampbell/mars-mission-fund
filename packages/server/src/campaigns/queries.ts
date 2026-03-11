@@ -7,6 +7,7 @@ import {
   ListQuery,
   CreateCampaignRequest,
   UpdateCampaignRequest,
+  SubmitEvidenceBody,
 } from './types.js'
 
 function slugify(text: string): string {
@@ -805,4 +806,109 @@ export async function enforceDeadline(pool: Pool, id: string): Promise<CampaignS
     [id]
   )
   return result.rows[0]!
+}
+
+export async function settleCampaign(pool: Pool, campaignId: string): Promise<void> {
+  await pool.query(`UPDATE campaigns SET status = 'Settlement', updated_at = now() WHERE id = $1`, [
+    campaignId,
+  ])
+}
+
+export async function submitMilestoneEvidence(
+  pool: Pool,
+  campaignId: string,
+  milestoneId: string,
+  body: SubmitEvidenceBody
+): Promise<void> {
+  await pool.query(
+    `UPDATE campaign_milestones
+     SET status = 'Submitted',
+         evidence_description = $3,
+         evidence_url = $4,
+         evidence_submitted_at = now()
+     WHERE campaign_id = $1 AND id = $2`,
+    [campaignId, milestoneId, body.evidenceDescription, body.evidenceUrl ?? null]
+  )
+}
+
+export async function verifyMilestone(
+  pool: Pool,
+  campaignId: string,
+  milestoneId: string
+): Promise<{ allVerified: boolean }> {
+  const client = await pool.connect()
+  try {
+    await client.query('BEGIN')
+
+    await client.query(
+      `UPDATE campaign_milestones SET status = 'Verified' WHERE campaign_id = $1 AND id = $2`,
+      [campaignId, milestoneId]
+    )
+
+    const checkResult = await client.query<{ unverified_count: string }>(
+      `SELECT COUNT(*) AS unverified_count
+       FROM campaign_milestones
+       WHERE campaign_id = $1 AND status != 'Verified'`,
+      [campaignId]
+    )
+
+    const allVerified = parseInt(checkResult.rows[0]?.unverified_count ?? '1', 10) === 0
+
+    if (allVerified) {
+      await client.query(
+        `UPDATE campaigns SET status = 'Complete', updated_at = now() WHERE id = $1`,
+        [campaignId]
+      )
+    }
+
+    await client.query('COMMIT')
+    return { allVerified }
+  } catch (err) {
+    await client.query('ROLLBACK')
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
+export async function returnMilestone(
+  pool: Pool,
+  campaignId: string,
+  milestoneId: string,
+  feedback: string
+): Promise<void> {
+  await pool.query(
+    `UPDATE campaign_milestones
+     SET status = 'Returned', feedback = $3
+     WHERE campaign_id = $1 AND id = $2`,
+    [campaignId, milestoneId, feedback]
+  )
+}
+
+export async function cancelSettlement(pool: Pool, campaignId: string): Promise<void> {
+  await pool.query(`UPDATE campaigns SET status = 'Cancelled', updated_at = now() WHERE id = $1`, [
+    campaignId,
+  ])
+}
+
+export interface AuditLogEntry {
+  eventType: string
+  campaignId: string
+  milestoneId?: string
+  actorId: string
+  payload: Record<string, unknown>
+}
+
+export async function insertAuditLog(pool: Pool, entry: AuditLogEntry): Promise<void> {
+  await pool.query(
+    `INSERT INTO audit_log (event_type, campaign_id, milestone_id, actor_id, payload)
+     VALUES ($1, $2, $3, $4, $5)`,
+    [
+      entry.eventType,
+      entry.campaignId,
+      entry.milestoneId ?? null,
+      entry.actorId,
+      JSON.stringify(entry.payload),
+    ]
+  )
 }

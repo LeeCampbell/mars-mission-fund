@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: No TypeScript errors; component exported correctly
   - **Brief ref**: §ProtectedRoute
 
-- [ ] TASK-06: Create `LoginPage`
+- [x] TASK-06: Create `LoginPage`
   - **Goal**: Login page with demo user selector and email/password form
   - **Details**: Create `packages/client/src/pages/LoginPage.tsx`. Hardcode demo user list (at minimum: `admin@example.com / password`, `alice@example.com / password` — confirm from backend seed if available). Display demo users as clickable cards; clicking one pre-fills email + password fields. Standard email + password form below. On submit call `useLogin()`; on success navigate to `location.state?.from ?? '/'`. Display server errors using `--color-status-error` semantic token. If already authenticated, redirect to `/`.
   - **Files**: `packages/client/src/pages/LoginPage.tsx` (create)

@@ -50,7 +50,7 @@ Brief: plan/ready/brief.md
   - **Verify**: §1.4 contains the `routeTitles` map description; the `useEffect` pattern is mentioned; the title format string is present verbatim.
   - **Brief ref**: Scope bullet 6; Approach step 4
 
-- [ ] TASK-05: Update learnings.md, bump versions, and add changelog entries
+- [x] TASK-05: Update learnings.md, bump versions, and add changelog entries
   - **Goal**: Close out the milestone by recording new insights in `learnings.md` and updating the `Version` field and changelog in every modified spec file.
   - **Details**:
     - Read `specs/learnings.md` and add entries for:

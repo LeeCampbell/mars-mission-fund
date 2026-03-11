@@ -1,7 +1,7 @@
 # Frontend Standards
 
 > **Spec ID**: L3-005
-> **Version**: 0.4
+> **Version**: 0.5
 > **Status**: Approved
 > **Rate of Change**: Sprint-level / tech decisions
 > **Depends On**: L2-001 (Brand Application Standard), L2-002 (Engineering Standard), L3-001 (Architecture)
@@ -623,6 +623,7 @@ Domain specs may not introduce visual properties that bypass this spec's token a
 | March 2026 | 0.2     | —      | Resolved OQ-1: React 19.x selected as frontend framework per L3-008.                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | March 2026 | 0.3     | —      | Resolved OQ-2 through OQ-9: Mobile-first responsive strategy with breakpoints at 640/768/1024/1280px. Bundle size budgets established. TanStack Query + React built-in state for state management. Inline SVG React components for icons. Vitest + React Testing Library + Playwright + MSW + Supertest for testing (with Playwright MCP for AI agent integration). SPA with selective static pre-rendering for SEO pages. Graceful degradation for no-JS with branded noscript fallback. |
 | 2026-03-09 | 0.4     | —      | Documented patterns introduced in issues #40–#43 (Public Campaign Pages milestone): (1) Section 1.4 — lazy loading pattern for non-marketing routes using `React.lazy` + `Suspense` with a root `<Suspense>` wrapping `<Routes>`; (2) Section 1.5 — api/hooks layering convention (`src/api/<domain>.ts` for fetch functions, `src/hooks/use<Domain>.ts` for TanStack Query hooks, page components consume hooks only); (3) Section 1.5 — Vite dev-server proxy forwarding `/v1` to `http://localhost:3000` for local development. |
+| 2026-03-10 | 0.5     | —      | Documented patterns introduced in issues #80–#81 (Milestone housekeeping milestone): (1) Section 1.2.1 — Trusted HTML Rendering: `dangerouslySetInnerHTML` permitted only for API-sourced content; raw user-supplied HTML explicitly forbidden (XSS); current usage is `campaign.description` in `CampaignDetailPage`; (2) Section 1.4 — Page title management: static `routeTitles` map in `Layout.tsx` for known routes; page components use `useEffect` for dynamic titles; title format `<Page Name> — Mars Mission Fund`. |
 
 ---
 

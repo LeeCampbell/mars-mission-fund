@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists with correct schema and index definition
   - **Brief ref**: Migrations section, migration #3
 
-- [ ] TASK-04: Create migration — milestone_evidence table
+- [x] TASK-04: Create migration — milestone_evidence table
   - **Goal**: Create the `milestone_evidence` table
   - **Details**: Create `packages/server/db/migrations/20260311000006_create_milestone_evidence.sql`. Columns: `id UUID PK`, `milestone_id UUID NOT NULL REFERENCES campaign_milestones(id)`, `campaign_id UUID NOT NULL REFERENCES campaigns(id)`, `submitted_by UUID NOT NULL REFERENCES accounts(id)`, `evidence_type TEXT NOT NULL`, `evidence_url TEXT NOT NULL`, `description TEXT`, `submitted_at TIMESTAMPTZ NOT NULL DEFAULT now()`. Add index on `milestone_id`.
   - **Files**: `packages/server/db/migrations/20260311000006_create_milestone_evidence.sql`

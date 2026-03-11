@@ -65,7 +65,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; functions are importable
   - **Brief ref**: §4 Server queries
 
-- [ ] TASK-06: Server routes — campaign review endpoints
+- [x] TASK-06: Server routes — campaign review endpoints
   - **Goal**: Wire up the five new campaign action endpoints in the campaigns router
   - **Details**: In `packages/server/src/campaigns/routes.ts`:
     - Register `GET /review-queue` **before** `GET /:id` to avoid UUID param collision

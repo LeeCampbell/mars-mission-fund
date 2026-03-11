@@ -17,7 +17,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Files exist and contain valid SQL with correct column definitions; review `packages/server/db/schema.sql` patterns for consistency
   - **Brief ref**: Database layer — migrations 1–3
 
-- [ ] TASK-02: DB migrations — seed data (006–008)
+- [x] TASK-02: DB migrations — seed data (006–008)
   - **Goal**: Seed reviewer demo account, Submitted campaigns, milestone evidence, cancellation request, and demo notifications
   - **Details**:
     - `20260311000006_seed_reviewer.sql`: insert reviewer account with id `44444444-4444-4444-4444-444444444444`, email `reviewer@example.com`, role `Reviewer`; generate bcrypt hash for `reviewer-demo-pass` with `node -e "require('bcryptjs').hash('reviewer-demo-pass',10).then(console.log)"` and embed the result

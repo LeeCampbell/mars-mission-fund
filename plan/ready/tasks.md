@@ -31,7 +31,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File compiles with `npx tsc --noEmit -p packages/server/tsconfig.json`.
   - **Brief ref**: Audit helper section
 
-- [ ] TASK-03: Zod schemas and query functions for new endpoints
+- [x] TASK-03: Zod schemas and query functions for new endpoints
   - **Goal**: Extend `types.ts` with new request body schemas and `queries.ts` with the DB mutation functions needed by all new endpoints.
   - **Details**:
     In `packages/server/src/campaigns/types.ts`:

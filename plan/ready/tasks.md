@@ -184,7 +184,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; `npm run lint` passes; `npm run build` succeeds
   - **Brief ref**: Frontend layer — modified files
 
-- [ ] TASK-15: Write E2E tests
+- [x] TASK-15: Write E2E tests
   - **Goal**: Create Playwright E2E tests covering the reviewer and admin flows described in the brief
   - **Details**: Create `e2e/review.spec.ts`. Required flows:
     1. Reviewer logs in as `reviewer@example.com`, navigates to `/review`, asserts Submitted campaign rows visible

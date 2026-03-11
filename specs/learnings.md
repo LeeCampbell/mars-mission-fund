@@ -111,3 +111,15 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 - If `npm run test:e2e` fails with "Executable doesn't exist" after a Playwright version bump, run `npx playwright install chromium` to download the new browser binaries.
 - The `ci-check.sh` script does not include E2E tests — only `./scripts/e2e-check.sh` or `./scripts/e2e-check-docker.sh` run E2E tests with the full stack.
 - E2E tests require a running PostgreSQL + backend + frontend stack; Docker is the simplest way to achieve this (use `./scripts/e2e-check-docker.sh`).
+
+## Issue #115: E2E test environment — no Docker, manual stack setup
+
+- The Docker daemon is not available in this agent environment. `e2e-check.sh` and `e2e-check-docker.sh` both fail because they call `docker`.
+- Resolution: install PostgreSQL via `sudo apt-get install -y postgresql-16`, then manually create the user/database (`sudo -u postgres psql`, `CREATE USER mmf WITH PASSWORD 'mmf'; CREATE DATABASE mmf OWNER mmf;`), run `DATABASE_URL=... dbmate --migrations-dir packages/server/db/migrations up`, start `npm run dev:server` and `npm run dev` in background, then run `npx playwright test`.
+- `dbmate` is pre-installed at `/usr/local/bin/dbmate`; Playwright browser binaries must be installed first via `npx playwright install chromium`.
+- E2E tests that mutate data (claim/approve) leave the DB dirty. Re-running tests on a dirty DB causes failures because campaigns are no longer in Submitted status. Fix: drop and re-create the DB (`DATABASE_URL=... dbmate ... drop && sudo -u postgres createdb -O mmf mmf && DATABASE_URL=... dbmate ... up`) before re-running the full suite.
+
+## Issue #115: E2E login helper race condition
+
+- The shared `login()` helper only awaits the Sign In button click, not the resulting navigation. If the caller immediately calls `page.goto(...)` after `login()`, the navigation can interrupt before the JWT is stored in localStorage, leaving the user unauthenticated on the next page.
+- Resolution: always add `await expect(page).toHaveURL('/')` immediately after `login()` before any subsequent `page.goto(...)` calls. This ensures the login flow completes and the JWT is persisted.

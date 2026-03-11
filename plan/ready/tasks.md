@@ -27,7 +27,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/shared` succeeds with no type errors
   - **Brief ref**: §8 Shared types
 
-- [ ] TASK-03: Server middleware — requireRole accepts Role | Role[]
+- [x] TASK-03: Server middleware — requireRole accepts Role | Role[]
   - **Goal**: Update `requireRole` to accept a single role or an array of roles
   - **Details**: In `packages/server/src/middleware/requireRole.ts`, change the parameter type from `role: Role` to `role: Role | Role[]`. Internally convert to an array and use `roles.includes(user.role)`. All existing single-string callers remain backward-compatible.
   - **Files**:

@@ -62,6 +62,8 @@ const mockCampaign: CampaignDetail = {
       body: 'Things are going well.',
     },
   ],
+  creatorId: null,
+  reviewerId: null,
 }
 
 vi.mock('../hooks/useCampaign', () => ({

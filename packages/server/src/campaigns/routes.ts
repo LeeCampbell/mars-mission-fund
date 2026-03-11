@@ -11,6 +11,9 @@ import {
   RejectBodySchema,
   PostUpdateBodySchema,
   ContributeBodySchema,
+  MilestoneRouteParamsSchema,
+  SubmitEvidenceBodySchema,
+  ReturnMilestoneBodySchema,
 } from './types.js'
 import {
   listCampaigns,
@@ -34,6 +37,12 @@ import {
   requestCancellation,
   approveCancellation,
   enforceDeadline,
+  settleCampaign,
+  submitMilestoneEvidence,
+  verifyMilestone,
+  returnMilestone,
+  cancelSettlement,
+  insertAuditLog,
 } from './queries.js'
 import { authenticate } from '../middleware/authenticate.js'
 import { requireRole } from '../middleware/requireRole.js'
@@ -960,6 +969,420 @@ export function createCampaignRouter(pool: Pool): Router {
       next(err)
     }
   })
+
+  // POST /:id/settle — Admin transitions a Funded campaign to Settlement
+  router.post(
+    '/:id/settle',
+    authenticate,
+    requireRole(['Administrator', 'SuperAdministrator']),
+    async (req, res, next) => {
+      const parsed = RouteParamsSchema.safeParse(req.params)
+      if (!parsed.success) {
+        return next(
+          Object.assign(new Error('Invalid campaign ID'), {
+            status: 400,
+            code: 'INVALID_CAMPAIGN_ID',
+            details: parsed.error.flatten(),
+          })
+        )
+      }
+
+      try {
+        const campaign = await getCampaignById(pool, parsed.data.id)
+        if (campaign === null) {
+          return next(
+            Object.assign(new Error('Campaign not found'), {
+              status: 404,
+              code: 'CAMPAIGN_NOT_FOUND',
+              details: {},
+            })
+          )
+        }
+        if (campaign.status !== 'Funded') {
+          return next(
+            Object.assign(new Error('Campaign is not in Funded status'), {
+              status: 409,
+              code: 'INVALID_CAMPAIGN_STATE',
+              details: { currentStatus: campaign.status },
+            })
+          )
+        }
+
+        await settleCampaign(pool, parsed.data.id)
+
+        const actor = res.locals['user'] as { sub?: string }
+        await insertAuditLog(pool, {
+          eventType: 'campaign.settled',
+          campaignId: parsed.data.id,
+          actorId: actor.sub ?? 'unknown',
+          payload: { previousStatus: 'Funded' },
+        })
+
+        res.json({ data: { id: parsed.data.id, status: 'Settlement' } })
+      } catch (err) {
+        next(err)
+      }
+    }
+  )
+
+  // POST /:id/milestones/:mid/submit-evidence — Creator submits evidence
+  router.post(
+    '/:id/milestones/:mid/submit-evidence',
+    authenticate,
+    requireRole('Creator'),
+    async (req, res, next) => {
+      const parsedParams = MilestoneRouteParamsSchema.safeParse(req.params)
+      if (!parsedParams.success) {
+        return next(
+          Object.assign(new Error('Invalid route parameters'), {
+            status: 400,
+            code: 'INVALID_PARAMS',
+            details: parsedParams.error.flatten(),
+          })
+        )
+      }
+
+      const parsedBody = SubmitEvidenceBodySchema.safeParse(req.body)
+      if (!parsedBody.success) {
+        return next(
+          Object.assign(new Error('Invalid request body'), {
+            status: 422,
+            code: 'INVALID_BODY',
+            details: parsedBody.error.flatten(),
+          })
+        )
+      }
+
+      try {
+        const campaign = await getCampaignById(pool, parsedParams.data.id)
+        if (campaign === null) {
+          return next(
+            Object.assign(new Error('Campaign not found'), {
+              status: 404,
+              code: 'CAMPAIGN_NOT_FOUND',
+              details: {},
+            })
+          )
+        }
+        if (campaign.status !== 'Settlement') {
+          return next(
+            Object.assign(new Error('Campaign is not in Settlement status'), {
+              status: 409,
+              code: 'INVALID_CAMPAIGN_STATE',
+              details: { currentStatus: campaign.status },
+            })
+          )
+        }
+
+        const milestone = campaign.milestones.find((m) => m.id === parsedParams.data.mid)
+        if (!milestone) {
+          return next(
+            Object.assign(new Error('Milestone not found'), {
+              status: 404,
+              code: 'MILESTONE_NOT_FOUND',
+              details: {},
+            })
+          )
+        }
+        if (milestone.status !== 'Pending' && milestone.status !== 'Returned') {
+          return next(
+            Object.assign(new Error('Milestone is not in Pending or Returned status'), {
+              status: 409,
+              code: 'INVALID_MILESTONE_STATE',
+              details: { currentStatus: milestone.status },
+            })
+          )
+        }
+
+        await submitMilestoneEvidence(
+          pool,
+          parsedParams.data.id,
+          parsedParams.data.mid,
+          parsedBody.data
+        )
+
+        const actor = res.locals['user'] as { sub?: string }
+        await insertAuditLog(pool, {
+          eventType: 'milestone.evidence_submitted',
+          campaignId: parsedParams.data.id,
+          milestoneId: parsedParams.data.mid,
+          actorId: actor.sub ?? 'unknown',
+          payload: { evidenceUrl: parsedBody.data.evidenceUrl ?? null },
+        })
+
+        // DEMO STUB: notify admin of evidence submission
+        console.log(
+          `[STUB] Admin notification: evidence submitted for milestone ${parsedParams.data.mid} in campaign ${parsedParams.data.id}`
+        )
+
+        res.json({
+          data: { id: parsedParams.data.mid, status: 'Submitted' },
+        })
+      } catch (err) {
+        next(err)
+      }
+    }
+  )
+
+  // POST /:id/milestones/:mid/verify — Admin verifies a milestone
+  router.post(
+    '/:id/milestones/:mid/verify',
+    authenticate,
+    requireRole(['Administrator', 'SuperAdministrator']),
+    async (req, res, next) => {
+      const parsedParams = MilestoneRouteParamsSchema.safeParse(req.params)
+      if (!parsedParams.success) {
+        return next(
+          Object.assign(new Error('Invalid route parameters'), {
+            status: 400,
+            code: 'INVALID_PARAMS',
+            details: parsedParams.error.flatten(),
+          })
+        )
+      }
+
+      try {
+        const campaign = await getCampaignById(pool, parsedParams.data.id)
+        if (campaign === null) {
+          return next(
+            Object.assign(new Error('Campaign not found'), {
+              status: 404,
+              code: 'CAMPAIGN_NOT_FOUND',
+              details: {},
+            })
+          )
+        }
+        if (campaign.status !== 'Settlement') {
+          return next(
+            Object.assign(new Error('Campaign is not in Settlement status'), {
+              status: 409,
+              code: 'INVALID_CAMPAIGN_STATE',
+              details: { currentStatus: campaign.status },
+            })
+          )
+        }
+
+        const milestone = campaign.milestones.find((m) => m.id === parsedParams.data.mid)
+        if (!milestone) {
+          return next(
+            Object.assign(new Error('Milestone not found'), {
+              status: 404,
+              code: 'MILESTONE_NOT_FOUND',
+              details: {},
+            })
+          )
+        }
+        if (milestone.status !== 'Submitted') {
+          return next(
+            Object.assign(new Error('Milestone is not in Submitted status'), {
+              status: 409,
+              code: 'INVALID_MILESTONE_STATE',
+              details: { currentStatus: milestone.status },
+            })
+          )
+        }
+
+        const actor = res.locals['user'] as { sub?: string }
+        const actorId = actor.sub ?? 'unknown'
+
+        const { allVerified } = await verifyMilestone(
+          pool,
+          parsedParams.data.id,
+          parsedParams.data.mid
+        )
+
+        await insertAuditLog(pool, {
+          eventType: 'milestone.verified',
+          campaignId: parsedParams.data.id,
+          milestoneId: parsedParams.data.mid,
+          actorId,
+          payload: {},
+        })
+
+        // DEMO STUB: disburse funds for this milestone
+        console.log(
+          `[STUB] Disbursement: funds released for milestone ${parsedParams.data.mid} in campaign ${parsedParams.data.id}`
+        )
+
+        if (allVerified) {
+          await insertAuditLog(pool, {
+            eventType: 'campaign.completed',
+            campaignId: parsedParams.data.id,
+            actorId,
+            payload: {},
+          })
+
+          // DEMO STUB: notify creator that campaign is complete
+          console.log(
+            `[STUB] Creator notification: campaign ${parsedParams.data.id} is now Complete`
+          )
+        }
+
+        res.json({
+          data: { id: parsedParams.data.mid, status: 'Verified', campaignComplete: allVerified },
+        })
+      } catch (err) {
+        next(err)
+      }
+    }
+  )
+
+  // POST /:id/milestones/:mid/return — Admin returns evidence with feedback
+  router.post(
+    '/:id/milestones/:mid/return',
+    authenticate,
+    requireRole(['Administrator', 'SuperAdministrator']),
+    async (req, res, next) => {
+      const parsedParams = MilestoneRouteParamsSchema.safeParse(req.params)
+      if (!parsedParams.success) {
+        return next(
+          Object.assign(new Error('Invalid route parameters'), {
+            status: 400,
+            code: 'INVALID_PARAMS',
+            details: parsedParams.error.flatten(),
+          })
+        )
+      }
+
+      const parsedBody = ReturnMilestoneBodySchema.safeParse(req.body)
+      if (!parsedBody.success) {
+        return next(
+          Object.assign(new Error('Invalid request body'), {
+            status: 422,
+            code: 'INVALID_BODY',
+            details: parsedBody.error.flatten(),
+          })
+        )
+      }
+
+      try {
+        const campaign = await getCampaignById(pool, parsedParams.data.id)
+        if (campaign === null) {
+          return next(
+            Object.assign(new Error('Campaign not found'), {
+              status: 404,
+              code: 'CAMPAIGN_NOT_FOUND',
+              details: {},
+            })
+          )
+        }
+        if (campaign.status !== 'Settlement') {
+          return next(
+            Object.assign(new Error('Campaign is not in Settlement status'), {
+              status: 409,
+              code: 'INVALID_CAMPAIGN_STATE',
+              details: { currentStatus: campaign.status },
+            })
+          )
+        }
+
+        const milestone = campaign.milestones.find((m) => m.id === parsedParams.data.mid)
+        if (!milestone) {
+          return next(
+            Object.assign(new Error('Milestone not found'), {
+              status: 404,
+              code: 'MILESTONE_NOT_FOUND',
+              details: {},
+            })
+          )
+        }
+        if (milestone.status !== 'Submitted') {
+          return next(
+            Object.assign(new Error('Milestone is not in Submitted status'), {
+              status: 409,
+              code: 'INVALID_MILESTONE_STATE',
+              details: { currentStatus: milestone.status },
+            })
+          )
+        }
+
+        await returnMilestone(
+          pool,
+          parsedParams.data.id,
+          parsedParams.data.mid,
+          parsedBody.data.feedback
+        )
+
+        const actor = res.locals['user'] as { sub?: string }
+        await insertAuditLog(pool, {
+          eventType: 'milestone.returned',
+          campaignId: parsedParams.data.id,
+          milestoneId: parsedParams.data.mid,
+          actorId: actor.sub ?? 'unknown',
+          payload: {},
+        })
+
+        // DEMO STUB: notify creator that milestone was returned
+        console.log(
+          `[STUB] Creator notification: milestone ${parsedParams.data.mid} returned in campaign ${parsedParams.data.id}`
+        )
+
+        res.json({
+          data: { id: parsedParams.data.mid, status: 'Returned' },
+        })
+      } catch (err) {
+        next(err)
+      }
+    }
+  )
+
+  // POST /:id/cancel — Admin cancels a Settlement-state campaign
+  router.post(
+    '/:id/cancel',
+    authenticate,
+    requireRole(['Administrator', 'SuperAdministrator']),
+    async (req, res, next) => {
+      const parsed = RouteParamsSchema.safeParse(req.params)
+      if (!parsed.success) {
+        return next(
+          Object.assign(new Error('Invalid campaign ID'), {
+            status: 400,
+            code: 'INVALID_CAMPAIGN_ID',
+            details: parsed.error.flatten(),
+          })
+        )
+      }
+
+      try {
+        const campaign = await getCampaignById(pool, parsed.data.id)
+        if (campaign === null) {
+          return next(
+            Object.assign(new Error('Campaign not found'), {
+              status: 404,
+              code: 'CAMPAIGN_NOT_FOUND',
+              details: {},
+            })
+          )
+        }
+        if (campaign.status !== 'Settlement') {
+          return next(
+            Object.assign(new Error('Campaign is not in Settlement status'), {
+              status: 409,
+              code: 'INVALID_CAMPAIGN_STATE',
+              details: { currentStatus: campaign.status },
+            })
+          )
+        }
+
+        await cancelSettlement(pool, parsed.data.id)
+
+        const actor = res.locals['user'] as { sub?: string }
+        await insertAuditLog(pool, {
+          eventType: 'campaign.cancelled',
+          campaignId: parsed.data.id,
+          actorId: actor.sub ?? 'unknown',
+          payload: { previousStatus: 'Settlement' },
+        })
+
+        // DEMO STUB: trigger refund process
+        console.log(`[STUB] Refund initiated for campaign ${parsed.data.id}`)
+
+        res.json({ data: { id: parsed.data.id, status: 'Cancelled' } })
+      } catch (err) {
+        next(err)
+      }
+    }
+  )
 
   return router
 }

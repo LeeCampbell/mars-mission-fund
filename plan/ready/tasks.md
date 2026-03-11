@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists with correct schema and index definition
   - **Brief ref**: Migrations section, migration #2
 
-- [ ] TASK-03: Create migration — notifications table
+- [x] TASK-03: Create migration — notifications table
   - **Goal**: Create the `notifications` table
   - **Details**: Create `packages/server/db/migrations/20260311000005_create_notifications.sql`. Columns: `id UUID PK`, `user_id UUID NOT NULL REFERENCES accounts(id)`, `type TEXT NOT NULL`, `title TEXT NOT NULL`, `message TEXT NOT NULL`, `campaign_id UUID REFERENCES campaigns(id)`, `read BOOLEAN NOT NULL DEFAULT false`, `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`. Add index on `user_id`.
   - **Files**: `packages/server/db/migrations/20260311000005_create_notifications.sql`

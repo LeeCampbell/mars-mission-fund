@@ -187,7 +187,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; no lint errors; pages import step components correctly
   - **Brief ref**: Frontend — Pages (CampaignNewPage, CampaignEditPage)
 
-- [ ] TASK-13: Component tests — Dashboard, form steps, and CampaignNewPage
+- [x] TASK-13: Component tests — Dashboard, form steps, and CampaignNewPage
   - **Goal**: Add Vitest + React Testing Library tests for the new UI components
   - **Details**: Mock React Query hooks where needed. Tests to write:
     - `DashboardPage.test.tsx` — mock `useMyCampaigns` returning campaigns in various statuses; assert status group headings, campaign titles, "New Campaign" button, "Edit" and "View" action buttons

@@ -69,6 +69,22 @@ cd mars-mission-fund
 
 ---
 
+## Demo accounts
+
+The local development seed includes three demo users for workshop use:
+
+| Role          | Email                     | Password           |
+| ------------- | ------------------------- | ------------------ |
+| Backer        | `backer@example.com`      | `backer-demo-pass`   |
+| Creator       | `creator@example.com`     | `creator-demo-pass`  |
+| Administrator | `admin@example.com`       | `admin-demo-pass`    |
+
+To log in: open the app at `http://localhost:5173`, click **Login** in the navigation bar, enter one of the email/password pairs above, and observe the role displayed in the nav after sign-in.
+
+These credentials are for workshop and demo use only. The JWT is stored in `localStorage` and is valid only for the local development session.
+
+---
+
 ## Project Structure
 
 ```text

@@ -4,6 +4,9 @@
 --   creator@example.com   / creator-demo-pass
 --   admin@example.com     / admin-demo-pass
 
+-- DEMO STUB: Passwords below are bcrypt hashes of known, hardcoded demo values.
+-- Production (L3-002) requires breach-list checking and policy enforcement at registration;
+-- no user passwords should ever be pre-seeded with publicly known values.
 INSERT INTO accounts (id, email, password_hash, display_name, bio, role) VALUES
   (
     '11111111-1111-1111-1111-111111111111',

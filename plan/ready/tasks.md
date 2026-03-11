@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `find specs/ -name "*.md" | sort` output matches every entry in `specs/README.md`; ADR-0002 appears in the ADRs table and file-system layout; `npm run lint:md` passes.
   - **Brief ref**: Approach §6 — Verify and update specs/README.md
 
-- [ ] TASK-07: Run CI checks and confirm all pass
+- [x] TASK-07: Run CI checks and confirm all pass
   - **Goal**: Verify that all documentation changes are clean and no CI check is broken.
   - **Details**: Run `./scripts/ci-check.sh`. If any check fails (type-check, lint, format, markdown lint, build, tests), fix the issue before marking this task complete. Pay particular attention to `npm run lint:md` since all new and modified files are Markdown.
   - **Files**: (none — verification only)

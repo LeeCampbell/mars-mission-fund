@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router'
 import { Logo } from './ui/Logo'
+import { Badge } from './ui/Badge'
+import { useAuthContext } from '../context/AuthContext'
+import { useLogout } from '../hooks/useAuth'
 
 const headerStyle: React.CSSProperties = {
   position: 'sticky',
@@ -132,6 +135,23 @@ const mobileNavLinkActiveStyle: React.CSSProperties = {
   color: 'var(--color-text-accent)',
 }
 
+const logoutButtonStyle: React.CSSProperties = {
+  ...navLinkBase,
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  borderBottom: '2px solid transparent',
+}
+
+const mobileLogoutButtonStyle: React.CSSProperties = {
+  ...mobileNavLinkBase,
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  width: '100%',
+  textAlign: 'left',
+}
+
 const cssOverrides = `
   .mmf-skip-link:focus {
     top: 16px !important;
@@ -176,6 +196,10 @@ const navLinks = [
 export function Header() {
   ensureHeaderStyle()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { isAuthenticated, user } = useAuthContext()
+  const { mutate: logoutMutate } = useLogout()
+
+  const isAdmin = user?.role === 'Administrator' || user?.role === 'SuperAdministrator'
 
   return (
     <header style={headerStyle}>
@@ -206,6 +230,50 @@ export function Header() {
                 </NavLink>
               </li>
             ))}
+            {!isAuthenticated && (
+              <li>
+                <NavLink
+                  to="/login"
+                  className="mmf-nav-link"
+                  style={({ isActive }) => ({
+                    ...navLinkBase,
+                    ...(isActive ? navLinkActiveStyle : {}),
+                  })}
+                >
+                  Log in
+                </NavLink>
+              </li>
+            )}
+            {isAuthenticated && (
+              <>
+                <li>
+                  <NavLink
+                    to="/profile"
+                    className="mmf-nav-link"
+                    style={({ isActive }) => ({
+                      ...navLinkBase,
+                      ...(isActive ? navLinkActiveStyle : {}),
+                    })}
+                  >
+                    {user?.displayName ?? 'Profile'}
+                  </NavLink>
+                </li>
+                {isAdmin && (
+                  <li>
+                    <Badge variant="accent">Admin</Badge>
+                  </li>
+                )}
+                <li>
+                  <button
+                    className="mmf-nav-link"
+                    style={logoutButtonStyle}
+                    onClick={() => logoutMutate()}
+                  >
+                    Log out
+                  </button>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
 
@@ -243,6 +311,60 @@ export function Header() {
               </NavLink>
             </li>
           ))}
+          {!isAuthenticated && (
+            <li>
+              <NavLink
+                to="/login"
+                className="mmf-mobile-nav-link"
+                style={({ isActive }) => ({
+                  ...mobileNavLinkBase,
+                  ...(isActive ? mobileNavLinkActiveStyle : {}),
+                })}
+                onClick={() => setMobileOpen(false)}
+              >
+                Log in
+              </NavLink>
+            </li>
+          )}
+          {isAuthenticated && (
+            <>
+              <li>
+                <NavLink
+                  to="/profile"
+                  className="mmf-mobile-nav-link"
+                  style={({ isActive }) => ({
+                    ...mobileNavLinkBase,
+                    ...(isActive ? mobileNavLinkActiveStyle : {}),
+                  })}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {user?.displayName ?? 'Profile'}
+                </NavLink>
+              </li>
+              {isAdmin && (
+                <li
+                  style={{
+                    padding: '12px 0',
+                    borderBottom: '1px solid var(--color-border-subtle)',
+                  }}
+                >
+                  <Badge variant="accent">Admin</Badge>
+                </li>
+              )}
+              <li>
+                <button
+                  className="mmf-mobile-nav-link"
+                  style={mobileLogoutButtonStyle}
+                  onClick={() => {
+                    logoutMutate()
+                    setMobileOpen(false)
+                  }}
+                >
+                  Log out
+                </button>
+              </li>
+            </>
+          )}
         </ul>
       )}
     </header>

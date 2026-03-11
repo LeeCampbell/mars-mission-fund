@@ -1,7 +1,7 @@
 # Tech Stack
 
 > **Spec ID:** L3-008
-> **Version:** 0.4.0
+> **Version:** 0.5.0
 > **Status:** Approved
 > **Rate of change:** Slow (changes at major technology decisions)
 > **Depends on:** L1-001, L2-002, L3-001
@@ -89,9 +89,10 @@ Together they form the developer observability stack, complementing PostHog's pr
 
 ## Authentication
 
-| Technology | Purpose                                        |
-| ---------- | ---------------------------------------------- |
-| Clerk      | Client-side authentication and user management |
+| Technology   | Purpose                                                      |
+| ------------ | ------------------------------------------------------------ |
+| jsonwebtoken | Stateless JWT generation and validation (demo auth stub)     |
+| bcryptjs     | Password hashing for demo account credentials (seed SQL)     |
 
 ---
 
@@ -306,3 +307,4 @@ The Playwright E2E suite requires the following CI environment setup (introduced
 | 2026-03-09 | Claude | Added Local Development section: `docker-compose.dev.yml` (postgres:16-alpine), DBMate migration invocation and naming convention, Express server run-separately pattern, `server/src/` directory layout. Bumped to 0.2.0. |
 | 2026-03-10 | Claude | Updated Local Development section: DBMate volume path `server/db` → `packages/server/db`; Express run command `cd server && npm run dev` → `npm run dev:server` (from repo root); Server Directory Layout root label `server/` → `packages/server/`. Bumped to 0.3.0. |
 | 2026-03-10 | Claude | Added Playwright CI Requirements subsection documenting `postgres:16-alpine` service, DBMate migrations, seed script, and config/test file locations. Bumped to 0.4.0. |
+| 2026-03-11 | Claude | Replaced Clerk authentication row with `jsonwebtoken` (stateless JWT generation/validation) and `bcryptjs` (password hashing) to reflect custom demo auth stub delivered in issues #93–#95. Bumped to 0.5.0. |

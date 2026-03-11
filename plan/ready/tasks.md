@@ -30,7 +30,7 @@ Brief: plan/ready/brief.md
   - **Verify**: No Clerk references remain outside the historical changelog entry. Version is incremented. New dated changelog entry present.
   - **Brief ref**: Step 2 — security.md (L3-002)
 
-- [ ] TASK-04: Update specs/tech/tech-stack.md — replace Clerk row with jwt + bcrypt
+- [x] TASK-04: Update specs/tech/tech-stack.md — replace Clerk row with jwt + bcrypt
   - **Goal**: Replace the Clerk authentication row with entries for `jsonwebtoken` and the actual password-hashing library (confirmed in TASK-01); increment version and add changelog entry.
   - **Details**: Read the file. Find the Clerk entry in the authentication section and replace it with two rows: one for `jsonwebtoken` (stateless JWT generation/validation) and one for `bcryptjs` (or `bcrypt`, per TASK-01 finding) (password hashing). Use the exact package names and versions from TASK-01. Increment the version field and add a dated changelog row.
   - **Files**: `specs/tech/tech-stack.md`

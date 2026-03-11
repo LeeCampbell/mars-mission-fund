@@ -147,7 +147,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/pages/AdminMilestonesPage.test.tsx` passes
   - **Brief ref**: Frontend layer — AdminMilestonesPage
 
-- [ ] TASK-12: AdminCancellationsPage + NotificationsPage
+- [x] TASK-12: AdminCancellationsPage + NotificationsPage
   - **Goal**: Implement the admin cancellations page and the notifications listing page
   - **Details**:
     - `AdminCancellationsPage.tsx`: uses `useCancellationRequests()`; renders table with campaign title, cancellation reason, requested date; each row has "Approve" button (calls `useApproveCancellation`) and "Deny" button (calls `useDenyCancellation`); show loading/empty states

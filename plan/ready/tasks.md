@@ -44,7 +44,7 @@ Brief: plan/ready/brief.md
   - **Verify**: "Clerk/OIDC" no longer appears in Section 6.3. Version incremented. New changelog entry present.
   - **Brief ref**: Step 4 — architecture.md (L3-001)
 
-- [ ] TASK-06: Add auth-pattern entries to specs/learnings.md
+- [x] TASK-06: Add auth-pattern entries to specs/learnings.md
   - **Goal**: Append four new learning entries under a new "Auth Patterns" heading covering: stateless JWT middleware, demo user selector UI, JWT in localStorage deviation, and bcrypt hashes in seed migrations.
   - **Details**: Read the file to find the correct insertion point (end of file or under a logical section). Append a new `## Auth Patterns` heading followed by four entries:
     1. **Stateless JWT auth middleware** — Express middleware, `req.user` injection, `JWT_SECRET` env var, `Authorization: Bearer` header.

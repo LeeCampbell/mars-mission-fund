@@ -82,3 +82,26 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 
 - `packages/shared/src/index.ts` exports the shared Campaign types. Uses `"exports": { ".": "./src/index.ts" }` so bundler-mode TypeScript resolves types directly from source without a compile step.
 - Re-exporting types from `packages/client/src/api/campaigns.ts` preserves backward compatibility for components importing from that module.
+
+## Auth Patterns
+
+### Stateless JWT auth middleware
+
+- Express middleware attaches `req.user` (decoded JWT payload) so downstream route handlers can access the current user.
+- Auth secrets go in the `JWT_SECRET` env var; the token is sent as an `Authorization: Bearer` header.
+
+### Demo user selector on login page
+
+- The login page offers pre-populated options (email + known password) for each demo role so workshop participants can switch users without typing credentials.
+- This is a workshop-only UI pattern; it must not appear in production builds.
+
+### JWT stored in localStorage (demo deviation)
+
+- Production auth should use HttpOnly cookies to prevent XSS token theft.
+- The demo intentionally uses localStorage for transparency and ease of inspection during the workshop.
+- This deviation is annotated with a "demo stub" comment in the AuthProvider.
+
+### bcrypt hashes in seed migrations
+
+- Demo accounts use known passwords (e.g. `password123`) stored as bcrypt hashes in seed SQL.
+- These are workshop-only; never use known seed passwords in a production system.

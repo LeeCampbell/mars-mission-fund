@@ -43,7 +43,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/shared` passes; TypeScript does not error on `requireRole(['Administrator', 'SuperAdministrator'])`
   - **Brief ref**: Shared types section; Server layer — requireRole update
 
-- [ ] TASK-04: Review server module
+- [x] TASK-04: Review server module
   - **Goal**: Implement `/v1/review` endpoints (list, claim, approve, reject) with notification side-effects
   - **Details**:
     - `review/types.ts`: Zod schemas — `ApproveBody` (`{ notes: string }`), `RejectBody` (`{ rationale: string; guidance: string }`), `ReviewRouteParams` (`{ id: uuid }`)

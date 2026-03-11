@@ -10,6 +10,7 @@ import { createCampaignRouter } from './campaigns/routes.js'
 import { createAuthRouter } from './auth/routes.js'
 import { createUsersRouter } from './users/routes.js'
 import { createNotificationsRouter } from './notifications/routes.js'
+import { createReviewRouter } from './review/routes.js'
 
 export function createApp(pool: Pool): Express {
   const app = express()
@@ -23,6 +24,7 @@ export function createApp(pool: Pool): Express {
   app.use('/v1/auth', createAuthRouter(pool))
   app.use('/v1/users', createUsersRouter(pool))
   app.use('/v1/notifications', createNotificationsRouter(pool))
+  app.use('/v1/review', createReviewRouter(pool))
   app.use(errorHandler)
 
   return app

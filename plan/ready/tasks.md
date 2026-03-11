@@ -131,7 +131,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; existing ProtectedRoute tests still pass
   - **Brief ref**: Frontend — ProtectedRoute, Routing, Page titles
 
-- [ ] TASK-09: Campaign form step components (Steps 1–6)
+- [x] TASK-09: Campaign form step components (Steps 1–6)
   - **Goal**: Implement the six data-entry step components for the multi-step campaign form
   - **Details**: Create each as a pure controlled component under `packages/client/src/components/campaigns/form/`. Each receives a state slice and `onChange` callback, performs field-level validation, and shows inline errors.
     - `StepIndicator.tsx` — horizontal list of 7 step labels; highlights current, completed, upcoming

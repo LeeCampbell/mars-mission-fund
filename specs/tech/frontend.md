@@ -91,6 +91,18 @@ The UI is built from a hierarchy of composable components.
 All visual properties are consumed from semantic tokens.
 Hardcoded visual values in component code are a spec violation.
 
+### 1.2.1 Trusted HTML Rendering
+
+`dangerouslySetInnerHTML` is permitted **only** for HTML content sourced from the application's own API (e.g. rich-text campaign descriptions stored in the database and returned by the server).
+
+**Security boundary:**
+
+- Raw user-supplied HTML must **never** be rendered via `dangerouslySetInnerHTML` — doing so creates an XSS vulnerability.
+- Content rendered this way must originate exclusively from the application's own API responses, which are treated as trusted because they are stored and served by the application itself.
+- If the source of HTML content is in any doubt, use a sanitisation library (e.g. DOMPurify) before rendering.
+
+**Current usage:** `campaign.description` in `CampaignDetailPage` — the campaign description is authored by campaign owners, stored in the database, and returned by the API. It is rendered via `dangerouslySetInnerHTML` to preserve formatting.
+
 ### 1.3 State Management
 
 State management uses a **layered approach** that avoids heavy frameworks in favour of React's built-in primitives and a dedicated server-state library.

@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: §4.3 table contains exactly four rows for the invest-family; each has a non-empty "Use Instead" value; no original row is deleted without replacement.
   - **Brief ref**: Scope bullet 4; Approach step 2
 
-- [ ] TASK-03: Update frontend.md — document dangerouslySetInnerHTML HTML rendering pattern
+- [x] TASK-03: Update frontend.md — document dangerouslySetInnerHTML HTML rendering pattern
   - **Goal**: Record the security boundary rule and approved usage pattern for `dangerouslySetInnerHTML` so future developers know when it is and is not acceptable.
   - **Details**:
     - Read `specs/tech/frontend.md` to find §1.2 (component architecture) or §1.5 and determine the best insertion point for a new subsection.

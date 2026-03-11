@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react'
 
-type BadgeVariant = 'funded' | 'active' | 'new'
+type BadgeVariant = 'funded' | 'active' | 'new' | 'accent'
 
 interface BadgeProps {
   variant: BadgeVariant
@@ -40,6 +40,16 @@ const variantStyles: Record<
     },
     dot: {
       background: 'var(--color-status-new)',
+    },
+  },
+  accent: {
+    badge: {
+      background: 'rgba(26, 58, 110, 0.3)',
+      color: 'var(--color-text-accent)',
+      border: '1px solid var(--color-border-accent)',
+    },
+    dot: {
+      background: 'var(--color-text-accent)',
     },
   },
 }

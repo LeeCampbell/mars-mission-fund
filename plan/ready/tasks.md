@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` in repo root passes; dev server navigates to `/login` without error
   - **Brief ref**: §Routing, §Layout titles
 
-- [ ] TASK-10: Update `Header.tsx` with auth-aware navigation
+- [x] TASK-10: Update `Header.tsx` with auth-aware navigation
   - **Goal**: Header shows "Log in" when unauthenticated; profile link, role badge, and logout button when authenticated
   - **Details**: `packages/client/src/components/Header.tsx` — import `useAuthContext` and `useLogout`. When unauthenticated: render a "Log in" `NavLink` pointing to `/login` in both desktop and mobile nav. When authenticated: render a profile `NavLink` (display name or "Profile") pointing to `/profile`, an `<Badge variant="accent">Admin</Badge>` badge if user has `admin` role, and a "Log out" `<button>` that calls `useLogout().mutate()`. Apply changes to both desktop and mobile nav sections.
   - **Files**: `packages/client/src/components/Header.tsx` (modify)

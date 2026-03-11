@@ -101,7 +101,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes for client
   - **Brief ref**: Frontend layer — API clients
 
-- [ ] TASK-08: Frontend hooks
+- [x] TASK-08: Frontend hooks
   - **Goal**: Create TanStack Query hooks for review, notifications, and admin operations
   - **Details**:
     - `hooks/useReview.ts`: `useReviewQueue()` — `useQuery` on `['reviewQueue']`; `useClaimCampaign()` — `useMutation` + invalidate `reviewQueue`; `useApproveCampaign()` — `useMutation` + invalidate; `useRejectCampaign()` — `useMutation` + invalidate; follow patterns from `useCampaigns.ts`

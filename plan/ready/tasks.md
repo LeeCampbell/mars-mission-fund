@@ -79,7 +79,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; manual curl against running server returns correct status codes
   - **Brief ref**: §5 Server routes
 
-- [ ] TASK-07: Notifications router and app registration
+- [x] TASK-07: Notifications router and app registration
   - **Goal**: Create the notifications router and register it in the Express app
   - **Details**:
     - Create `packages/server/src/notifications/routes.ts` with `GET /` → authenticate → `getNotificationsForUser(pool, req.user.id)` → respond 200 `{ data: notifications }`

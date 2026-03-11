@@ -1,7 +1,7 @@
 # Brand Application Standard
 
 > **Spec ID**: L2-001
-> **Version**: 1.2
+> **Version**: 1.3
 > **Status**: Approved
 > **Rate of Change**: Monthly / standard reviews
 > **Depends On**: L1-001 (Product Vision & Mission), Brand Guidelines (mars-mission-fund-brand.html)
@@ -227,25 +227,29 @@ These are the only tokens components may reference. Each maps to a Tier 1 identi
 
 ### 2.8 Typography — Semantic
 
-| Semantic Token              | Maps To          | Size | Weight | Additional                                      |
-| --------------------------- | ---------------- | ---- | ------ | ----------------------------------------------- |
-| `--type-hero`               | `--font-display` | 96px | 400    | letter-spacing: 0.03em. Landing page hero only. |
-| `--type-page-title`         | `--font-display` | 56px | 400    | letter-spacing: 0.04em                          |
-| `--type-section-heading`    | `--font-display` | 40px | 400    | letter-spacing: 0.04em                          |
-| `--type-card-title`         | `--font-body`    | 24px | 700    |                                                 |
-| `--type-body`               | `--font-body`    | 16px | 400    | line-height: 1.7                                |
-| `--type-body-small`         | `--font-body`    | 13px | 400    | line-height: 1.7                                |
-| `--type-button`             | `--font-body`    | 14px | 600    | letter-spacing: 0.01em                          |
-| `--type-label`              | `--font-data`    | 11px | 400    | letter-spacing: 0.2em, uppercase                |
-| `--type-section-label`      | `--font-data`    | 11px | 400    | letter-spacing: 0.3em, uppercase                |
-| `--type-data`               | `--font-data`    | 14px | 400    | Mission codes, financial figures, timestamps    |
-| `--type-stat-value`         | `--font-display` | 40px | 400    | letter-spacing: 0.03em                          |
-| `--type-stat-value-compact` | `--font-display` | 28px | 400    | letter-spacing: 0.05em                          |
-| `--type-input-label`        | `--font-data`    | 12px | 600    | letter-spacing: 0.05em, uppercase               |
+**Split-property token convention**: Each type-scale entry in this table expands into five property-specific CSS variables: `--type-*-size`, `--type-*-weight`, `--type-*-leading`, `--type-*-spacing`, and `--type-*-family`. Components apply each property individually rather than relying on a CSS shorthand. The `-family` tokens map each type-scale entry to the relevant brand font-family token.
+
+| Semantic Token              | `-family` Token                    | Font Family      | Size | Weight | Additional                                      |
+| --------------------------- | ---------------------------------- | ---------------- | ---- | ------ | ----------------------------------------------- |
+| `--type-hero`               | `--type-hero-family`               | `--font-display` | 96px | 400    | letter-spacing: 0.03em. Landing page hero only. |
+| `--type-page-title`         | `--type-page-title-family`         | `--font-display` | 56px | 400    | letter-spacing: 0.04em                          |
+| `--type-section-heading`    | `--type-section-heading-family`    | `--font-display` | 40px | 400    | letter-spacing: 0.04em                          |
+| `--type-card-title`         | `--type-card-title-family`         | `--font-body`    | 24px | 700    |                                                 |
+| `--type-body`               | `--type-body-family`               | `--font-body`    | 16px | 400    | line-height: 1.7                                |
+| `--type-body-small`         | `--type-body-small-family`         | `--font-body`    | 13px | 400    | line-height: 1.7                                |
+| `--type-button`             | `--type-button-family`             | `--font-body`    | 14px | 600    | letter-spacing: 0.01em                          |
+| `--type-label`              | `--type-label-family`              | `--font-data`    | 11px | 400    | letter-spacing: 0.2em, uppercase                |
+| `--type-section-label`      | `--type-section-label-family`      | `--font-data`    | 11px | 400    | letter-spacing: 0.3em, uppercase                |
+| `--type-data`               | `--type-data-family`               | `--font-data`    | 14px | 400    | Mission codes, financial figures, timestamps    |
+| `--type-stat-value`         | `--type-stat-value-family`         | `--font-display` | 40px | 400    | letter-spacing: 0.03em                          |
+| `--type-stat-value-compact` | `--type-stat-value-compact-family` | `--font-display` | 28px | 400    | letter-spacing: 0.05em                          |
+| `--type-input-label`        | `--type-input-label-family`        | `--font-data`    | 12px | 600    | letter-spacing: 0.05em, uppercase               |
 
 **Rule**: The type scale is a closed set. No intermediate sizes or custom font assignments. If a design requires a size not in this scale, it must be added to this spec before implementation.
 
 **Rule**: `--font-display` (Bebas Neue) is always uppercase. Never set it in mixed case or lowercase.
+
+> **Named Exception — Hero H1 Responsive Sizing**: The `--type-hero-size` token defines the base desktop size as 96px, but the hero H1 uses an approved responsive sizing ladder that overrides `--type-hero-size` at breakpoints: 32px (mobile baseline) → 48px (sm, 640px+) → 72px (lg, 1024px+) → 96px (xl, 1280px+). This breakpoint ladder is implemented via media query overrides and does not introduce new type-scale entries. It is the only approved responsive override of a fixed type-scale token.
 
 ### 2.9 Motion — Semantic
 
@@ -417,7 +421,10 @@ Never use the following in any user-facing product copy:
 | "Click here"                                 | Non-descriptive, inaccessible                  | Descriptive link text: "View mission details"                      |
 | "Exciting opportunity"                       | Sounds like financial spam                     | Specific claim: "Funding closes in 18 days"                        |
 | "Synergistic", "disruptive", "revolutionary" | Corporate buzzwords violate brand voice        | Plain language: specific, concrete descriptions                    |
-| "Investment" (without legal caveat)          | Regulatory risk — contributions are not equity | "Contribution", "backing", "stake", "pledge"                       |
+| "invest"                                     | Regulatory risk — contributions are not equity | "donate", "contribute", "back", "pledge"                           |
+| "investing"                                  | Regulatory risk — contributions are not equity | "donating", "contributing", "backing", "pledging"                  |
+| "investor"                                   | Regulatory risk — contributions are not equity | "donor", "contributor", "backer", "supporter"                      |
+| "investment"                                 | Regulatory risk — contributions are not equity | "donation", "contribution", "backing", "pledge"                    |
 | "Guaranteed returns"                         | Illegal in most jurisdictions                  | Never imply financial returns                                      |
 | "Click to learn more"                        | Passive, vague                                 | Action-specific: "Read the mission plan"                           |
 | Passive voice in CTAs                        | Weakens urgency                                | Active voice: "Back this mission" not "This mission can be backed" |
@@ -545,6 +552,7 @@ The following are violations of this standard. Agents and developers must flag t
 | March 2026 | 1.0     | —      | Initial draft. Combined identity and semantic tokens.                                                                                                                                                                                                                                                    |
 | March 2026 | 1.1     | —      | Restructured to two-tier token architecture. Identity tokens (Tier 1) for brand reference only; semantic tokens (Tier 2) as sole component consumption layer. Added semantic mappings for all colour, typography, motion, and layout tokens. Tier 1 direct reference added as misuse violation.          |
 | March 2026 | 1.2     | —      | Closed token chain gaps: replaced raw rgba/hex values in Tier 2 with identity token derivations using `{token} / {opacity%}` convention. Added `--success-deep` and `--signal-blue` to Tier 1. Removed unused `--crater`. Section 7.2 now references semantic tokens with note on light-theme overrides. |
+| 2026-03-10 | 1.3     | —      | §2.8: documented split-property token convention (five suffixes per scale entry: `-size`, `-weight`, `-leading`, `-spacing`, `-family`); added `-family` column to typography table with all 13 `--type-*-family` tokens; added Named Exception block for hero H1 responsive sizing ladder (32px→48px→72px→96px). §4.3: expanded "invest" forbidden-word table from one row to four, covering "invest", "investing", "investor", "investment" with approved alternatives. |
 
 ---
 

@@ -1,7 +1,7 @@
 # Frontend Standards
 
 > **Spec ID**: L3-005
-> **Version**: 0.4
+> **Version**: 0.5
 > **Status**: Approved
 > **Rate of Change**: Sprint-level / tech decisions
 > **Depends On**: L2-001 (Brand Application Standard), L2-002 (Engineering Standard), L3-001 (Architecture)
@@ -91,6 +91,18 @@ The UI is built from a hierarchy of composable components.
 All visual properties are consumed from semantic tokens.
 Hardcoded visual values in component code are a spec violation.
 
+### 1.2.1 Trusted HTML Rendering
+
+`dangerouslySetInnerHTML` is permitted **only** for HTML content sourced from the application's own API (e.g. rich-text campaign descriptions stored in the database and returned by the server).
+
+**Security boundary:**
+
+- Raw user-supplied HTML must **never** be rendered via `dangerouslySetInnerHTML` — doing so creates an XSS vulnerability.
+- Content rendered this way must originate exclusively from the application's own API responses, which are treated as trusted because they are stored and served by the application itself.
+- If the source of HTML content is in any doubt, use a sanitisation library (e.g. DOMPurify) before rendering.
+
+**Current usage:** `campaign.description` in `CampaignDetailPage` — the campaign description is authored by campaign owners, stored in the database, and returned by the API. It is rendered via `dangerouslySetInnerHTML` to preserve formatting.
+
 ### 1.3 State Management
 
 State management uses a **layered approach** that avoids heavy frameworks in favour of React's built-in primitives and a dedicated server-state library.
@@ -135,6 +147,32 @@ const Contribute = React.lazy(() => import('./pages/Contribute'));
 ```
 
 Marketing pages (landing, public campaign list) may be statically pre-rendered and do not require lazy loading.
+
+**Page title management pattern** (introduced in Issue #81):
+
+- A static `routeTitles` map in `Layout.tsx` maps known route paths to their full page title strings. On every location change, a `useEffect` in `Layout` looks up the current path in this map and sets `document.title` accordingly.
+- For dynamic routes whose titles depend on fetched data (e.g. a campaign's name on the campaign detail page), the page component sets `document.title` in its own `useEffect` once the data is available.
+- Title format: `<Page Name> — Mars Mission Fund` (em dash separator, app name suffix on every page).
+
+```tsx
+// Layout.tsx — static route titles
+const routeTitles: Record<string, string> = {
+  '/': 'Home — Mars Mission Fund',
+  '/about': 'About — Mars Mission Fund',
+  '/contact': 'Contact — Mars Mission Fund',
+}
+
+useEffect(() => {
+  document.title = routeTitles[location.pathname] ?? 'Mars Mission Fund'
+}, [location.pathname])
+
+// CampaignDetailPage.tsx — dynamic title set once campaign data loads
+useEffect(() => {
+  if (campaign) {
+    document.title = `${campaign.title} — Mars Mission Fund`
+  }
+}, [campaign])
+```
 
 ### 1.5 API Communication
 
@@ -585,6 +623,7 @@ Domain specs may not introduce visual properties that bypass this spec's token a
 | March 2026 | 0.2     | —      | Resolved OQ-1: React 19.x selected as frontend framework per L3-008.                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | March 2026 | 0.3     | —      | Resolved OQ-2 through OQ-9: Mobile-first responsive strategy with breakpoints at 640/768/1024/1280px. Bundle size budgets established. TanStack Query + React built-in state for state management. Inline SVG React components for icons. Vitest + React Testing Library + Playwright + MSW + Supertest for testing (with Playwright MCP for AI agent integration). SPA with selective static pre-rendering for SEO pages. Graceful degradation for no-JS with branded noscript fallback. |
 | 2026-03-09 | 0.4     | —      | Documented patterns introduced in issues #40–#43 (Public Campaign Pages milestone): (1) Section 1.4 — lazy loading pattern for non-marketing routes using `React.lazy` + `Suspense` with a root `<Suspense>` wrapping `<Routes>`; (2) Section 1.5 — api/hooks layering convention (`src/api/<domain>.ts` for fetch functions, `src/hooks/use<Domain>.ts` for TanStack Query hooks, page components consume hooks only); (3) Section 1.5 — Vite dev-server proxy forwarding `/v1` to `http://localhost:3000` for local development. |
+| 2026-03-10 | 0.5     | —      | Documented patterns introduced in issues #80–#81 (Milestone housekeeping milestone): (1) Section 1.2.1 — Trusted HTML Rendering: `dangerouslySetInnerHTML` permitted only for API-sourced content; raw user-supplied HTML explicitly forbidden (XSS); current usage is `campaign.description` in `CampaignDetailPage`; (2) Section 1.4 — Page title management: static `routeTitles` map in `Layout.tsx` for known routes; page components use `useEffect` for dynamic titles; title format `<Page Name> — Mars Mission Fund`. |
 
 ---
 

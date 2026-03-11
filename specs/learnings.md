@@ -64,6 +64,18 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 - The client API layer previously caught all fetch errors and returned inline mock data. This masked real server errors and made E2E tests unable to verify error states.
 - Resolution: re-throw errors instead. The UI renders loading/error states using React state.
 
+## Token & Design System Patterns
+
+### Split-property token naming convention
+
+- Each type-scale entry in the brand spec expands into five CSS variables: `--type-*-size`, `--type-*-weight`, `--type-*-leading`, `--type-*-spacing`, and `--type-*-family`. Components apply each property individually — there is no shorthand.
+- The `-family` tokens map each scale entry to the relevant `--font-*` identity token (e.g. `--type-hero-family: var(--font-display)`).
+
+### Responsive hero type scaling is a named exception, not a violation
+
+- The `--type-hero-size` token is fixed at 96px in the type scale, but the hero H1 uses a responsive ladder: 32px (mobile) → 48px (sm, 640px+) → 72px (lg, 1024px+) → 96px (xl, 1280px+).
+- This is documented in brand.md §2.8 as "Named Exception — Hero H1 Responsive Sizing". It is the only approved responsive override of a fixed type-scale token and is implemented via media query overrides, not new scale entries.
+
 ## Monorepo Structure
 
 ### @mmf/shared package

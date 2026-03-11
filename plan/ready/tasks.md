@@ -158,7 +158,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript passes; pages render without errors; components import from correct hooks
   - **Brief ref**: Frontend layer — AdminCancellationsPage, NotificationsPage
 
-- [ ] TASK-13: NotificationBell component + tests
+- [x] TASK-13: NotificationBell component + tests
   - **Goal**: Implement the notification bell header component and its tests
   - **Details**:
     - `NotificationBell.tsx`: calls `useNotifications()` on mount; renders a bell icon (SVG or unicode `🔔`) wrapped in a `<Link to="/notifications">`; overlays a red badge showing unread count (filter `notifications.filter(n => !n.isRead).length`); hide badge if count is 0; handle loading state gracefully

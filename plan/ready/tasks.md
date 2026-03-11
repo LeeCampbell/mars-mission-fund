@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists and contains valid SQL with 5 new columns; no syntax errors
   - **Brief ref**: Migrations section, migration #1
 
-- [ ] TASK-02: Create migration — campaign_audit_log table
+- [x] TASK-02: Create migration — campaign_audit_log table
   - **Goal**: Create the immutable `campaign_audit_log` table for state-transition history
   - **Details**: Create `packages/server/db/migrations/20260311000004_create_campaign_audit_log.sql`. Columns: `id UUID PK`, `campaign_id UUID NOT NULL REFERENCES campaigns(id)`, `previous_state TEXT`, `new_state TEXT NOT NULL`, `actor_id UUID NOT NULL REFERENCES accounts(id)`, `rationale TEXT`, `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`. Add index on `campaign_id`.
   - **Files**: `packages/server/db/migrations/20260311000004_create_campaign_audit_log.sql`

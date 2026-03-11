@@ -8,6 +8,7 @@ const mockPool = { query: mockQuery } as unknown as Pool
 const app = createApp(mockPool)
 
 const TEST_UUID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+const CREATOR_UUID = '22222222-2222-2222-2222-222222222222'
 
 const mockCampaignSummary = {
   id: TEST_UUID,
@@ -21,6 +22,7 @@ const mockCampaignSummary = {
   contributorCount: 42,
   deadline: null,
   createdAt: new Date('2024-01-15T10:00:00.000Z'),
+  createdBy: CREATOR_UUID,
 }
 
 const mockCampaignRow = {
@@ -50,6 +52,7 @@ describe('Campaign Routes', () => {
       expect(res.body).toHaveProperty('data')
       expect(Array.isArray(res.body.data)).toBe(true)
       expect(res.body.data).toHaveLength(1)
+      expect(res.body.data[0].createdBy).toBe(CREATOR_UUID)
       expect(res.headers['x-correlation-id']).toBeDefined()
     })
 
@@ -90,6 +93,7 @@ describe('Campaign Routes', () => {
       expect(res.headers['content-type']).toMatch(/application\/json/)
       expect(res.body).toHaveProperty('data')
       expect(res.body.data.id).toBe(TEST_UUID)
+      expect(res.body.data.createdBy).toBe(CREATOR_UUID)
       expect(res.headers['x-correlation-id']).toBeDefined()
     })
 

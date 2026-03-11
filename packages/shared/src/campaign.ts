@@ -77,6 +77,7 @@ export const CampaignSummarySchema = z.object({
   contributorCount: z.number().int(),
   deadline: z.coerce.date().nullable(),
   createdAt: z.coerce.date(),
+  createdBy: z.string().uuid().nullable(),
 })
 
 // Full campaign returned by the detail endpoint
@@ -94,6 +95,38 @@ export const CampaignDetailSchema = CampaignSummarySchema.extend({
   updates: z.array(CampaignUpdateSchema),
 })
 
+export const AuditLogEntrySchema = z.object({
+  id: z.string().uuid(),
+  campaignId: z.string().uuid(),
+  previousState: CampaignStatusSchema.nullable(),
+  newState: CampaignStatusSchema,
+  actorId: z.string().uuid(),
+  rationale: z.string().nullable(),
+  createdAt: z.coerce.date(),
+})
+
+export const NotificationSchema = z.object({
+  id: z.string().uuid(),
+  userId: z.string().uuid(),
+  type: z.string(),
+  title: z.string(),
+  message: z.string(),
+  campaignId: z.string().uuid().nullable(),
+  read: z.boolean(),
+  createdAt: z.coerce.date(),
+})
+
+export const MilestoneEvidenceSchema = z.object({
+  id: z.string().uuid(),
+  milestoneId: z.string().uuid(),
+  campaignId: z.string().uuid(),
+  submittedBy: z.string().uuid(),
+  evidenceType: z.string(),
+  evidenceUrl: z.string().url(),
+  description: z.string().nullable(),
+  submittedAt: z.coerce.date(),
+})
+
 export type CampaignStatus = z.infer<typeof CampaignStatusSchema>
 export type CampaignCategory = z.infer<typeof CampaignCategorySchema>
 export type MilestoneStatus = z.infer<typeof MilestoneStatusSchema>
@@ -103,3 +136,6 @@ export type TeamMember = z.infer<typeof TeamMemberSchema>
 export type CampaignUpdate = z.infer<typeof CampaignUpdateSchema>
 export type CampaignSummary = z.infer<typeof CampaignSummarySchema>
 export type CampaignDetail = z.infer<typeof CampaignDetailSchema>
+export type AuditLogEntry = z.infer<typeof AuditLogEntrySchema>
+export type Notification = z.infer<typeof NotificationSchema>
+export type MilestoneEvidence = z.infer<typeof MilestoneEvidenceSchema>

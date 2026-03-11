@@ -81,7 +81,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cd packages/client && npm test` — all new tests pass with no failures
   - **Brief ref**: §Frontend component tests
 
-- [ ] TASK-12: Final build and integration verification
+- [x] TASK-12: Final build and integration verification
   - **Goal**: Confirm the entire feature compiles cleanly and tests are green
   - **Details**: Run `npm run build` from the repo root and confirm zero TypeScript errors. Run `cd packages/client && npm test` and confirm all tests pass. Review console output for any runtime warnings. If the backend (Issue #93) is available, do a quick manual smoke test per the brief's visual verification checklist.
   - **Files**: No file changes — verification only

@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; `npx tsc -b --noEmit` passes; login page visually shows a Reviewer card
   - **Brief ref**: "LoginPage demo card" section
 
-- [ ] TASK-03: Write E2E tests for campaign lifecycle
+- [x] TASK-03: Write E2E tests for campaign lifecycle
   - **Goal**: Create `e2e/campaign-lifecycle.spec.ts` with all 7 lifecycle scenarios described in the brief
   - **Details**: Create the file in `e2e/`. Reuse the `login` helper pattern from `e2e/auth.spec.ts`. Each test must be independent: log in fresh, create a new draft via UI, and drive the full scenario. Tests must not rely on execution order or shared state. Cover all 7 scenarios:
     1. Creator creates draft, fills required fields, submits for review

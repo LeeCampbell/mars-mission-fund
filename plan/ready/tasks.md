@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File diff shows `createdBy` added to both SELECTs; `npx tsc -b --noEmit` passes
   - **Brief ref**: Server queries section
 
-- [ ] TASK-09: Update server unit tests for createdBy field
+- [x] TASK-09: Update server unit tests for createdBy field
   - **Goal**: Cover the new `createdBy` field in campaign server tests
   - **Details**: Modify `packages/server/src/__tests__/campaigns.test.ts`. Add `createdBy` (a UUID string or null) to `mockCampaignSummary` and `mockCampaignRow`. Add assertions that list and detail API responses include the `createdBy` field.
   - **Files**: `packages/server/src/__tests__/campaigns.test.ts`

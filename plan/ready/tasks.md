@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: No TypeScript errors; hooks export correct names
   - **Brief ref**: §TanStack Query hooks
 
-- [ ] TASK-05: Create `ProtectedRoute` component
+- [x] TASK-05: Create `ProtectedRoute` component
   - **Goal**: Route guard that redirects unauthenticated or unauthorised users
   - **Details**: Create `packages/client/src/components/ProtectedRoute.tsx`. Props: `{ requireAdmin?: boolean }`. Read `{ isAuthenticated, user }` from `useAuthContext()`. If not authenticated → `<Navigate to="/login" state={{ from: location }} replace />`. If `requireAdmin` and user lacks `admin` role → `<Navigate to="/" replace />`. Otherwise render `<Outlet />` (layout-route usage). Use `useLocation` from `react-router`.
   - **Files**: `packages/client/src/components/ProtectedRoute.tsx` (create)

@@ -19,7 +19,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Files exist and contain valid SQL. `schema.sql` includes the new columns and `audit_events` table.
   - **Brief ref**: DB migrations section; Audit helper section (table schema)
 
-- [ ] TASK-02: Audit helper — writeAuditEvent
+- [x] TASK-02: Audit helper — writeAuditEvent
   - **Goal**: Create `packages/server/src/campaigns/audit.ts` that exports a fire-and-forget `writeAuditEvent` helper.
   - **Details**:
     - Import `Pool` from `pg`.

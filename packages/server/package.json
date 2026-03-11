@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@mmf/shared": "*",
+    "bcryptjs": "^3.0.3",
     "cors": "^2",
     "dotenv": "^16.4.5",
     "express": "^5",
     "helmet": "^8",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8",
     "pino": "^9",
     "pino-http": "^10",
@@ -22,8 +24,10 @@
     "zod": "^3"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2",
     "@types/express": "^5",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22",
     "@types/pg": "^8",
     "@types/supertest": "^6",

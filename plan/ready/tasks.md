@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists with correct schema and index definition
   - **Brief ref**: Migrations section, migration #4
 
-- [ ] TASK-05: Create migration — seed Reviewer demo account
+- [x] TASK-05: Create migration — seed Reviewer demo account
   - **Goal**: Insert the Reviewer demo account into `accounts`
   - **Details**: Create `packages/server/db/migrations/20260311000007_seed_reviewer_account.sql`. Generate bcrypt-10 hash of `reviewer-demo-pass` via `node -e "require('bcrypt').hash('reviewer-demo-pass', 10).then(h => console.log(h))"`. INSERT with fixed UUID `44444444-4444-4444-4444-444444444444`, email `reviewer@example.com`, role `Reviewer`. Follow DEMO STUB comment pattern from `20260311000002_seed_accounts.sql`.
   - **Files**: `packages/server/db/migrations/20260311000007_seed_reviewer_account.sql`

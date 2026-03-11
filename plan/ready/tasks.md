@@ -74,7 +74,7 @@ Brief: plan/ready/brief.md
   - **Verify**: No TypeScript errors; header renders auth state correctly in browser
   - **Brief ref**: §Navigation updates
 
-- [ ] TASK-11: Write component tests
+- [x] TASK-11: Write component tests
   - **Goal**: Cover login flow, profile editing, ProtectedRoute redirects, and admin user list
   - **Details**: Use Vitest + React Testing Library, mocking API modules with `vi.mock`. Follow patterns of existing tests if any; otherwise mock `AuthContext` and TanStack Query. `ProtectedRoute.test.tsx` — test redirect to `/login` when unauthenticated; test redirect to `/` when authenticated but not admin with `requireAdmin`; test renders children when authenticated. `LoginPage.test.tsx` — test demo user cards pre-fill credentials; test form submission calls `useLogin`; test error message displayed on failed login. `ProfilePage.test.tsx` — test user info is displayed; test edit form submission calls `useUpdateProfile`. `AdminUsersPage.test.tsx` — test renders user list from `useUsers`; test loading/error states.
   - **Files**: `packages/client/src/components/ProtectedRoute.test.tsx` (create), `packages/client/src/pages/LoginPage.test.tsx` (create), `packages/client/src/pages/ProfilePage.test.tsx` (create), `packages/client/src/pages/AdminUsersPage.test.tsx` (create)

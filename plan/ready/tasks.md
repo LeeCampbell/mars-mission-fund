@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Update L4-001 local demo scope note in specs/domain/account.md
+- [x] TASK-01: Update L4-001 local demo scope note in specs/domain/account.md
   - **Goal**: Replace the outdated Clerk reference in the "Local demo scope" paragraph with an accurate description of the JWT stub.
   - **Details**: Open `specs/domain/account.md`. Find the paragraph that begins "Registration, authentication via Clerk…" and replace it with the exact text provided in the brief (section 1): describes JWT stub, localStorage, bcrypt, stateless tokens, and what is/isn't theatre.
   - **Files**: `specs/domain/account.md`

@@ -8,6 +8,8 @@ import { MilestonesSection } from '../components/campaigns/MilestonesSection'
 import { StretchGoalsSection } from '../components/campaigns/StretchGoalsSection'
 import { CampaignUpdatesSection } from '../components/campaigns/CampaignUpdatesSection'
 import { TeamSection } from '../components/campaigns/TeamSection'
+import { ReviewActionsPanel } from '../components/campaigns/ReviewActionsPanel'
+import { useAuthContext } from '../context/AuthContext'
 import type { CampaignStatus } from '@mmf/shared'
 
 type BadgeVariant = 'funded' | 'active' | 'new'
@@ -146,6 +148,7 @@ const errorStyle: React.CSSProperties = {
 
 export function CampaignDetailPage() {
   const { id } = useParams<{ id: string }>()
+  const { user } = useAuthContext()
 
   const { data: campaign, isLoading, isError } = useCampaign(id ?? '')
 
@@ -245,6 +248,10 @@ export function CampaignDetailPage() {
 
               <div style={sectionSpacingStyle}>
                 <CampaignUpdatesSection updates={campaign.updates} />
+              </div>
+
+              <div style={sectionSpacingStyle}>
+                <ReviewActionsPanel campaign={campaign} user={user} />
               </div>
             </div>
 

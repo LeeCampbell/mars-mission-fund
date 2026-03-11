@@ -137,7 +137,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; page renders the list and Claim button in the browser when logged in as reviewer
   - **Brief ref**: §7 Client UI (ReviewQueuePage)
 
-- [ ] TASK-12: ReviewActionsPanel component and CampaignDetailPage integration
+- [x] TASK-12: ReviewActionsPanel component and CampaignDetailPage integration
   - **Goal**: Create the Approve/Reject/Resubmit panel and render it on the campaign detail page
   - **Details**:
     - Create `packages/client/src/components/campaigns/ReviewActionsPanel.tsx`. Accepts campaign data and current user as props.

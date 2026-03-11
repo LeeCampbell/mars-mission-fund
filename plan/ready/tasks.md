@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/shared` passes with no errors.
   - **Brief ref**: Shared types
 
-- [ ] TASK-03: Extend requireRole middleware to accept an array of roles
+- [x] TASK-03: Extend requireRole middleware to accept an array of roles
   - **Goal**: Allow admin routes to accept both `'Administrator'` and `'SuperAdministrator'`
   - **Details**: In `packages/server/src/middleware/requireRole.ts`, change the signature to `requireRole(role: Role | Role[])`. Inside the function, normalise to an array and check if `req.user.role` is included. All existing single-role usages must continue to work unchanged.
   - **Files**: `packages/server/src/middleware/requireRole.ts`

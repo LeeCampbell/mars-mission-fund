@@ -1,7 +1,7 @@
 # Account Lifecycle
 
 > **Spec ID**: L4-001
-> **Version**: 0.2
+> **Version**: 0.3
 > **Status**: Approved
 > **Rate of Change**: Per feature / per release
 > **Depends On**: L2-001 (Brand Application Standard), L3-002 (Security), L3-005 (Frontend Standards), L4-005 (KYC)
@@ -11,7 +11,8 @@
 
 ## Purpose
 
-> **Local demo scope**: Registration, authentication via Clerk, role assignment, and profile management are **real** — they are implemented in the local demo. Session elevation, MFA enforcement, account deactivation with GDPR erasure workflow, data portability exports, and SSO provider integration are theatre. The local demo uses Clerk's default session management.
+> **Local demo scope**: Registration, authentication via a custom stateless JWT stub (no refresh, no revocation; JWT stored in localStorage; demo passwords bcrypt-hashed), role assignment, and profile management are **real** — they are implemented in the local demo.
+> Session elevation, MFA enforcement, account deactivation with GDPR erasure workflow, data portability exports, SSO provider integration, and Clerk/OIDC are theatre for the demo.
 
 This spec governs the full account lifecycle for Mars Mission Fund: registration, onboarding, email verification, password policies, SSO integration, profile management, role assignment and management, session management, notification preferences, account recovery, account deactivation, and data portability.
 
@@ -437,3 +438,4 @@ Escrow status queries during deactivation use the Payments read API.
 | ---------- | ------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | March 2026 | 0.1     | —      | Initial stub. Registration, onboarding, roles, profile, sessions, recovery, deactivation, data portability, interface contracts with KYC, Donor, Campaign, and Payments.                                                                                                                                              |
 | March 2026 | 0.2     | —      | Resolved all open questions: verification link expiry (24h), password reset expiry (1h), SSO providers (Google, Microsoft), default notifications (all opt-in except announcements), reactivation window (90 days), export format (JSON + CSV), MFA recovery process (manual ID verification), no cooling-off period. |
+| March 2026 | 0.3     | —      | Updated local demo scope note: replaced Clerk reference with custom stateless JWT stub description (no refresh, no revocation, JWT in localStorage, bcrypt-hashed demo passwords); Clerk/OIDC noted as theatre for the demo. |

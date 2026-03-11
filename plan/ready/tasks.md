@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Package names and versions are recorded; confirms whether it is `bcryptjs` or `bcrypt`.
   - **Brief ref**: Step 3 / Dependencies section ("Confirm the exact npm package names … before updating tech-stack.md")
 
-- [ ] TASK-02: Update specs/domain/account.md — local demo scope note + version bump
+- [x] TASK-02: Update specs/domain/account.md — local demo scope note + version bump
   - **Goal**: Replace the Clerk reference in the local demo scope note with the custom JWT/bcrypt stub description; increment version 0.2 → 0.3 and add a changelog entry.
   - **Details**: Read the file. On line 14 (local demo scope note) replace "authentication via Clerk" (or equivalent) with a description of the custom JWT stub: stateless, no refresh, no revocation, JWT in localStorage, bcrypt-hashed demo passwords, and that Clerk / SSO / session elevation / MFA are theatre for the demo. Increment the `Version` field from 0.2 to 0.3. Add a dated changelog row documenting the change.
   - **Files**: `specs/domain/account.md`

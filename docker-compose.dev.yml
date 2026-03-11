@@ -15,5 +15,13 @@ services:
       timeout: 5s
       retries: 5
 
+# Server environment variables required when running the Node.js server:
+#   DATABASE_URL=postgres://mmf:mmf@localhost:5432/mmf
+#   PORT=3001
+#   JWT_SECRET=change-me-in-production  <-- REQUIRED for JWT auth middleware
+# If a server service is added to this compose file, include:
+#   environment:
+#     JWT_SECRET: change-me-in-production
+
 volumes:
   pgdata:

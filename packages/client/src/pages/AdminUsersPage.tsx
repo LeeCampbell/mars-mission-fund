@@ -2,10 +2,10 @@ import { useUsers } from '../hooks/useUsers'
 import { Badge } from '../components/ui/Badge'
 import type { User } from '@mmf/shared'
 
-type BadgeVariant = 'funded' | 'active' | 'new'
+type BadgeVariant = 'funded' | 'active' | 'new' | 'accent'
 
 function roleBadgeVariant(role: string): BadgeVariant {
-  if (role === 'admin') return 'active'
+  if (role === 'Administrator' || role === 'SuperAdministrator') return 'accent'
   return 'new'
 }
 
@@ -88,15 +88,9 @@ function UserRow({ user }: { user: User }) {
       <td style={tdStyle}>{user.displayName ?? '—'}</td>
       <td style={tdStyle}>
         <div style={rolesStyle}>
-          {user.roles.length === 0 ? (
-            <span style={{ color: 'var(--color-text-tertiary)' }}>None</span>
-          ) : (
-            user.roles.map((role) => (
-              <Badge key={role} variant={roleBadgeVariant(role)}>
-                {role}
-              </Badge>
-            ))
-          )}
+          <Badge variant={roleBadgeVariant(user.role)}>
+            {user.role}
+          </Badge>
         </div>
       </td>
     </tr>

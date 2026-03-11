@@ -14,7 +14,9 @@ const mockUser = {
   email: 'alice@example.com',
   displayName: 'Alice',
   bio: null,
-  roles: ['user'],
+  role: 'Backer' as const,
+  createdAt: new Date(),
+  updatedAt: new Date(),
 }
 
 const adminUser = {
@@ -22,7 +24,9 @@ const adminUser = {
   email: 'admin@example.com',
   displayName: 'Admin',
   bio: null,
-  roles: ['admin'],
+  role: 'Administrator' as const,
+  createdAt: new Date(),
+  updatedAt: new Date(),
 }
 
 describe('ProtectedRoute', () => {

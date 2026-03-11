@@ -114,7 +114,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript passes; hooks export matches what pages will import
   - **Brief ref**: Frontend layer — hooks
 
-- [ ] TASK-09: ReviewQueuePage + tests
+- [x] TASK-09: ReviewQueuePage + tests
   - **Goal**: Implement the reviewer queue page and its component tests
   - **Details**:
     - `ReviewQueuePage.tsx`: uses `useReviewQueue()`; renders a table of CampaignSummary rows (title, status, created_at); each row has a "Claim" button that calls `useClaimCampaign()` mutation; on success, navigate to `/review/:id`; show loading/error states

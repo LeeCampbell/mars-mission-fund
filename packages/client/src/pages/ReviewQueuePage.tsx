@@ -1,8 +1,6 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { fetchReviewQueue, claimCampaign } from '../api/campaigns'
-import type { CampaignSummary } from '../api/campaigns'
+import { useReviewQueue, useClaimCampaign } from '../hooks/useReview'
+import type { CampaignSummary } from '@mmf/shared'
 
 const pageStyle: React.CSSProperties = {
   minHeight: '100vh',
@@ -22,13 +20,6 @@ const headingStyle: React.CSSProperties = {
   letterSpacing: 'var(--type-heading-2-spacing)',
   lineHeight: 'var(--type-heading-2-leading)',
   color: 'var(--color-text-primary)',
-  margin: '0 0 var(--space-2)',
-}
-
-const subheadingStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-body)',
-  fontSize: 'var(--type-body-size)',
-  color: 'var(--color-text-secondary)',
   margin: '0 0 var(--space-6)',
 }
 
@@ -58,11 +49,11 @@ const tdStyle: React.CSSProperties = {
 }
 
 const claimButtonStyle: React.CSSProperties = {
+  padding: 'var(--space-2) var(--space-4)',
   background: 'var(--color-accent-primary)',
   color: 'var(--color-text-on-accent)',
   border: 'none',
   borderRadius: 'var(--radius-sm)',
-  padding: 'var(--space-2) var(--space-4)',
   fontFamily: 'var(--font-body)',
   fontSize: 'var(--type-body-small-size)',
   fontWeight: 600,
@@ -96,29 +87,22 @@ const errorStyle: React.CSSProperties = {
 }
 
 const emptyStyle: React.CSSProperties = {
-  padding: 'var(--space-12) 0',
+  padding: 'var(--space-8)',
   textAlign: 'center',
   fontFamily: 'var(--font-body)',
   fontSize: 'var(--type-body-size)',
   color: 'var(--color-text-secondary)',
 }
 
-function CampaignRow({ campaign }: { campaign: CampaignSummary }) {
-  const navigate = useNavigate()
-  const queryClient = useQueryClient()
-  const [claimError, setClaimError] = useState<string | null>(null)
-
-  const { mutate: claim, isPending } = useMutation({
-    mutationFn: () => claimCampaign(campaign.id),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['review-queue'] })
-      void navigate(`/campaigns/${campaign.id}`)
-    },
-    onError: () => {
-      setClaimError('Failed to claim campaign. Please try again.')
-    },
-  })
-
+function CampaignRow({
+  campaign,
+  onClaim,
+  isClaiming,
+}: {
+  campaign: CampaignSummary
+  onClaim: (id: string) => void
+  isClaiming: boolean
+}) {
   const submittedDate = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
@@ -128,30 +112,16 @@ function CampaignRow({ campaign }: { campaign: CampaignSummary }) {
   return (
     <tr>
       <td style={tdStyle}>{campaign.title}</td>
+      <td style={tdStyle}>{campaign.status}</td>
       <td style={tdStyle}>{submittedDate}</td>
       <td style={tdStyle}>
-        {claimError && (
-          <span
-            role="alert"
-            style={{
-              fontSize: 'var(--type-body-small-size)',
-              color: 'var(--color-status-error)',
-              marginRight: 'var(--space-2)',
-            }}
-          >
-            {claimError}
-          </span>
-        )}
         <button
-          style={isPending ? claimButtonDisabledStyle : claimButtonStyle}
-          disabled={isPending}
-          onClick={() => {
-            setClaimError(null)
-            claim()
-          }}
+          style={isClaiming ? claimButtonDisabledStyle : claimButtonStyle}
+          onClick={() => onClaim(campaign.id)}
+          disabled={isClaiming}
           aria-label={`Claim campaign: ${campaign.title}`}
         >
-          {isPending ? 'Claiming…' : 'Claim'}
+          {isClaiming ? 'Claiming…' : 'Claim'}
         </button>
       </td>
     </tr>
@@ -159,14 +129,17 @@ function CampaignRow({ campaign }: { campaign: CampaignSummary }) {
 }
 
 export function ReviewQueuePage() {
-  const {
-    data: campaigns,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['review-queue'],
-    queryFn: fetchReviewQueue,
-  })
+  const { data: campaigns, isLoading, isError } = useReviewQueue()
+  const claimMutation = useClaimCampaign()
+  const navigate = useNavigate()
+
+  function handleClaim(id: string) {
+    claimMutation.mutate(id, {
+      onSuccess: () => {
+        void navigate(`/review/${id}`)
+      },
+    })
+  }
 
   if (isLoading) {
     return (
@@ -178,7 +151,7 @@ export function ReviewQueuePage() {
     )
   }
 
-  if (isError) {
+  if (isError || !campaigns) {
     return (
       <div style={pageStyle}>
         <div style={errorStyle} role="alert">
@@ -192,24 +165,26 @@ export function ReviewQueuePage() {
     <div style={pageStyle}>
       <div style={contentStyle}>
         <h1 style={headingStyle}>Review Queue</h1>
-        <p style={subheadingStyle}>Campaigns awaiting review, oldest first.</p>
-
-        {campaigns && campaigns.length === 0 && (
+        {campaigns.length === 0 ? (
           <div style={emptyStyle}>No campaigns awaiting review.</div>
-        )}
-
-        {campaigns && campaigns.length > 0 && (
+        ) : (
           <table style={tableStyle} aria-label="Campaigns awaiting review">
             <thead>
               <tr>
                 <th style={thStyle}>Campaign</th>
+                <th style={thStyle}>Status</th>
                 <th style={thStyle}>Submitted</th>
                 <th style={thStyle}>Action</th>
               </tr>
             </thead>
             <tbody>
               {campaigns.map((campaign) => (
-                <CampaignRow key={campaign.id} campaign={campaign} />
+                <CampaignRow
+                  key={campaign.id}
+                  campaign={campaign}
+                  onClaim={handleClaim}
+                  isClaiming={claimMutation.isPending}
+                />
               ))}
             </tbody>
           </table>

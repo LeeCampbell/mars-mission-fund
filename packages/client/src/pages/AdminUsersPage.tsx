@@ -88,9 +88,7 @@ function UserRow({ user }: { user: User }) {
       <td style={tdStyle}>{user.displayName ?? '—'}</td>
       <td style={tdStyle}>
         <div style={rolesStyle}>
-          <Badge variant={roleBadgeVariant(user.role)}>
-            {user.role}
-          </Badge>
+          <Badge variant={roleBadgeVariant(user.role)}>{user.role}</Badge>
         </div>
       </td>
     </tr>

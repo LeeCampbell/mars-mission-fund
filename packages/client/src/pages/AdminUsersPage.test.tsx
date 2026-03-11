@@ -9,8 +9,24 @@ vi.mock('../hooks/useUsers', () => ({
 import { useUsers } from '../hooks/useUsers'
 
 const mockUsers = [
-  { id: '1', email: 'admin@example.com', displayName: 'Admin User', bio: null, role: 'Administrator', createdAt: new Date(), updatedAt: new Date() },
-  { id: '2', email: 'alice@example.com', displayName: 'Alice', bio: null, role: 'Backer', createdAt: new Date(), updatedAt: new Date() },
+  {
+    id: '1',
+    email: 'admin@example.com',
+    displayName: 'Admin User',
+    bio: null,
+    role: 'Administrator',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '2',
+    email: 'alice@example.com',
+    displayName: 'Alice',
+    bio: null,
+    role: 'Backer',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
 ]
 
 describe('AdminUsersPage', () => {

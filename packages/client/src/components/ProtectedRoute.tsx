@@ -13,11 +13,7 @@ export function ProtectedRoute({ requireAdmin }: ProtectedRouteProps) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 
-  if (
-    requireAdmin &&
-    user?.role !== 'Administrator' &&
-    user?.role !== 'SuperAdministrator'
-  ) {
+  if (requireAdmin && user?.role !== 'Administrator' && user?.role !== 'SuperAdministrator') {
     return <Navigate to="/" replace />
   }
 

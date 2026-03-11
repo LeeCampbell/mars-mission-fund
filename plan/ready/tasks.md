@@ -96,7 +96,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Server builds (`npm run build`); manual curl or type-check passes.
   - **Brief ref**: Route patterns section; Endpoint details section
 
-- [ ] TASK-05: Integration tests for all new endpoints
+- [x] TASK-05: Integration tests for all new endpoints
   - **Goal**: Add comprehensive integration tests to `packages/server/src/__tests__/campaigns.test.ts` covering all six new endpoints.
   - **Details**: Follow the existing SuperTest + mock-pool pattern in the file. For each endpoint add tests for:
     - Happy path (correct state, valid input, expected response code and body)

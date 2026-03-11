@@ -9,7 +9,21 @@ const mockPool = { query: mockQuery } as unknown as Pool
 const app = createApp(mockPool)
 
 const TEST_UUID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+const TEST_JWT_SECRET = 'test-jwt-secret-for-campaign-tests'
 const CREATOR_UUID = '22222222-2222-2222-2222-222222222222'
+const BACKER_UUID = 'b1b2b3b4-e5f6-7890-abcd-ef1234567890'
+const ADMIN_UUID = 'ad000000-e5f6-7890-abcd-ef1234567890'
+const OTHER_CREATOR_UUID = 'oc000000-e5f6-7890-abcd-ef1234567890'
+
+function makeCreatorToken(id = CREATOR_UUID): string {
+  return jwt.sign({ id, role: 'Creator' }, TEST_JWT_SECRET)
+}
+function makeBackerToken(): string {
+  return jwt.sign({ id: BACKER_UUID, role: 'Backer' }, TEST_JWT_SECRET)
+}
+function makeAdminToken(): string {
+  return jwt.sign({ id: ADMIN_UUID, role: 'Administrator' }, TEST_JWT_SECRET)
+}
 
 const mockCampaignSummary = {
   id: TEST_UUID,
@@ -37,9 +51,87 @@ const mockCampaignRow = {
   updatedAt: new Date('2024-01-20T10:00:00.000Z'),
 }
 
+// CampaignRow shapes for new endpoint tests
+const mockApprovedCampaignRow = {
+  id: TEST_UUID,
+  status: 'Approved',
+  creatorId: CREATOR_UUID,
+  currentAmountUsd: 0,
+  minFundingTargetUsd: 100000,
+  maxFundingCapUsd: 500000,
+  contributorCount: 0,
+  deadline: null,
+  cancellationRequestedAt: null,
+  launchedAt: null,
+}
+
+const mockLiveCampaignRow = {
+  id: TEST_UUID,
+  status: 'Live',
+  creatorId: CREATOR_UUID,
+  currentAmountUsd: 50000,
+  minFundingTargetUsd: 100000,
+  maxFundingCapUsd: 500000,
+  contributorCount: 5,
+  deadline: null,
+  cancellationRequestedAt: null,
+  launchedAt: new Date('2026-01-01T00:00:00.000Z'),
+}
+
+const mockLiveCampaignNoContributors = {
+  ...mockLiveCampaignRow,
+  contributorCount: 0,
+}
+
+const mockLiveCampaignCancellationRequested = {
+  ...mockLiveCampaignRow,
+  cancellationRequestedAt: new Date('2026-02-01T00:00:00.000Z'),
+}
+
+const mockLiveCampaignPastDeadlineUnderfunded = {
+  ...mockLiveCampaignRow,
+  deadline: new Date('2026-01-01T00:00:00.000Z'), // past date
+  currentAmountUsd: 10000, // underfunded
+}
+
+const mockLiveCampaignPastDeadlineFunded = {
+  ...mockLiveCampaignRow,
+  deadline: new Date('2026-01-01T00:00:00.000Z'), // past date
+  currentAmountUsd: 200000, // above min target
+}
+
+const mockLaunchResult = {
+  id: TEST_UUID,
+  status: 'Live',
+  launchedAt: new Date('2026-03-11T00:00:00.000Z'),
+}
+
+const mockPostUpdateResult = {
+  id: 'upd00000-e5f6-7890-abcd-ef1234567890',
+  body: 'Great progress on the habitat!',
+  postedAt: new Date('2026-03-11T12:00:00.000Z'),
+}
+
+const mockContributeResult = {
+  currentAmountUsd: 60000,
+  contributorCount: 6,
+  status: 'Live',
+}
+
+const mockContributeResultFunded = {
+  currentAmountUsd: 100000,
+  contributorCount: 6,
+  status: 'Funded',
+}
+
 describe('Campaign Routes', () => {
   beforeEach(() => {
     mockQuery.mockReset()
+    vi.stubEnv('JWT_SECRET', TEST_JWT_SECRET)
+  })
+
+  afterEach(() => {
+    vi.unstubAllEnvs()
   })
 
   describe('GET /v1/campaigns', () => {
@@ -118,6 +210,608 @@ describe('Campaign Routes', () => {
       expect(res.body).toHaveProperty('error')
       expect(res.body.error.code).toBe('INVALID_CAMPAIGN_ID')
       expect(res.body.error).toHaveProperty('correlation_id')
+    })
+  })
+
+  describe('POST /v1/campaigns/:id/launch', () => {
+    it('returns 200 with launched campaign data on success', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockApprovedCampaignRow], rowCount: 1 })
+      mockQuery.mockResolvedValueOnce({ rows: [mockLaunchResult], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/launch`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toHaveProperty('id', TEST_UUID)
+      expect(res.body.data).toHaveProperty('status', 'Live')
+      expect(res.body.data).toHaveProperty('launchedAt')
+    })
+
+    it('returns 200 when campaign has null creatorId (unassigned)', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockApprovedCampaignRow, creatorId: null }],
+        rowCount: 1,
+      })
+      mockQuery.mockResolvedValueOnce({ rows: [mockLaunchResult], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/launch`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(200)
+    })
+
+    it('returns 401 when no token is provided', async () => {
+      const res = await request(app).post(`/v1/campaigns/${TEST_UUID}/launch`)
+
+      expect(res.status).toBe(401)
+    })
+
+    it('returns 403 when role is not Creator', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/launch`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 403 when Creator does not own the campaign', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockApprovedCampaignRow, creatorId: OTHER_CREATOR_UUID }],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/launch`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 409 INVALID_CAMPAIGN_STATE when campaign is not Approved', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockLiveCampaignRow], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/launch`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_CAMPAIGN_STATE')
+    })
+
+    it('returns 500 on DB error during launch', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockApprovedCampaignRow], rowCount: 1 })
+      mockQuery.mockRejectedValueOnce(new Error('DB error'))
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/launch`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(500)
+    })
+  })
+
+  describe('POST /v1/campaigns/:id/updates', () => {
+    it('returns 201 with posted update data on success', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockLiveCampaignRow], rowCount: 1 })
+      mockQuery.mockResolvedValueOnce({ rows: [mockPostUpdateResult], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/updates`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+        .send({ body: 'Great progress on the habitat!' })
+
+      expect(res.status).toBe(201)
+      expect(res.body.data).toHaveProperty('id')
+      expect(res.body.data).toHaveProperty('body', 'Great progress on the habitat!')
+      expect(res.body.data).toHaveProperty('postedAt')
+    })
+
+    it('returns 201 when campaign is in Funded state', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockLiveCampaignRow, status: 'Funded' }],
+        rowCount: 1,
+      })
+      mockQuery.mockResolvedValueOnce({ rows: [mockPostUpdateResult], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/updates`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+        .send({ body: 'Campaign funded! Here is an update.' })
+
+      expect(res.status).toBe(201)
+    })
+
+    it('returns 401 when no token is provided', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/updates`)
+        .send({ body: 'Some update' })
+
+      expect(res.status).toBe(401)
+    })
+
+    it('returns 403 when role is not Creator', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/updates`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
+        .send({ body: 'Some update' })
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 403 when Creator does not own the campaign', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockLiveCampaignRow, creatorId: OTHER_CREATOR_UUID }],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/updates`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+        .send({ body: 'Some update' })
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 400 when body is missing', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/updates`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+        .send({})
+
+      expect(res.status).toBe(400)
+      expect(res.body.error.code).toBe('INVALID_REQUEST_BODY')
+    })
+
+    it('returns 400 when body is empty string', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/updates`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+        .send({ body: '' })
+
+      expect(res.status).toBe(400)
+      expect(res.body.error.code).toBe('INVALID_REQUEST_BODY')
+    })
+
+    it('returns 409 INVALID_CAMPAIGN_STATE when campaign is Approved', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockApprovedCampaignRow], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/updates`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+        .send({ body: 'Some update' })
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_CAMPAIGN_STATE')
+    })
+
+    it('returns 500 on DB error during update insert', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockLiveCampaignRow], rowCount: 1 })
+      mockQuery.mockRejectedValueOnce(new Error('DB error'))
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/updates`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+        .send({ body: 'Some update' })
+
+      expect(res.status).toBe(500)
+    })
+  })
+
+  describe('POST /v1/campaigns/:id/contribute', () => {
+    it('returns 200 with updated funding data on success', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockLiveCampaignRow], rowCount: 1 })
+      mockQuery.mockResolvedValueOnce({ rows: [mockContributeResult], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/contribute`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
+        .send({ amountUsd: 10000 })
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toHaveProperty('currentAmountUsd')
+      expect(res.body.data).toHaveProperty('contributorCount')
+      expect(res.body.data).toHaveProperty('status', 'Live')
+    })
+
+    it('returns 200 and transitions status to Funded when min target is met', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockLiveCampaignRow], rowCount: 1 })
+      mockQuery.mockResolvedValueOnce({ rows: [mockContributeResultFunded], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/contribute`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
+        .send({ amountUsd: 50000 })
+
+      expect(res.status).toBe(200)
+      expect(res.body.data.status).toBe('Funded')
+    })
+
+    it('returns 200 for contributions to already-Funded campaigns', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockLiveCampaignRow, status: 'Funded', currentAmountUsd: 100000 }],
+        rowCount: 1,
+      })
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockContributeResult, currentAmountUsd: 110000, status: 'Funded' }],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/contribute`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
+        .send({ amountUsd: 10000 })
+
+      expect(res.status).toBe(200)
+    })
+
+    it('returns 401 when no token is provided', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/contribute`)
+        .send({ amountUsd: 10000 })
+
+      expect(res.status).toBe(401)
+    })
+
+    it('returns 400 when amountUsd is missing', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/contribute`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
+        .send({})
+
+      expect(res.status).toBe(400)
+      expect(res.body.error.code).toBe('INVALID_REQUEST_BODY')
+    })
+
+    it('returns 400 when amountUsd is not a positive integer', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/contribute`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
+        .send({ amountUsd: -100 })
+
+      expect(res.status).toBe(400)
+      expect(res.body.error.code).toBe('INVALID_REQUEST_BODY')
+    })
+
+    it('returns 409 CAMPAIGN_DEADLINE_PASSED when deadline has passed and campaign is underfunded', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [mockLiveCampaignPastDeadlineUnderfunded],
+        rowCount: 1,
+      })
+      // enforceDeadline query
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockLiveCampaignPastDeadlineUnderfunded, status: 'Failed' }],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/contribute`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
+        .send({ amountUsd: 10000 })
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('CAMPAIGN_DEADLINE_PASSED')
+    })
+
+    it('returns 409 INVALID_CAMPAIGN_STATE for non-Live/non-Funded campaign', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockApprovedCampaignRow], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/contribute`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
+        .send({ amountUsd: 10000 })
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_CAMPAIGN_STATE')
+    })
+
+    it('returns 422 FUNDING_CAP_EXCEEDED when contribution exceeds max cap', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockLiveCampaignRow, currentAmountUsd: 490000, maxFundingCapUsd: 500000 }],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/contribute`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
+        .send({ amountUsd: 20000 })
+
+      expect(res.status).toBe(422)
+      expect(res.body.error.code).toBe('FUNDING_CAP_EXCEEDED')
+    })
+
+    it('returns 500 on DB error during contribution', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockLiveCampaignRow], rowCount: 1 })
+      mockQuery.mockRejectedValueOnce(new Error('DB error'))
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/contribute`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
+        .send({ amountUsd: 10000 })
+
+      expect(res.status).toBe(500)
+    })
+  })
+
+  describe('POST /v1/campaigns/:id/cancel', () => {
+    it('returns 200 with Cancelled status when no contributors (Branch A)', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockLiveCampaignNoContributors], rowCount: 1 })
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockLiveCampaignNoContributors, status: 'Cancelled' }],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/cancel`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toHaveProperty('status', 'Cancelled')
+    })
+
+    it('returns 202 requesting admin approval when contributors exist (Branch B)', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockLiveCampaignRow], rowCount: 1 })
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockLiveCampaignRow, cancellationRequestedAt: new Date() }],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/cancel`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(202)
+      expect(res.body.data).toHaveProperty('message')
+    })
+
+    it('returns 401 when no token is provided', async () => {
+      const res = await request(app).post(`/v1/campaigns/${TEST_UUID}/cancel`)
+
+      expect(res.status).toBe(401)
+    })
+
+    it('returns 403 when role is not Creator', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/cancel`)
+        .set('Authorization', `Bearer ${makeAdminToken()}`)
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 403 when Creator does not own the campaign', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockLiveCampaignRow, creatorId: OTHER_CREATOR_UUID }],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/cancel`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 409 INVALID_CAMPAIGN_STATE when campaign is not Live', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockApprovedCampaignRow], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/cancel`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_CAMPAIGN_STATE')
+    })
+
+    it('returns 409 CANCELLATION_ALREADY_REQUESTED when cancellation is pending', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [mockLiveCampaignCancellationRequested],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/cancel`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('CANCELLATION_ALREADY_REQUESTED')
+    })
+
+    it('returns 500 on DB error during cancel', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockLiveCampaignNoContributors], rowCount: 1 })
+      mockQuery.mockRejectedValueOnce(new Error('DB error'))
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/cancel`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(500)
+    })
+  })
+
+  describe('POST /v1/campaigns/:id/approve-cancel', () => {
+    it('returns 200 with Cancelled status on success', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [mockLiveCampaignCancellationRequested],
+        rowCount: 1,
+      })
+      mockQuery.mockResolvedValueOnce({
+        rows: [
+          {
+            ...mockLiveCampaignCancellationRequested,
+            status: 'Cancelled',
+            cancellationRequestedAt: null,
+          },
+        ],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/approve-cancel`)
+        .set('Authorization', `Bearer ${makeAdminToken()}`)
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toHaveProperty('status', 'Cancelled')
+    })
+
+    it('returns 401 when no token is provided', async () => {
+      const res = await request(app).post(`/v1/campaigns/${TEST_UUID}/approve-cancel`)
+
+      expect(res.status).toBe(401)
+    })
+
+    it('returns 403 when role is not Administrator', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/approve-cancel`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 409 NO_PENDING_CANCELLATION when no cancellation is requested', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockLiveCampaignRow], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/approve-cancel`)
+        .set('Authorization', `Bearer ${makeAdminToken()}`)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('NO_PENDING_CANCELLATION')
+    })
+
+    it('returns 409 NO_PENDING_CANCELLATION when campaign is not Live', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockApprovedCampaignRow, cancellationRequestedAt: new Date() }],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/approve-cancel`)
+        .set('Authorization', `Bearer ${makeAdminToken()}`)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('NO_PENDING_CANCELLATION')
+    })
+
+    it('returns 500 on DB error during approveCancellation', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [mockLiveCampaignCancellationRequested],
+        rowCount: 1,
+      })
+      mockQuery.mockRejectedValueOnce(new Error('DB error'))
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/approve-cancel`)
+        .set('Authorization', `Bearer ${makeAdminToken()}`)
+
+      expect(res.status).toBe(500)
+    })
+  })
+
+  describe('POST /v1/campaigns/:id/enforce-deadline', () => {
+    it('returns 200 with Failed status when campaign is underfunded (Branch A)', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [mockLiveCampaignPastDeadlineUnderfunded],
+        rowCount: 1,
+      })
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockLiveCampaignPastDeadlineUnderfunded, status: 'Failed' }],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/enforce-deadline`)
+        .set('Authorization', `Bearer ${makeAdminToken()}`)
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toHaveProperty('status', 'Failed')
+    })
+
+    it('returns 200 with no enforcement when campaign is funded (Branch B)', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [mockLiveCampaignPastDeadlineFunded],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/enforce-deadline`)
+        .set('Authorization', `Bearer ${makeAdminToken()}`)
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toHaveProperty('message', 'No enforcement needed.')
+    })
+
+    it('returns 401 when no token is provided', async () => {
+      const res = await request(app).post(`/v1/campaigns/${TEST_UUID}/enforce-deadline`)
+
+      expect(res.status).toBe(401)
+    })
+
+    it('returns 403 when role is not Administrator', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/enforce-deadline`)
+        .set('Authorization', `Bearer ${makeCreatorToken()}`)
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 409 INVALID_CAMPAIGN_STATE when campaign is not Live', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockApprovedCampaignRow], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/enforce-deadline`)
+        .set('Authorization', `Bearer ${makeAdminToken()}`)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_CAMPAIGN_STATE')
+    })
+
+    it('returns 409 DEADLINE_NOT_PASSED when deadline is null', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [mockLiveCampaignRow], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/enforce-deadline`)
+        .set('Authorization', `Bearer ${makeAdminToken()}`)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('DEADLINE_NOT_PASSED')
+    })
+
+    it('returns 409 DEADLINE_NOT_PASSED when deadline is in the future', async () => {
+      const futureDeadline = new Date(Date.now() + 86400000) // tomorrow
+      mockQuery.mockResolvedValueOnce({
+        rows: [{ ...mockLiveCampaignRow, deadline: futureDeadline }],
+        rowCount: 1,
+      })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/enforce-deadline`)
+        .set('Authorization', `Bearer ${makeAdminToken()}`)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('DEADLINE_NOT_PASSED')
+    })
+
+    it('returns 500 on DB error during enforceDeadline', async () => {
+      mockQuery.mockResolvedValueOnce({
+        rows: [mockLiveCampaignPastDeadlineUnderfunded],
+        rowCount: 1,
+      })
+      mockQuery.mockRejectedValueOnce(new Error('DB error'))
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/enforce-deadline`)
+        .set('Authorization', `Bearer ${makeAdminToken()}`)
+
+      expect(res.status).toBe(500)
     })
   })
 })

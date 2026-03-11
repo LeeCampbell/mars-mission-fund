@@ -118,7 +118,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes all tests with coverage thresholds met.
   - **Brief ref**: Testing section
 
-- [ ] TASK-06: Full CI check and final verification
+- [x] TASK-06: Full CI check and final verification
   - **Goal**: Ensure all CI checks pass end-to-end before the branch is considered ready for review.
   - **Details**:
     - Run `npm run build -w @mmf/shared && npx tsc -b --noEmit && npx tsc --noEmit -p packages/server/tsconfig.json`.

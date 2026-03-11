@@ -425,7 +425,9 @@ export function createCampaignRouter(pool: Pool): Router {
         outcome: 'success',
       })
 
-      res.status(200).json({ data: { id: result.id, status: result.status, launchedAt: result.launchedAt } })
+      res
+        .status(200)
+        .json({ data: { id: result.id, status: result.status, launchedAt: result.launchedAt } })
     } catch (err) {
       next(err)
     }
@@ -671,7 +673,7 @@ export function createCampaignRouter(pool: Pool): Router {
           status: 400,
           code: 'INVALID_REQUEST_BODY',
           details: bodyParsed.error.flatten(),
-        }),
+        })
       )
     }
 
@@ -686,7 +688,9 @@ export function createCampaignRouter(pool: Pool): Router {
       }
 
       if (campaign.status !== 'Live' && campaign.status !== 'Funded') {
-        return next(makeError('Campaign is not in Live or Funded state', 409, 'INVALID_CAMPAIGN_STATE'))
+        return next(
+          makeError('Campaign is not in Live or Funded state', 409, 'INVALID_CAMPAIGN_STATE')
+        )
       }
 
       const result = await postCampaignUpdate(pool, parsed.data.id, bodyParsed.data.body)
@@ -700,7 +704,9 @@ export function createCampaignRouter(pool: Pool): Router {
         outcome: 'success',
       })
 
-      res.status(201).json({ data: { id: result.id, body: result.body, postedAt: result.postedAt } })
+      res
+        .status(201)
+        .json({ data: { id: result.id, body: result.body, postedAt: result.postedAt } })
     } catch (err) {
       next(err)
     }
@@ -722,7 +728,7 @@ export function createCampaignRouter(pool: Pool): Router {
           status: 400,
           code: 'INVALID_REQUEST_BODY',
           details: bodyParsed.error.flatten(),
-        }),
+        })
       )
     }
 
@@ -752,7 +758,9 @@ export function createCampaignRouter(pool: Pool): Router {
       }
 
       if (campaign.status !== 'Live' && campaign.status !== 'Funded') {
-        return next(makeError('Campaign is not accepting contributions', 409, 'INVALID_CAMPAIGN_STATE'))
+        return next(
+          makeError('Campaign is not accepting contributions', 409, 'INVALID_CAMPAIGN_STATE')
+        )
       }
 
       if (campaign.currentAmountUsd + bodyParsed.data.amountUsd > campaign.maxFundingCapUsd) {
@@ -764,7 +772,7 @@ export function createCampaignRouter(pool: Pool): Router {
         pool,
         parsed.data.id,
         bodyParsed.data.amountUsd,
-        campaign.minFundingTargetUsd,
+        campaign.minFundingTargetUsd
       )
 
       if (oldStatus === 'Live' && result.status === 'Funded') {
@@ -827,7 +835,9 @@ export function createCampaignRouter(pool: Pool): Router {
       }
 
       if (campaign.cancellationRequestedAt !== null) {
-        return next(makeError('Cancellation already requested', 409, 'CANCELLATION_ALREADY_REQUESTED'))
+        return next(
+          makeError('Cancellation already requested', 409, 'CANCELLATION_ALREADY_REQUESTED')
+        )
       }
 
       if (campaign.contributorCount === 0) {
@@ -942,7 +952,9 @@ export function createCampaignRouter(pool: Pool): Router {
         res.status(200).json({ data: { status: 'Failed' } })
       } else {
         // Branch B: already funded — no enforcement needed
-        res.status(200).json({ data: { status: campaign.status, message: 'No enforcement needed.' } })
+        res
+          .status(200)
+          .json({ data: { status: campaign.status, message: 'No enforcement needed.' } })
       }
     } catch (err) {
       next(err)

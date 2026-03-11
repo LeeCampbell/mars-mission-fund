@@ -38,7 +38,7 @@ export async function writeAuditEvent(pool: Pool, event: AuditEventInput): Promi
         event.previousState ? JSON.stringify(event.previousState) : null,
         event.newState ? JSON.stringify(event.newState) : null,
         event.rationale ?? null,
-      ],
+      ]
     )
   } catch (err) {
     console.error('[audit] Failed to write audit event:', err)

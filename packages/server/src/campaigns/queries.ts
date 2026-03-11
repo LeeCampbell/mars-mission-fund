@@ -225,10 +225,7 @@ export async function updateCampaign(
   creatorId: string,
   data: UpdateCampaignRequest
 ): Promise<WriteResult> {
-  const check = await pool.query(
-    `SELECT id, creator_id, status FROM campaigns WHERE id = $1`,
-    [id]
-  )
+  const check = await pool.query(`SELECT id, creator_id, status FROM campaigns WHERE id = $1`, [id])
 
   if (check.rowCount === 0) {
     return { campaign: null, reason: 'not_found' }
@@ -266,10 +263,7 @@ export async function updateCampaign(
     }
   }
 
-  await pool.query(
-    `UPDATE campaigns SET ${setClauses.join(', ')} WHERE id = $1`,
-    params
-  )
+  await pool.query(`UPDATE campaigns SET ${setClauses.join(', ')} WHERE id = $1`, params)
 
   const campaign = await getCampaignById(pool, id)
   return { campaign, reason: null }
@@ -280,10 +274,7 @@ export async function deleteCampaign(
   id: string,
   creatorId: string
 ): Promise<WriteResult> {
-  const check = await pool.query(
-    `SELECT id, creator_id, status FROM campaigns WHERE id = $1`,
-    [id]
-  )
+  const check = await pool.query(`SELECT id, creator_id, status FROM campaigns WHERE id = $1`, [id])
 
   if (check.rowCount === 0) {
     return { campaign: null, reason: 'not_found' }
@@ -417,10 +408,9 @@ export async function submitCampaign(
   }
 
   // Transition to Submitted
-  await pool.query(
-    `UPDATE campaigns SET status = 'Submitted', updated_at = now() WHERE id = $1`,
-    [id]
-  )
+  await pool.query(`UPDATE campaigns SET status = 'Submitted', updated_at = now() WHERE id = $1`, [
+    id,
+  ])
 
   await pool.query(
     `INSERT INTO campaign_audit_events (campaign_id, event_type, actor_id, previous_state, new_state)

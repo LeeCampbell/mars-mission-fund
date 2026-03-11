@@ -43,7 +43,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes
   - **Brief ref**: Section 4 — Server queries
 
-- [ ] TASK-05: Server routes — POST, PUT, DELETE, submit + createdBy=me on GET
+- [x] TASK-05: Server routes — POST, PUT, DELETE, submit + createdBy=me on GET
   - **Goal**: Wire up all four new write endpoints and update the GET handler for `createdBy=me`
   - **Details**:
     - `POST /` with `authenticate, requireRole('Creator')` → call `createCampaign`, respond 201.

@@ -152,7 +152,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; no lint errors; components render without crashes
   - **Brief ref**: Frontend — Components
 
-- [ ] TASK-10: ReviewSubmitStep and CampaignUpdateForm / MilestoneEvidenceForm components
+- [x] TASK-10: ReviewSubmitStep and CampaignUpdateForm / MilestoneEvidenceForm components
   - **Goal**: Implement Step 7 (review + submit) and the two inline creator forms for the detail page
   - **Details**:
     - `ReviewSubmitStep.tsx` — read-only summary of all steps' data (title, team count, milestone table with % sum, risk count, media URL); "Save Draft" button; "Submit for Review" button that opens a confirmation dialog (use a simple `<dialog>` or a modal state); on confirm calls the `onSubmit` callback

@@ -148,6 +148,32 @@ const Contribute = React.lazy(() => import('./pages/Contribute'));
 
 Marketing pages (landing, public campaign list) may be statically pre-rendered and do not require lazy loading.
 
+**Page title management pattern** (introduced in Issue #81):
+
+- A static `routeTitles` map in `Layout.tsx` maps known route paths to their full page title strings. On every location change, a `useEffect` in `Layout` looks up the current path in this map and sets `document.title` accordingly.
+- For dynamic routes whose titles depend on fetched data (e.g. a campaign's name on the campaign detail page), the page component sets `document.title` in its own `useEffect` once the data is available.
+- Title format: `<Page Name> — Mars Mission Fund` (em dash separator, app name suffix on every page).
+
+```tsx
+// Layout.tsx — static route titles
+const routeTitles: Record<string, string> = {
+  '/': 'Home — Mars Mission Fund',
+  '/about': 'About — Mars Mission Fund',
+  '/contact': 'Contact — Mars Mission Fund',
+}
+
+useEffect(() => {
+  document.title = routeTitles[location.pathname] ?? 'Mars Mission Fund'
+}, [location.pathname])
+
+// CampaignDetailPage.tsx — dynamic title set once campaign data loads
+useEffect(() => {
+  if (campaign) {
+    document.title = `${campaign.title} — Mars Mission Fund`
+  }
+}, [campaign])
+```
+
 ### 1.5 API Communication
 
 - All API communication goes through a centralised HTTP client that enforces:

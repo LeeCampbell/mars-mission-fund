@@ -38,7 +38,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The new subsection exists under the correct parent section; it names `CampaignDetailPage` as the current usage; it explicitly forbids user-supplied HTML.
   - **Brief ref**: Scope bullet 5; Approach step 3
 
-- [ ] TASK-04: Update frontend.md §1.4 — document page-title management pattern
+- [x] TASK-04: Update frontend.md §1.4 — document page-title management pattern
   - **Goal**: Capture the `routeTitles` map + `useEffect` pattern introduced in Issue #81 so it is discoverable and followed by future developers.
   - **Details**:
     - Read `specs/tech/frontend.md` §1.4 (routing) to find the right insertion point.

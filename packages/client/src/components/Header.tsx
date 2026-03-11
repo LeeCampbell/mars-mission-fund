@@ -199,7 +199,7 @@ export function Header() {
   const { isAuthenticated, user } = useAuthContext()
   const { mutate: logoutMutate } = useLogout()
 
-  const isAdmin = user?.roles.includes('admin') ?? false
+  const isAdmin = user?.role === 'Administrator'
 
   return (
     <header style={headerStyle}>

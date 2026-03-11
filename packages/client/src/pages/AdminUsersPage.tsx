@@ -5,7 +5,7 @@ import type { User } from '@mmf/shared'
 type BadgeVariant = 'funded' | 'active' | 'new'
 
 function roleBadgeVariant(role: string): BadgeVariant {
-  if (role === 'admin') return 'active'
+  if (role === 'Administrator') return 'active'
   return 'new'
 }
 
@@ -88,15 +88,7 @@ function UserRow({ user }: { user: User }) {
       <td style={tdStyle}>{user.displayName ?? '—'}</td>
       <td style={tdStyle}>
         <div style={rolesStyle}>
-          {user.roles.length === 0 ? (
-            <span style={{ color: 'var(--color-text-tertiary)' }}>None</span>
-          ) : (
-            user.roles.map((role) => (
-              <Badge key={role} variant={roleBadgeVariant(role)}>
-                {role}
-              </Badge>
-            ))
-          )}
+          <Badge variant={roleBadgeVariant(user.role)}>{user.role}</Badge>
         </div>
       </td>
     </tr>

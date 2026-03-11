@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All four file paths are confirmed to exist. The three demo user credentials (email + plaintext password) are identified.
   - **Brief ref**: Approach §2 and §3, note on verifying exact paths
 
-- [ ] TASK-03: Add "## Demo accounts" section to README.md
+- [x] TASK-03: Add "## Demo accounts" section to README.md
   - **Goal**: Make demo credentials discoverable for workshop participants directly in the README.
   - **Details**: Insert a new `## Demo accounts` section in `README.md` (place it immediately after the "Getting Started" section or before it, whichever flows better). The section must: list all three seeded users in a markdown table (role, email, password); include a short login walkthrough paragraph (open app, click Login, enter credentials, observe role shown in nav); add a one-sentence note that credentials are for workshop/demo use only and that the JWT is stored in localStorage. Use the real credentials found in TASK-02.
   - **Files**: `README.md`

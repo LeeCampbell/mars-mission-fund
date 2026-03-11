@@ -9,8 +9,24 @@ vi.mock('../hooks/useUsers', () => ({
 import { useUsers } from '../hooks/useUsers'
 
 const mockUsers = [
-  { id: '1', email: 'admin@example.com', displayName: 'Admin User', bio: null, roles: ['admin'] },
-  { id: '2', email: 'alice@example.com', displayName: 'Alice', bio: null, roles: ['user'] },
+  {
+    id: '1',
+    email: 'admin@example.com',
+    displayName: 'Admin User',
+    bio: null,
+    role: 'Administrator' as const,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '2',
+    email: 'alice@example.com',
+    displayName: 'Alice',
+    bio: null,
+    role: 'Backer' as const,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
 ]
 
 describe('AdminUsersPage', () => {
@@ -38,8 +54,8 @@ describe('AdminUsersPage', () => {
 
     render(<AdminUsersPage />)
 
-    expect(screen.getByText('admin')).toBeInTheDocument()
-    expect(screen.getByText('user')).toBeInTheDocument()
+    expect(screen.getByText('Administrator')).toBeInTheDocument()
+    expect(screen.getByText('Backer')).toBeInTheDocument()
   })
 
   it('shows loading state while fetching', () => {

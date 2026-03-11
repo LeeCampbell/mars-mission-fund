@@ -19,7 +19,9 @@ const mockUser = {
   email: 'alice@example.com',
   displayName: 'Alice',
   bio: 'Hello world',
-  roles: ['user'],
+  role: 'Backer' as const,
+  createdAt: new Date(),
+  updatedAt: new Date(),
 }
 
 function renderProfilePage() {
@@ -50,7 +52,7 @@ describe('ProfilePage', () => {
     renderProfilePage()
 
     expect(screen.getByText('alice@example.com')).toBeInTheDocument()
-    expect(screen.getByText('user')).toBeInTheDocument()
+    expect(screen.getByText('Backer')).toBeInTheDocument()
   })
 
   it('pre-populates edit form with current display name and bio', () => {

@@ -177,17 +177,9 @@ export function ProfilePage() {
           <p style={sectionLabelStyle}>Email</p>
           <p style={fieldValueStyle}>{user.email}</p>
 
-          <p style={sectionLabelStyle}>Roles</p>
+          <p style={sectionLabelStyle}>Role</p>
           <div style={rolesRowStyle}>
-            {user.roles.length > 0 ? (
-              user.roles.map((role) => (
-                <Badge key={role} variant="active">
-                  {role}
-                </Badge>
-              ))
-            ) : (
-              <span style={{ ...fieldValueStyle, marginBottom: 0 }}>No roles assigned</span>
-            )}
+            <Badge variant="active">{user.role}</Badge>
           </div>
 
           <div style={dividerStyle} />

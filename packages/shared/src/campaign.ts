@@ -28,7 +28,7 @@ export const CampaignCategorySchema = z.enum([
   'Communications & Navigation',
 ])
 
-export const MilestoneStatusSchema = z.enum(['Pending', 'Submitted', 'Verified'])
+export const MilestoneStatusSchema = z.enum(['Pending', 'Submitted', 'Verified', 'Returned'])
 
 export const MilestoneSchema = z.object({
   id: z.string().uuid(),
@@ -39,6 +39,10 @@ export const MilestoneSchema = z.object({
   verificationCriteria: z.string().nullable(),
   status: MilestoneStatusSchema,
   sortOrder: z.number().int(),
+  evidenceDescription: z.string().nullable().optional(),
+  evidenceUrl: z.string().nullable().optional(),
+  evidenceSubmittedAt: z.string().datetime().nullable().optional(),
+  feedback: z.string().nullable().optional(),
 })
 
 export const StretchGoalSchema = z.object({

@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Migration files exist with correct SQL. Schema file updated to match.
   - **Brief ref**: Database — two new migrations
 
-- [ ] TASK-02: Update shared types for milestone status and evidence fields
+- [x] TASK-02: Update shared types for milestone status and evidence fields
   - **Goal**: Extend `MilestoneStatusSchema` with `'Returned'` and add evidence/feedback fields to `MilestoneSchema`
   - **Details**: In `packages/shared/src/campaign.ts`, add `'Returned'` to the `MilestoneStatusSchema` enum. Add optional fields to `MilestoneSchema`: `evidenceDescription`, `evidenceUrl`, `evidenceSubmittedAt` (ISO datetime string or null), `feedback`. Run `npm run build -w @mmf/shared` to verify.
   - **Files**: `packages/shared/src/campaign.ts`

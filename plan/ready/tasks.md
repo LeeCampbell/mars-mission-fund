@@ -51,7 +51,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compilation succeeds. Query functions accept `Pool` and string parameters and return typed results.
   - **Brief ref**: Server layout and Login flow sections
 
-- [ ] TASK-07: Create auth routes
+- [x] TASK-07: Create auth routes
   - **Goal**: Implement Express route handlers for `POST /v1/auth/login`, `POST /v1/auth/logout`, and `GET /v1/auth/me`.
   - **Details**:
     - Follow the existing campaigns route structure (Router, validation, query, response).

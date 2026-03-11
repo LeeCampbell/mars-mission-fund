@@ -30,7 +30,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All three files created; migration 006 contains a valid bcrypt hash (60-char `$2b$` string); migration 007 references known UUIDs from existing seed data
   - **Brief ref**: Database layer — migrations 4–6
 
-- [ ] TASK-03: Shared notification types + update requireRole middleware
+- [x] TASK-03: Shared notification types + update requireRole middleware
   - **Goal**: Add `NotificationSchema`/`NotificationType` to `@mmf/shared`; update `requireRole` to accept `Role | Role[]`
   - **Details**:
     - Create `packages/shared/src/notification.ts` with `NotificationType` union (`'CAMPAIGN_SUBMITTED' | 'CAMPAIGN_APPROVED' | 'CAMPAIGN_REJECTED' | 'MILESTONE_SUBMITTED' | 'MILESTONE_VERIFIED' | 'MILESTONE_RETURNED' | 'CAMPAIGN_CANCELLED'`) and `NotificationSchema` (zod) with fields: `id`, `userId`, `type`, `title`, `body`, `campaignId`, `isRead`, `createdAt`; export `Notification` inferred type

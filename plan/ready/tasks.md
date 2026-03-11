@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Component renders without TypeScript errors; uses `useUsers` hook
   - **Brief ref**: §Pages — AdminUsersPage
 
-- [ ] TASK-09: Wire routing, layout titles, and `AuthProvider` into the app shell
+- [x] TASK-09: Wire routing, layout titles, and `AuthProvider` into the app shell
   - **Goal**: Connect all new pages into the router and wrap app with AuthProvider
   - **Details**: `packages/client/src/App.tsx` — add `React.lazy` imports for `LoginPage`, `ProfilePage`, `AdminUsersPage`. Inside the `<Route element={<Layout />}>` block add: `<Route path="/login" element={<LoginPage />} />`, layout route `<Route element={<ProtectedRoute />}>` containing `/profile`, layout route `<Route element={<ProtectedRoute requireAdmin />}>` containing `/admin/users`. `packages/client/src/components/Layout.tsx` — add to `routeTitles`: `'/login': 'Log In — Mars Mission Fund'`, `'/profile': 'Profile — Mars Mission Fund'`, `'/admin/users': 'Users — Mars Mission Fund'`. `packages/client/src/main.tsx` — add `<AuthProvider>` inside `<QueryClientProvider>`, wrapping `<App />`.
   - **Files**: `packages/client/src/App.tsx` (modify), `packages/client/src/components/Layout.tsx` (modify), `packages/client/src/main.tsx` (modify)

@@ -1,10 +1,33 @@
+import { randomBytes } from 'crypto'
 import { Pool } from 'pg'
-import { CampaignSummary, CampaignDetail } from './types.js'
-import { ListQuery } from './types.js'
+import {
+  CampaignSummary,
+  CampaignDetail,
+  ListQuery,
+  CreateCampaignRequest,
+  UpdateCampaignRequest,
+} from './types.js'
 
-export async function listCampaigns(pool: Pool, filters: ListQuery): Promise<CampaignSummary[]> {
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+function randomHex(bytes: number): string {
+  return randomBytes(bytes).toString('hex')
+}
+
+export async function listCampaigns(
+  pool: Pool,
+  filters: ListQuery,
+  creatorId?: string
+): Promise<CampaignSummary[]> {
   const conditions: string[] = []
-  const params: string[] = []
+  const params: unknown[] = []
 
   if (filters.status !== undefined) {
     params.push(filters.status)
@@ -14,6 +37,11 @@ export async function listCampaigns(pool: Pool, filters: ListQuery): Promise<Cam
   if (filters.category !== undefined) {
     params.push(filters.category)
     conditions.push(`category = $${params.length}`)
+  }
+
+  if (creatorId !== undefined) {
+    params.push(creatorId)
+    conditions.push(`creator_id = $${params.length}`)
   }
 
   const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
@@ -140,4 +168,266 @@ export async function getCampaignById(pool: Pool, id: string): Promise<CampaignD
   }
 
   return detail
+}
+
+export async function createCampaign(
+  pool: Pool,
+  creatorId: string,
+  data: CreateCampaignRequest
+): Promise<CampaignDetail> {
+  const slug = `${slugify(data.title)}-${randomHex(3)}`
+
+  const result = await pool.query(
+    `INSERT INTO campaigns (
+      title, category, summary, description, alignment_statement, tags,
+      hero_image_url, min_funding_target_usd, max_funding_cap_usd, deadline,
+      risk_disclosures, creator_id, status, slug,
+      current_amount_usd, contributor_count
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'Draft', $13, 0, 0)
+    RETURNING id`,
+    [
+      data.title,
+      data.category,
+      data.summary ?? '',
+      data.description ?? '',
+      data.alignmentStatement ?? '',
+      data.tags ?? [],
+      data.heroImageUrl ?? null,
+      data.minFundingTargetUsd ?? 0,
+      data.maxFundingCapUsd ?? 0,
+      data.deadline ?? null,
+      data.riskDisclosures ?? [],
+      creatorId,
+      slug,
+    ]
+  )
+
+  const campaignId = result.rows[0].id
+
+  await pool.query(
+    `INSERT INTO campaign_audit_events (campaign_id, event_type, actor_id, previous_state, new_state)
+     VALUES ($1, 'campaign.created', $2, NULL, 'Draft')`,
+    [campaignId, creatorId]
+  )
+
+  const campaign = await getCampaignById(pool, campaignId)
+  return campaign!
+}
+
+type WriteResult = {
+  campaign: CampaignDetail | null
+  reason: 'not_found' | 'forbidden' | 'not_draft' | null
+}
+
+export async function updateCampaign(
+  pool: Pool,
+  id: string,
+  creatorId: string,
+  data: UpdateCampaignRequest
+): Promise<WriteResult> {
+  const check = await pool.query(
+    `SELECT id, creator_id, status FROM campaigns WHERE id = $1`,
+    [id]
+  )
+
+  if (check.rowCount === 0) {
+    return { campaign: null, reason: 'not_found' }
+  }
+
+  const row = check.rows[0]
+  if (row.creator_id !== creatorId) {
+    return { campaign: null, reason: 'forbidden' }
+  }
+  if (row.status !== 'Draft') {
+    return { campaign: null, reason: 'not_draft' }
+  }
+
+  const setClauses: string[] = ['updated_at = now()']
+  const params: unknown[] = [id]
+
+  const fields: Array<[keyof UpdateCampaignRequest, string]> = [
+    ['title', 'title'],
+    ['category', 'category'],
+    ['summary', 'summary'],
+    ['description', 'description'],
+    ['alignmentStatement', 'alignment_statement'],
+    ['tags', 'tags'],
+    ['heroImageUrl', 'hero_image_url'],
+    ['minFundingTargetUsd', 'min_funding_target_usd'],
+    ['maxFundingCapUsd', 'max_funding_cap_usd'],
+    ['deadline', 'deadline'],
+    ['riskDisclosures', 'risk_disclosures'],
+  ]
+
+  for (const [key, col] of fields) {
+    if (data[key] !== undefined) {
+      params.push(data[key])
+      setClauses.push(`${col} = $${params.length}`)
+    }
+  }
+
+  await pool.query(
+    `UPDATE campaigns SET ${setClauses.join(', ')} WHERE id = $1`,
+    params
+  )
+
+  const campaign = await getCampaignById(pool, id)
+  return { campaign, reason: null }
+}
+
+export async function deleteCampaign(
+  pool: Pool,
+  id: string,
+  creatorId: string
+): Promise<WriteResult> {
+  const check = await pool.query(
+    `SELECT id, creator_id, status FROM campaigns WHERE id = $1`,
+    [id]
+  )
+
+  if (check.rowCount === 0) {
+    return { campaign: null, reason: 'not_found' }
+  }
+
+  const row = check.rows[0]
+  if (row.creator_id !== creatorId) {
+    return { campaign: null, reason: 'forbidden' }
+  }
+  if (row.status !== 'Draft') {
+    return { campaign: null, reason: 'not_draft' }
+  }
+
+  await pool.query(`DELETE FROM campaigns WHERE id = $1`, [id])
+  return { campaign: null, reason: null }
+}
+
+type SubmitResult = {
+  campaign: CampaignDetail | null
+  errors: string[]
+}
+
+export async function submitCampaign(
+  pool: Pool,
+  id: string,
+  creatorId: string
+): Promise<SubmitResult> {
+  const check = await pool.query(
+    `SELECT
+      id, creator_id, status,
+      title, summary, description, alignment_statement,
+      min_funding_target_usd, max_funding_cap_usd,
+      deadline, risk_disclosures
+    FROM campaigns WHERE id = $1`,
+    [id]
+  )
+
+  if (check.rowCount === 0) {
+    return { campaign: null, errors: ['not_found'] }
+  }
+
+  const row = check.rows[0]
+
+  if (row.creator_id !== creatorId) {
+    return { campaign: null, errors: ['forbidden'] }
+  }
+  if (row.status !== 'Draft') {
+    return { campaign: null, errors: ['not_draft'] }
+  }
+
+  // DEMO STUB: KYC always verified
+  const kycVerified = true
+  if (!kycVerified) {
+    return { campaign: null, errors: ['KYC verification failed'] }
+  }
+
+  const errors: string[] = []
+
+  // §4.2 field completeness checks
+  if (!row.title || row.title.trim() === '') {
+    errors.push('title is required')
+  }
+  if (!row.summary || row.summary.trim() === '') {
+    errors.push('summary is required')
+  }
+  if (!row.description || row.description.trim() === '') {
+    errors.push('description is required')
+  }
+  if (!row.alignment_statement || row.alignment_statement.trim() === '') {
+    errors.push('alignmentStatement is required')
+  }
+
+  // §4.5 funding target constraints
+  const minTarget = Number(row.min_funding_target_usd)
+  const maxCap = Number(row.max_funding_cap_usd)
+  if (minTarget < 1_000_000 || minTarget > 1_000_000_000) {
+    errors.push('minFundingTargetUsd must be between 1,000,000 and 1,000,000,000')
+  }
+  if (maxCap < minTarget) {
+    errors.push('maxFundingCapUsd must be greater than or equal to minFundingTargetUsd')
+  }
+
+  // §4.5 deadline constraints
+  if (!row.deadline) {
+    errors.push('deadline is required')
+  } else {
+    const now = new Date()
+    const deadline = new Date(row.deadline)
+    const daysFromNow = (deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    if (daysFromNow < 7) {
+      errors.push('deadline must be at least 7 days from now')
+    }
+    if (daysFromNow > 365) {
+      errors.push('deadline must be at most 365 days from now')
+    }
+  }
+
+  // §4.5 risk disclosures
+  const riskDisclosures: string[] = row.risk_disclosures ?? []
+  if (riskDisclosures.length < 1) {
+    errors.push('at least one risk disclosure is required')
+  }
+
+  // §4.5 team member and milestone constraints
+  const teamResult = await pool.query(
+    `SELECT COUNT(*) AS count FROM campaign_team_members WHERE campaign_id = $1`,
+    [id]
+  )
+  const teamCount = Number(teamResult.rows[0].count)
+  if (teamCount < 1) {
+    errors.push('at least one team member is required')
+  }
+
+  const milestoneResult = await pool.query(
+    `SELECT COUNT(*) AS count, COALESCE(SUM(funding_pct), 0) AS total_pct
+     FROM campaign_milestones WHERE campaign_id = $1`,
+    [id]
+  )
+  const milestoneCount = Number(milestoneResult.rows[0].count)
+  const milestonePctSum = Number(milestoneResult.rows[0].total_pct)
+
+  if (milestoneCount < 2) {
+    errors.push('at least two milestones are required')
+  }
+  if (milestoneCount > 0 && milestonePctSum !== 100) {
+    errors.push('milestone funding percentages must sum to 100')
+  }
+
+  if (errors.length > 0) {
+    return { campaign: null, errors }
+  }
+
+  // Transition to Submitted
+  await pool.query(
+    `UPDATE campaigns SET status = 'Submitted', updated_at = now() WHERE id = $1`,
+    [id]
+  )
+
+  await pool.query(
+    `INSERT INTO campaign_audit_events (campaign_id, event_type, actor_id, previous_state, new_state)
+     VALUES ($1, 'campaign.submitted', $2, 'Draft', 'Submitted')`,
+    [id, creatorId]
+  )
+
+  const campaign = await getCampaignById(pool, id)
+  return { campaign, errors: [] }
 }

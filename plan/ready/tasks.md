@@ -30,7 +30,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes with no new errors
   - **Brief ref**: Section 3 — Server types
 
-- [ ] TASK-04: Server queries — createCampaign, updateCampaign, deleteCampaign, submitCampaign
+- [x] TASK-04: Server queries — createCampaign, updateCampaign, deleteCampaign, submitCampaign
   - **Goal**: Implement all four new query functions in `packages/server/src/campaigns/queries.ts`
   - **Details**:
     - `createCampaign(pool, creatorId, data)`: insert with `status='Draft'`, slug = `slugify(title) + '-' + randomHex(6)`, insert `campaign.created` audit event, return `CampaignDetail`.

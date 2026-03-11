@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles with no errors (`npm run build` in repo root or `tsc --noEmit` in client)
   - **Brief ref**: §Auth API layer
 
-- [ ] TASK-03: Create `AuthContext` with `useReducer` and session restoration
+- [x] TASK-03: Create `AuthContext` with `useReducer` and session restoration
   - **Goal**: Provide global auth state (user, token, isAuthenticated) to the entire app
   - **Details**: Create `packages/client/src/context/AuthContext.tsx`. Use `useReducer` with `LOGIN` and `LOGOUT` actions. State shape: `{ user: User | null, token: string | null }`. Derive `isAuthenticated` from `token !== null`. On mount (`useEffect`), read token from `localStorage`; if present, call `fetchCurrentUser()` — on success dispatch `LOGIN`, on failure remove token from `localStorage`. Expose `login(token, user)` and `logout()` functions via context value. Export `useAuthContext()` hook that throws if used outside the provider.
   - **Files**: `packages/client/src/context/AuthContext.tsx` (create)

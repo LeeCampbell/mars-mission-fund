@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Add database migrations for evidence fields and audit log
+- [x] TASK-01: Add database migrations for evidence fields and audit log
   - **Goal**: Create the two SQL migrations that extend `campaign_milestones` and add the `audit_log` table
   - **Details**: Create `20260311000003_add_milestone_evidence_fields.sql` adding `evidence_description`, `evidence_url`, `evidence_submitted_at`, and `feedback` columns to `campaign_milestones`. Create `20260311000004_create_audit_log.sql` creating the `audit_log` table with `id`, `event_type`, `campaign_id`, `milestone_id`, `actor_id`, `payload`, `created_at`. Update `packages/server/db/schema.sql` to reflect all new columns and the new table.
   - **Files**: `packages/server/db/migrations/20260311000003_add_milestone_evidence_fields.sql`, `packages/server/db/migrations/20260311000004_create_audit_log.sql`, `packages/server/db/schema.sql`

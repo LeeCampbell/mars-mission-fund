@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The word "Clerk" no longer appears in the local demo scope note. The replacement paragraph mentions JWT stub, localStorage, bcrypt, and lists theatre items.
   - **Brief ref**: Approach §1 "Update L4-001 local demo scope note"
 
-- [ ] TASK-02: Locate auth files and extract demo credentials from seed migration
+- [x] TASK-02: Locate auth files and extract demo credentials from seed migration
   - **Goal**: Confirm the exact paths for auth middleware, login/logout routes, seed migration, and client AuthProvider; extract the plaintext email/password pairs from the seed file.
   - **Details**: Search the repo for the files created by #93 and #94. Specifically locate: (a) `packages/server/src/middleware/auth.ts`, (b) the auth routes file (e.g. `packages/server/src/auth/routes.ts` or `login.ts`), (c) the seed migration SQL file under `packages/server/src/db/migrations/` whose name contains "seed" or "demo_users", (d) the client-side AuthProvider under `packages/client/src/`. Read the seed migration to find the three seeded users (Backer, Creator, Administrator) with their emails and bcrypt-hashed passwords. Cross-reference with any known plaintext values in the seed or a companion fixture file.
   - **Files**: No files modified — research only; record findings for use in subsequent tasks.

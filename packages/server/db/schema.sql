@@ -34,6 +34,22 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: accounts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.accounts (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    email text NOT NULL,
+    password_hash text NOT NULL,
+    display_name text,
+    bio text,
+    role text DEFAULT 'Backer'::text NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+--
 -- Name: campaign_milestones; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -123,6 +139,22 @@ CREATE TABLE public.campaigns (
 CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
 );
+
+
+--
+-- Name: accounts accounts_email_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.accounts
+    ADD CONSTRAINT accounts_email_key UNIQUE (email);
+
+
+--
+-- Name: accounts accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.accounts
+    ADD CONSTRAINT accounts_pkey PRIMARY KEY (id);
 
 
 --
@@ -230,4 +262,6 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20260309000003'),
     ('20260309000004'),
     ('20260309000005'),
-    ('20260309000006');
+    ('20260309000006'),
+    ('20260311000001'),
+    ('20260311000002');

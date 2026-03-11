@@ -39,10 +39,12 @@ describe('LoginPage', () => {
 
     renderLoginPage()
 
-    expect(screen.getAllByText('Admin').length).toBeGreaterThan(0)
-    expect(screen.getByText('Alice')).toBeInTheDocument()
+    expect(screen.getByText('Demo Backer')).toBeInTheDocument()
+    expect(screen.getByText('Demo Creator')).toBeInTheDocument()
+    expect(screen.getByText('Demo Admin')).toBeInTheDocument()
+    expect(screen.getByText('backer@example.com')).toBeInTheDocument()
+    expect(screen.getByText('creator@example.com')).toBeInTheDocument()
     expect(screen.getByText('admin@example.com')).toBeInTheDocument()
-    expect(screen.getByText('alice@example.com')).toBeInTheDocument()
   })
 
   it('pre-fills credentials when demo user card is clicked', () => {
@@ -61,11 +63,11 @@ describe('LoginPage', () => {
 
     renderLoginPage()
 
-    // Click the Admin demo card
-    fireEvent.click(screen.getAllByRole('button', { name: /admin/i })[0])
+    // Click the Demo Backer demo card
+    fireEvent.click(screen.getByRole('button', { name: /demo backer/i }))
 
-    expect(screen.getByLabelText(/email/i)).toHaveValue('admin@example.com')
-    expect(screen.getByLabelText(/password/i)).toHaveValue('password')
+    expect(screen.getByLabelText(/email/i)).toHaveValue('backer@example.com')
+    expect(screen.getByLabelText(/password/i)).toHaveValue('backer-demo-pass')
   })
 
   it('calls login mutation on form submit', () => {

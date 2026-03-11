@@ -26,12 +26,17 @@ export async function loginUser(
   })
   if (!response.ok) {
     const json = await response.json().catch(() => ({}))
-    throw new Error((json as { message?: string }).message ?? `HTTP ${response.status}`)
+    const msg =
+      (json as { error?: { code?: string } }).error?.code ??
+      (json as { message?: string }).message ??
+      `HTTP ${response.status}`
+    throw new Error(msg)
   }
   const json = await response.json()
+  const envelope = json as { data: { token: string; user: unknown } }
   return {
-    token: (json as { token: string }).token,
-    user: UserSchema.parse((json as { user: unknown }).user),
+    token: envelope.data.token,
+    user: UserSchema.parse(envelope.data.user),
   }
 }
 

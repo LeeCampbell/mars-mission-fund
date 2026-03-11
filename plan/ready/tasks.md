@@ -99,7 +99,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Both files contain `JWT_SECRET`. The docker-compose file is valid YAML.
   - **Brief ref**: Files to Create/Modify table, JWT_SECRET section
 
-- [ ] TASK-12: Write auth integration tests
+- [x] TASK-12: Write auth integration tests
   - **Goal**: Create `packages/server/src/__tests__/auth.test.ts` covering all auth endpoint contracts.
   - **Details**: Mirror the `campaigns.test.ts` mock-pool pattern. Use `vi.stubEnv` to set `JWT_SECRET` to a known test value. Cover:
     - Login success (valid credentials → returns JWT + user)

@@ -44,7 +44,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The seed migration file contains a `-- DEMO STUB:` comment. The client AuthProvider contains a `// DEMO STUB:` comment. Grep for `DEMO STUB` across the repo returns five total hits.
   - **Brief ref**: Approach §3, table rows 4–5
 
-- [ ] TASK-06: Run build and full test suite; verify campaign routes remain public
+- [x] TASK-06: Run build and full test suite; verify campaign routes remain public
   - **Goal**: Confirm that all documentation and comment changes leave the codebase fully functional, and that campaign endpoints are still public.
   - **Details**:
     1. Run `npm run build` from the repo root. Confirm zero TypeScript errors.

@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `cd packages/shared && npm run build` succeeds; `User` type importable from `@mmf/shared`
   - **Brief ref**: §Shared types
 
-- [ ] TASK-02: Create auth API fetch wrappers (`src/api/auth.ts`)
+- [x] TASK-02: Create auth API fetch wrappers (`src/api/auth.ts`)
   - **Goal**: Thin fetch layer for all five auth endpoints, following the campaigns.ts pattern
   - **Details**: Add `authedFetch` private helper that reads `localStorage.getItem('token')` and injects `Authorization: Bearer` header. Implement and export: `loginUser(email, password)` → `POST /v1/auth/login`, `logoutUser()` → `POST /v1/auth/logout`, `fetchCurrentUser()` → `GET /v1/auth/me`, `updateProfile(data)` → `PATCH /v1/auth/profile`, `fetchUsers()` → `GET /v1/users`. Validate responses with Zod using `User` from `@mmf/shared`.
   - **Files**: `packages/client/src/api/auth.ts` (create)

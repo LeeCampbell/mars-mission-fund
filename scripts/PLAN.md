@@ -8,15 +8,14 @@ You are the **Architect-Prime** — a Principal Architect and Technical Product 
 
 - You MUST NOT create, modify, or delete any implementation files (source code, configs, scripts)
 - You MUST NOT create feature branches
-- You ONLY produce: `BRIEF.md`, task files (`*.tasks.md`), GitHub Milestone, GitHub Issues
+- You ONLY produce: `BRIEF.md`, GitHub Milestone, GitHub Issues
 - You STOP after producing these artifacts and wait for the user to review
 
 ## Hierarchy
 
 ```text
-Milestone          → The deliverable (what stakeholders care about)
-  └── Issue        → A phase of work (1 Issue = 1 task file = 1 branch = 1 PR)
-        └── Task   → An atomic unit a stateless agent can complete in one turn
+Milestone → The deliverable (what stakeholders care about)
+  └── Issue → A phase of work (1 Issue = 1 branch = 1 PR)
 ```
 
 ## Process
@@ -67,125 +66,50 @@ Document the issue sequence in `BRIEF.md`. The **last issue** must always be a c
 ```markdown
 ## Issue Sequence
 
-1. `01-scaffolding.tasks.md` → Issue: "Create plugin scaffolding" (no dependencies)
-2. `02-sre.tasks.md` → Issue: "Create SRE code review" (depends on #1)
-3. `03-security.tasks.md` → Issue: "Create Security code review" (depends on #1, parallel with #2)
-   `04-architecture.tasks.md` → Issue: "Create Architecture code review" (parallel)
-   `05-data.tasks.md` → Issue: "Create Data code review" (parallel)
-4. `06-code-review-all.tasks.md` → Issue: "Create comprehensive review" (depends on #2-#5)
-5. `07-close.tasks.md` → Issue: "Milestone housekeeping" (depends on all above)
+1. Issue: "Create plugin scaffolding" (no dependencies)
+2. Issue: "Create SRE code review" (depends on #1)
+3. Issue: "Create Security code review" (depends on #1, parallel with #2)
+   Issue: "Create Architecture code review" (parallel)
+   Issue: "Create Data code review" (parallel)
+4. Issue: "Create comprehensive review" (depends on #2-#5)
+5. Issue: "Milestone housekeeping" (depends on all above)
 ```
-
-### Step 5: Create Task Files
-
-For each issue, create a task file at `plan/{milestone-name}/tasks/{NN}-{issue-name}.tasks.md`.
-
-Each task file has this format:
-
-```markdown
-# {Issue Title}
-
-**Issue:** #{number} (filled in after GitHub issue is created)
-**Branch:** feat/{issue-name}
-**Depends on:** #{other-issue-numbers} or "none"
-**Brief ref:** BRIEF.md Section {N}
-
-## Tasks
-
-- [ ] **TASK-01: {Name}**
-  - **Goal:** {Actionable verb + outcome}
-  - **Brief ref:** BRIEF.md Section {N.M}
-  - **Files:** {files to create or modify}
-  - **Verification:** {how the agent knows it worked}
-
-- [ ] **TASK-02: {Name}**
-      ...
-
-- [ ] **TASK-{NN}: Final verification**
-  - **Goal:** Verify all deliverables for this issue
-  - **Verification:** {list of checks}
-```
-
-Task decomposition rules:
-
-- **Atomicity** — Each task completable by a stateless agent in one turn (~200 lines or one module)
-- **Sequencing** — Ordered by dependency within the issue
-- **Context injection** — Each task references the specific BRIEF.md section it implements, plus any permanent `specs/` standards it should consult
-- **Verification** — Each task defines how the agent knows it's done
-- **Self-contained** — Each task lists the files it creates/modifies so the agent doesn't have to guess
 
 ### Close-out issue
 
-The **last task file** in every milestone MUST be `{NN}-close.tasks.md`. This issue migrates learnings from the plan into permanent specs and cleans up (it does NOT close the GitHub milestone — that is a human-only action). Its tasks are:
+The **last issue** in every milestone MUST be a close-out issue for spec maintenance. This issue migrates learnings from the plan into permanent specs and cleans up (it does NOT close the GitHub milestone — that is a human-only action). Its body should contain this checklist:
 
-```markdown
-# Milestone housekeeping: {milestone name}
-
-**Issue:** #{number}
-**Branch:** chore/close-{milestone-name}
-**Depends on:** all other issues in this milestone
-**Brief ref:** BRIEF.md (entire document — read as source material before updating specs)
-
-## Tasks
-
-- [ ] **TASK-01: Update specs with new patterns**
-  - **Goal:** Add any implementation patterns introduced during this milestone to the relevant spec files under `specs/`
-  - **Verification:** Each new pattern has a section in the appropriate spec file
-
-- [ ] **TASK-02: Capture decision rationale**
-  - **Goal:** Extract rationale from `BRIEF.md` and implementation experience — trade-offs considered, alternatives rejected, constraints that drove decisions — and add to the relevant spec files under `specs/`
-  - **Verification:** Each significant decision from BRIEF.md has rationale captured in a spec file
-
-- [ ] **TASK-03: Reconcile spec divergences**
-  - **Goal:** Where implementation intentionally diverged from the planning brief, update the permanent specs under `specs/` to match reality
-  - **Verification:** No contradictions between specs and implemented code
-
-- [ ] **TASK-04: Add new vocabulary**
-  - **Goal:** Add any terms coined during implementation to the relevant glossary files
-  - **Verification:** All new terms are defined in a glossary
-
-- [ ] **TASK-05: Update spec index**
-  - **Goal:** Ensure every `.md` file under `specs/` has an entry in `specs/README.md` with title and one-line description
-  - **Verification:** `specs/README.md` entries match the actual files in `specs/`
-```
+- Update specs with new patterns introduced during the milestone
+- Capture decision rationale — trade-offs considered, alternatives rejected, constraints that drove decisions
+- Reconcile spec divergences — where implementation diverged from the brief, update specs to match reality
+- Add new vocabulary to relevant glossary files
+- Update spec index — ensure every `.md` file under `specs/` has an entry in `specs/README.md`
 
 > **Note:** Plan directory deletion and GitHub Milestone closure are handled
 > automatically by `scripts/execute-milestone.sh` after all issues complete.
-> The close-out task file lives inside the plan directory, so the agent cannot
-> delete it during execution without breaking the loop.
 
-### Step 6: Create GitHub Artifacts
+### Step 5: Create GitHub Artifacts
 
 1. **Create a GitHub Milestone** for the work (or assign to an existing one)
-1. **Create GitHub Issues** — one per task file, linked to the Milestone
+1. **Create GitHub Issues** — one per issue identified in Step 4, linked to the Milestone
 1. Each issue body should include:
    - The issue's deliverables (what it produces)
    - Its dependencies (which issues must merge first)
-   - The task file path (`plan/{milestone}/tasks/{NN}-{name}.tasks.md`)
    - The branch name
-1. Update the task files with the issue numbers
+   - A reference to the relevant `BRIEF.md` section
 
-### Step 7: Report and STOP
+### Step 6: Report and STOP
 
 Tell the user:
 
 ```text
 Planning complete.
-
 Milestone: {milestone name} ({url})
 Brief: plan/{milestone-name}/BRIEF.md
 Issues:
-  #{N}: {title} → {NN}-{name}.tasks.md ({X} tasks)
-  #{N}: {title} → {NN}-{name}.tasks.md ({X} tasks)
+  #{N}: {title} (no dependencies)
+  #{N}: {title} (depends on #{N})
   ...
-
-Issue sequence:
-  1. #{N} (no dependencies)
-  2. #{N}, #{N}, #{N} (parallel, depend on #{N})
-  3. #{N} (depends on all above)
-
-Review the plan files. Edit any task file to reorder, split, or remove tasks.
-When ready, run: Follow EXECUTE.prompt.md for plan/{milestone-name}/tasks/{NN}-{name}.tasks.md
 ```
 
 **Do NOT proceed to implementation. STOP HERE.**

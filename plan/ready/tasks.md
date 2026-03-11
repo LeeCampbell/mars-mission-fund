@@ -83,7 +83,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compilation succeeds. Router exports `usersRouter`.
   - **Brief ref**: User routes section
 
-- [ ] TASK-10: Register routers in app.ts
+- [x] TASK-10: Register routers in app.ts
   - **Goal**: Mount the auth and users routers in the Express app alongside the existing campaigns router.
   - **Details**: Import `authRouter` from `./auth/routes.js` and `usersRouter` from `./users/routes.js`. Mount at `/v1/auth` and `/v1/users` respectively in `packages/server/src/app.ts`, following the existing pattern for `/v1/campaigns`.
   - **Files**: `packages/server/src/app.ts` (modify)

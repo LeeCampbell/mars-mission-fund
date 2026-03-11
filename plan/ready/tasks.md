@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists, contains three `INSERT INTO accounts` rows with valid bcrypt hash strings (`$2b$...`), and the passwords are documented in a comment at the top.
   - **Brief ref**: Seed migration section
 
-- [ ] TASK-04: Add Zod schemas to `@mmf/shared`
+- [x] TASK-04: Add Zod schemas to `@mmf/shared`
   - **Goal**: Create `packages/shared/src/account.ts` with all required Zod schemas and export them from the shared package index.
   - **Details**: Define and export: `RoleSchema` (enum), `UserSchema` (id, email, displayName, bio, role, createdAt, updatedAt — no password_hash), `LoginRequestSchema` (email, password), `LoginResponseSchema` (token, user), `UpdateProfileRequestSchema` (displayName?, bio?). Add `export * from './account.js'` to `packages/shared/src/index.ts` following the existing export pattern.
   - **Files**: `packages/shared/src/account.ts` (create), `packages/shared/src/index.ts` (modify)

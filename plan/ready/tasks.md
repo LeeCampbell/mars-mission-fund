@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists with correct SQL; `npm run build` passes; `npx tsc -b --noEmit` passes
   - **Brief ref**: "Reviewer seed account" section
 
-- [ ] TASK-02: Add Demo Reviewer card to LoginPage
+- [x] TASK-02: Add Demo Reviewer card to LoginPage
   - **Goal**: Add a fourth demo card for the Reviewer role so the E2E login helper can pre-fill reviewer credentials
   - **Details**: In `packages/client/src/pages/LoginPage.tsx`, add a `DemoCard` entry for `Demo Reviewer` (email: `reviewer@example.com`, password: `reviewer-demo-pass`) to the `DEMO_USERS` array, positioned between Creator and Admin. The 2×2 grid layout already fits 4 cards — no CSS change needed.
   - **Files**: `packages/client/src/pages/LoginPage.tsx`

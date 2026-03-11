@@ -24,6 +24,12 @@ const DEMO_USERS: DemoUser[] = [
     role: 'Creator',
   },
   {
+    name: 'Demo Reviewer',
+    email: 'reviewer@example.com',
+    password: 'reviewer-demo-pass',
+    role: 'Reviewer',
+  },
+  {
     name: 'Demo Admin',
     email: 'admin@example.com',
     password: 'admin-demo-pass',

@@ -21,7 +21,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Migration files are syntactically correct SQL; schema.sql updated; seed has a Creator account
   - **Brief ref**: Database section
 
-- [ ] TASK-02: Shared Zod schemas — RiskDisclosure, MilestoneInput, CreateCampaignInput, UpdateCampaignInput
+- [x] TASK-02: Shared Zod schemas — RiskDisclosure, MilestoneInput, CreateCampaignInput, UpdateCampaignInput
   - **Goal**: Add all new shared validation schemas and extend `CampaignDetailSchema`
   - **Details**: In `packages/shared/src/campaign.ts` add:
     - `RiskDisclosureSchema` — `{ id: z.string().uuid(), description: z.string().min(1), mitigation: z.string().min(1), sortOrder: z.number().int().default(0) }`

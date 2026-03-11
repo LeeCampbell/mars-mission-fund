@@ -84,6 +84,67 @@ export const CampaignSummarySchema = z.object({
   createdBy: z.string().uuid().nullable(),
 })
 
+export const RiskDisclosureSchema = z.object({
+  id: z.string().uuid(),
+  description: z.string().min(1),
+  mitigation: z.string().min(1),
+  sortOrder: z.number().int().default(0),
+})
+
+// Input shapes for create/update (no id, no status, no sort_order)
+export const MilestoneInputSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  targetDate: z.coerce.date().nullable().optional(),
+  fundingPercentage: z.coerce.number(),
+  verificationCriteria: z.string().nullable().optional(),
+})
+
+export const TeamMemberInputSchema = z.object({
+  name: z.string(),
+  role: z.string(),
+  bio: z.string().nullable().optional(),
+})
+
+export const RiskInputSchema = z.object({
+  description: z.string().min(1),
+  mitigation: z.string().min(1),
+})
+
+export const CreateCampaignInputSchema = z.object({
+  title: z.string().min(1),
+  summary: z.string().default(''),
+  description: z.string().default(''),
+  alignmentStatement: z.string().default(''),
+  category: z.string().default(''),
+  minFundingTargetUsd: z.number().int().default(0),
+  maxFundingCapUsd: z.number().int().default(0),
+  deadline: z.coerce.date().nullable().optional(),
+  teamMembers: z.array(TeamMemberInputSchema).optional(),
+  milestones: z.array(MilestoneInputSchema).optional(),
+  risks: z.array(RiskInputSchema).optional(),
+  budgetBreakdown: z.string().nullable().optional(),
+  heroImageUrl: z.string().nullable().optional(),
+  additionalImageUrls: z.array(z.string()).optional(),
+})
+
+export const UpdateCampaignInputSchema = z.object({
+  title: z.string().min(1).optional(),
+  summary: z.string().optional(),
+  description: z.string().optional(),
+  alignmentStatement: z.string().optional(),
+  category: z.string().optional(),
+  minFundingTargetUsd: z.number().int().optional(),
+  maxFundingCapUsd: z.number().int().optional(),
+  deadline: z.coerce.date().nullable().optional(),
+  teamMembers: z.array(TeamMemberInputSchema).optional(),
+  milestones: z.array(MilestoneInputSchema).optional(),
+  risks: z.array(RiskInputSchema).optional(),
+  budgetBreakdown: z.string().nullable().optional(),
+  heroImageUrl: z.string().nullable().optional(),
+  additionalImageUrls: z.array(z.string()).optional(),
+})
+
 // Full campaign returned by the detail endpoint
 export const CampaignDetailSchema = CampaignSummarySchema.extend({
   slug: z.string(),
@@ -99,6 +160,9 @@ export const CampaignDetailSchema = CampaignSummarySchema.extend({
   stretchGoals: z.array(StretchGoalSchema),
   teamMembers: z.array(TeamMemberSchema),
   updates: z.array(CampaignUpdateSchema),
+  budgetBreakdown: z.string().nullable(),
+  additionalImageUrls: z.array(z.string()).default([]),
+  risks: z.array(RiskDisclosureSchema).default([]),
 })
 
 export const AuditLogEntrySchema = z.object({
@@ -166,3 +230,9 @@ export type CampaignDetail = z.infer<typeof CampaignDetailSchema>
 export type AuditLogEntry = z.infer<typeof AuditLogEntrySchema>
 export type Notification = z.infer<typeof NotificationSchema>
 export type MilestoneEvidence = z.infer<typeof MilestoneEvidenceSchema>
+export type RiskDisclosure = z.infer<typeof RiskDisclosureSchema>
+export type MilestoneInput = z.infer<typeof MilestoneInputSchema>
+export type TeamMemberInput = z.infer<typeof TeamMemberInputSchema>
+export type RiskInput = z.infer<typeof RiskInputSchema>
+export type CreateCampaignInput = z.infer<typeof CreateCampaignInputSchema>
+export type UpdateCampaignInput = z.infer<typeof UpdateCampaignInputSchema>

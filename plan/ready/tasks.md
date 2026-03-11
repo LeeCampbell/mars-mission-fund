@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists and contains valid SQL with `CREATE TABLE accounts` and `DROP TABLE accounts` in the down block.
   - **Brief ref**: DB migration section
 
-- [ ] TASK-03: Create seed migration with demo users
+- [x] TASK-03: Create seed migration with demo users
   - **Goal**: Insert three demo users (Backer, Creator, Administrator roles) with bcrypt-hashed passwords.
   - **Details**: Create `packages/server/db/migrations/20260311000002_seed_accounts.sql`. At the top of the file, document the known demo passwords in a comment. Use fixed UUIDs. Pre-compute bcrypt hashes (cost factor 10) for `backer-demo-pass`, `creator-demo-pass`, and `admin-demo-pass` — you can generate them with a small Node script or hard-code well-known hashes. Use parameterised-style `INSERT` with fixed literal values (no dynamic SQL needed in seed).
   - **Files**: `packages/server/db/migrations/20260311000002_seed_accounts.sql`

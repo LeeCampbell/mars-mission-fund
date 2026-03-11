@@ -90,7 +90,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` from repo root succeeds. App factory still creates the app without errors.
   - **Brief ref**: Approach section (register new routers alongside /v1/campaigns)
 
-- [ ] TASK-11: Wire JWT_SECRET into environment config
+- [x] TASK-11: Wire JWT_SECRET into environment config
   - **Goal**: Add `JWT_SECRET` to `.env.example` and `docker-compose.dev.yml`.
   - **Details**:
     - Create (or update) `packages/server/.env.example` to include `DATABASE_URL`, `PORT`, and `JWT_SECRET=change-me-in-production`.

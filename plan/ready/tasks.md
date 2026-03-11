@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; ADR references the correct migration filename and `writeAuditEvent`; `npm run lint:md` passes on the new file.
   - **Brief ref**: Approach §1 — Create ADR-0002
 
-- [ ] TASK-02: Update L3-006 (audit.md) with ADR-0002 cross-reference
+- [x] TASK-02: Update L3-006 (audit.md) with ADR-0002 cross-reference
   - **Goal**: Add a note to `specs/tech/audit.md` Section 1 "Local demo scope" callout referencing ADR-0002 and stating that the demo uses the simplified table rather than the full event schema.
   - **Details**: Read `specs/tech/audit.md` first. Locate the existing "Local demo scope" callout or theatre/real distinction paragraph near the top. Append (or augment) it with one paragraph: "The local demo uses the simplified `audit_log` table documented in ADR-0002 (`specs/adrs/0002-audit-log-simplified-approach.md`) rather than the full event schema described in this spec. See ADR-0002 for the trade-offs and production path." Follow one-sentence-per-line and `*emphasis*` (not `_emphasis_`) markdown rules.
   - **Files**: `specs/tech/audit.md` (modify)

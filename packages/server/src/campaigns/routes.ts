@@ -9,6 +9,8 @@ import {
   UpdateCampaignRequestSchema,
   ApproveBodySchema,
   RejectBodySchema,
+  PostUpdateBodySchema,
+  ContributeBodySchema,
 } from './types.js'
 import {
   listCampaigns,
@@ -24,9 +26,24 @@ import {
   resubmitCampaign,
   createAuditEvent,
   createNotification,
+  getCampaignState,
+  launchCampaign,
+  postCampaignUpdate,
+  recordContribution,
+  cancelCampaign,
+  requestCancellation,
+  approveCancellation,
+  enforceDeadline,
 } from './queries.js'
 import { authenticate } from '../middleware/authenticate.js'
 import { requireRole } from '../middleware/requireRole.js'
+import { writeAuditEvent } from './audit.js'
+
+type JwtUser = { id?: string; role?: string }
+
+function makeError(message: string, status: number, code: string) {
+  return Object.assign(new Error(message), { status, code, details: {} })
+}
 
 export function createCampaignRouter(pool: Pool): Router {
   const router = Router()
@@ -370,6 +387,50 @@ export function createCampaignRouter(pool: Pool): Router {
     }
   })
 
+  // POST /v1/campaigns/:id/launch
+  router.post('/:id/launch', authenticate, async (req, res, next) => {
+    const user = res.locals['user'] as JwtUser
+    if (user.role !== 'Creator') {
+      return next(makeError('Forbidden', 403, 'FORBIDDEN'))
+    }
+
+    const parsed = RouteParamsSchema.safeParse(req.params)
+    if (!parsed.success) {
+      return next(makeError('Invalid campaign ID', 400, 'INVALID_CAMPAIGN_ID'))
+    }
+
+    try {
+      const campaign = await getCampaignState(pool, parsed.data.id)
+      if (campaign === null) {
+        return next(makeError('Campaign not found', 404, 'CAMPAIGN_NOT_FOUND'))
+      }
+
+      // Ownership check: allow null creatorId (unassigned)
+      if (campaign.creatorId !== null && campaign.creatorId !== user.id) {
+        return next(makeError('Forbidden', 403, 'FORBIDDEN'))
+      }
+
+      if (campaign.status !== 'Approved') {
+        return next(makeError('Campaign is not in Approved state', 409, 'INVALID_CAMPAIGN_STATE'))
+      }
+
+      const result = await launchCampaign(pool, parsed.data.id)
+
+      writeAuditEvent(pool, {
+        action: 'campaign.launch',
+        actorId: user.id,
+        actorType: 'Creator',
+        resourceType: 'campaign',
+        resourceId: parsed.data.id,
+        outcome: 'success',
+      })
+
+      res.status(200).json({ data: { id: result.id, status: result.status, launchedAt: result.launchedAt } })
+    } catch (err) {
+      next(err)
+    }
+  })
+
   router.post('/:id/approve', authenticate, requireRole('Reviewer'), async (req, res, next) => {
     const parsedParams = RouteParamsSchema.safeParse(req.params)
     if (!parsedParams.success) {
@@ -586,6 +647,303 @@ export function createCampaignRouter(pool: Pool): Router {
       })
 
       res.json({ data: updated })
+    } catch (err) {
+      next(err)
+    }
+  })
+
+  // POST /v1/campaigns/:id/updates
+  router.post('/:id/updates', authenticate, async (req, res, next) => {
+    const user = res.locals['user'] as JwtUser
+    if (user.role !== 'Creator') {
+      return next(makeError('Forbidden', 403, 'FORBIDDEN'))
+    }
+
+    const parsed = RouteParamsSchema.safeParse(req.params)
+    if (!parsed.success) {
+      return next(makeError('Invalid campaign ID', 400, 'INVALID_CAMPAIGN_ID'))
+    }
+
+    const bodyParsed = PostUpdateBodySchema.safeParse(req.body)
+    if (!bodyParsed.success) {
+      return next(
+        Object.assign(new Error('Invalid request body'), {
+          status: 400,
+          code: 'INVALID_REQUEST_BODY',
+          details: bodyParsed.error.flatten(),
+        }),
+      )
+    }
+
+    try {
+      const campaign = await getCampaignState(pool, parsed.data.id)
+      if (campaign === null) {
+        return next(makeError('Campaign not found', 404, 'CAMPAIGN_NOT_FOUND'))
+      }
+
+      if (campaign.creatorId !== null && campaign.creatorId !== user.id) {
+        return next(makeError('Forbidden', 403, 'FORBIDDEN'))
+      }
+
+      if (campaign.status !== 'Live' && campaign.status !== 'Funded') {
+        return next(makeError('Campaign is not in Live or Funded state', 409, 'INVALID_CAMPAIGN_STATE'))
+      }
+
+      const result = await postCampaignUpdate(pool, parsed.data.id, bodyParsed.data.body)
+
+      writeAuditEvent(pool, {
+        action: 'campaign.update_posted',
+        actorId: user.id,
+        actorType: 'Creator',
+        resourceType: 'campaign',
+        resourceId: parsed.data.id,
+        outcome: 'success',
+      })
+
+      res.status(201).json({ data: { id: result.id, body: result.body, postedAt: result.postedAt } })
+    } catch (err) {
+      next(err)
+    }
+  })
+
+  // POST /v1/campaigns/:id/contribute
+  router.post('/:id/contribute', authenticate, async (req, res, next) => {
+    const user = res.locals['user'] as JwtUser
+
+    const parsed = RouteParamsSchema.safeParse(req.params)
+    if (!parsed.success) {
+      return next(makeError('Invalid campaign ID', 400, 'INVALID_CAMPAIGN_ID'))
+    }
+
+    const bodyParsed = ContributeBodySchema.safeParse(req.body)
+    if (!bodyParsed.success) {
+      return next(
+        Object.assign(new Error('Invalid request body'), {
+          status: 400,
+          code: 'INVALID_REQUEST_BODY',
+          details: bodyParsed.error.flatten(),
+        }),
+      )
+    }
+
+    try {
+      const campaign = await getCampaignState(pool, parsed.data.id)
+      if (campaign === null) {
+        return next(makeError('Campaign not found', 404, 'CAMPAIGN_NOT_FOUND'))
+      }
+
+      // Deadline guard: if deadline passed, campaign is Live, and underfunded → enforce deadline
+      const now = new Date()
+      if (
+        campaign.deadline !== null &&
+        campaign.deadline < now &&
+        campaign.status === 'Live' &&
+        campaign.currentAmountUsd < campaign.minFundingTargetUsd
+      ) {
+        await enforceDeadline(pool, parsed.data.id)
+        writeAuditEvent(pool, {
+          action: 'campaign.deadline_expired',
+          actorId: user.id,
+          resourceType: 'campaign',
+          resourceId: parsed.data.id,
+          outcome: 'success',
+        })
+        return next(makeError('Campaign deadline has passed', 409, 'CAMPAIGN_DEADLINE_PASSED'))
+      }
+
+      if (campaign.status !== 'Live' && campaign.status !== 'Funded') {
+        return next(makeError('Campaign is not accepting contributions', 409, 'INVALID_CAMPAIGN_STATE'))
+      }
+
+      if (campaign.currentAmountUsd + bodyParsed.data.amountUsd > campaign.maxFundingCapUsd) {
+        return next(makeError('Contribution would exceed funding cap', 422, 'FUNDING_CAP_EXCEEDED'))
+      }
+
+      const oldStatus = campaign.status
+      const result = await recordContribution(
+        pool,
+        parsed.data.id,
+        bodyParsed.data.amountUsd,
+        campaign.minFundingTargetUsd,
+      )
+
+      if (oldStatus === 'Live' && result.status === 'Funded') {
+        writeAuditEvent(pool, {
+          action: 'campaign.status_changed',
+          actorId: user.id,
+          resourceType: 'campaign',
+          resourceId: parsed.data.id,
+          outcome: 'success',
+          previousState: { status: oldStatus },
+          newState: { status: result.status },
+        })
+      }
+
+      writeAuditEvent(pool, {
+        action: 'campaign.contribution_received',
+        actorId: user.id,
+        resourceType: 'campaign',
+        resourceId: parsed.data.id,
+        outcome: 'success',
+        newState: { amountUsd: bodyParsed.data.amountUsd },
+      })
+
+      res.status(200).json({
+        data: {
+          currentAmountUsd: result.currentAmountUsd,
+          contributorCount: result.contributorCount,
+          status: result.status,
+        },
+      })
+    } catch (err) {
+      next(err)
+    }
+  })
+
+  // POST /v1/campaigns/:id/cancel
+  router.post('/:id/cancel', authenticate, async (req, res, next) => {
+    const user = res.locals['user'] as JwtUser
+    if (user.role !== 'Creator') {
+      return next(makeError('Forbidden', 403, 'FORBIDDEN'))
+    }
+
+    const parsed = RouteParamsSchema.safeParse(req.params)
+    if (!parsed.success) {
+      return next(makeError('Invalid campaign ID', 400, 'INVALID_CAMPAIGN_ID'))
+    }
+
+    try {
+      const campaign = await getCampaignState(pool, parsed.data.id)
+      if (campaign === null) {
+        return next(makeError('Campaign not found', 404, 'CAMPAIGN_NOT_FOUND'))
+      }
+
+      if (campaign.creatorId !== null && campaign.creatorId !== user.id) {
+        return next(makeError('Forbidden', 403, 'FORBIDDEN'))
+      }
+
+      if (campaign.status !== 'Live') {
+        return next(makeError('Campaign is not Live', 409, 'INVALID_CAMPAIGN_STATE'))
+      }
+
+      if (campaign.cancellationRequestedAt !== null) {
+        return next(makeError('Cancellation already requested', 409, 'CANCELLATION_ALREADY_REQUESTED'))
+      }
+
+      if (campaign.contributorCount === 0) {
+        // Branch A: no contributors — cancel immediately
+        await cancelCampaign(pool, parsed.data.id)
+        writeAuditEvent(pool, {
+          action: 'campaign.cancelled',
+          actorId: user.id,
+          actorType: 'Creator',
+          resourceType: 'campaign',
+          resourceId: parsed.data.id,
+          outcome: 'success',
+        })
+        res.status(200).json({ data: { status: 'Cancelled' } })
+      } else {
+        // Branch B: has contributors — request cancellation
+        await requestCancellation(pool, parsed.data.id)
+        writeAuditEvent(pool, {
+          action: 'campaign.cancellation_requested',
+          actorId: user.id,
+          actorType: 'Creator',
+          resourceType: 'campaign',
+          resourceId: parsed.data.id,
+          outcome: 'success',
+        })
+        res
+          .status(202)
+          .json({ data: { message: 'Cancellation requested. Awaiting administrator approval.' } })
+      }
+    } catch (err) {
+      next(err)
+    }
+  })
+
+  // POST /v1/campaigns/:id/approve-cancel
+  router.post('/:id/approve-cancel', authenticate, async (req, res, next) => {
+    const user = res.locals['user'] as JwtUser
+    if (user.role !== 'Administrator') {
+      return next(makeError('Forbidden', 403, 'FORBIDDEN'))
+    }
+
+    const parsed = RouteParamsSchema.safeParse(req.params)
+    if (!parsed.success) {
+      return next(makeError('Invalid campaign ID', 400, 'INVALID_CAMPAIGN_ID'))
+    }
+
+    try {
+      const campaign = await getCampaignState(pool, parsed.data.id)
+      if (campaign === null) {
+        return next(makeError('Campaign not found', 404, 'CAMPAIGN_NOT_FOUND'))
+      }
+
+      if (campaign.status !== 'Live' || campaign.cancellationRequestedAt === null) {
+        return next(makeError('No pending cancellation request', 409, 'NO_PENDING_CANCELLATION'))
+      }
+
+      await approveCancellation(pool, parsed.data.id)
+
+      writeAuditEvent(pool, {
+        action: 'campaign.cancellation_approved',
+        actorId: user.id,
+        actorType: 'Administrator',
+        resourceType: 'campaign',
+        resourceId: parsed.data.id,
+        outcome: 'success',
+      })
+
+      res.status(200).json({ data: { status: 'Cancelled' } })
+    } catch (err) {
+      next(err)
+    }
+  })
+
+  // POST /v1/campaigns/:id/enforce-deadline
+  router.post('/:id/enforce-deadline', authenticate, async (req, res, next) => {
+    const user = res.locals['user'] as JwtUser
+    if (user.role !== 'Administrator') {
+      return next(makeError('Forbidden', 403, 'FORBIDDEN'))
+    }
+
+    const parsed = RouteParamsSchema.safeParse(req.params)
+    if (!parsed.success) {
+      return next(makeError('Invalid campaign ID', 400, 'INVALID_CAMPAIGN_ID'))
+    }
+
+    try {
+      const campaign = await getCampaignState(pool, parsed.data.id)
+      if (campaign === null) {
+        return next(makeError('Campaign not found', 404, 'CAMPAIGN_NOT_FOUND'))
+      }
+
+      if (campaign.status !== 'Live') {
+        return next(makeError('Campaign is not Live', 409, 'INVALID_CAMPAIGN_STATE'))
+      }
+
+      const now = new Date()
+      if (campaign.deadline === null || campaign.deadline >= now) {
+        return next(makeError('Campaign deadline has not passed', 409, 'DEADLINE_NOT_PASSED'))
+      }
+
+      if (campaign.currentAmountUsd < campaign.minFundingTargetUsd) {
+        // Branch A: underfunded → fail the campaign
+        await enforceDeadline(pool, parsed.data.id)
+        writeAuditEvent(pool, {
+          action: 'campaign.deadline_expired',
+          actorId: user.id,
+          actorType: 'Administrator',
+          resourceType: 'campaign',
+          resourceId: parsed.data.id,
+          outcome: 'success',
+        })
+        res.status(200).json({ data: { status: 'Failed' } })
+      } else {
+        // Branch B: already funded — no enforcement needed
+        res.status(200).json({ data: { status: campaign.status, message: 'No enforcement needed.' } })
+      }
     } catch (err) {
       next(err)
     }

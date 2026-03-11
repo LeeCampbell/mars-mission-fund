@@ -52,7 +52,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes with no new errors.
   - **Brief ref**: Endpoint details section; Files to Create/Modify table
 
-- [ ] TASK-04: Route handlers — launch, updates, contribute, cancel, approve-cancel, enforce-deadline
+- [x] TASK-04: Route handlers — launch, updates, contribute, cancel, approve-cancel, enforce-deadline
   - **Goal**: Register the six new POST endpoints in `packages/server/src/campaigns/routes.ts` with full business logic, auth checks, and audit event writes.
   - **Details**: For each endpoint follow the pattern: authenticate → role/ownership check → fetch campaign → state precondition → DB mutation → writeAuditEvent (fire-and-forget) → response.
 

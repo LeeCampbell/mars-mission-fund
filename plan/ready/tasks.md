@@ -169,7 +169,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/components/NotificationBell.test.tsx` passes
   - **Brief ref**: Frontend layer — NotificationBell component
 
-- [ ] TASK-14: Update Header, ProtectedRoute, App.tsx, and LoginPage
+- [x] TASK-14: Update Header, ProtectedRoute, App.tsx, and LoginPage
   - **Goal**: Wire up new pages into routing, add role-based nav links, and add reviewer to demo selector
   - **Details**:
     - `Header.tsx`: import and render `<NotificationBell />` when authenticated (next to existing nav); add `<NavLink to="/review">Review Queue</NavLink>` when `user.role === 'Reviewer'`; add `<NavLink to="/admin/milestones">Milestones</NavLink>` and `<NavLink to="/admin/cancellations">Cancellations</NavLink>` when `isAdmin` (both desktop and mobile nav sections)

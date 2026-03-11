@@ -29,6 +29,18 @@ const AdminUsersPage = React.lazy(() =>
 const ReviewQueuePage = React.lazy(() =>
   import('./pages/ReviewQueuePage').then((m) => ({ default: m.ReviewQueuePage }))
 )
+const ReviewDetailPage = React.lazy(() =>
+  import('./pages/ReviewDetailPage').then((m) => ({ default: m.ReviewDetailPage }))
+)
+const AdminMilestonesPage = React.lazy(() =>
+  import('./pages/AdminMilestonesPage').then((m) => ({ default: m.AdminMilestonesPage }))
+)
+const AdminCancellationsPage = React.lazy(() =>
+  import('./pages/AdminCancellationsPage').then((m) => ({ default: m.AdminCancellationsPage }))
+)
+const NotificationsPage = React.lazy(() =>
+  import('./pages/NotificationsPage').then((m) => ({ default: m.NotificationsPage }))
+)
 
 export default function App() {
   return (
@@ -45,9 +57,16 @@ export default function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
+            </Route>
+            <Route element={<ProtectedRoute requireReviewer />}>
+              <Route path="/review" element={<ReviewQueuePage />} />
+              <Route path="/review/:id" element={<ReviewDetailPage />} />
             </Route>
             <Route element={<ProtectedRoute requireAdmin />}>
               <Route path="/admin/users" element={<AdminUsersPage />} />
+              <Route path="/admin/milestones" element={<AdminMilestonesPage />} />
+              <Route path="/admin/cancellations" element={<AdminCancellationsPage />} />
             </Route>
             <Route element={<ProtectedRoute requireReviewer />}>
               <Route path="/review-queue" element={<ReviewQueuePage />} />

@@ -72,7 +72,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compilation succeeds. All query functions are properly typed.
   - **Brief ref**: User routes and Server layout sections
 
-- [ ] TASK-09: Create user routes
+- [x] TASK-09: Create user routes
   - **Goal**: Implement Express route handlers for `GET /v1/users`, `GET /v1/users/:id`, and `PATCH /v1/users/:id`.
   - **Details**:
     - `GET /v1/users`: apply `authenticate` + `requireRole('Administrator')`, return `200 { "data": [users] }`.

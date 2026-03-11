@@ -44,7 +44,7 @@ export async function getAccountById(pool: Pool, id: string): Promise<AccountRow
 export async function updateAccount(
   pool: Pool,
   id: string,
-  data: UpdateProfileRequest,
+  data: UpdateProfileRequest
 ): Promise<AccountRow | null> {
   const fields: string[] = []
   const values: (string | undefined)[] = []

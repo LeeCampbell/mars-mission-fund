@@ -35,7 +35,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Each of the three target locations contains a `// DEMO STUB:` comment that names the production alternative. Grep for `DEMO STUB` confirms at least three matches across these two files.
   - **Brief ref**: Approach §3, table rows 1–3
 
-- [ ] TASK-05: Add DEMO STUB comments to seed migration and client AuthProvider
+- [x] TASK-05: Add DEMO STUB comments to seed migration and client AuthProvider
   - **Goal**: Document the remaining two deviations (hardcoded bcrypt passwords and localStorage JWT storage).
   - **Details**:
     1. In the seed migration SQL file (path confirmed in TASK-02), add a SQL comment block (`-- DEMO STUB: …`) near the INSERT statements explaining that passwords are bcrypt hashes of known demo values and that production requires breach-list checking and policy enforcement at registration.

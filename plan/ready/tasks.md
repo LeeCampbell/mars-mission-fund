@@ -151,7 +151,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; Approve/Reject panel visible for reviewer on Under Review campaign; Resubmit button visible for creator on Rejected campaign
   - **Brief ref**: §7 Client UI (ReviewActionsPanel, CampaignDetailPage)
 
-- [ ] TASK-13: Write E2E tests
+- [x] TASK-13: Write E2E tests
   - **Goal**: Create Playwright E2E tests covering the reviewer and creator flows described in the brief
   - **Details**: Create `e2e/review-pipeline.spec.ts` following patterns in `e2e/auth.spec.ts` and `e2e/campaigns.spec.ts`.
     - **Reviewer flow**: login as `reviewer@example.com`; navigate to `/review-queue`; assert seeded Submitted campaign appears; click Claim; verify campaign detail shows Under Review status; submit Approve with notes; verify status changes to Approved

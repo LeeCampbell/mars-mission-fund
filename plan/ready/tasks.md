@@ -42,7 +42,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compilation succeeds. Both files export the expected function signatures.
   - **Brief ref**: Auth middleware pattern section
 
-- [ ] TASK-06: Create auth queries and types
+- [x] TASK-06: Create auth queries and types
   - **Goal**: Implement the DB query functions and local types for the auth module.
   - **Details**:
     - `queries.ts`: implement `findAccountByEmail(pool, email)` and `findAccountById(pool, id)` using parameterised queries (`$1`, `$2`). SELECT columns aliased to camelCase (id, email, password_hash AS "passwordHash", display_name AS "displayName", bio, role, created_at AS "createdAt", updated_at AS "updatedAt"). Return `null` when row not found.

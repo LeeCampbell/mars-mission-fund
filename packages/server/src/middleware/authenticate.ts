@@ -1,4 +1,4 @@
-// Deviation from L4-001 §5.2: this middleware performs stateless JWT verification only.
+// DEMO STUB (L4-001 §5.2): this middleware performs stateless JWT verification only.
 // There is no server-side session store or token revocation list in this demo stub.
 // Production systems should implement token revocation (e.g. via a blocklist in Redis).
 

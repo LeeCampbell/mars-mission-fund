@@ -31,6 +31,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(authReducer, { user: null, token: null })
 
   useEffect(() => {
+    // DEMO STUB: JWT is stored in localStorage for simplicity.
+    // Production would use Clerk's SDK with httpOnly cookie storage,
+    // which prevents XSS access to the token.
     const token = localStorage.getItem('token')
     if (!token) return
 

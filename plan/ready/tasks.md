@@ -105,7 +105,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes with ≥80% overall (new business logic at 90%+, API endpoints 100%)
   - **Brief ref**: §9 Server integration tests
 
-- [ ] TASK-09: Client API — campaign review functions and notifications
+- [x] TASK-09: Client API — campaign review functions and notifications
   - **Goal**: Add client-side API functions for all review actions and notifications
   - **Details**:
     - In `packages/client/src/api/campaigns.ts`, add: `fetchReviewQueue()`, `claimCampaign(id)`, `approveCampaign(id, notes)`, `rejectCampaign(id, rationale, guidance)`, `resubmitCampaign(id)`

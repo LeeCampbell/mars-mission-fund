@@ -11,7 +11,12 @@ interface DemoUser {
 }
 
 const DEMO_USERS: DemoUser[] = [
-  { name: 'Demo Backer', email: 'backer@example.com', password: 'backer-demo-pass', role: 'Backer' },
+  {
+    name: 'Demo Backer',
+    email: 'backer@example.com',
+    password: 'backer-demo-pass',
+    role: 'Backer',
+  },
   {
     name: 'Demo Creator',
     email: 'creator@example.com',

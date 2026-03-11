@@ -220,6 +220,7 @@ describe('Campaign Routes', () => {
       mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // stretch goals
       mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // team members
       mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // updates
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // risks
 
       const res = await request(app).get(`/v1/campaigns/${TEST_UUID}`)
 

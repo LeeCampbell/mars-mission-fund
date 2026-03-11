@@ -35,7 +35,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/shared` passes with no TypeScript errors
   - **Brief ref**: Shared types section
 
-- [ ] TASK-03: Backend queries — add all new campaign DB queries
+- [x] TASK-03: Backend queries — add all new campaign DB queries
   - **Goal**: Implement all new parameterised database query functions
   - **Details**: In `packages/server/src/campaigns/queries.ts`:
     - `getMyCampaigns(pool, userId)` — SELECT campaigns WHERE creator_id = userId, include risk count or basic info

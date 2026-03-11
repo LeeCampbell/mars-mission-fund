@@ -1,5 +1,6 @@
 import { randomBytes } from 'crypto'
-import { Pool } from 'pg'
+import { Pool, PoolClient } from 'pg'
+import type { CreateCampaignInput } from '@mmf/shared'
 import {
   CampaignSummary,
   CampaignDetail,
@@ -142,6 +143,28 @@ export async function listCampaigns(
   return result.rows
 }
 
+export async function getMyCampaigns(pool: Pool, userId: string): Promise<CampaignSummary[]> {
+  const sql = `
+    SELECT
+      id,
+      title,
+      summary,
+      status,
+      category,
+      hero_image_url AS "heroImageUrl",
+      min_funding_target_usd AS "goalAmount",
+      current_amount_usd AS "raisedAmount",
+      contributor_count AS "contributorCount",
+      deadline,
+      created_at AS "createdAt"
+    FROM campaigns
+    WHERE creator_id = $1
+    ORDER BY created_at DESC
+  `
+  const result = await pool.query<CampaignSummary>(sql, [userId])
+  return result.rows
+}
+
 export async function getCampaignById(pool: Pool, id: string): Promise<CampaignDetail | null> {
   const campaignSql = `
     SELECT
@@ -165,7 +188,9 @@ export async function getCampaignById(pool: Pool, id: string): Promise<CampaignD
       launched_at AS "launchedAt",
       updated_at AS "updatedAt",
       creator_id AS "creatorId",
-      reviewer_id AS "reviewerId"
+      reviewer_id AS "reviewerId",
+      budget_breakdown AS "budgetBreakdown",
+      additional_image_urls AS "additionalImageUrls"
     FROM campaigns
     WHERE id = $1
   `
@@ -243,6 +268,60 @@ export async function getCampaignById(pool: Pool, id: string): Promise<CampaignD
   }
 
   return detail
+}
+
+async function insertTeamMembers(
+  client: PoolClient,
+  campaignId: string,
+  members: CreateCampaignInput['teamMembers']
+): Promise<void> {
+  if (!members?.length) return
+  for (const [i, member] of members.entries()) {
+    await client.query(
+      `INSERT INTO campaign_team_members (campaign_id, name, role, bio, sort_order)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [campaignId, member.name, member.role, member.bio ?? null, i]
+    )
+  }
+}
+
+async function insertMilestones(
+  client: PoolClient,
+  campaignId: string,
+  milestones: CreateCampaignInput['milestones']
+): Promise<void> {
+  if (!milestones?.length) return
+  for (const [i, m] of milestones.entries()) {
+    await client.query(
+      `INSERT INTO campaign_milestones
+         (campaign_id, title, description, target_date, funding_pct, verification_criteria, sort_order)
+       VALUES ($1, $2, $3, COALESCE($4, CURRENT_DATE), $5, $6, $7)`,
+      [
+        campaignId,
+        m.title,
+        m.description,
+        m.targetDate ?? null,
+        m.fundingPercentage,
+        m.verificationCriteria ?? '',
+        i,
+      ]
+    )
+  }
+}
+
+async function insertRisks(
+  client: PoolClient,
+  campaignId: string,
+  risks: CreateCampaignInput['risks']
+): Promise<void> {
+  if (!risks?.length) return
+  for (const [i, risk] of risks.entries()) {
+    await client.query(
+      `INSERT INTO campaign_risks (campaign_id, description, mitigation, sort_order)
+       VALUES ($1, $2, $3, $4)`,
+      [campaignId, risk.description, risk.mitigation, i]
+    )
+  }
 }
 
 export async function createCampaign(

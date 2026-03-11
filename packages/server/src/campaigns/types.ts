@@ -6,6 +6,8 @@ import {
   CampaignDetailSchema,
   CreateCampaignRequestSchema,
   UpdateCampaignRequestSchema,
+  CreateCampaignInputSchema,
+  UpdateCampaignInputSchema,
 } from '@mmf/shared'
 
 export {
@@ -15,6 +17,8 @@ export {
   CampaignDetailSchema,
   CreateCampaignRequestSchema,
   UpdateCampaignRequestSchema,
+  CreateCampaignInputSchema,
+  UpdateCampaignInputSchema,
 }
 export type {
   CampaignStatus,
@@ -23,6 +27,10 @@ export type {
   CampaignDetail,
   CreateCampaignRequest,
   UpdateCampaignRequest,
+  CreateCampaignInput,
+  UpdateCampaignInput,
+  RiskDisclosure,
+  MilestoneInput,
 } from '@mmf/shared'
 
 export const RouteParamsSchema = z.object({

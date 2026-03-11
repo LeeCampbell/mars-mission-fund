@@ -71,7 +71,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes with coverage ≥ 80%; all new test cases green
   - **Brief ref**: Section 6 — Integration tests
 
-- [ ] TASK-07: Final CI verification
+- [x] TASK-07: Final CI verification
   - **Goal**: Confirm all lint, type-check, format, build, and test checks pass end-to-end
   - **Details**: Run the full CI check script and fix any remaining issues (formatting, lint warnings, type errors). Ensure coverage threshold is met.
   - **Files**: Any files needing minor formatting or lint fixes

@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Verify auth package names from server package.json
+- [x] TASK-01: Verify auth package names from server package.json
   - **Goal**: Confirm the exact npm package names used for JWT and password hashing so tech-stack.md is updated with accurate names.
   - **Details**: Read `packages/server/package.json` and locate the JWT library (expected: `jsonwebtoken`) and password-hashing library (expected: `bcryptjs` or `bcrypt`). Note exact package names and versions for use in TASK-04.
   - **Files**: `packages/server/package.json` (read only)

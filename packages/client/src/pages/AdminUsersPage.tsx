@@ -2,10 +2,10 @@ import { useUsers } from '../hooks/useUsers'
 import { Badge } from '../components/ui/Badge'
 import type { User } from '@mmf/shared'
 
-type BadgeVariant = 'funded' | 'active' | 'new'
+type BadgeVariant = 'funded' | 'active' | 'new' | 'accent'
 
 function roleBadgeVariant(role: string): BadgeVariant {
-  if (role === 'Administrator') return 'active'
+  if (role === 'Administrator' || role === 'SuperAdministrator') return 'accent'
   return 'new'
 }
 

@@ -33,7 +33,7 @@ function renderProfilePage() {
 }
 
 describe('ProfilePage', () => {
-  it('displays user email and roles', () => {
+  it('displays user email and role', () => {
     vi.mocked(useAuthContext).mockReturnValue({
       isAuthenticated: true,
       user: mockUser,

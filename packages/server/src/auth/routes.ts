@@ -67,8 +67,9 @@ export function createAuthRouter(pool: Pool): Router {
   })
 
   // POST /v1/auth/logout
-  // DEMO STUB: this handler is a no-op — the client discards the token locally.
-  // Production requires server-side session revocation.
+  // DEMO STUB (L4-001 §5.2): no server-side session revocation in this demo stub.
+  // JWT is stateless; actual token discard is client-side only.
+  // Production systems should implement a token revocation blocklist (e.g. Redis).
   router.post('/logout', authenticate, (_req, res) => {
     res.json({ data: { message: 'Logged out' } })
   })

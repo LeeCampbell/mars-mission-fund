@@ -126,7 +126,7 @@ describe('LoginPage', () => {
         email: 'alice@example.com',
         displayName: 'Alice',
         bio: null,
-        role: 'Backer' as const,
+        role: 'Backer',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

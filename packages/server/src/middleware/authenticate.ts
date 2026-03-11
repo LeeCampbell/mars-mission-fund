@@ -1,5 +1,6 @@
-// DEMO STUB: validates a stateless JWT rather than a Clerk session.
-// Production (L3-002) requires Clerk-managed sessions with revocation.
+// DEMO STUB (L4-001 §5.2): this middleware performs stateless JWT verification only.
+// There is no server-side session store or token revocation list in this demo stub.
+// Production systems should implement token revocation (e.g. via a blocklist in Redis).
 
 import type { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'

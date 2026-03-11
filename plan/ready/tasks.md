@@ -15,7 +15,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The §2.8 prose mentions all five suffixes; the table contains a `-family` entry for each scale; the hero H1 exception is documented by name.
   - **Brief ref**: Scope bullets 1–3; Approach step 1
 
-- [ ] TASK-02: Update brand.md §4.3 — expand "invest" forbidden-word family
+- [x] TASK-02: Update brand.md §4.3 — expand "invest" forbidden-word family
   - **Goal**: Strengthen the forbidden-language vocabulary table so all inflected forms of "invest" are explicitly listed with spec-compliant alternatives.
   - **Details**:
     - Read `specs/standards/brand.md` §4.3 to see the current table structure.

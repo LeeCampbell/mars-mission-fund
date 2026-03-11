@@ -421,7 +421,10 @@ Never use the following in any user-facing product copy:
 | "Click here"                                 | Non-descriptive, inaccessible                  | Descriptive link text: "View mission details"                      |
 | "Exciting opportunity"                       | Sounds like financial spam                     | Specific claim: "Funding closes in 18 days"                        |
 | "Synergistic", "disruptive", "revolutionary" | Corporate buzzwords violate brand voice        | Plain language: specific, concrete descriptions                    |
-| "Investment" (without legal caveat)          | Regulatory risk — contributions are not equity | "Contribution", "backing", "stake", "pledge"                       |
+| "invest"                                     | Regulatory risk — contributions are not equity | "donate", "contribute", "back", "pledge"                           |
+| "investing"                                  | Regulatory risk — contributions are not equity | "donating", "contributing", "backing", "pledging"                  |
+| "investor"                                   | Regulatory risk — contributions are not equity | "donor", "contributor", "backer", "supporter"                      |
+| "investment"                                 | Regulatory risk — contributions are not equity | "donation", "contribution", "backing", "pledge"                    |
 | "Guaranteed returns"                         | Illegal in most jurisdictions                  | Never imply financial returns                                      |
 | "Click to learn more"                        | Passive, vague                                 | Action-specific: "Read the mission plan"                           |
 | Passive voice in CTAs                        | Weakens urgency                                | Active voice: "Back this mission" not "This mission can be backed" |

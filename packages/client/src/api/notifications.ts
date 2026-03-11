@@ -12,11 +12,12 @@ function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
 
 export interface Notification {
   id: string
-  accountId: string
+  userId: string
   campaignId: string | null
   type: string
+  title: string
   message: string
-  readAt: string | null
+  read: boolean
   createdAt: string
 }
 

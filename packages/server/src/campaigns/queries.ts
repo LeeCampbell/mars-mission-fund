@@ -527,8 +527,7 @@ export async function claimCampaign(
 export async function approveCampaign(
   pool: Pool,
   id: string,
-  reviewerId: string,
-  _notes: string
+  reviewerId: string
 ): Promise<CampaignRow | null> {
   const sql = `
     UPDATE campaigns
@@ -543,9 +542,7 @@ export async function approveCampaign(
 export async function rejectCampaign(
   pool: Pool,
   id: string,
-  reviewerId: string,
-  _rationale: string,
-  _guidance: string
+  reviewerId: string
 ): Promise<CampaignRow | null> {
   const sql = `
     UPDATE campaigns

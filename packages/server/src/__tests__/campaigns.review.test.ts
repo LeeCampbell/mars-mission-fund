@@ -54,11 +54,12 @@ const draftCampaignRow = { ...baseCampaignRow, status: 'Draft', reviewerId: null
 
 const mockNotificationRow = {
   id: 'c3d4e5f6-a7b8-9012-cdef-123456789012',
-  accountId: CREATOR_UUID,
+  userId: CREATOR_UUID,
   campaignId: CAMPAIGN_UUID,
   type: 'campaign.claimed',
+  title: 'Campaign Under Review',
   message: 'Your campaign is now under review.',
-  readAt: null,
+  read: false,
   createdAt: new Date('2026-01-01T00:00:00.000Z'),
 }
 

@@ -1,21 +1,4 @@
 -- migrate:up
--- Demo reviewer credentials (for local development only — never use in production):
---   reviewer@example.com / reviewer-demo-pass
-
--- DEMO STUB: Password below is a bcrypt hash of a known, hardcoded demo value.
--- Production (L3-002) requires breach-list checking and policy enforcement at registration;
--- no user passwords should ever be pre-seeded with publicly known values.
-INSERT INTO accounts (id, email, password_hash, display_name, bio, role) VALUES
-  (
-    '44444444-4444-4444-4444-444444444444',
-    'reviewer@example.com',
-    '$2b$10$AqvcNG9fH2dpGjyvSidu7uBK8SJnXCNl0ilk/MAvAvzRDkrEt2JfK',
-    'Demo Reviewer',
-    'A demo reviewer account for local development.',
-    'Reviewer'
-  )
-ON CONFLICT DO NOTHING;
-
 -- Seeded Submitted campaign for reviewer flow E2E testing
 INSERT INTO campaigns (
   id, slug, title, summary, description, alignment_statement,
@@ -70,4 +53,3 @@ DELETE FROM campaigns WHERE id IN (
   '00000000-0011-0000-0000-000000000011',
   '00000000-0012-0000-0000-000000000012'
 );
-DELETE FROM accounts WHERE id = '44444444-4444-4444-4444-444444444444';

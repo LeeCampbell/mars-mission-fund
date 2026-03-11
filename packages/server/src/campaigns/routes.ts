@@ -421,7 +421,7 @@ export function createCampaignRouter(pool: Pool): Router {
       }
 
       const previousStatus = campaign.status
-      const updated = await approveCampaign(pool, id, actor.id, notes)
+      const updated = await approveCampaign(pool, id, actor.id)
       if (updated === null) {
         return next(new Error('Failed to approve campaign'))
       }
@@ -502,7 +502,7 @@ export function createCampaignRouter(pool: Pool): Router {
       }
 
       const previousStatus = campaign.status
-      const updated = await rejectCampaign(pool, id, actor.id, rationale, guidance)
+      const updated = await rejectCampaign(pool, id, actor.id)
       if (updated === null) {
         return next(new Error('Failed to reject campaign'))
       }

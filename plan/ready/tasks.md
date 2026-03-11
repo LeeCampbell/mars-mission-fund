@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Install new npm dependencies
+- [x] TASK-01: Install new npm dependencies
   - **Goal**: Add `bcryptjs`, `@types/bcryptjs`, `jsonwebtoken`, and `@types/jsonwebtoken` to `packages/server/package.json` and install them.
   - **Details**: Run `npm install bcryptjs jsonwebtoken` and `npm install -D @types/bcryptjs @types/jsonwebtoken` from `packages/server/`. Verify versions land at `bcryptjs ^2` and `jsonwebtoken ^9`.
   - **Files**: `packages/server/package.json`, `package-lock.json` (or workspace lock file)

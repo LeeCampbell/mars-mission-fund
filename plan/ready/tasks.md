@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists; INSERT uses correct UUID, email, role, and a valid bcrypt hash string
   - **Brief ref**: Migrations section, migration #5
 
-- [ ] TASK-06: Create migration — set created_by on seed campaigns
+- [x] TASK-06: Create migration — set created_by on seed campaigns
   - **Goal**: Backfill `created_by` on all seed campaigns to the Demo Creator UUID
   - **Details**: Create `packages/server/db/migrations/20260311000008_seed_campaign_created_by.sql`. UPDATE all rows in `campaigns` setting `created_by = '22222222-2222-2222-2222-222222222222'`.
   - **Files**: `packages/server/db/migrations/20260311000008_seed_campaign_created_by.sql`

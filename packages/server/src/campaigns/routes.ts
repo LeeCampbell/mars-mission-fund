@@ -18,6 +18,7 @@ import {
 import {
   listCampaigns,
   getCampaignById,
+  getMyCampaigns,
   createCampaign,
   updateCampaign,
   deleteCampaign,
@@ -296,6 +297,16 @@ export function createCampaignRouter(pool: Pool): Router {
   })
 
   // Must be registered before /:id to avoid UUID param collision
+  router.get('/my', authenticate, requireRole('Creator'), async (req, res, next) => {
+    const user = res.locals['user'] as { id: string }
+    try {
+      const campaigns = await getMyCampaigns(pool, user.id)
+      res.json({ data: campaigns })
+    } catch (err) {
+      next(err)
+    }
+  })
+
   router.get('/review-queue', authenticate, requireRole('Reviewer'), async (_req, res, next) => {
     try {
       const campaigns = await getReviewQueue(pool)

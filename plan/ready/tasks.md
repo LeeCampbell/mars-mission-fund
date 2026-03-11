@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles (`npx tsc --noEmit -p packages/server/tsconfig.json`)
   - **Brief ref**: Backend section — queries
 
-- [ ] TASK-04: Backend routes — add new campaign API endpoints
+- [x] TASK-04: Backend routes — add new campaign API endpoints
   - **Goal**: Wire all new routes into the campaign router with auth and validation middleware
   - **Details**: In `packages/server/src/campaigns/routes.ts`:
     - Define `GET /my` before `GET /:id` (important ordering)

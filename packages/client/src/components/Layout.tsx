@@ -11,6 +11,7 @@ const mainStyle: React.CSSProperties = {
 const routeTitles: Record<string, string> = {
   '/': 'Home — Mars Mission Fund',
   '/about': 'About — Mars Mission Fund',
+  '/campaigns': 'Explore Missions — Mars Mission Fund',
   '/contact': 'Contact — Mars Mission Fund',
 }
 

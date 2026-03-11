@@ -42,7 +42,7 @@
       "Bash(eslint:*)",
       "Bash(prettier:*)",
       "Bash(tsc:*)",
-      "Bash(./scripts/:*)",
+      "Bash(./scripts/*)",
       "mcp__playwright__*"
     ],
     "deny": ["Bash(git branch -D:*)", "Bash(gh pr merge:*)"]

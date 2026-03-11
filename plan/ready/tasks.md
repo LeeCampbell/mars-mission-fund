@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` from `packages/shared/` (or repo root) succeeds and TypeScript compiles without errors. Importing `RoleSchema` from `@mmf/shared` resolves correctly.
   - **Brief ref**: Shared Zod schemas section
 
-- [ ] TASK-05: Create JWT auth middleware
+- [x] TASK-05: Create JWT auth middleware
   - **Goal**: Implement `authenticate` and `requireRole` middleware files under `packages/server/src/middleware/`.
   - **Details**:
     - `authenticate.ts`: reads `Authorization: Bearer <token>`, calls `jsonwebtoken.verify(token, process.env.JWT_SECRET)`, writes decoded payload to `res.locals.user`. Returns `401 UNAUTHORIZED` with `{ error: { code: 'UNAUTHORIZED' } }` if token is missing or invalid. Add a comment referencing the deviation from L4-001 §5.2 (no server-side session revocation in this demo stub).

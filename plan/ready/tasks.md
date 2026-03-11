@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles. Server starts without errors.
   - **Brief ref**: Server routes
 
-- [ ] TASK-07: Write integration tests for all 5 new endpoints
+- [x] TASK-07: Write integration tests for all 5 new endpoints
   - **Goal**: Full test coverage for the settlement workflow endpoints covering happy path, auth, role, state, and validation errors
   - **Details**: In `packages/server/src/__tests__/campaigns.test.ts`, add test suites for each of the 5 endpoints. For each endpoint test: happy path (correct role, valid state → 200); 401 Unauthorized (no token); 403 Forbidden (wrong role); 404 Campaign not found; 409 Conflict (campaign in wrong state). For endpoints with a request body (`submit-evidence`, `return`) also test 422 for invalid/missing body. Use existing test helpers for auth tokens and DB setup. Ensure all 5 acceptance criteria are covered: AC-CAMP-013 through AC-CAMP-016.
   - **Files**: `packages/server/src/__tests__/campaigns.test.ts`

@@ -1090,7 +1090,7 @@ describe('Campaign Routes', () => {
 
     it('returns 401 when no token provided', async () => {
       const res = await request(app).post(
-        `/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/verify`,
+        `/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/verify`
       )
 
       expect(res.status).toBe(401)

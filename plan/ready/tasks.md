@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes with ≥80% overall coverage. All new tests pass.
   - **Brief ref**: Verification — Unit/integration tests
 
-- [ ] TASK-08: Final CI verification
+- [x] TASK-08: Final CI verification
   - **Goal**: Confirm all CI checks pass end-to-end
   - **Details**: Run the full CI check suite: `npm run build -w @mmf/shared`, `npx tsc -b --noEmit`, `npx tsc --noEmit -p packages/server/tsconfig.json`, `npm run build`, `npm run lint`, `npm run format:check`, `npm run test:coverage`. Fix any type errors, lint violations, or formatting issues that arise.
   - **Files**: Any files needing formatting or lint fixes

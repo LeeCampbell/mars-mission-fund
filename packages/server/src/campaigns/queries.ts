@@ -30,7 +30,8 @@ export async function listCampaigns(pool: Pool, filters: ListQuery): Promise<Cam
       current_amount_usd AS "raisedAmount",
       contributor_count AS "contributorCount",
       deadline,
-      created_at AS "createdAt"
+      created_at AS "createdAt",
+      created_by AS "createdBy"
     FROM campaigns
     ${where}
     ORDER BY created_at DESC
@@ -54,6 +55,7 @@ export async function getCampaignById(pool: Pool, id: string): Promise<CampaignD
       contributor_count AS "contributorCount",
       deadline,
       created_at AS "createdAt",
+      created_by AS "createdBy",
       slug,
       description,
       alignment_statement AS "alignmentStatement",

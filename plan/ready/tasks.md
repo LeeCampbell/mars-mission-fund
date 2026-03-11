@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/shared` passes; TypeScript types are exported
   - **Brief ref**: Shared types section
 
-- [ ] TASK-08: Update server SQL queries to include createdBy
+- [x] TASK-08: Update server SQL queries to include createdBy
   - **Goal**: Add `created_by AS "createdBy"` to both `listCampaigns` and `getCampaignById` SELECT clauses
   - **Details**: Modify `packages/server/src/campaigns/queries.ts`. Add `created_by AS "createdBy"` to the SELECT in both query functions. No TypeScript type changes needed — types infer from the updated shared schemas.
   - **Files**: `packages/server/src/campaigns/queries.ts`

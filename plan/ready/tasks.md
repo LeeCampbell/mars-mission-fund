@@ -57,7 +57,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes; server starts without errors
   - **Brief ref**: Section 5 — Server routes
 
-- [ ] TASK-06: Integration tests — full campaign write endpoint coverage
+- [x] TASK-06: Integration tests — full campaign write endpoint coverage
   - **Goal**: Add a `describe('Campaign Write Endpoints')` block to `packages/server/src/__tests__/campaigns.test.ts` covering 100% of new endpoint contracts
   - **Details**: Follow the existing mock-pool + supertest pattern. Cover:
     - `POST /v1/campaigns`: 201 success, 400 invalid body, 401 no token, 403 non-Creator role

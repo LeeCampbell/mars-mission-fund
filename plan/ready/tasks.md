@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: DB migrations — creator_id, cancellation_requested_at, audit_events
+- [x] TASK-01: DB migrations — creator_id, cancellation_requested_at, audit_events
   - **Goal**: Add the three database migrations required by the brief so subsequent server code can use the new columns and table.
   - **Details**:
     1. Create `20260311000003_add_creator_id_to_campaigns.sql`: `ALTER TABLE campaigns ADD COLUMN creator_id uuid REFERENCES accounts(id)`. After the ALTER, add a seed UPDATE that sets `creator_id` to the UUID of the demo Creator account (look up via `role = 'Creator'` subquery) for campaigns whose status is in `('Approved','Live','Funded')`.

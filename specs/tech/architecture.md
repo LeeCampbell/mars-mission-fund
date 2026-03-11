@@ -1,7 +1,7 @@
 # Architecture
 
 > **Spec ID**: L3-001
-> **Version**: 0.6
+> **Version**: 0.7
 > **Status**: Approved
 > **Rate of Change**: Sprint-level / tech decisions
 > **Depends On**: L1-001 (Product Vision & Mission), L2-002 (Engineering Standard), L3-008 (Tech Stack)
@@ -265,7 +265,7 @@ Asynchronous (event-driven) communication is used when:
 
 Per [Engineering Standard](L2-002), Section 1.5, every service-to-service call is authenticated.
 
-- **Mechanism**: Not applicable — single deployment unit, all inter-service calls are in-process. If services are split in the future, JWT service tokens are recommended, aligning with existing Clerk/OIDC infrastructure.
+- **Mechanism**: Not applicable — single deployment unit, all inter-service calls are in-process. If services are split in the future, JWT service tokens are recommended, aligning with the custom stateless JWT implementation already in use for user authentication (see [Security](L3-002) and [Tech Stack](L3-008)).
 - Each service has a unique identity.
   No service impersonates another.
 - Authorisation policies define which services can call which endpoints.
@@ -452,3 +452,4 @@ This spec shares boundaries with every other L3 spec and several L4 specs.
 | 2026-03-09 | 0.4     | —      | Clarified local demo topology in Section 1: `docker-compose.dev.yml` starts PostgreSQL only; the Express server (`server/`) is run separately via `npm run dev` — it is not part of the Docker Compose stack.                                                                                                                                                                                                                                                                                                                  |
 | 2026-03-10 | 0.5     | —      | Corrected Section 1 local demo scope note: updated Express server path from `server/` to `packages/server/` and run command to `npm run dev:server` from the repo root (or `npm run dev` inside `packages/server/`), reflecting the completed npm workspaces monorepo restructuring.                                                                                                                                                                                                                                          |
 | 2026-03-10 | 0.6     | Claude | Added Success Response Envelope and Field Naming Convention subsections to Section 6.1, documenting the `{ "data": ... }` wrapper and camelCase API field naming convention introduced by issue #65.                                                                                                                                                                                                                                                                                                                         |
+| 2026-03-11 | 0.7     | Claude | Updated Section 6.3 service identity note: replaced "Clerk/OIDC infrastructure" reference with the custom stateless JWT implementation used for user authentication (issue #96).                                                                                                                                                                                                                                                                                                                                             |

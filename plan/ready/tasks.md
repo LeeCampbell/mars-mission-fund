@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists with correct UPDATE statement and UUID
   - **Brief ref**: Migrations section, migration #6
 
-- [ ] TASK-07: Add new Zod schemas and types to @mmf/shared
+- [x] TASK-07: Add new Zod schemas and types to @mmf/shared
   - **Goal**: Export `AuditLogEntrySchema`, `NotificationSchema`, `MilestoneEvidenceSchema` and their TypeScript types; extend `CampaignSummarySchema` with nullable `createdBy`
   - **Details**: Modify `packages/shared/src/campaign.ts`. Add the three new schemas exactly as specified in the brief. Add `createdBy: z.string().uuid().nullable()` to `CampaignSummarySchema`. Export inferred types for all three new schemas. `CampaignDetailSchema` inherits `createdBy` automatically via `.extend(...)`.
   - **Files**: `packages/shared/src/campaign.ts`

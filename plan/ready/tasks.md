@@ -161,7 +161,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:e2e` — all tests pass (existing + new)
   - **Brief ref**: §10 E2E tests, Verification section
 
-- [ ] TASK-14: Final CI verification
+- [x] TASK-14: Final CI verification
   - **Goal**: Confirm the full CI pipeline passes with all new code
   - **Details**: Run the complete CI check script to verify type-checking, lint, formatting, build, and unit/integration test coverage all pass. Fix any remaining issues.
     - `npm run build -w @mmf/shared && npx tsc -b --noEmit && npx tsc --noEmit -p packages/server/tsconfig.json`

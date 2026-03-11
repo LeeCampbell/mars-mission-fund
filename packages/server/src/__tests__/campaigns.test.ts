@@ -816,24 +816,7 @@ describe('Campaign Routes', () => {
   })
 })
 
-const TEST_JWT_SECRET = 'test-jwt-secret-for-write-tests'
-const TEST_CREATOR_ID = 'b2c3d4e5-f6a7-8901-bcde-f12345678901'
-
-function makeCreatorToken(): string {
-  return jwt.sign(
-    { id: TEST_CREATOR_ID, email: 'creator@example.com', role: 'Creator' },
-    TEST_JWT_SECRET,
-    { expiresIn: '8h' }
-  )
-}
-
-function makeBackerToken(): string {
-  return jwt.sign(
-    { id: TEST_CREATOR_ID, email: 'backer@example.com', role: 'Backer' },
-    TEST_JWT_SECRET,
-    { expiresIn: '8h' }
-  )
-}
+const TEST_CREATOR_ID = CREATOR_UUID
 
 // Returns a valid campaign row for submitCampaign's SELECT query (snake_case columns)
 function makeSubmitCampaignRow(overrides: Record<string, unknown> = {}): Record<string, unknown> {

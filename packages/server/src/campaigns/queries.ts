@@ -667,10 +667,7 @@ export async function getNotificationsForUser(
   return result.rows
 }
 
-export async function getCampaignState(
-  pool: Pool,
-  id: string
-): Promise<CampaignStateRow | null> {
+export async function getCampaignState(pool: Pool, id: string): Promise<CampaignStateRow | null> {
   const result = await pool.query<CampaignStateRow>(
     `SELECT
       id,

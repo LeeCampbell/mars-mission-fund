@@ -29,7 +29,9 @@ const mockAccountRow = {
   updatedAt: new Date('2026-01-01T00:00:00.000Z'),
 }
 
-function makeToken(payload: object = { id: TEST_USER_ID, email: TEST_EMAIL, role: 'Backer' }): string {
+function makeToken(
+  payload: object = { id: TEST_USER_ID, email: TEST_EMAIL, role: 'Backer' }
+): string {
   return jwt.sign(payload, TEST_JWT_SECRET, { expiresIn: '8h' })
 }
 
@@ -60,7 +62,11 @@ describe('Auth Routes', () => {
       expect(res.body.data.user).not.toHaveProperty('password_hash')
 
       // Verify returned token is valid
-      const decoded = jwt.verify(res.body.data.token, TEST_JWT_SECRET) as { id: string; email: string; role: string }
+      const decoded = jwt.verify(res.body.data.token, TEST_JWT_SECRET) as {
+        id: string
+        email: string
+        role: string
+      }
       expect(decoded.id).toBe(TEST_USER_ID)
       expect(decoded.email).toBe(TEST_EMAIL)
       expect(decoded.role).toBe('Backer')
@@ -91,9 +97,7 @@ describe('Auth Routes', () => {
     })
 
     it('returns 400 on invalid request body', async () => {
-      const res = await request(app)
-        .post('/v1/auth/login')
-        .send({ email: 'not-an-email' })
+      const res = await request(app).post('/v1/auth/login').send({ email: 'not-an-email' })
 
       expect(res.status).toBe(400)
       expect(res.body).toHaveProperty('error')
@@ -104,9 +108,7 @@ describe('Auth Routes', () => {
     it('returns 200 with message on valid token', async () => {
       const token = makeToken()
 
-      const res = await request(app)
-        .post('/v1/auth/logout')
-        .set('Authorization', `Bearer ${token}`)
+      const res = await request(app).post('/v1/auth/logout').set('Authorization', `Bearer ${token}`)
 
       expect(res.status).toBe(200)
       expect(res.body).toHaveProperty('data')
@@ -136,9 +138,7 @@ describe('Auth Routes', () => {
 
       const token = makeToken()
 
-      const res = await request(app)
-        .get('/v1/auth/me')
-        .set('Authorization', `Bearer ${token}`)
+      const res = await request(app).get('/v1/auth/me').set('Authorization', `Bearer ${token}`)
 
       expect(res.status).toBe(200)
       expect(res.body).toHaveProperty('data')
@@ -168,7 +168,7 @@ describe('Auth Routes', () => {
       const expiredToken = jwt.sign(
         { id: TEST_USER_ID, email: TEST_EMAIL, role: 'Backer' },
         TEST_JWT_SECRET,
-        { expiresIn: -1 },
+        { expiresIn: -1 }
       )
 
       const res = await request(app)
@@ -184,9 +184,7 @@ describe('Auth Routes', () => {
 
       const token = makeToken()
 
-      const res = await request(app)
-        .get('/v1/auth/me')
-        .set('Authorization', `Bearer ${token}`)
+      const res = await request(app).get('/v1/auth/me').set('Authorization', `Bearer ${token}`)
 
       expect(res.status).toBe(404)
       expect(res.body.error.code).toBe('USER_NOT_FOUND')

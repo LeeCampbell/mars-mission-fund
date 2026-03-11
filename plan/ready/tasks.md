@@ -113,7 +113,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test` from `packages/server/` — all auth tests pass.
   - **Brief ref**: Integration tests section, auth.test.ts
 
-- [ ] TASK-13: Write users integration tests
+- [x] TASK-13: Write users integration tests
   - **Goal**: Create `packages/server/src/__tests__/users.test.ts` covering all user endpoint permission combinations.
   - **Details**: Mirror the `campaigns.test.ts` mock-pool pattern with `vi.stubEnv` for `JWT_SECRET`. Cover:
     - GET /users as Administrator → 200 + array

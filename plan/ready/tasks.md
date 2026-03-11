@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: The four entries are present under "Campaign Lifecycle Patterns"; `npm run lint:md` passes.
   - **Brief ref**: Approach §4 — Add new learnings
 
-- [ ] TASK-05: Add Glossary section to specs/domain/campaign.md
+- [x] TASK-05: Add Glossary section to specs/domain/campaign.md
   - **Goal**: Define the 12 campaign states and key review-pipeline, milestone, and financial vocabulary introduced in this milestone.
   - **Details**: Read `specs/domain/campaign.md` to find the Acceptance Criteria section. Add a new "Glossary" section after it. **Campaign states** (one-sentence each): Draft, Submitted, Under Review, Approved, Rejected, Live, Funded, Suspended, Failed, Settlement, Complete, Cancelled. **Review pipeline terms**: FIFO queue, pull-based assignment, claim, recuse, curation criteria, 5-day SLA. **Milestone terms**: verification criteria, evidence submission, staged fund release, return for resubmission. **Financial terms**: minimum funding target, maximum funding cap, deadline enforcement, stretch goal, flexible funding. Follow one-sentence-per-line and `*emphasis*` rules.
   - **Files**: `specs/domain/campaign.md` (modify)

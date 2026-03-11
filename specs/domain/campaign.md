@@ -480,6 +480,99 @@ Campaign enforces permissions based on the authenticated user's role.
 
 ---
 
+## 12. Glossary
+
+### Campaign States
+
+**Draft**
+: The campaign proposal is being assembled by the creator and is not visible to reviewers or the public.
+
+**Submitted**
+: The creator has submitted the proposal for review; the proposal is immutable until a review outcome is recorded.
+
+**Under Review**
+: A reviewer has claimed the proposal and is evaluating it against the curation criteria.
+
+**Approved**
+: The proposal has passed review and is cleared to launch as a live campaign.
+
+**Rejected**
+: The proposal did not meet curation criteria; the reviewer has provided written rationale and resubmission guidance.
+
+**Live**
+: The campaign is publicly visible and accepting contributions from backers.
+
+**Funded**
+: The campaign has reached its minimum funding target and continues accepting contributions until the deadline or maximum funding cap is reached.
+
+**Suspended**
+: The campaign has been temporarily frozen due to a compliance issue (e.g., creator KYC revoked); no new contributions are accepted while the issue is resolved.
+
+**Failed**
+: The campaign deadline passed without the minimum funding target being met; all contributions are refunded.
+
+**Settlement**
+: The campaign has closed with sufficient funding and funds are being disbursed to the creator per the milestone verification plan.
+
+**Complete**
+: All milestones have been verified and all funds disbursed; the campaign is fully resolved.
+
+**Cancelled**
+: The campaign was cancelled by the creator or an administrator before completion; all contributions are refunded.
+
+### Review Pipeline Terms
+
+**FIFO queue**
+: The shared, first-in-first-out ordered list of submitted proposals waiting to be claimed by a reviewer.
+
+**Pull-based assignment**
+: Reviewers proactively claim the next available campaign from the queue rather than being assigned work automatically.
+
+**Claim**
+: The action a reviewer takes to take ownership of a submitted proposal, transitioning it to *Under Review*.
+
+**Recuse**
+: A reviewer's voluntary withdrawal from a campaign they have claimed, returning the campaign to the FIFO queue for another reviewer to claim.
+
+**Curation criteria**
+: The six evaluation dimensions (Mars-mission alignment, feasibility, team credibility, risk transparency, milestone quality, completeness) against which reviewers assess proposals.
+
+**5-day SLA**
+: The target service-level agreement for completing a review outcome within 5 business days of a proposal entering *Submitted* state.
+
+### Milestone Terms
+
+**Verification criteria**
+: The specific, measurable conditions defined in the milestone plan that must be demonstrated by evidence before an admin verifies the milestone as complete.
+
+**Evidence submission**
+: The creator's act of providing documents, images, links, or reports through the platform to demonstrate that a milestone's verification criteria have been met.
+
+**Staged fund release**
+: The pattern in which funds are disbursed incrementally upon each milestone verification rather than as a single lump sum at campaign completion.
+
+**Return for resubmission**
+: The admin outcome indicating that submitted milestone evidence is insufficient; the creator is notified with specific feedback and may submit new or improved evidence.
+
+### Financial Terms
+
+**Minimum funding target**
+: The lower funding threshold (minimum USD $1,000,000) that a campaign must reach by its deadline; if not met, the campaign fails and all contributions are refunded.
+
+**Maximum funding cap**
+: The upper funding ceiling at which the campaign stops accepting new contributions; funds raised above the minimum target but below the cap are retained by the campaign.
+
+**Deadline enforcement**
+: The automatic system action that transitions a live campaign to *Funded* or *Failed* at its deadline based on whether the minimum funding target was met.
+
+**Stretch goal**
+: An optional funding tier defined above the minimum funding target; each tier activates when its threshold is reached and unlocks additional deliverables or features.
+
+**Flexible funding**
+: The platform's funding model in which campaigns that meet their minimum target keep the full amount raised (up to the cap); campaigns that do not meet the minimum target receive nothing and all contributions are refunded.
+
+---
+
 ## Change Log
 
 | Date       | Version | Author | Summary                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |

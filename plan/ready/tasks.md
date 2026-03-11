@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Glossary section exists after Acceptance Criteria; all 12 states are listed; `npm run lint:md` passes.
   - **Brief ref**: Approach §5 — Add Glossary to campaign.md
 
-- [ ] TASK-06: Update specs/README.md index — add ADR-0002 and verify completeness
+- [x] TASK-06: Update specs/README.md index — add ADR-0002 and verify completeness
   - **Goal**: Ensure every `.md` file under `specs/` has an entry in `specs/README.md`, including the newly created ADR-0002.
   - **Details**: Run `find specs/ -name "*.md" | sort` to get the full file list. Read `specs/README.md` and compare. Add ADR-0002 to the ADRs table (title, status, date, summary). Update the file-system layout diagram to include `0002-audit-log-simplified-approach.md`. Confirm every other `.md` file already has an entry; add any that are missing. Follow one-sentence-per-line and `*emphasis*` rules.
   - **Files**: `specs/README.md` (modify)

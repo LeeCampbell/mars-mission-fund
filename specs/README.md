@@ -106,9 +106,15 @@ These are not numbered specs and do not participate in the L1–L4 dependency hi
 
 | Document            | Purpose                                                                 |
 | ------------------- | ----------------------------------------------------------------------- |
-| `adrs/`             | Architecture Decision Records capturing technology and structural choices. |
 | `tooling/github.md` | CLI reference for managing GitHub milestones, issues, and PRs via `gh`. |
 | `learnings.md`      | Accumulated gotchas, environment quirks, and workarounds discovered during implementation; updated by agents at milestone close. |
+
+### Architecture Decision Records (ADRs)
+
+| ADR     | Title                                      | Status   | Date       | Summary                                                                                      |
+| ------- | ------------------------------------------ | -------- | ---------- | -------------------------------------------------------------------------------------------- |
+| ADR-0001 | npm Workspaces Monorepo Structure         | Accepted | 2026-03-10 | Chose npm workspaces over Turborepo/Nx; adopted `packages/` as the top-level directory name. |
+| ADR-0002 | Simplified Audit Log for Local Demo       | Accepted | 2026-03-11 | Demo uses a minimal `audit_log` table rather than the full L3-006 production event schema.   |
 
 ---
 
@@ -173,7 +179,8 @@ Some concerns span multiple specs. When working in these areas, read all referen
 specs/
 ├── README.md                          ← You are here
 ├── adrs/
-│   └── 0001-npm-workspaces-monorepo.md  ← ADR-0001
+│   ├── 0001-npm-workspaces-monorepo.md  ← ADR-0001
+│   └── 0002-audit-log-simplified-approach.md  ← ADR-0002
 ├── learnings.md                       ← Accumulated implementation gotchas
 ├── product-vision-and-mission.md      ← L1
 ├── standards/

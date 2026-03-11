@@ -116,7 +116,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles (`npx tsc -b --noEmit`)
   - **Brief ref**: §6 Client API
 
-- [ ] TASK-10: Client UI — ProtectedRoute, App routing, LoginPage
+- [x] TASK-10: Client UI — ProtectedRoute, App routing, LoginPage
   - **Goal**: Add reviewer-role support to routing and update the login demo selector
   - **Details**:
     - In `packages/client/src/components/ProtectedRoute.tsx`, add `requireReviewer?: boolean` prop; redirect if `user.role !== 'Reviewer'` when prop is true

@@ -35,7 +35,7 @@ const baseCampaignRow = {
   launchedAt: null,
   updatedAt: new Date('2026-01-01T00:00:00.000Z'),
   creatorId: CREATOR_UUID,
-  reviewerId: null,
+  reviewerId: null as string | null,
 }
 
 const submittedCampaignRow = { ...baseCampaignRow, status: 'Submitted', reviewerId: null }

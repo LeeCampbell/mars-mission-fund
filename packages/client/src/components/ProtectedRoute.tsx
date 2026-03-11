@@ -3,9 +3,10 @@ import { useAuthContext } from '../context/AuthContext'
 
 interface ProtectedRouteProps {
   requireAdmin?: boolean
+  requireReviewer?: boolean
 }
 
-export function ProtectedRoute({ requireAdmin }: ProtectedRouteProps) {
+export function ProtectedRoute({ requireAdmin, requireReviewer }: ProtectedRouteProps) {
   const { isAuthenticated, user } = useAuthContext()
   const location = useLocation()
 
@@ -14,6 +15,10 @@ export function ProtectedRoute({ requireAdmin }: ProtectedRouteProps) {
   }
 
   if (requireAdmin && user?.role !== 'Administrator' && user?.role !== 'SuperAdministrator') {
+    return <Navigate to="/" replace />
+  }
+
+  if (requireReviewer && user?.role !== 'Reviewer') {
     return <Navigate to="/" replace />
   }
 

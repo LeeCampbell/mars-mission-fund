@@ -88,7 +88,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript passes; all six route handlers present
   - **Brief ref**: Server layer — admin module
 
-- [ ] TASK-07: Frontend API clients
+- [x] TASK-07: Frontend API clients
   - **Goal**: Create the three API client modules for review, notifications, and admin
   - **Details**:
     - `api/review.ts`: `fetchReviewQueue()` → GET `/v1/review`; `claimCampaign(id)` → POST `/v1/review/:id/claim`; `approveCampaign(id, notes)` → POST `/v1/review/:id/approve` `{ notes }`; `rejectCampaign(id, rationale, guidance)` → POST `/v1/review/:id/reject` `{ rationale, guidance }`; use `authedFetch` (copy pattern from existing `api/` files)

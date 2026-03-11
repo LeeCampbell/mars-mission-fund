@@ -129,7 +129,7 @@ Brief: plan/ready/brief.md
   - **Verify**: TypeScript compiles; `/review-queue` redirects non-Reviewer users; Reviewer demo entry appears on LoginPage
   - **Brief ref**: §7 Client UI (ProtectedRoute, App.tsx, LoginPage)
 
-- [ ] TASK-11: ReviewQueuePage component
+- [x] TASK-11: ReviewQueuePage component
   - **Goal**: Create the review queue page that lists Submitted campaigns and allows claiming
   - **Details**: Create `packages/client/src/pages/ReviewQueuePage.tsx`. Use React Query to fetch `fetchReviewQueue()`. Render a table/list showing campaign title and submission date. Each row has a "Claim" button that calls `claimCampaign(id)` then navigates to `/campaigns/:id`.
   - **Files**:

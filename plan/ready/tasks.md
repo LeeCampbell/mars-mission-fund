@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: No "Clerk" references remain in the local demo scope note. `Version` field reads `0.3`. A new changelog entry dated today is present.
   - **Brief ref**: Step 1 — account.md (L4-001)
 
-- [ ] TASK-03: Update specs/tech/security.md — Clerk references + version bump
+- [x] TASK-03: Update specs/tech/security.md — Clerk references + version bump
   - **Goal**: Remove all Clerk references from the local demo scope note, the "User impersonation" threat-control row, the IdP key-concept definition, and the PCI DSS 7.2 row; increment version and add changelog entry.
   - **Details**: Read the file. Make four targeted edits:
     1. Local demo scope note (≈line 14): replace "authentication via Clerk" with the custom JWT stub.

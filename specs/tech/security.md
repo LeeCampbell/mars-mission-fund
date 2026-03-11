@@ -1,7 +1,7 @@
 # Security
 
 > **Spec ID**: L3-002
-> **Version**: 0.4
+> **Version**: 0.5
 > **Status**: Approved
 > **Rate of Change**: Sprint-level / tech decisions
 > **Depends On**: L1-001 (Product Vision & Mission), L2-002 (Engineering Standard), L3-001 (Architecture)
@@ -11,7 +11,7 @@
 
 ## 1. Purpose
 
-> **Local demo scope**: RBAC model, authentication via Clerk, input validation, CSP headers, and the STRIDE threat model structure are **real** — they inform the local demo's auth implementation. Penetration testing, incident response procedures, breach notification workflows, certificate management, and compliance audit cadences are theatre. Session timeouts and lockout thresholds will use sensible defaults without formal review.
+> **Local demo scope**: RBAC model, authentication via a custom stateless JWT/bcrypt stub (stateless, no refresh tokens, no revocation, JWT stored in localStorage), input validation, CSP headers, and the STRIDE threat model structure are **real** — they inform the local demo's auth implementation. Penetration testing, incident response procedures, breach notification workflows, certificate management, and compliance audit cadences are theatre. Session timeouts and lockout thresholds will use sensible defaults without formal review.
 
 This spec defines the security architecture for Mars Mission Fund: threat model, control matrix, authentication and authorisation architecture, encryption standards, compliance mapping, session management, and incident response.
 It implements the "Security as Foundation" principle from the [Product Vision & Mission](L1-001) and the security invariants defined in the [Engineering Standard](L2-002), Section 1.
@@ -95,7 +95,7 @@ The threat model is a living document — it must be reviewed and updated whenev
 | Threat                              | Trust Boundary                | Control                                                                                          | Spec Reference                       | Priority |
 | ----------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------ | -------- |
 | **Spoofing**                        |                               |                                                                                                  |                                      |          |
-| User impersonation                  | External → API Gateway        | OAuth 2.0 / OIDC authentication via Clerk with MFA                                               | Section 4                            | Critical |
+| User impersonation                  | External → API Gateway        | Stateless JWT validation with bcrypt credential check (demo stub; production will add MFA)        | Section 4                            | Critical |
 | Session hijacking                   | External → API Gateway        | Short-lived access tokens (5 min), secure HttpOnly cookies, session binding to device/user-agent | Section 4.3, 4.4                     | Critical |
 | Credential stuffing                 | External → API Gateway        | Account lockout after 3 failed attempts, rate limiting on auth endpoints (10/min)                | Section 4.5, 7.3                     | Critical |
 | Token forgery                       | API Gateway → Domain Services | RS256/ES256 JWT signature validation, issuer and expiry checks at gateway                        | Section 4.3                          | Critical |
@@ -138,8 +138,8 @@ The threat model is a living document — it must be reviewed and updated whenev
 
 Authentication is based on OAuth 2.0 with OpenID Connect (OIDC) for identity.
 
-- **Identity Provider (IdP)**: Clerk (per [Tech Stack](L3-008)).
-  Clerk provides OAuth 2.0/OIDC, session management, and MFA capabilities as a managed service.
+- **Identity Provider (IdP)**: Custom JWT stub (per [Tech Stack](L3-008)).
+  The demo uses `jsonwebtoken` for stateless token generation/validation and `bcryptjs` for password hashing; SSO, session management, and MFA are not implemented in the local demo.
 - All user authentication flows use the Authorization Code flow with PKCE (Proof Key for Code Exchange).
 - Implicit flow and Resource Owner Password Credentials flow are prohibited.
 
@@ -331,7 +331,7 @@ Client-side tokenisation via **Stripe Elements** — the platform never stores, 
 | **6.1** — Security patches applied in timely manner                           | Dependency vulnerability scanning on every CI build; CVSS 9.0+ blocks merge                                     | Section 11                                 |
 | **6.2** — Protection against known vulnerabilities                            | SAST on every CI build; DAST weekly in staging; bi-annual penetration testing                                   | Section 11                                 |
 | **7.1** — Restrict access to system components and cardholder data            | RBAC with five roles; MFA for financial and admin operations; API-layer authorisation                           | Sections 4, 5                              |
-| **7.2** — Unique ID for each person with access                               | Clerk-managed user identities; no shared or generic accounts                                                    | Section 4.1                                |
+| **7.2** — Unique ID for each person with access                               | Accounts table with JWT-based identity; no shared or generic accounts                                           | Section 4.1                                |
 | **8.1** — Identify and authenticate access to system components               | OAuth 2.0 / OIDC authentication; MFA on financial actions                                                       | Section 4                                  |
 | **9.1** — Physical security of payment processing areas                       | Not applicable — no cardholder data processed or stored in MMF infrastructure                                   | N/A                                        |
 | **11.1** — Test security systems and processes regularly                      | Security review cadence: SAST/DAST continuous, penetration testing bi-annually, threat model review quarterly   | Section 11                                 |
@@ -519,3 +519,4 @@ Operational incident response (availability, performance degradation) is defined
 | March 2026 | 0.2     | —      | Resolved OQ-1: Clerk selected as Identity Provider per L3-008.                                                                                                                                                                                                                                                                                |
 | March 2026 | 0.3     | —      | Resolved all remaining open questions (OQ-2 through OQ-14). Access token 5 min, refresh token 1 day, unlimited sessions, 15 min idle / 8 hr absolute timeout, 3-attempt lockout, AWS KMS + ACM, CSP directives, rate limits, 30s revocation propagation, bi-annual pen testing, breach notification escalation chain. Status moved to Review. |
 | March 2026 | 0.4     | —      | Expanded Security Control Matrix (Section 3.3) with comprehensive controls across all STRIDE categories and trust boundaries. Expanded PCI DSS SAQ-A mapping (Section 8.1) for Stripe gateway. Removed placeholder notes.                                                                                                                     |
+| March 2026 | 0.5     | —      | Removed Clerk references from local demo scope note, threat-control matrix, IdP definition, and PCI DSS 7.2 row; replaced with custom JWT/bcrypt stub description.                                                                                                                                                                           |

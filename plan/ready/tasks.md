@@ -74,7 +74,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes
   - **Brief ref**: Multi-step Form (edit wrapper)
 
-- [ ] TASK-09: Add creator panels to Campaign Detail page
+- [x] TASK-09: Add creator panels to Campaign Detail page
   - **Goal**: Post Update panel and Submit Evidence panel rendered conditionally for the campaign creator
   - **Details**: Read the full `CampaignDetailPage.tsx` first. Add two new creator-only sections after the existing content:
     - **Post Update panel**: rendered when `user?.id === campaign.creatorId && (campaign.status === 'Live' || campaign.status === 'Funded')`. Contains a `<textarea>` for update body and a "Post Update" button. Use inline `useMutation` calling `postCampaignUpdate(id, body)`, then `invalidateQueries(['campaign', id])` on success. Clear textarea on success.

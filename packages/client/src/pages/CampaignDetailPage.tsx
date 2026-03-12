@@ -1,8 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCampaign } from '../hooks/useCampaign'
 import { Badge } from '../components/ui/Badge'
 import { Card } from '../components/ui/Card'
+import { Button } from '../components/ui/Button'
 import { FundingProgressSection } from '../components/campaigns/FundingProgressSection'
 import { MilestonesSection } from '../components/campaigns/MilestonesSection'
 import { StretchGoalsSection } from '../components/campaigns/StretchGoalsSection'
@@ -10,7 +12,8 @@ import { CampaignUpdatesSection } from '../components/campaigns/CampaignUpdatesS
 import { TeamSection } from '../components/campaigns/TeamSection'
 import { ReviewActionsPanel } from '../components/campaigns/ReviewActionsPanel'
 import { useAuthContext } from '../context/AuthContext'
-import type { CampaignStatus } from '@mmf/shared'
+import { postCampaignUpdate, submitMilestoneEvidence } from '../api/campaigns'
+import type { CampaignStatus, Milestone } from '@mmf/shared'
 
 type BadgeVariant = 'funded' | 'active' | 'new'
 
@@ -146,6 +149,231 @@ const errorStyle: React.CSSProperties = {
   color: 'var(--color-status-error)',
 }
 
+const creatorPanelStyle: React.CSSProperties = {
+  border: '1px solid var(--color-border-subtle)',
+  borderRadius: 'var(--radius-card)',
+  padding: 'var(--space-6)',
+  background: 'var(--color-bg-card)',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 'var(--space-6)',
+}
+
+const creatorPanelHeadingStyle: React.CSSProperties = {
+  fontFamily: 'var(--font-heading)',
+  fontSize: 'var(--type-heading-3-size)',
+  fontWeight: 'var(--type-heading-3-weight)' as React.CSSProperties['fontWeight'],
+  letterSpacing: 'var(--type-heading-3-spacing)',
+  lineHeight: 'var(--type-heading-3-leading)',
+  color: 'var(--color-text-primary)',
+  margin: 0,
+}
+
+const creatorPanelLabelStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 'var(--space-2)',
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-body-small-size)',
+  fontWeight: 600,
+  color: 'var(--color-text-secondary)',
+  letterSpacing: '0.05em',
+  textTransform: 'uppercase',
+}
+
+const creatorPanelTextareaStyle: React.CSSProperties = {
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-body-size)',
+  color: 'var(--color-text-primary)',
+  background: 'var(--color-bg-input)',
+  border: '1px solid var(--color-border-default)',
+  borderRadius: 'var(--radius-sm)',
+  padding: 'var(--space-3)',
+  resize: 'vertical',
+  minHeight: '80px',
+  width: '100%',
+  boxSizing: 'border-box',
+}
+
+const creatorPanelInputStyle: React.CSSProperties = {
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-body-size)',
+  color: 'var(--color-text-primary)',
+  background: 'var(--color-bg-input)',
+  border: '1px solid var(--color-border-default)',
+  borderRadius: 'var(--radius-sm)',
+  padding: 'var(--space-3)',
+  width: '100%',
+  boxSizing: 'border-box',
+}
+
+const creatorPanelErrorStyle: React.CSSProperties = {
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-body-small-size)',
+  color: 'var(--color-status-error)',
+}
+
+const milestoneItemStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 'var(--space-4)',
+  paddingTop: 'var(--space-4)',
+  borderTop: '1px solid var(--color-border-subtle)',
+}
+
+const milestoneTitleStyle: React.CSSProperties = {
+  fontFamily: 'var(--font-heading)',
+  fontSize: 'var(--type-body-size)',
+  fontWeight: 600,
+  color: 'var(--color-text-primary)',
+  margin: '0 0 var(--space-1)',
+}
+
+function PostUpdatePanel({ campaignId }: { campaignId: string }) {
+  const queryClient = useQueryClient()
+  const [body, setBody] = useState('')
+  const [error, setError] = useState<string | null>(null)
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => postCampaignUpdate(campaignId, body),
+    onSuccess: () => {
+      setBody('')
+      void queryClient.invalidateQueries({ queryKey: ['campaign', campaignId] })
+    },
+    onError: () => {
+      setError('Failed to post update. Please try again.')
+    },
+  })
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+    mutate()
+  }
+
+  return (
+    <div style={creatorPanelStyle} aria-label="Post update">
+      <h2 style={creatorPanelHeadingStyle}>Post an Update</h2>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+        <label style={creatorPanelLabelStyle}>
+          Update
+          <textarea
+            style={creatorPanelTextareaStyle}
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            placeholder="Share news with your backers…"
+            required
+          />
+        </label>
+        {error && (
+          <span role="alert" style={creatorPanelErrorStyle}>
+            {error}
+          </span>
+        )}
+        <Button type="submit" variant="primary" disabled={isPending || body.trim() === ''}>
+          {isPending ? 'Posting…' : 'Post Update'}
+        </Button>
+      </form>
+    </div>
+  )
+}
+
+function MilestoneEvidenceForm({
+  campaignId,
+  milestone,
+}: {
+  campaignId: string
+  milestone: Milestone
+}) {
+  const queryClient = useQueryClient()
+  const [evidenceDescription, setEvidenceDescription] = useState('')
+  const [evidenceUrl, setEvidenceUrl] = useState('')
+  const [error, setError] = useState<string | null>(null)
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: () =>
+      submitMilestoneEvidence(campaignId, milestone.id, {
+        evidenceDescription,
+        evidenceUrl: evidenceUrl.trim() || undefined,
+      }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['campaign', campaignId] })
+    },
+    onError: () => {
+      setError('Failed to submit evidence. Please try again.')
+    },
+  })
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+    mutate()
+  }
+
+  return (
+    <div style={milestoneItemStyle}>
+      <p style={milestoneTitleStyle}>{milestone.title}</p>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+        <label style={creatorPanelLabelStyle}>
+          Evidence Description
+          <textarea
+            style={creatorPanelTextareaStyle}
+            value={evidenceDescription}
+            onChange={(e) => setEvidenceDescription(e.target.value)}
+            placeholder="Describe the evidence for this milestone…"
+            required
+          />
+        </label>
+        <label style={creatorPanelLabelStyle}>
+          Evidence URL (optional)
+          <input
+            type="url"
+            style={creatorPanelInputStyle}
+            value={evidenceUrl}
+            onChange={(e) => setEvidenceUrl(e.target.value)}
+            placeholder="https://…"
+          />
+        </label>
+        {error && (
+          <span role="alert" style={creatorPanelErrorStyle}>
+            {error}
+          </span>
+        )}
+        <Button
+          type="submit"
+          variant="primary"
+          disabled={isPending || isSuccess || evidenceDescription.trim() === ''}
+        >
+          {isPending ? 'Submitting…' : isSuccess ? 'Submitted' : 'Submit Evidence'}
+        </Button>
+      </form>
+    </div>
+  )
+}
+
+function SubmitEvidencePanel({
+  campaignId,
+  milestones,
+}: {
+  campaignId: string
+  milestones: Milestone[]
+}) {
+  const pendingMilestones = milestones.filter(
+    (m) => m.status === 'Pending' || m.status === 'Returned'
+  )
+
+  if (pendingMilestones.length === 0) return null
+
+  return (
+    <div style={creatorPanelStyle} aria-label="Submit milestone evidence">
+      <h2 style={creatorPanelHeadingStyle}>Submit Milestone Evidence</h2>
+      {pendingMilestones.map((milestone) => (
+        <MilestoneEvidenceForm key={milestone.id} campaignId={campaignId} milestone={milestone} />
+      ))}
+    </div>
+  )
+}
+
 export function CampaignDetailPage() {
   const { id } = useParams<{ id: string }>()
   const { user } = useAuthContext()
@@ -253,6 +481,22 @@ export function CampaignDetailPage() {
               <div style={sectionSpacingStyle}>
                 <ReviewActionsPanel campaign={campaign} user={user} />
               </div>
+
+              {user?.id === campaign.creatorId &&
+                (campaign.status === 'Live' || campaign.status === 'Funded') && (
+                  <div style={sectionSpacingStyle}>
+                    <PostUpdatePanel campaignId={campaign.id} />
+                  </div>
+                )}
+
+              {user?.id === campaign.creatorId && campaign.status === 'Settlement' && (
+                <div style={sectionSpacingStyle}>
+                  <SubmitEvidencePanel
+                    campaignId={campaign.id}
+                    milestones={campaign.milestones}
+                  />
+                </div>
+              )}
             </div>
 
             {/* Sidebar */}

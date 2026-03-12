@@ -42,9 +42,8 @@ WORKDIR /workspace
 RUN chown agent:agent /workspace
 
 # Copy scripts
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-COPY agent-loop.sh /usr/local/bin/agent-loop.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/agent-loop.sh
+COPY entrypoint.sh agent-loop.sh resolve-conflicts-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/agent-loop.sh /usr/local/bin/resolve-conflicts-entrypoint.sh
 
 # Copy prompts into container
 COPY prompts/ /usr/local/share/prompts/

@@ -4,12 +4,18 @@ import jwt from 'jsonwebtoken'
 import { createApp } from '../app.js'
 import type { Pool } from 'pg'
 
+const TEST_JWT_SECRET = 'test-jwt-secret-for-campaign-tests'
+
 const mockQuery = vi.fn()
-const mockPool = { query: mockQuery } as unknown as Pool
+const mockClientQuery = vi.fn()
+const mockRelease = vi.fn()
+const mockClient = { query: mockClientQuery, release: mockRelease }
+const mockConnect = vi.fn().mockResolvedValue(mockClient)
+const mockPool = { query: mockQuery, connect: mockConnect } as unknown as Pool
 const app = createApp(mockPool)
 
 const TEST_UUID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
-const TEST_JWT_SECRET = 'test-jwt-secret-for-campaign-tests'
+const TEST_MILESTONE_UUID = 'b2c3d4e5-f6a7-8901-bcde-f12345678901'
 const CREATOR_UUID = '22222222-2222-2222-2222-222222222222'
 const BACKER_UUID = 'b1b2b3b4-e5f6-7890-abcd-ef1234567890'
 const ADMIN_UUID = 'ad000000-e5f6-7890-abcd-ef1234567890'
@@ -23,6 +29,9 @@ function makeBackerToken(): string {
 }
 function makeAdminToken(): string {
   return jwt.sign({ id: ADMIN_UUID, role: 'Administrator' }, TEST_JWT_SECRET)
+}
+function makeToken(role: string): string {
+  return jwt.sign({ id: TEST_UUID, role }, TEST_JWT_SECRET)
 }
 
 const mockCampaignSummary = {
@@ -124,9 +133,41 @@ const mockContributeResultFunded = {
   status: 'Funded',
 }
 
+const mockMilestonePending = {
+  id: TEST_MILESTONE_UUID,
+  title: 'Phase 1',
+  description: 'First phase',
+  targetDate: null,
+  fundingPercentage: 50,
+  verificationCriteria: null,
+  status: 'Pending',
+  sortOrder: 1,
+}
+
+/** Mock pool.query to return an empty campaign row (getCampaignById → null). */
+function mockGetCampaignNotFound(): void {
+  mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 })
+}
+
+/**
+ * Mock the 5 pool.query calls that getCampaignById makes:
+ * campaign row, milestones, stretch goals, team members, updates.
+ */
+function mockGetCampaignWithStatus(status: string, milestones: unknown[] = []): void {
+  mockQuery.mockResolvedValueOnce({ rows: [{ ...mockCampaignRow, status }], rowCount: 1 })
+  mockQuery.mockResolvedValueOnce({ rows: milestones, rowCount: milestones.length })
+  mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 })
+  mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 })
+  mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 })
+}
+
 describe('Campaign Routes', () => {
   beforeEach(() => {
     mockQuery.mockReset()
+    mockClientQuery.mockReset()
+    mockRelease.mockReset()
+    mockConnect.mockReset()
+    mockConnect.mockResolvedValue(mockClient)
     vi.stubEnv('JWT_SECRET', TEST_JWT_SECRET)
   })
 
@@ -575,10 +616,10 @@ describe('Campaign Routes', () => {
       expect(res.status).toBe(401)
     })
 
-    it('returns 403 when role is not Creator', async () => {
+    it('returns 403 when role is not Creator or Administrator', async () => {
       const res = await request(app)
         .post(`/v1/campaigns/${TEST_UUID}/cancel`)
-        .set('Authorization', `Bearer ${makeAdminToken()}`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
 
       expect(res.status).toBe(403)
       expect(res.body.error.code).toBe('FORBIDDEN')
@@ -812,6 +853,461 @@ describe('Campaign Routes', () => {
         .set('Authorization', `Bearer ${makeAdminToken()}`)
 
       expect(res.status).toBe(500)
+    })
+  })
+
+  describe('POST /v1/campaigns/:id/settle', () => {
+    it('returns 200 with Settlement status on success (Administrator)', async () => {
+      mockGetCampaignWithStatus('Funded')
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // settleCampaign
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // insertAuditLog
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/settle`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toEqual({ id: TEST_UUID, status: 'Settlement' })
+    })
+
+    it('returns 200 for SuperAdministrator role', async () => {
+      mockGetCampaignWithStatus('Funded')
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 })
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/settle`)
+        .set('Authorization', `Bearer ${makeToken('SuperAdministrator')}`)
+
+      expect(res.status).toBe(200)
+    })
+
+    it('returns 401 when no token provided', async () => {
+      const res = await request(app).post(`/v1/campaigns/${TEST_UUID}/settle`)
+
+      expect(res.status).toBe(401)
+      expect(res.body.error.code).toBe('UNAUTHORIZED')
+    })
+
+    it('returns 403 for Creator role', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/settle`)
+        .set('Authorization', `Bearer ${makeToken('Creator')}`)
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 404 when campaign not found', async () => {
+      mockGetCampaignNotFound()
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/settle`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+
+      expect(res.status).toBe(404)
+      expect(res.body.error.code).toBe('CAMPAIGN_NOT_FOUND')
+    })
+
+    it('returns 409 when campaign is not in Funded status', async () => {
+      mockGetCampaignWithStatus('Live')
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/settle`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_CAMPAIGN_STATE')
+    })
+  })
+
+  describe('POST /v1/campaigns/:id/milestones/:mid/submit-evidence', () => {
+    const validBody = {
+      evidenceDescription: 'Phase 1 completed successfully',
+      evidenceUrl: 'https://example.com/evidence',
+    }
+
+    it('returns 200 with Submitted status on success (Pending milestone)', async () => {
+      mockGetCampaignWithStatus('Settlement', [mockMilestonePending])
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // submitMilestoneEvidence
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // insertAuditLog
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/submit-evidence`)
+        .set('Authorization', `Bearer ${makeToken('Creator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toEqual({ id: TEST_MILESTONE_UUID, status: 'Submitted' })
+    })
+
+    it('returns 200 on success with Returned milestone', async () => {
+      mockGetCampaignWithStatus('Settlement', [{ ...mockMilestonePending, status: 'Returned' }])
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 })
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/submit-evidence`)
+        .set('Authorization', `Bearer ${makeToken('Creator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(200)
+      expect(res.body.data.status).toBe('Submitted')
+    })
+
+    it('returns 401 when no token provided', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/submit-evidence`)
+        .send(validBody)
+
+      expect(res.status).toBe(401)
+      expect(res.body.error.code).toBe('UNAUTHORIZED')
+    })
+
+    it('returns 403 for Administrator role', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/submit-evidence`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 404 when campaign not found', async () => {
+      mockGetCampaignNotFound()
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/submit-evidence`)
+        .set('Authorization', `Bearer ${makeToken('Creator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(404)
+      expect(res.body.error.code).toBe('CAMPAIGN_NOT_FOUND')
+    })
+
+    it('returns 409 when campaign is not in Settlement status', async () => {
+      mockGetCampaignWithStatus('Live')
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/submit-evidence`)
+        .set('Authorization', `Bearer ${makeToken('Creator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_CAMPAIGN_STATE')
+    })
+
+    it('returns 404 when milestone not found', async () => {
+      mockGetCampaignWithStatus('Settlement', [])
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/submit-evidence`)
+        .set('Authorization', `Bearer ${makeToken('Creator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(404)
+      expect(res.body.error.code).toBe('MILESTONE_NOT_FOUND')
+    })
+
+    it('returns 409 when milestone is not in Pending or Returned status', async () => {
+      mockGetCampaignWithStatus('Settlement', [{ ...mockMilestonePending, status: 'Verified' }])
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/submit-evidence`)
+        .set('Authorization', `Bearer ${makeToken('Creator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_MILESTONE_STATE')
+    })
+
+    it('returns 422 when evidenceDescription is missing', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/submit-evidence`)
+        .set('Authorization', `Bearer ${makeToken('Creator')}`)
+        .send({ evidenceUrl: 'https://example.com' })
+
+      expect(res.status).toBe(422)
+      expect(res.body.error.code).toBe('INVALID_BODY')
+    })
+  })
+
+  describe('POST /v1/campaigns/:id/milestones/:mid/verify', () => {
+    it('returns 200 with campaignComplete: false when other milestones remain', async () => {
+      mockGetCampaignWithStatus('Settlement', [{ ...mockMilestonePending, status: 'Submitted' }])
+      // verifyMilestone uses pool.connect() — mock the transaction client queries
+      mockClientQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // BEGIN
+      mockClientQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // UPDATE milestone
+      mockClientQuery.mockResolvedValueOnce({ rows: [{ unverified_count: '1' }], rowCount: 1 }) // SELECT COUNT
+      mockClientQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // COMMIT
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // insertAuditLog (milestone.verified)
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/verify`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toEqual({
+        id: TEST_MILESTONE_UUID,
+        status: 'Verified',
+        campaignComplete: false,
+      })
+    })
+
+    it('returns 200 with campaignComplete: true when all milestones are now verified', async () => {
+      mockGetCampaignWithStatus('Settlement', [{ ...mockMilestonePending, status: 'Submitted' }])
+      mockClientQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // BEGIN
+      mockClientQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // UPDATE milestone
+      mockClientQuery.mockResolvedValueOnce({ rows: [{ unverified_count: '0' }], rowCount: 1 }) // SELECT COUNT (all done)
+      mockClientQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // UPDATE campaigns SET status='Complete'
+      mockClientQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // COMMIT
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // insertAuditLog (milestone.verified)
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // insertAuditLog (campaign.completed)
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/verify`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+
+      expect(res.status).toBe(200)
+      expect(res.body.data.campaignComplete).toBe(true)
+    })
+
+    it('returns 200 for SuperAdministrator role', async () => {
+      mockGetCampaignWithStatus('Settlement', [{ ...mockMilestonePending, status: 'Submitted' }])
+      mockClientQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // BEGIN
+      mockClientQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // UPDATE milestone
+      mockClientQuery.mockResolvedValueOnce({ rows: [{ unverified_count: '1' }], rowCount: 1 }) // SELECT COUNT
+      mockClientQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 }) // COMMIT
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // insertAuditLog
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/verify`)
+        .set('Authorization', `Bearer ${makeToken('SuperAdministrator')}`)
+
+      expect(res.status).toBe(200)
+    })
+
+    it('returns 401 when no token provided', async () => {
+      const res = await request(app).post(
+        `/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/verify`
+      )
+
+      expect(res.status).toBe(401)
+      expect(res.body.error.code).toBe('UNAUTHORIZED')
+    })
+
+    it('returns 403 for Creator role', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/verify`)
+        .set('Authorization', `Bearer ${makeToken('Creator')}`)
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 404 when campaign not found', async () => {
+      mockGetCampaignNotFound()
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/verify`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+
+      expect(res.status).toBe(404)
+      expect(res.body.error.code).toBe('CAMPAIGN_NOT_FOUND')
+    })
+
+    it('returns 409 when campaign is not in Settlement status', async () => {
+      mockGetCampaignWithStatus('Live')
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/verify`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_CAMPAIGN_STATE')
+    })
+
+    it('returns 404 when milestone not found', async () => {
+      mockGetCampaignWithStatus('Settlement', [])
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/verify`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+
+      expect(res.status).toBe(404)
+      expect(res.body.error.code).toBe('MILESTONE_NOT_FOUND')
+    })
+
+    it('returns 409 when milestone is not in Submitted status', async () => {
+      mockGetCampaignWithStatus('Settlement', [mockMilestonePending]) // status: 'Pending'
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/verify`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_MILESTONE_STATE')
+    })
+  })
+
+  describe('POST /v1/campaigns/:id/milestones/:mid/return', () => {
+    const validBody = { feedback: 'Please provide more detailed documentation' }
+
+    it('returns 200 with Returned status on success', async () => {
+      mockGetCampaignWithStatus('Settlement', [{ ...mockMilestonePending, status: 'Submitted' }])
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // returnMilestone
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // insertAuditLog
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/return`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toEqual({ id: TEST_MILESTONE_UUID, status: 'Returned' })
+    })
+
+    it('returns 401 when no token provided', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/return`)
+        .send(validBody)
+
+      expect(res.status).toBe(401)
+      expect(res.body.error.code).toBe('UNAUTHORIZED')
+    })
+
+    it('returns 403 for Creator role', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/return`)
+        .set('Authorization', `Bearer ${makeToken('Creator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 404 when campaign not found', async () => {
+      mockGetCampaignNotFound()
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/return`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(404)
+      expect(res.body.error.code).toBe('CAMPAIGN_NOT_FOUND')
+    })
+
+    it('returns 409 when campaign is not in Settlement status', async () => {
+      mockGetCampaignWithStatus('Live')
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/return`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_CAMPAIGN_STATE')
+    })
+
+    it('returns 404 when milestone not found', async () => {
+      mockGetCampaignWithStatus('Settlement', [])
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/return`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(404)
+      expect(res.body.error.code).toBe('MILESTONE_NOT_FOUND')
+    })
+
+    it('returns 409 when milestone is not in Submitted status', async () => {
+      mockGetCampaignWithStatus('Settlement', [mockMilestonePending]) // Pending, not Submitted
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/return`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+        .send(validBody)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_MILESTONE_STATE')
+    })
+
+    it('returns 422 when feedback is missing', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/milestones/${TEST_MILESTONE_UUID}/return`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+        .send({})
+
+      expect(res.status).toBe(422)
+      expect(res.body.error.code).toBe('INVALID_BODY')
+    })
+  })
+
+  describe('POST /v1/campaigns/:id/cancel (settlement)', () => {
+    it('returns 200 with Cancelled status on success (Administrator)', async () => {
+      mockGetCampaignWithStatus('Settlement')
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // cancelSettlement
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 }) // insertAuditLog
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/cancel`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toEqual({ id: TEST_UUID, status: 'Cancelled' })
+    })
+
+    it('returns 200 for SuperAdministrator role', async () => {
+      mockGetCampaignWithStatus('Settlement')
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 })
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 1 })
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/cancel`)
+        .set('Authorization', `Bearer ${makeToken('SuperAdministrator')}`)
+
+      expect(res.status).toBe(200)
+    })
+
+    it('returns 401 when no token provided (settlement cancel)', async () => {
+      const res = await request(app).post(`/v1/campaigns/${TEST_UUID}/cancel`)
+
+      expect(res.status).toBe(401)
+      expect(res.body.error.code).toBe('UNAUTHORIZED')
+    })
+
+    it('returns 403 for Backer role (settlement cancel)', async () => {
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/cancel`)
+        .set('Authorization', `Bearer ${makeToken('Backer')}`)
+
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    })
+
+    it('returns 404 when campaign not found (settlement cancel)', async () => {
+      mockGetCampaignNotFound()
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/cancel`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+
+      expect(res.status).toBe(404)
+      expect(res.body.error.code).toBe('CAMPAIGN_NOT_FOUND')
+    })
+
+    it('returns 409 when campaign is not in Settlement status (settlement cancel)', async () => {
+      mockGetCampaignWithStatus('Funded')
+
+      const res = await request(app)
+        .post(`/v1/campaigns/${TEST_UUID}/cancel`)
+        .set('Authorization', `Bearer ${makeToken('Administrator')}`)
+
+      expect(res.status).toBe(409)
+      expect(res.body.error.code).toBe('INVALID_CAMPAIGN_STATE')
     })
   })
 })

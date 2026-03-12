@@ -102,12 +102,14 @@ const statusBadgeVariant: Record<Milestone['status'], BadgeVariant> = {
   Verified: 'funded',
   Submitted: 'active',
   Pending: 'new',
+  Returned: 'new',
 }
 
 const statusLabel: Record<Milestone['status'], string> = {
   Verified: 'Verified',
   Submitted: 'Submitted',
   Pending: 'Pending',
+  Returned: 'Returned',
 }
 
 export function MilestonesSection({ milestones, className }: MilestonesSectionProps) {

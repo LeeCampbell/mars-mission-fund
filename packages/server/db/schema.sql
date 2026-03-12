@@ -48,7 +48,11 @@ CREATE TABLE public.campaign_milestones (
     funding_pct integer NOT NULL,
     verification_criteria text NOT NULL,
     status text DEFAULT 'Pending'::text NOT NULL,
-    sort_order integer DEFAULT 0 NOT NULL
+    sort_order integer DEFAULT 0 NOT NULL,
+    evidence_description text,
+    evidence_url text,
+    evidence_submitted_at timestamp with time zone,
+    feedback text
 );
 
 
@@ -162,6 +166,21 @@ CREATE TABLE public.campaign_audit_events (
 
 
 --
+-- Name: audit_log; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.audit_log (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    event_type text NOT NULL,
+    campaign_id uuid,
+    milestone_id uuid,
+    actor_id text NOT NULL,
+    payload jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -192,6 +211,14 @@ ALTER TABLE ONLY public.accounts
 
 ALTER TABLE ONLY public.accounts
     ADD CONSTRAINT accounts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: audit_log audit_log_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.audit_log
+    ADD CONSTRAINT audit_log_pkey PRIMARY KEY (id);
 
 
 --
@@ -315,6 +342,22 @@ ALTER TABLE ONLY public.campaign_updates
 
 
 --
+-- Name: audit_log audit_log_campaign_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.audit_log
+    ADD CONSTRAINT audit_log_campaign_id_fkey FOREIGN KEY (campaign_id) REFERENCES public.campaigns(id);
+
+
+--
+-- Name: audit_log audit_log_milestone_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.audit_log
+    ADD CONSTRAINT audit_log_milestone_id_fkey FOREIGN KEY (milestone_id) REFERENCES public.campaign_milestones(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -334,9 +377,11 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20260309000006'),
     ('20260311000001'),
     ('20260311000002'),
+    ('20260311000009'),
+    ('20260311000010'),
+    ('20260311000011'),
     ('20260311000012'),
     ('20260311000013'),
     ('20260311000014'),
-    ('20260311000009'),
-    ('20260311000010'),
-    ('20260311000011');
+    ('20260311000015'),
+    ('20260311000016');

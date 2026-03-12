@@ -33,6 +33,11 @@ export const SubmitRouteParamsSchema = z.object({
   id: z.string().uuid(),
 })
 
+export const MilestoneRouteParamsSchema = z.object({
+  id: z.string().uuid(),
+  mid: z.string().uuid(),
+})
+
 export const ListQuerySchema = z.object({
   status: CampaignStatusSchema.optional(),
   category: CampaignCategorySchema.optional(),
@@ -47,11 +52,23 @@ export const ContributeBodySchema = z.object({
   amountUsd: z.number().int().positive(),
 })
 
+export const SubmitEvidenceBodySchema = z.object({
+  evidenceDescription: z.string().min(1),
+  evidenceUrl: z.string().url().optional(),
+})
+
+export const ReturnMilestoneBodySchema = z.object({
+  feedback: z.string().min(1),
+})
+
 export type RouteParams = z.infer<typeof RouteParamsSchema>
 export type SubmitRouteParams = z.infer<typeof SubmitRouteParamsSchema>
+export type MilestoneRouteParams = z.infer<typeof MilestoneRouteParamsSchema>
 export type ListQuery = z.infer<typeof ListQuerySchema>
 export type PostUpdateBody = z.infer<typeof PostUpdateBodySchema>
 export type ContributeBody = z.infer<typeof ContributeBodySchema>
+export type SubmitEvidenceBody = z.infer<typeof SubmitEvidenceBodySchema>
+export type ReturnMilestoneBody = z.infer<typeof ReturnMilestoneBodySchema>
 
 export const ClaimBodySchema = z.object({})
 export const ApproveBodySchema = z.object({ notes: z.string().min(1) })

@@ -1,4 +1,4 @@
-# Resolve Conflicts on PR #__PR_NUMBER__
+# Resolve Conflicts on PR #\_\_PR\_NUMBER\_\_
 
 Use the `/resolve-pr-conflicts __PR_NUMBER__` skill to resolve merge conflicts on this PR.
 
@@ -17,13 +17,13 @@ SERVER_PID=$!
 sleep 5
 ```
 
-2. Run E2E tests:
+1. Run E2E tests:
 
 ```bash
 npx playwright test
 ```
 
-3. Stop the backend:
+1. Stop the backend:
 
 ```bash
 kill $SERVER_PID 2>/dev/null || true

@@ -315,13 +315,7 @@ const STATUS_GROUPS: StatusGroup[] = [
   },
 ]
 
-function CampaignSection({
-  label,
-  campaigns,
-}: {
-  label: string
-  campaigns: CampaignSummary[]
-}) {
+function CampaignSection({ label, campaigns }: { label: string; campaigns: CampaignSummary[] }) {
   if (campaigns.length === 0) return null
 
   return (

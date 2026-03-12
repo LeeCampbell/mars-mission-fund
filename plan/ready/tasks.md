@@ -52,7 +52,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Page renders without TypeScript errors; `npx tsc -b --noEmit` passes
   - **Brief ref**: Creator Dashboard
 
-- [ ] TASK-07: Create 7-step Campaign Form page
+- [x] TASK-07: Create 7-step Campaign Form page
   - **Goal**: `CampaignFormPage.tsx` — a multi-step form usable for both create (`/campaigns/new`) and edit (`/campaigns/:id/edit`) modes
   - **Details**: Create `packages/client/src/pages/CampaignFormPage.tsx`. Export `CampaignFormPage` accepting an optional `campaignId?: string` prop. Use `useReducer` with a `FormState` type covering all 7 steps' fields. If `campaignId` is provided, call `useCampaign(campaignId)` and populate the reducer on load. Steps (numbered indicator at top, Back/Next navigation):
     1. **Mission** — title (required), category (select from `CampaignCategorySchema` values), summary (max 280), description, alignmentStatement

@@ -7,7 +7,11 @@ interface ProtectedRouteProps {
   requireCreator?: boolean
 }
 
-export function ProtectedRoute({ requireAdmin, requireReviewer, requireCreator }: ProtectedRouteProps) {
+export function ProtectedRoute({
+  requireAdmin,
+  requireReviewer,
+  requireCreator,
+}: ProtectedRouteProps) {
   const { isAuthenticated, user } = useAuthContext()
   const location = useLocation()
 

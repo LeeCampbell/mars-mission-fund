@@ -104,7 +104,10 @@ export async function createCampaign(data: CreateCampaignRequest): Promise<Campa
   return CampaignDetailSchema.parse(json.data)
 }
 
-export async function updateCampaign(id: string, data: UpdateCampaignRequest): Promise<CampaignDetail> {
+export async function updateCampaign(
+  id: string,
+  data: UpdateCampaignRequest
+): Promise<CampaignDetail> {
   const response = await authedFetch(`/v1/campaigns/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),

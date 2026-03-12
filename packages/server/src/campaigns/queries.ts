@@ -285,6 +285,36 @@ export async function createCampaign(
     [campaignId, creatorId]
   )
 
+  if (data.milestones !== undefined && data.milestones.length > 0) {
+    await pool.query(`DELETE FROM campaign_milestones WHERE campaign_id = $1`, [campaignId])
+    for (const m of data.milestones) {
+      await pool.query(
+        `INSERT INTO campaign_milestones (campaign_id, title, description, target_date, funding_pct, verification_criteria, sort_order)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [
+          campaignId,
+          m.title,
+          m.description ?? '',
+          m.targetDate ?? null,
+          m.fundingPercentage,
+          m.verificationCriteria ?? '',
+          m.sortOrder,
+        ]
+      )
+    }
+  }
+
+  if (data.teamMembers !== undefined && data.teamMembers.length > 0) {
+    await pool.query(`DELETE FROM campaign_team_members WHERE campaign_id = $1`, [campaignId])
+    for (const t of data.teamMembers) {
+      await pool.query(
+        `INSERT INTO campaign_team_members (campaign_id, name, role, bio, sort_order)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [campaignId, t.name, t.role, t.bio ?? '', t.sortOrder]
+      )
+    }
+  }
+
   const campaign = await getCampaignById(pool, campaignId)
   return campaign!
 }
@@ -339,6 +369,36 @@ export async function updateCampaign(
   }
 
   await pool.query(`UPDATE campaigns SET ${setClauses.join(', ')} WHERE id = $1`, params)
+
+  if (data.milestones !== undefined && data.milestones.length > 0) {
+    await pool.query(`DELETE FROM campaign_milestones WHERE campaign_id = $1`, [id])
+    for (const m of data.milestones) {
+      await pool.query(
+        `INSERT INTO campaign_milestones (campaign_id, title, description, target_date, funding_pct, verification_criteria, sort_order)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [
+          id,
+          m.title,
+          m.description ?? '',
+          m.targetDate ?? null,
+          m.fundingPercentage,
+          m.verificationCriteria ?? '',
+          m.sortOrder,
+        ]
+      )
+    }
+  }
+
+  if (data.teamMembers !== undefined && data.teamMembers.length > 0) {
+    await pool.query(`DELETE FROM campaign_team_members WHERE campaign_id = $1`, [id])
+    for (const t of data.teamMembers) {
+      await pool.query(
+        `INSERT INTO campaign_team_members (campaign_id, name, role, bio, sort_order)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [id, t.name, t.role, t.bio ?? '', t.sortOrder]
+      )
+    }
+  }
 
   const campaign = await getCampaignById(pool, id)
   return { campaign, reason: null }

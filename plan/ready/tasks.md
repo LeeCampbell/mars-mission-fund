@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/shared && npx tsc -b --noEmit` passes with no type errors
   - **Brief ref**: Shared schema extension
 
-- [ ] TASK-02: Update server queries to upsert milestones and team members
+- [x] TASK-02: Update server queries to upsert milestones and team members
   - **Goal**: `createCampaign` and `updateCampaign` in `queries.ts` delete-then-reinsert milestone and team-member rows from the payload
   - **Details**: Read `packages/server/src/campaigns/queries.ts` fully first. After the INSERT/UPDATE of the campaign row in `createCampaign`, if `milestones` is provided, run `DELETE FROM campaign_milestones WHERE campaign_id = $1` then bulk-INSERT each milestone row. Same for `teamMembers` → `campaign_team_members`. Repeat the same pattern in `updateCampaign`. Handle the case where the arrays are empty or undefined (skip the deletes if arrays are absent). Check column names against `packages/server/db/schema.sql` first.
   - **Files**: `packages/server/src/campaigns/queries.ts`, read `packages/server/db/schema.sql` for column names

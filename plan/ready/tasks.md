@@ -91,7 +91,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes at 80% threshold
   - **Brief ref**: Component tests
 
-- [ ] TASK-11: Write E2E tests
+- [x] TASK-11: Write E2E tests
   - **Goal**: Create Playwright E2E tests covering the creator flow end-to-end
   - **Details**: Create `e2e/creator-dashboard.spec.ts`. Follow patterns in `e2e/auth.spec.ts` and `e2e/campaigns.spec.ts`. Cover: (1) Log in as a Creator demo user; (2) Navigate to `/dashboard` — verify page title and "New Campaign" button; (3) Click "New Campaign" → `/campaigns/new`; (4) Fill all 7 steps with valid data (use test values: title "E2E Test Campaign", a team member, 2 milestones summing to 100%, 1 risk); (5) Click "Save Draft" on step 1 — verify URL changes to `/campaigns/:id/edit`; (6) Navigate to step 7 and click "Submit for Review" → confirm dialog → verify navigation to `/dashboard`; (7) Verify the campaign appears on the dashboard with status "Submitted" or "Under Review". Tests must pass against the running local stack.
   - **Files**: `e2e/creator-dashboard.spec.ts`

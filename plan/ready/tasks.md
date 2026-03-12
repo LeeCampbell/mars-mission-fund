@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; no lint errors
   - **Brief ref**: Client API layer
 
-- [ ] TASK-04: Create `useCreatorCampaigns` hook
+- [x] TASK-04: Create `useCreatorCampaigns` hook
   - **Goal**: A `useQuery` hook wrapping `fetchMyCampaigns` for use by the dashboard
   - **Details**: Create `packages/client/src/hooks/useCreatorCampaigns.ts`. Export `useCreatorCampaigns()` which calls `useQuery({ queryKey: ['my-campaigns'], queryFn: fetchMyCampaigns, staleTime: 0 })`. Follow the pattern in existing hooks (e.g. `useCampaign.ts`).
   - **Files**: `packages/client/src/hooks/useCreatorCampaigns.ts`

@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` and `npm run lint` pass
   - **Brief ref**: Routing and auth
 
-- [ ] TASK-06: Create Creator Dashboard page
+- [x] TASK-06: Create Creator Dashboard page
   - **Goal**: `DashboardPage.tsx` lists the creator's campaigns grouped by status with quick-action buttons
   - **Details**: Create `packages/client/src/pages/DashboardPage.tsx`. Use `useCreatorCampaigns()` to fetch. Group campaigns into sections: Draft, Submitted/Under Review/Approved, Live/Funded, Settlement/Complete, Rejected/Cancelled/Failed. Each campaign row shows: title, status badge (use the `Badge` component from `../components/ui/Badge`), deadline, raised amount, and quick-action buttons:
     - Draft → "Edit" (`Link` to `/campaigns/:id/edit`), "Submit" (inline `useMutation` → `submitCampaignForReview`, then `invalidateQueries(['my-campaigns'])`), "Delete" (inline `useMutation` → `deleteCampaign`, confirm with `window.confirm`)

@@ -383,9 +383,14 @@ Branch: ${BRANCH}"
         exit 1
         ;;
       passing)
-        echo ">>> CI passed! Archiving plan."
+        echo ">>> CI passed! Merging PR #${PR_NUMBER}"
+        GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr merge "$PR_NUMBER" \
+          --repo "$UPSTREAM_REPO" --squash 2>&1 | tee -a "$LOG_FILE" || {
+          echo "!!! Merge failed for PR #${PR_NUMBER}"
+          exit 2
+        }
         archive_plan
-        echo ">>> Issue #${ISSUE_NUMBER} complete"
+        echo ">>> Issue #${ISSUE_NUMBER} complete — PR merged"
         exit 0
         ;;
       conflicting)

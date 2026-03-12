@@ -84,7 +84,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; no lint errors
   - **Brief ref**: Campaign Detail Page additions
 
-- [ ] TASK-10: Write component tests for Dashboard and Form pages
+- [x] TASK-10: Write component tests for Dashboard and Form pages
   - **Goal**: Achieve ≥80% coverage for the new dashboard and campaign form pages
   - **Details**: Create `packages/client/src/pages/DashboardPage.test.tsx` covering: loading state, error state, empty state (no campaigns), populated state with multiple status groups, "New Campaign" link presence. Create `packages/client/src/pages/CampaignFormPage.test.tsx` covering: step 1 renders required fields, Next blocked when title is empty, step 4 Next blocked when milestone percentages ≠ 100%, "Save Draft" calls `createCampaign` in create mode, form initialises from existing data in edit mode. Follow the testing patterns in existing test files (e.g. `ReviewQueuePage.test.tsx`). Mock `../api/campaigns` and `../hooks/useCreatorCampaigns`. Use `@testing-library/react` and `vitest`.
   - **Files**: `packages/client/src/pages/DashboardPage.test.tsx`, `packages/client/src/pages/CampaignFormPage.test.tsx`

@@ -254,7 +254,10 @@ function PostUpdatePanel({ campaignId }: { campaignId: string }) {
   return (
     <div style={creatorPanelStyle} aria-label="Post update">
       <h2 style={creatorPanelHeadingStyle}>Post an Update</h2>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+      <form
+        onSubmit={handleSubmit}
+        style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}
+      >
         <label style={creatorPanelLabelStyle}>
           Update
           <textarea
@@ -313,7 +316,10 @@ function MilestoneEvidenceForm({
   return (
     <div style={milestoneItemStyle}>
       <p style={milestoneTitleStyle}>{milestone.title}</p>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+      <form
+        onSubmit={handleSubmit}
+        style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}
+      >
         <label style={creatorPanelLabelStyle}>
           Evidence Description
           <textarea
@@ -491,10 +497,7 @@ export function CampaignDetailPage() {
 
               {user?.id === campaign.creatorId && campaign.status === 'Settlement' && (
                 <div style={sectionSpacingStyle}>
-                  <SubmitEvidencePanel
-                    campaignId={campaign.id}
-                    milestones={campaign.milestones}
-                  />
+                  <SubmitEvidencePanel campaignId={campaign.id} milestones={campaign.milestones} />
                 </div>
               )}
             </div>

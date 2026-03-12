@@ -133,6 +133,22 @@ export const MilestoneEvidenceSchema = z.object({
   submittedAt: z.coerce.date(),
 })
 
+export const CreateMilestoneRequestSchema = z.object({
+  title: z.string().min(1),
+  description: z.string(),
+  targetDate: z.coerce.date().nullable().optional(),
+  fundingPercentage: z.number().min(0).max(100),
+  verificationCriteria: z.string().nullable().optional(),
+  sortOrder: z.number().int(),
+})
+
+export const CreateTeamMemberRequestSchema = z.object({
+  name: z.string().min(1),
+  role: z.string().min(1),
+  bio: z.string().nullable().optional(),
+  sortOrder: z.number().int(),
+})
+
 export const CreateCampaignRequestSchema = z.object({
   title: z.string().min(1).max(200),
   category: CampaignCategorySchema,
@@ -145,12 +161,16 @@ export const CreateCampaignRequestSchema = z.object({
   maxFundingCapUsd: z.number().int().positive().optional(),
   deadline: z.coerce.date().nullable().optional(),
   riskDisclosures: z.array(z.string()).optional().default([]),
+  milestones: z.array(CreateMilestoneRequestSchema).optional().default([]),
+  teamMembers: z.array(CreateTeamMemberRequestSchema).optional().default([]),
 })
 
 export const UpdateCampaignRequestSchema = CreateCampaignRequestSchema.partial()
   .omit({ category: true })
   .extend({ category: CampaignCategorySchema.optional() })
 
+export type CreateMilestoneRequest = z.infer<typeof CreateMilestoneRequestSchema>
+export type CreateTeamMemberRequest = z.infer<typeof CreateTeamMemberRequestSchema>
 export type CreateCampaignRequest = z.infer<typeof CreateCampaignRequestSchema>
 export type UpdateCampaignRequest = z.infer<typeof UpdateCampaignRequestSchema>
 

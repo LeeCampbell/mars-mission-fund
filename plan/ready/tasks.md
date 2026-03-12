@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Extend shared schemas with milestone and team-member types
+- [x] TASK-01: Extend shared schemas with milestone and team-member types
   - **Goal**: Add `CreateMilestoneRequestSchema` and `CreateTeamMemberRequestSchema` to shared package; extend `CreateCampaignRequestSchema` with `milestones` and `teamMembers` arrays; export new types
   - **Details**: In `packages/shared/src/campaign.ts`, add the two new Zod schemas above `CreateCampaignRequestSchema`. Add `milestones: z.array(CreateMilestoneRequestSchema).optional().default([])` and `teamMembers: z.array(CreateTeamMemberRequestSchema).optional().default([])` to `CreateCampaignRequestSchema`. Export `CreateMilestoneRequest` and `CreateTeamMemberRequest` types. `UpdateCampaignRequestSchema` inherits via `.partial()` automatically.
   - **Files**: `packages/shared/src/campaign.ts`

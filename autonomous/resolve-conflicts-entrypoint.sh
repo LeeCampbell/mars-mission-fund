@@ -90,5 +90,6 @@ timeout "$TIMEOUT" claude \
   --dangerously-skip-permissions \
   --print \
   --verbose \
+  --output-format stream-json \
   -p "$PROMPT" \
   2>&1 | tee "$LOG_FILE"

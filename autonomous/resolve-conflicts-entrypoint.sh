@@ -47,7 +47,7 @@ export DATABASE_URL="postgresql://mmf:mmf@db:5432/mmf?sslmode=disable"
 export JWT_SECRET="test-jwt-secret-for-conflict-resolution"
 
 echo ">>> Running database migrations"
-dbmate up
+dbmate -d packages/server/db/migrations -s packages/server/db/schema.sql up
 
 # ── Check PR status ─────────────────────────────────────────
 echo ">>> Checking PR #${PR_NUMBER} status"

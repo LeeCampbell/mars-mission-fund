@@ -1,4 +1,4 @@
-# Resolve Conflicts on PR #\_\_PR\_NUMBER\_\_
+# Resolve Conflicts
 
 Use the `/resolve-pr-conflicts __PR_NUMBER__` skill to resolve merge conflicts on this PR.
 

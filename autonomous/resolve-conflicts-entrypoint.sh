@@ -84,7 +84,7 @@ LOG_FILE="${LOG_DIR}/resolve-conflicts-${PR_NUMBER}-${TIMESTAMP}.log"
 TIMEOUT="${TIMEOUT_SECONDS:-1800}"
 
 PROMPT_FILE="${LOG_DIR}/resolve-conflicts-prompt-${PR_NUMBER}.md"
-sed -e "s/__PR_NUMBER__/${PR_NUMBER}/g" -e "s/\\\\_\\\\_PR_NUMBER\\\\_\\\\_/${PR_NUMBER}/g" "${PROMPTS_DIR}/resolve-conflicts.md" > "$PROMPT_FILE"
+sed "s/__PR_NUMBER__/${PR_NUMBER}/g" "${PROMPTS_DIR}/resolve-conflicts.md" > "$PROMPT_FILE"
 
 echo ">>> Starting Claude to resolve conflicts on PR #${PR_NUMBER}"
 timeout "$TIMEOUT" claude \

@@ -98,7 +98,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:e2e` — all tests pass (existing + new)
   - **Brief ref**: Verification section
 
-- [ ] TASK-12: Final CI verification
+- [x] TASK-12: Final CI verification
   - **Goal**: Confirm the full CI pipeline passes before the branch is ready for review
   - **Details**: Run the individual CI checks in sequence: (1) `npm run build -w @mmf/shared && npx tsc -b --noEmit && npx tsc --noEmit -p packages/server/tsconfig.json`; (2) `npm run lint`; (3) `npm run format:check`; (4) `npm run build`; (5) `npm run test:coverage`. Fix any remaining type errors, lint warnings, or test failures. Do NOT run `./scripts/ci-check.sh` as a single command (chaining breaks auto-approval); run each check separately.
   - **Files**: Any files flagged by the checks

@@ -36,7 +36,10 @@ test.describe('Creator dashboard', () => {
     await page.goto('/dashboard')
 
     // Click "New Campaign" link → /campaigns/new
-    await page.getByRole('link', { name: /New Campaign/i }).first().click()
+    await page
+      .getByRole('link', { name: /New Campaign/i })
+      .first()
+      .click()
     await expect(page).toHaveURL('/campaigns/new')
     await expect(page.getByRole('heading', { name: /Step 1/i })).toBeVisible()
 
@@ -44,12 +47,14 @@ test.describe('Creator dashboard', () => {
     await page.locator('#title').fill('E2E Test Campaign')
     await page.locator('#category').selectOption({ index: 1 }) // first non-empty option
     await page.locator('#summary').fill('A test campaign created by automated E2E tests.')
-    await page.locator('#description').fill(
-      'Full description of the E2E test campaign for Mars mission advancement.',
-    )
-    await page.locator('#alignmentStatement').fill(
-      'This campaign advances the Mars mission by demonstrating reliable E2E test automation.',
-    )
+    await page
+      .locator('#description')
+      .fill('Full description of the E2E test campaign for Mars mission advancement.')
+    await page
+      .locator('#alignmentStatement')
+      .fill(
+        'This campaign advances the Mars mission by demonstrating reliable E2E test automation.'
+      )
 
     // Save Draft on Step 1 — URL should change to /campaigns/:id/edit
     await page.getByRole('button', { name: /save draft/i }).click()

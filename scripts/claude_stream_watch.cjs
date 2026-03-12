@@ -4,21 +4,21 @@
  * Claude Code Verbose Log Parser
  * Created in https://chatgpt.com/c/69aa7061-c7a8-839c-bd16-542340fd34ba
  *
- * Modes [all powershell]:
+ * Modes:
  *    Screen only:
- *      docker logs -f autonomous-agent-1 2>&1 | node .\claude_stream_watch.js --hide AGENT --max-line-length 1000
+ *      docker logs -f autonomous-agent-1 2>&1 | node ./scripts/claude_stream_watch.cjs --hide AGENT --max-line-length 1000
  *
- *   Screen and file (simultaneous):
+ *   [pwsh]Screen and file (simultaneous):
  *      $ts = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
  *      docker logs -f autonomous-agent-1 2>&1 |
  *        node .\claude_stream_watch.js --hide AGENT --max-line-length 1000 |
  *        Tee-Object -FilePath ".\diagnostics_$ts.txt"
  *
  *   No time prefix:
- *      docker logs -f autonomous-agent-1 2>&1 | node .\claude_stream_watch.js --hide AGENT --max-line-length 1000 --no-time
+ *      docker logs -f autonomous-agent-1 2>&1 | node ./scripts/claude_stream_watch.cjs --hide AGENT --max-line-length 1000 --no-time
  *
  *   Only new lines:
- *     docker logs -f --tail 0 autonomous-agent-1 2>&1 | node .\claude_stream_watch.js --hide AGENT --max-line-length 1000
+ *     docker logs -f --tail 0 autonomous-agent-1 2>&1 | node ./scripts/claude_stream_watch.cjs --hide AGENT --max-line-length 1000
  *
  * The verbose log format is newline-delimited JSON objects.
  * Each line is a self-contained event envelope.

@@ -25,6 +25,7 @@
       "Bash(git status:*)",
       "Bash(git stash:*)",
       "Bash(git remote:*)",
+      "Bash(git rebase:*)",
       "Bash(git fetch:*)",
       "Bash(git rebase:*)",
       "Bash(git cherry-pick:*)",

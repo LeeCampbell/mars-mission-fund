@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes
   - **Brief ref**: Hooks
 
-- [ ] TASK-05: Extend `ProtectedRoute` and update routing + layout titles
+- [x] TASK-05: Extend `ProtectedRoute` and update routing + layout titles
   - **Goal**: Add `requireCreator` prop to `ProtectedRoute`; register three new lazy-loaded routes in `App.tsx`; add `routeTitles` entries in `Layout.tsx`
   - **Details**: In `ProtectedRoute.tsx`, add `requireCreator?: boolean` to the props interface; add a guard: `if (requireCreator && user?.role !== 'Creator') return <Navigate to="/" replace />`. In `App.tsx`, add lazy imports for `DashboardPage`, `CampaignFormPage`, `CampaignEditPage` (same pattern as existing lazy pages). Add a `<Route element={<ProtectedRoute requireCreator />}>` block containing `/dashboard`, `/campaigns/new`, `/campaigns/:id/edit` routes. In `Layout.tsx`, add `'/dashboard': 'Creator Dashboard — Mars Mission Fund'` and `'/campaigns/new': 'New Campaign — Mars Mission Fund'` to `routeTitles`.
   - **Files**: `packages/client/src/components/ProtectedRoute.tsx`, `packages/client/src/App.tsx`, `packages/client/src/components/Layout.tsx`

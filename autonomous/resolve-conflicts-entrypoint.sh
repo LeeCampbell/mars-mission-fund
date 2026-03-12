@@ -68,7 +68,11 @@ if [ "$MERGEABLE" = "MERGEABLE" ]; then
   exit 0
 fi
 
-echo ">>> PR #${PR_NUMBER} mergeable status: ${MERGEABLE}"
+if [ "$MERGEABLE" = "UNKNOWN" ]; then
+  echo ">>> PR #${PR_NUMBER} mergeable status is UNKNOWN (GitHub still computing), proceeding"
+else
+  echo ">>> PR #${PR_NUMBER} mergeable status: ${MERGEABLE}"
+fi
 
 # ── Invoke Claude ────────────────────────────────────────────
 PROMPTS_DIR="/usr/local/share/prompts"
@@ -79,7 +83,7 @@ TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 LOG_FILE="${LOG_DIR}/resolve-conflicts-${PR_NUMBER}-${TIMESTAMP}.log"
 TIMEOUT="${TIMEOUT_SECONDS:-1800}"
 
-PROMPT=$(sed "s/__PR_NUMBER__/${PR_NUMBER}/g" "${PROMPTS_DIR}/resolve-conflicts.md")
+PROMPT=$(sed -e "s/__PR_NUMBER__/${PR_NUMBER}/g" -e "s/\\\\_\\\\_PR_NUMBER\\\\_\\\\_/${PR_NUMBER}/g" "${PROMPTS_DIR}/resolve-conflicts.md")
 
 echo ">>> Starting Claude to resolve conflicts on PR #${PR_NUMBER}"
 timeout "$TIMEOUT" claude \

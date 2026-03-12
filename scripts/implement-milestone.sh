@@ -88,25 +88,42 @@ echo ">>> Found ${ISSUE_COUNT} issues"
 
 # ── Build dependency graph ───────────────────────────────────
 # Parse each issue body for dependency patterns (case-insensitive):
-#   "depends on #N", "blocked by #N", "requires #N"
+#   "depends on #N", "blocked by #N", "requires #N", "Dependencies: #N"
+# Supports both GitHub issue numbers and relative milestone positions.
 
 # Create temp files for the graph and state tracking
 DEPS_FILE=$(mktemp)
 ALL_ISSUES_FILE=$(mktemp)
 BRANCHES_FILE=$(mktemp)   # "issue_number branch_name" per line
 FAILED_FILE=$(mktemp)     # one failed issue number per line
-trap 'rm -f "$DEPS_FILE" "$ALL_ISSUES_FILE" "$BRANCHES_FILE" "$FAILED_FILE"' EXIT
+trap 'rm -f "$DEPS_FILE" "$ALL_ISSUES_FILE" "$BRANCHES_FILE" "$FAILED_FILE" "${POSITION_MAP_FILE:-}"' EXIT
 
 # Extract issue numbers and their dependencies
 echo "$ISSUES_JSON" | jq -r '.[] | .number | tostring' | sort -n > "$ALL_ISSUES_FILE"
 
+# Build position-to-github-number mapping for relative issue references.
+# Milestone issues sorted by number get positions 1, 2, 3, etc.
+POSITION_MAP_FILE=$(mktemp)
+position=1
+while read -r gh_num; do
+  echo "${position} ${gh_num}" >> "$POSITION_MAP_FILE"
+  position=$((position + 1))
+done < "$ALL_ISSUES_FILE"
+
 echo "$ISSUES_JSON" | jq -r '.[] | "\(.number)\t\(.body)"' | while IFS=$'\t' read -r num body; do
-  # Extract dependency issue numbers (case-insensitive matching)
-  dep_numbers=$(echo "$body" | grep -ioE '(depends on|blocked by|requires) #[0-9]+' | grep -oE '#[0-9]+' | tr -d '#' || true)
+  # Extract dependency issue numbers (case-insensitive matching).
+  # Matches: "depends on #N", "blocked by #N", "requires #N", "Dependencies: #N", "**Dependencies**: #N"
+  dep_numbers=$(echo "$body" | grep -ioE '(depends on|blocked by|requires|dependencies):?\s*#[0-9]+' | grep -oE '#[0-9]+' | tr -d '#' || true)
   for dep in $dep_numbers; do
-    # Only record deps that are in our milestone
+    # Check if dep is a GitHub issue number in our milestone
     if grep -qx "$dep" "$ALL_ISSUES_FILE"; then
       echo "${num} ${dep}" >> "$DEPS_FILE"
+    else
+      # Try interpreting as a relative milestone position and map to GitHub number
+      mapped=$(grep "^${dep} " "$POSITION_MAP_FILE" | awk '{print $2}' || true)
+      if [ -n "$mapped" ] && grep -qx "$mapped" "$ALL_ISSUES_FILE"; then
+        echo "${num} ${mapped}" >> "$DEPS_FILE"
+      fi
     fi
   done
 done
@@ -215,11 +232,6 @@ while read -r num; do
   echo "    #${num}: ${title}"
 done <<< "$SORTED_ISSUES"
 
-# ── Helper: look up branch for an issue number ───────────────
-get_issue_branch() {
-  grep "^${1} " "$BRANCHES_FILE" | awk '{print $2}' | head -1
-}
-
 # ── Process each issue ───────────────────────────────────────
 while read -r ISSUE_NUMBER; do
   ISSUE_TITLE=$(echo "$ISSUES_JSON" | jq -r ".[] | select(.number == ${ISSUE_NUMBER}) | .title")
@@ -246,22 +258,14 @@ while read -r ISSUE_NUMBER; do
     continue
   fi
 
-  # Determine base branch.
-  # For diamond dependencies (issue depends on multiple parents), we use the
-  # first parent found in the deps file. This is deterministic since deps are
-  # written in issue-body parse order. Only one parent can be the base branch.
-  BASE_BRANCH="main"
-  if [ -s "$DEPS_FILE" ]; then
-    while read -r child parent; do
-      if [ "$child" = "$ISSUE_NUMBER" ]; then
-        parent_branch=$(get_issue_branch "$parent")
-        if [ -n "$parent_branch" ]; then
-          BASE_BRANCH="$parent_branch"
-          echo ">>> Stacking on #${parent}'s branch: ${BASE_BRANCH}"
-          break
-        fi
-      fi
-    done < "$DEPS_FILE"
+  # Linear chaining: each issue branches off the previous issue's branch.
+  # This prevents merge conflicts between sequential PRs, since each PR
+  # includes all prior PRs' changes. The first issue branches from main.
+  if [ -n "${PREV_BRANCH:-}" ]; then
+    BASE_BRANCH="$PREV_BRANCH"
+    echo ">>> Chaining on previous branch: ${BASE_BRANCH}"
+  else
+    BASE_BRANCH="main"
   fi
 
   # Compute branch name
@@ -274,6 +278,8 @@ while read -r ISSUE_NUMBER; do
   EXISTING_PR=$(gh pr list --repo "${UPSTREAM_REPO}" --head "${FORK_OWNER}:${BRANCH}" --state open --json url --jq '.[0].url // empty' 2>/dev/null || true)
   if [ -n "$EXISTING_PR" ]; then
     echo ">>> Skipping #${ISSUE_NUMBER} — PR already exists: ${EXISTING_PR}"
+    # Still record for linear chaining so the next issue branches from this one
+    PREV_BRANCH="$BRANCH"
     continue
   fi
 
@@ -296,10 +302,19 @@ while read -r ISSUE_NUMBER; do
   cd "$REPO_ROOT/autonomous"
   if docker compose up --build --abort-on-container-exit 2>&1 | tee "$DOCKER_LOG_FILE"; then
     echo ">>> Container completed successfully for issue #${ISSUE_NUMBER}"
+    # Record this branch for linear chaining — the next issue will branch from it.
+    PREV_BRANCH="$BRANCH"
+    # Wait for the merge commit to propagate before the next issue fetches the base branch.
+    echo ">>> Waiting for merge to propagate..."
+    sleep 10
   else
     echo "!!! Container failed for issue #${ISSUE_NUMBER}"
     echo ">>> Docker logs saved to: ${DOCKER_LOG_FILE}"
     echo "$ISSUE_NUMBER" >> "$FAILED_FILE"
+    # Linear chain is broken — subsequent issues would branch from an unmerged base.
+    # Stop processing to avoid cascading failures.
+    echo "!!! Stopping milestone — linear chain broken by failed issue #${ISSUE_NUMBER}"
+    break
   fi
 
 done <<< "$SORTED_ISSUES"

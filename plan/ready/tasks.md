@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; form renders all 7 steps and navigation works
   - **Brief ref**: Multi-step Form
 
-- [ ] TASK-08: Create Campaign Edit page wrapper
+- [x] TASK-08: Create Campaign Edit page wrapper
   - **Goal**: `CampaignEditPage.tsx` reads `:id` from route params and renders `CampaignFormPage` in edit mode; sets document title once campaign loads
   - **Details**: Create `packages/client/src/pages/CampaignEditPage.tsx`. Use `useParams()` to get `id`. Render `<CampaignFormPage campaignId={id} />`. Set `document.title` to `${campaign.title} — Edit — Mars Mission Fund` using `useEffect` once the campaign data loads (follow the pattern in `CampaignDetailPage`).
   - **Files**: `packages/client/src/pages/CampaignEditPage.tsx`

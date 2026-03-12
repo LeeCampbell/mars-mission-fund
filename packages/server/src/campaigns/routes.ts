@@ -820,7 +820,10 @@ export function createCampaignRouter(pool: Pool): Router {
   // POST /v1/campaigns/:id/cancel
   router.post('/:id/cancel', authenticate, async (req, res, next) => {
     const user = res.locals['user'] as JwtUser
-    if (user.role !== 'Creator') {
+    const isCreator = user.role === 'Creator'
+    const isAdmin = user.role === 'Administrator' || user.role === 'SuperAdministrator'
+
+    if (!isCreator && !isAdmin) {
       return next(makeError('Forbidden', 403, 'FORBIDDEN'))
     }
 
@@ -830,6 +833,34 @@ export function createCampaignRouter(pool: Pool): Router {
     }
 
     try {
+      // Admin path: cancel a Settlement-state campaign
+      if (isAdmin) {
+        const campaign = await getCampaignById(pool, parsed.data.id)
+        if (campaign === null) {
+          return next(makeError('Campaign not found', 404, 'CAMPAIGN_NOT_FOUND'))
+        }
+        if (campaign.status !== 'Settlement') {
+          return next(
+            makeError('Campaign is not in Settlement status', 409, 'INVALID_CAMPAIGN_STATE')
+          )
+        }
+
+        await cancelSettlement(pool, parsed.data.id)
+
+        await insertAuditLog(pool, {
+          eventType: 'campaign.cancelled',
+          campaignId: parsed.data.id,
+          actorId: user.id ?? 'unknown',
+          payload: { previousStatus: 'Settlement' },
+        })
+
+        // DEMO STUB: trigger refund process
+        console.log(`[STUB] Refund initiated for campaign ${parsed.data.id}`)
+
+        return res.json({ data: { id: parsed.data.id, status: 'Cancelled' } })
+      }
+
+      // Creator path: cancel a Live campaign
       const campaign = await getCampaignState(pool, parsed.data.id)
       if (campaign === null) {
         return next(makeError('Campaign not found', 404, 'CAMPAIGN_NOT_FOUND'))
@@ -1320,64 +1351,6 @@ export function createCampaignRouter(pool: Pool): Router {
         res.json({
           data: { id: parsedParams.data.mid, status: 'Returned' },
         })
-      } catch (err) {
-        next(err)
-      }
-    }
-  )
-
-  // POST /:id/cancel — Admin cancels a Settlement-state campaign
-  router.post(
-    '/:id/cancel',
-    authenticate,
-    requireRole(['Administrator', 'SuperAdministrator']),
-    async (req, res, next) => {
-      const parsed = RouteParamsSchema.safeParse(req.params)
-      if (!parsed.success) {
-        return next(
-          Object.assign(new Error('Invalid campaign ID'), {
-            status: 400,
-            code: 'INVALID_CAMPAIGN_ID',
-            details: parsed.error.flatten(),
-          })
-        )
-      }
-
-      try {
-        const campaign = await getCampaignById(pool, parsed.data.id)
-        if (campaign === null) {
-          return next(
-            Object.assign(new Error('Campaign not found'), {
-              status: 404,
-              code: 'CAMPAIGN_NOT_FOUND',
-              details: {},
-            })
-          )
-        }
-        if (campaign.status !== 'Settlement') {
-          return next(
-            Object.assign(new Error('Campaign is not in Settlement status'), {
-              status: 409,
-              code: 'INVALID_CAMPAIGN_STATE',
-              details: { currentStatus: campaign.status },
-            })
-          )
-        }
-
-        await cancelSettlement(pool, parsed.data.id)
-
-        const actor = res.locals['user'] as { sub?: string }
-        await insertAuditLog(pool, {
-          eventType: 'campaign.cancelled',
-          campaignId: parsed.data.id,
-          actorId: actor.sub ?? 'unknown',
-          payload: { previousStatus: 'Settlement' },
-        })
-
-        // DEMO STUB: trigger refund process
-        console.log(`[STUB] Refund initiated for campaign ${parsed.data.id}`)
-
-        res.json({ data: { id: parsed.data.id, status: 'Cancelled' } })
       } catch (err) {
         next(err)
       }

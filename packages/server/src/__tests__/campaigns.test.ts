@@ -616,10 +616,10 @@ describe('Campaign Routes', () => {
       expect(res.status).toBe(401)
     })
 
-    it('returns 403 when role is not Creator', async () => {
+    it('returns 403 when role is not Creator or Administrator', async () => {
       const res = await request(app)
         .post(`/v1/campaigns/${TEST_UUID}/cancel`)
-        .set('Authorization', `Bearer ${makeAdminToken()}`)
+        .set('Authorization', `Bearer ${makeBackerToken()}`)
 
       expect(res.status).toBe(403)
       expect(res.body.error.code).toBe('FORBIDDEN')
@@ -1279,10 +1279,10 @@ describe('Campaign Routes', () => {
       expect(res.body.error.code).toBe('UNAUTHORIZED')
     })
 
-    it('returns 403 for Creator role (settlement cancel)', async () => {
+    it('returns 403 for Backer role (settlement cancel)', async () => {
       const res = await request(app)
         .post(`/v1/campaigns/${TEST_UUID}/cancel`)
-        .set('Authorization', `Bearer ${makeToken('Creator')}`)
+        .set('Authorization', `Bearer ${makeToken('Backer')}`)
 
       expect(res.status).toBe(403)
       expect(res.body.error.code).toBe('FORBIDDEN')

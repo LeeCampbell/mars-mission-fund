@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes; existing server tests pass with `npx vitest run -w packages/server`
   - **Brief ref**: Server query updates
 
-- [ ] TASK-03: Add creator API client functions
+- [x] TASK-03: Add creator API client functions
   - **Goal**: Add all 8 new functions to `packages/client/src/api/campaigns.ts`
   - **Details**: Add: `fetchMyCampaigns()` → `GET /v1/campaigns?createdBy=me`, returns `CampaignSummary[]`; `createCampaign(data: CreateCampaignRequest)` → `POST /v1/campaigns`, returns `CampaignDetail`; `updateCampaign(id, data: UpdateCampaignRequest)` → `PUT /v1/campaigns/:id`, returns `CampaignDetail`; `deleteCampaign(id)` → `DELETE /v1/campaigns/:id`, returns `void`; `submitCampaignForReview(id)` → `POST /v1/campaigns/:id/submit`, returns `void`; `launchCampaign(id)` → `POST /v1/campaigns/:id/launch`, returns `void`; `postCampaignUpdate(id, body: string)` → `POST /v1/campaigns/:id/update`, returns `void`; `submitMilestoneEvidence(id, mid, data: { evidenceDescription: string; evidenceUrl?: string })` → `POST /v1/campaigns/:id/milestones/:mid/submit-evidence`, returns `void`. All use `authedFetch` and throw on non-OK responses. Import and use `CreateCampaignRequest`, `UpdateCampaignRequest`, `CreateMilestoneRequest`, `CreateTeamMemberRequest` from `@mmf/shared`.
   - **Files**: `packages/client/src/api/campaigns.ts`

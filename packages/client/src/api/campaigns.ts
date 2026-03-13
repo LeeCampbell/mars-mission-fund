@@ -6,6 +6,8 @@ import type {
   StretchGoal,
   TeamMember,
   CampaignUpdate,
+  CreateCampaignRequest,
+  UpdateCampaignRequest,
 } from '@mmf/shared'
 
 function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
@@ -20,7 +22,16 @@ function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
   return fetch(path, { ...init, headers })
 }
 
-export type { CampaignSummary, CampaignDetail, Milestone, StretchGoal, TeamMember, CampaignUpdate }
+export type {
+  CampaignSummary,
+  CampaignDetail,
+  Milestone,
+  StretchGoal,
+  TeamMember,
+  CampaignUpdate,
+  CreateCampaignRequest,
+  UpdateCampaignRequest,
+}
 
 // Backward-compat alias — components will be updated in TASK-05
 export type Campaign = CampaignDetail
@@ -73,5 +84,70 @@ export async function rejectCampaign(
 
 export async function resubmitCampaign(id: string): Promise<void> {
   const response = await authedFetch(`/v1/campaigns/${id}/resubmit`, { method: 'POST' })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function fetchMyCampaigns(): Promise<CampaignSummary[]> {
+  const response = await authedFetch('/v1/campaigns?createdBy=me')
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const json = await response.json()
+  return (json.data as unknown[]).map((item) => CampaignSummarySchema.parse(item))
+}
+
+export async function createCampaign(data: CreateCampaignRequest): Promise<CampaignDetail> {
+  const response = await authedFetch('/v1/campaigns', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const json = await response.json()
+  return CampaignDetailSchema.parse(json.data)
+}
+
+export async function updateCampaign(
+  id: string,
+  data: UpdateCampaignRequest
+): Promise<CampaignDetail> {
+  const response = await authedFetch(`/v1/campaigns/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const json = await response.json()
+  return CampaignDetailSchema.parse(json.data)
+}
+
+export async function deleteCampaign(id: string): Promise<void> {
+  const response = await authedFetch(`/v1/campaigns/${id}`, { method: 'DELETE' })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function submitCampaignForReview(id: string): Promise<void> {
+  const response = await authedFetch(`/v1/campaigns/${id}/submit`, { method: 'POST' })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function launchCampaign(id: string): Promise<void> {
+  const response = await authedFetch(`/v1/campaigns/${id}/launch`, { method: 'POST' })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function postCampaignUpdate(id: string, body: string): Promise<void> {
+  const response = await authedFetch(`/v1/campaigns/${id}/update`, {
+    method: 'POST',
+    body: JSON.stringify({ body }),
+  })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function submitMilestoneEvidence(
+  id: string,
+  mid: string,
+  data: { evidenceDescription: string; evidenceUrl?: string }
+): Promise<void> {
+  const response = await authedFetch(`/v1/campaigns/${id}/milestones/${mid}/submit-evidence`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
 }

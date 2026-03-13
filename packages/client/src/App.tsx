@@ -29,6 +29,15 @@ const AdminUsersPage = React.lazy(() =>
 const ReviewQueuePage = React.lazy(() =>
   import('./pages/ReviewQueuePage').then((m) => ({ default: m.ReviewQueuePage }))
 )
+const DashboardPage = React.lazy(() =>
+  import('./pages/DashboardPage').then((m) => ({ default: m.DashboardPage }))
+)
+const CampaignFormPage = React.lazy(() =>
+  import('./pages/CampaignFormPage').then((m) => ({ default: m.CampaignFormPage }))
+)
+const CampaignEditPage = React.lazy(() =>
+  import('./pages/CampaignEditPage').then((m) => ({ default: m.CampaignEditPage }))
+)
 
 export default function App() {
   return (
@@ -51,6 +60,11 @@ export default function App() {
             </Route>
             <Route element={<ProtectedRoute requireReviewer />}>
               <Route path="/review-queue" element={<ReviewQueuePage />} />
+            </Route>
+            <Route element={<ProtectedRoute requireCreator />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/campaigns/new" element={<CampaignFormPage />} />
+              <Route path="/campaigns/:id/edit" element={<CampaignEditPage />} />
             </Route>
           </Route>
         </Routes>

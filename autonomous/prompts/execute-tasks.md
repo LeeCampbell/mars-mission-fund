@@ -54,13 +54,29 @@ When the current task is an E2E test task, follow these guidelines:
 - **Authentication**: If tests need login, define a local `login()` helper following the pattern in `auth.spec.ts`
 - **Do NOT use Playwright MCP** for E2E test authoring — write standard Playwright Test code
 
+### E2E Test Execution
+
+The database is running at `db:5432` with `DATABASE_URL` and `JWT_SECRET` set.
+
+To run E2E tests, use the helper script which handles the full lifecycle (dbmate up → start backend → run Playwright → stop backend → dbmate down):
+
+```bash
+./scripts/run-e2e.sh
+```
+
+To run a specific test file:
+
+```bash
+./scripts/run-e2e.sh e2e/auth.spec.ts
+```
+
 ### Step 4: Verify
 
 Run `./scripts/ci-check.sh` before committing. Every check must pass.
 
 If any check fails, fix the issue and re-run until all pass.
 
-If the task created or modified files in `e2e/`, also run `npm run test:e2e` to verify E2E tests pass.
+If the task created or modified files in `e2e/`, also run `./scripts/run-e2e.sh` to verify E2E tests pass.
 
 **Visual verification**: If the task involves UI changes:
 

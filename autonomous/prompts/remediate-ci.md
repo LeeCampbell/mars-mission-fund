@@ -77,6 +77,12 @@ Read the CI failure logs provided below to identify the root cause. Common failu
 
 Run `./scripts/ci-check.sh` to reproduce the failure locally. This runs the same checks as CI.
 
+To reproduce E2E test failures:
+
+```bash
+./scripts/run-e2e.sh
+```
+
 #### Step 3: Fix the issue
 
 Make the minimum changes necessary to fix the CI failure.

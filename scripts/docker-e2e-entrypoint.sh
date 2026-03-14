@@ -27,23 +27,6 @@ echo "=== All CI checks passed ==="
 # --- E2E tests (DB required) ---
 
 echo "=== E2E tests ==="
-
-# Run database migrations
-echo "Running database migrations…"
-dbmate -d ./packages/server/db/migrations -s ./packages/server/db/schema.sql up
-echo "Migrations complete."
-
-# Start the backend dev server in the background
-npm run dev:server &
-
-# Wait for backend to accept connections
-echo "Waiting for backend…"
-until curl -sf http://localhost:3001/v1/campaigns > /dev/null 2>&1; do
-  sleep 1
-done
-echo "Backend is ready."
-
-# Run Playwright e2e tests (Playwright starts the Vite dev server itself)
-npx playwright test
+./scripts/run-e2e.sh
 
 echo "=== All checks passed ==="

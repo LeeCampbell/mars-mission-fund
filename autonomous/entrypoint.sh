@@ -85,6 +85,10 @@ if [ -f package.json ]; then
   npm ci
 fi
 
+# ── Database env for E2E tests ─────────────────────────────
+export DATABASE_URL="postgresql://mmf:mmf@db:5432/mmf?sslmode=disable"
+export JWT_SECRET="test-jwt-secret-for-agent"
+
 # ── Run agent loop for this single issue ─────────────────────
 echo ""
 echo "=========================================="

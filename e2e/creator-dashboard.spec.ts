@@ -76,6 +76,7 @@ test.describe('Creator dashboard', () => {
     // ── Step 3: Funding Goals ──────────────────────────────────────────────────
     await expect(page.getByRole('heading', { name: /Step 3/i })).toBeVisible()
     await page.locator('#minFunding').fill('5000000')
+    await page.locator('#maxFunding').fill('10000000')
     await page.locator('#deadline').fill(getFutureDate(2))
     await page.getByRole('button', { name: 'Next' }).click()
 

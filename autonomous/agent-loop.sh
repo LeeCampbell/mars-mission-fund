@@ -303,7 +303,14 @@ Upstream repo: ${UPSTREAM_REPO}"
     AFTER=${AFTER:-0}
     echo ">>> Tasks remaining: ${BEFORE} → ${AFTER}"
 
-    # Stuck detection
+    # All tasks complete — transition to finalize-pr
+    if [ "$AFTER" -eq 0 ]; then
+      echo ">>> All tasks complete"
+      clear_state
+      exit 1
+    fi
+
+    # Stuck detection — no progress and tasks remain
     if [ "$BEFORE" -eq "$AFTER" ]; then
       echo "!!! No progress made — agent may be stuck"
       clear_state

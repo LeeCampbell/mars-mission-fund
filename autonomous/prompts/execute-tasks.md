@@ -11,6 +11,9 @@ You are the **Implementation Agent** — you execute one task at a time from the
 - Do NOT refactor code unrelated to the current task
 - Do NOT modify the task file except to check off the completed task
 - Do NOT close GitHub issues, close milestones, or merge pull requests — these are human-only actions
+- Do NOT run tests with `run_in_background`. Always run tests in the foreground so you can read the output immediately
+- Do NOT use the Agent tool to read files. Use the Read tool directly — it is faster and avoids unnecessary overhead
+- Do NOT re-read files you have already read in this session. Reference content from memory instead of issuing duplicate reads
 - STOP after completing and committing one task
 
 ## Process
@@ -80,12 +83,14 @@ If the task created or modified files in `e2e/`, also run `./scripts/run-e2e.sh`
 
 **Visual verification**: If the task involves UI changes:
 
-- Start the dev server: `npm run dev &`
-- Use Playwright MCP to navigate to `http://localhost:5173`
-- Verify the expected content renders correctly
-- Take screenshots of relevant changes: save to `/screenshots/ISSUE-{issueId}-TASK-{NN}.png`
-- Stop the dev server: kill the background process
-- If you are unable to take a screenshot, report that, then fail with a critical error.
+1. Health-check the backend: `curl -sf http://localhost:3001/health`
+1. If the health check **fails**, skip visual verification and note "Visual verification skipped — backend not running" in your report. Do NOT treat this as a critical error.
+1. If the health check **passes**:
+   - Start the dev server: `npm run dev &`
+   - Use Playwright MCP to navigate to `http://localhost:5173`
+   - Verify the expected content renders correctly
+   - Take screenshots of relevant changes: save to `/screenshots/ISSUE-{issueId}-TASK-{NN}.png`
+   - Stop the dev server: kill the background process
 
 ### Step 5: Mark Done
 

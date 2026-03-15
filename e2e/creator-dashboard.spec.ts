@@ -118,6 +118,6 @@ test.describe('Creator dashboard', () => {
     await expect(page).toHaveURL('/dashboard')
 
     // Campaign should appear on the dashboard (Submitted → "In Review / Approved" section)
-    await expect(page.getByText('E2E Test Campaign')).toBeVisible()
+    await expect(page.getByText('E2E Test Campaign').first()).toBeVisible()
   })
 })

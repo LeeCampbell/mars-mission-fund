@@ -75,7 +75,9 @@ To run a specific test file:
 
 ### Step 4: Verify
 
-Run `./scripts/ci-check.sh` before committing. Every check must pass.
+Run `./scripts/ci-check.sh` before committing — this includes type-checking, linting, **Prettier formatting**, and tests. Every check must pass.
+
+Do NOT cherry-pick individual checks (e.g. running only `tsc` or `eslint`). Always run the full `./scripts/ci-check.sh` script so formatting and other issues are caught immediately rather than accumulating across tasks.
 
 If any check fails, fix the issue and re-run until all pass.
 

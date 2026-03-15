@@ -46,6 +46,7 @@ Brief: plan/ready/brief.md
 ### Guidelines
 
 - **Order matters**: Tasks must be ordered so each can build on the previous
+- **Co-locate routes and pages**: If a task adds a route that imports a page component, that same task must create the page component. Do NOT create placeholder/stub files for components that will be implemented in later tasks — stubs cause lint errors (`no-unused-vars`) and thrashing. Use `React.lazy(() => import(...))` with a loading fallback if a route must exist before the page is ready.
 - **First task**: Usually project setup, dependencies, or configuration
 - **Last task**: Usually integration, final verification, or cleanup
 - **Granularity**: Prefer more smaller tasks over fewer large ones

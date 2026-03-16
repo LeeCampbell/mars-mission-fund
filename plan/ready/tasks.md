@@ -85,7 +85,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; navigating to `/review/:id` renders the page without errors
   - **Brief ref**: Client pages — ReviewDetailPage
 
-- [ ] TASK-07: Create AdminCampaignsPage
+- [x] TASK-07: Create AdminCampaignsPage
   - **Goal**: Implement the `/admin/campaigns` page for milestone verification and cancellation approval
   - **Details**:
     - Create `packages/client/src/pages/AdminCampaignsPage.tsx`

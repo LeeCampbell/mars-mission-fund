@@ -132,7 +132,8 @@ export async function listCampaigns(
       contributor_count AS "contributorCount",
       deadline,
       created_at AS "createdAt",
-      created_by AS "createdBy"
+      created_by AS "createdBy",
+      cancellation_requested_at AS "cancellationRequestedAt"
     FROM campaigns
     ${where}
     ORDER BY created_at DESC

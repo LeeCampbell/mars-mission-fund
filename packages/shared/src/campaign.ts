@@ -82,6 +82,7 @@ export const CampaignSummarySchema = z.object({
   deadline: z.coerce.date().nullable(),
   createdAt: z.coerce.date(),
   createdBy: z.string().uuid().nullable(),
+  cancellationRequestedAt: z.coerce.date().nullable().optional(),
 })
 
 // Full campaign returned by the detail endpoint

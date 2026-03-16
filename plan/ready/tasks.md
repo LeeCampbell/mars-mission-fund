@@ -71,7 +71,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; existing ReviewQueuePage tests still pass
   - **Brief ref**: App.tsx routes, ReviewQueuePage.tsx, Layout.tsx
 
-- [ ] TASK-06: Create ReviewDetailPage
+- [x] TASK-06: Create ReviewDetailPage
   - **Goal**: Implement the `/review/:id` page showing full campaign proposal and review actions panel
   - **Details**:
     - Create `packages/client/src/pages/ReviewDetailPage.tsx`

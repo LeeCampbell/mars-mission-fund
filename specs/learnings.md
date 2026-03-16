@@ -111,3 +111,4 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 - If `npm run test:e2e` fails with "Executable doesn't exist" after a Playwright version bump, run `npx playwright install chromium` to download the new browser binaries.
 - The `ci-check.sh` script does not include E2E tests — only `./scripts/e2e-check.sh` or `./scripts/e2e-check-docker.sh` run E2E tests with the full stack.
 - E2E tests require a running PostgreSQL + backend + frontend stack; Docker is the simplest way to achieve this (use `./scripts/e2e-check-docker.sh`).
+- In some workspace environments (e.g. sandboxed CI), `npx playwright install chromium` fails with network timeouts because CDN downloads are blocked. In that case, run E2E tests via `./scripts/e2e-check-docker.sh` (Docker handles the browser install inside its own image). If the environment can't access Docker either, E2E verification must be deferred — note it in the task report.

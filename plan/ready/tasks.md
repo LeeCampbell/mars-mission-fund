@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; hook exports correct types
   - **Brief ref**: Section 5
 
-- [ ] TASK-05: NotificationsPage + `/notifications` route
+- [x] TASK-05: NotificationsPage + `/notifications` route
   - **Goal**: Create the full notifications list page and wire its route
   - **Details**:
     - In `packages/client/src/App.tsx`, add a lazy-loaded route `/notifications` → `NotificationsPage` protected for any authenticated user.

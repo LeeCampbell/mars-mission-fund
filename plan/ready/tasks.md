@@ -131,7 +131,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; pages render; panels appear on correct campaign detail pages
   - **Brief ref**: Section 4
 
-- [ ] TASK-08: Header updates — `NotificationBell` + role-based nav links
+- [x] TASK-08: Header updates — `NotificationBell` + role-based nav links
   - **Goal**: Wire all new navigation elements into the header
   - **Details**:
     - In `packages/client/src/components/Header.tsx`:

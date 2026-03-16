@@ -22,7 +22,7 @@
     "prepare": "cp scripts/pre-push .git/hooks/pre-push"
   },
   "devDependencies": {
-    "@playwright/test": "^1.51.1",
+    "@playwright/test": "1.52.0",
     "eslint": "^9",
     "eslint-plugin-react": "^7",
     "eslint-plugin-react-hooks": "^5",

@@ -40,7 +40,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes with no type errors
   - **Brief ref**: Client API layer
 
-- [ ] TASK-04: Client hook — useNotifications
+- [x] TASK-04: Client hook — useNotifications
   - **Goal**: Create a TanStack Query hook that fetches notifications and exposes a mark-read mutation
   - **Details**:
     - Create `packages/client/src/hooks/useNotifications.ts`

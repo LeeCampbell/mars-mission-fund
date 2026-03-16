@@ -1,3 +1,8 @@
+import { NotificationSchema } from '@mmf/shared'
+import type { Notification } from '@mmf/shared'
+
+export type { Notification }
+
 function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
   const token = localStorage.getItem('token')
   const headers: Record<string, string> = {
@@ -10,20 +15,16 @@ function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
   return fetch(path, { ...init, headers })
 }
 
-export interface Notification {
-  id: string
-  userId: string
-  campaignId: string | null
-  type: string
-  title: string
-  message: string
-  read: boolean
-  createdAt: string
-}
-
 export async function fetchNotifications(): Promise<Notification[]> {
   const response = await authedFetch('/v1/notifications')
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
   const json = await response.json()
-  return (json as { data: Notification[] }).data
+  return (json as { data: unknown[] }).data.map((item) => NotificationSchema.parse(item))
+}
+
+export async function markNotificationAsRead(id: string): Promise<Notification> {
+  const response = await authedFetch(`/v1/notifications/${id}/read`, { method: 'PATCH' })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const json = await response.json()
+  return NotificationSchema.parse((json as { data: unknown }).data)
 }

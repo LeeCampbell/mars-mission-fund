@@ -15,7 +15,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/shared && npx tsc --noEmit -p packages/server/tsconfig.json` passes; `npm run test:coverage` passes
   - **Brief ref**: Section 1 — Backend
 
-- [ ] TASK-02: Client API additions — notifications + campaign admin actions
+- [x] TASK-02: Client API additions — notifications + campaign admin actions
   - **Goal**: Add all missing client-side API functions consumed by new components
   - **Details**:
     - In `packages/client/src/api/notifications.ts`, add `markNotificationAsRead(id: string): Promise<Notification>` — calls `PATCH /v1/notifications/:id/read`, validates response with `NotificationSchema`.

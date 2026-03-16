@@ -832,6 +832,24 @@ export async function requestCancellation(pool: Pool, id: string): Promise<Campa
   return result.rows[0]!
 }
 
+export async function denyCancellation(pool: Pool, id: string): Promise<CampaignStateRow> {
+  const result = await pool.query<CampaignStateRow>(
+    `UPDATE campaigns
+     SET cancellation_requested_at = NULL, updated_at = NOW()
+     WHERE id = $1
+     RETURNING
+       id, status, creator_id AS "creatorId",
+       current_amount_usd AS "currentAmountUsd",
+       min_funding_target_usd AS "minFundingTargetUsd",
+       max_funding_cap_usd AS "maxFundingCapUsd",
+       contributor_count AS "contributorCount",
+       deadline, cancellation_requested_at AS "cancellationRequestedAt",
+       launched_at AS "launchedAt"`,
+    [id]
+  )
+  return result.rows[0]!
+}
+
 export async function approveCancellation(pool: Pool, id: string): Promise<CampaignStateRow> {
   const result = await pool.query<CampaignStateRow>(
     `UPDATE campaigns

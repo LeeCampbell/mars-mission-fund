@@ -36,6 +36,7 @@ import {
   cancelCampaign,
   requestCancellation,
   approveCancellation,
+  denyCancellation,
   enforceDeadline,
   settleCampaign,
   submitMilestoneEvidence,
@@ -950,6 +951,56 @@ export function createCampaignRouter(pool: Pool): Router {
       next(err)
     }
   })
+
+  // POST /v1/campaigns/:id/deny-cancellation
+  router.post(
+    '/:id/deny-cancellation',
+    authenticate,
+    requireRole('Administrator'),
+    async (req, res, next) => {
+      const parsed = RouteParamsSchema.safeParse(req.params)
+      if (!parsed.success) {
+        return next(makeError('Invalid campaign ID', 400, 'INVALID_CAMPAIGN_ID'))
+      }
+
+      try {
+        const campaign = await getCampaignState(pool, parsed.data.id)
+        if (campaign === null) {
+          return next(makeError('Campaign not found', 404, 'CAMPAIGN_NOT_FOUND'))
+        }
+
+        if (campaign.cancellationRequestedAt === null) {
+          return next(makeError('No pending cancellation request', 400, 'NO_PENDING_CANCELLATION'))
+        }
+
+        const updated = await denyCancellation(pool, parsed.data.id)
+
+        const user = res.locals['user'] as JwtUser
+        writeAuditEvent(pool, {
+          action: 'campaign.cancellation_denied',
+          actorId: user.id,
+          actorType: 'Administrator',
+          resourceType: 'campaign',
+          resourceId: parsed.data.id,
+          outcome: 'success',
+        })
+
+        if (campaign.creatorId) {
+          await createNotification(pool, {
+            userId: campaign.creatorId,
+            campaignId: parsed.data.id,
+            type: 'cancellation_denied',
+            title: 'Cancellation Request Denied',
+            message: 'Your cancellation request has been reviewed and denied by an administrator.',
+          })
+        }
+
+        res.status(200).json({ data: updated })
+      } catch (err) {
+        next(err)
+      }
+    }
+  )
 
   // POST /v1/campaigns/:id/enforce-deadline
   router.post('/:id/enforce-deadline', authenticate, async (req, res, next) => {

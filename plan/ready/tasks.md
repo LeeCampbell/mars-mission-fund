@@ -13,7 +13,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes; manual curl or unit test confirms 204 response
   - **Brief ref**: Server — Add `PATCH /v1/notifications/:id/read`
 
-- [ ] TASK-02: Server — POST /:id/deny-cancellation route
+- [x] TASK-02: Server — POST /:id/deny-cancellation route
   - **Goal**: Add the deny-cancellation endpoint that Admin can use to reject a creator's cancellation request
   - **Details**:
     - In `packages/server/src/campaigns/routes.ts`, add `POST /:id/deny-cancellation` following the same pattern as `approve-cancel`

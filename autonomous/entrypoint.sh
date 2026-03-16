@@ -83,6 +83,12 @@ fi
 if [ -f package.json ]; then
   echo ">>> Installing dependencies"
   npm ci
+  # Install Chromium for the project's @playwright/test version.
+  # The Docker image pre-installs Chromium for @playwright/mcp (different
+  # playwright-core), but E2E tests use the project's own playwright which
+  # may expect a different browser revision. Both coexist under /ms-playwright/.
+  echo ">>> Installing Chromium for project Playwright"
+  npx playwright install chromium
 fi
 
 # ── Database env for E2E tests ─────────────────────────────

@@ -1,6 +1,6 @@
 # Autonomous agent: Claude Code + Playwright MCP in Docker
 # Base includes browser deps + Node.js (Ubuntu Noble)
-FROM mcr.microsoft.com/playwright:v1.52.0-noble
+FROM mcr.microsoft.com/playwright:v1.58.2-noble
 
 # System dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \

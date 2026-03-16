@@ -171,7 +171,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes with ≥80% threshold
   - **Brief ref**: Section 7
 
-- [ ] TASK-10: Write E2E tests
+- [x] TASK-10: Write E2E tests
   - **Goal**: Create Playwright E2E tests covering the user flows described in the brief
   - **Details**: Create or update files in `e2e/`. Follow patterns in existing tests (`e2e/auth.spec.ts`, `e2e/campaigns.spec.ts`). Use Playwright Test API. Tests must pass against the running local stack.
     - **Reviewer flow**: Log in as reviewer → navigate to `/review` → claim a campaign → assert navigation to `/review/:id` → approve the campaign.

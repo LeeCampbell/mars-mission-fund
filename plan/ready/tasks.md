@@ -104,7 +104,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; component renders without errors
   - **Brief ref**: Section 5
 
-- [ ] TASK-07: `AdminActionsPanel` + `AdminCampaignsPage` + CampaignDetailPage integration
+- [x] TASK-07: `AdminActionsPanel` + `AdminCampaignsPage` + CampaignDetailPage integration
   - **Goal**: Build admin milestone verification and cancellation approval UI
   - **Details**:
     - Create `packages/client/src/components/campaigns/AdminActionsPanel.tsx`:

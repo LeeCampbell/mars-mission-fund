@@ -26,6 +26,9 @@ const ProfilePage = React.lazy(() =>
 const AdminUsersPage = React.lazy(() =>
   import('./pages/AdminUsersPage').then((m) => ({ default: m.AdminUsersPage }))
 )
+const AdminCampaignsPage = React.lazy(() =>
+  import('./pages/AdminCampaignsPage').then((m) => ({ default: m.AdminCampaignsPage }))
+)
 const ReviewQueuePage = React.lazy(() =>
   import('./pages/ReviewQueuePage').then((m) => ({ default: m.ReviewQueuePage }))
 )
@@ -64,6 +67,7 @@ export default function App() {
             </Route>
             <Route element={<ProtectedRoute requireAdmin />}>
               <Route path="/admin/users" element={<AdminUsersPage />} />
+              <Route path="/admin/campaigns" element={<AdminCampaignsPage />} />
             </Route>
             <Route element={<ProtectedRoute requireReviewer />}>
               <Route path="/review" element={<ReviewQueuePage />} />

@@ -129,7 +129,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; header renders reviewer/admin links and bell based on role
   - **Brief ref**: Header — notification bell + role-based nav
 
-- [ ] TASK-10: Component tests for new pages and Header bell
+- [x] TASK-10: Component tests for new pages and Header bell
   - **Goal**: Write Vitest + Testing Library component tests for all new UI
   - **Details**:
     - `packages/client/src/pages/ReviewDetailPage.test.tsx`:

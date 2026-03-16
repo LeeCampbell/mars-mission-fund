@@ -114,7 +114,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; page renders without errors with empty and populated states
   - **Brief ref**: Client pages — NotificationsPage
 
-- [ ] TASK-09: Update Header — notification bell + role-based nav links
+- [x] TASK-09: Update Header — notification bell + role-based nav links
   - **Goal**: Add the notification bell with unread badge and role-based nav links for Reviewer and Admin
   - **Details**:
     - In `packages/client/src/components/Header.tsx`:

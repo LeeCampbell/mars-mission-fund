@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes
   - **Brief ref**: Server — Add `POST /v1/campaigns/:id/deny-cancellation`
 
-- [ ] TASK-03: Client API layer — campaign and notification functions
+- [x] TASK-03: Client API layer — campaign and notification functions
   - **Goal**: Expose all new server endpoints to the frontend through typed API helpers
   - **Details**:
     - In `packages/client/src/api/campaigns.ts`, add:

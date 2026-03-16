@@ -728,6 +728,29 @@ export async function getNotificationsForUser(
   return result.rows
 }
 
+export async function markNotificationRead(
+  pool: Pool,
+  notificationId: string,
+  userId: string
+): Promise<NotificationRow | null> {
+  const sql = `
+    UPDATE notifications
+    SET read = true
+    WHERE id = $1 AND user_id = $2
+    RETURNING
+      id,
+      user_id AS "userId",
+      campaign_id AS "campaignId",
+      type,
+      title,
+      message,
+      read,
+      created_at AS "createdAt"
+  `
+  const result = await pool.query<NotificationRow>(sql, [notificationId, userId])
+  return result.rows[0] ?? null
+}
+
 export async function getCampaignState(pool: Pool, id: string): Promise<CampaignStateRow | null> {
   const result = await pool.query<CampaignStateRow>(
     `SELECT

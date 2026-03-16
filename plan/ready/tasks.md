@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Backend — `markNotificationRead` query + `PATCH /:id/read` endpoint
+- [x] TASK-01: Backend — `markNotificationRead` query + `PATCH /:id/read` endpoint
   - **Goal**: Add the server-side ability to mark a notification as read via REST
   - **Details**:
     - In `packages/server/src/campaigns/queries.ts`, add `markNotificationRead(pool, notificationId, userId)` following the pattern of `createNotification` / `getNotificationsForUser`. The query must `UPDATE notifications SET read = true WHERE id = $1 AND user_id = $2 RETURNING *` to enforce ownership.

@@ -143,7 +143,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; reviewer sees "Review" link; admin sees "Admin" link; bell appears for logged-in users
   - **Brief ref**: Section 6
 
-- [ ] TASK-09: Unit tests for all new components and hooks
+- [x] TASK-09: Unit tests for all new components and hooks
   - **Goal**: Achieve ≥80% coverage threshold with tests for all new code
   - **Details**:
     - `packages/client/src/pages/ReviewDetailPage.test.tsx`:

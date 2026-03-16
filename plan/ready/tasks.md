@@ -85,7 +85,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; page renders at `/notifications`
   - **Brief ref**: Section 5
 
-- [ ] TASK-06: `NotificationBell` component
+- [x] TASK-06: `NotificationBell` component
   - **Goal**: Add a notification bell with unread badge and dropdown to the header
   - **Details**:
     - Create `packages/client/src/components/NotificationBell.tsx`:

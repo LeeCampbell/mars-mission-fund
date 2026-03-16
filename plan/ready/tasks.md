@@ -31,7 +31,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; functions are exported and typed correctly
   - **Brief ref**: Sections 1, 4
 
-- [ ] TASK-03: Route rename + ReviewQueuePage fix + ReviewDetailPage
+- [x] TASK-03: Route rename + ReviewQueuePage fix + ReviewDetailPage
   - **Goal**: Rename reviewer queue route to `/review`, update post-claim navigation, and create the review detail page
   - **Details**:
     - In `packages/client/src/App.tsx`:

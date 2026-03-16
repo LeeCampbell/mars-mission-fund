@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; navigating to `/review` shows queue, claiming navigates to `/review/:id`
   - **Brief ref**: Sections 2, 3
 
-- [ ] TASK-04: `useNotifications` hook
+- [x] TASK-04: `useNotifications` hook
   - **Goal**: Create the React Query hook that centralises notification data-fetching and mutation
   - **Details**:
     - Create `packages/client/src/hooks/useNotifications.ts`.

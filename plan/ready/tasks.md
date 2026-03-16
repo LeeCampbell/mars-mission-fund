@@ -52,7 +52,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; hook can be imported without errors
   - **Brief ref**: Client hooks — useNotifications
 
-- [ ] TASK-05: App.tsx routes + ReviewQueuePage navigation + Layout titles
+- [x] TASK-05: App.tsx routes + ReviewQueuePage navigation + Layout titles
   - **Goal**: Wire up all new routes and fix the post-claim navigation redirect
   - **Details**:
     - In `packages/client/src/App.tsx`:

@@ -38,6 +38,15 @@ const CampaignFormPage = React.lazy(() =>
 const CampaignEditPage = React.lazy(() =>
   import('./pages/CampaignEditPage').then((m) => ({ default: m.CampaignEditPage }))
 )
+const ReviewDetailPage = React.lazy(() =>
+  import('./pages/ReviewDetailPage').then((m) => ({ default: m.ReviewDetailPage }))
+)
+const AdminCampaignsPage = React.lazy(() =>
+  import('./pages/AdminCampaignsPage').then((m) => ({ default: m.AdminCampaignsPage }))
+)
+const NotificationsPage = React.lazy(() =>
+  import('./pages/NotificationsPage').then((m) => ({ default: m.NotificationsPage }))
+)
 
 export default function App() {
   return (
@@ -59,7 +68,14 @@ export default function App() {
               <Route path="/admin/users" element={<AdminUsersPage />} />
             </Route>
             <Route element={<ProtectedRoute requireReviewer />}>
-              <Route path="/review-queue" element={<ReviewQueuePage />} />
+              <Route path="/review" element={<ReviewQueuePage />} />
+              <Route path="/review/:id" element={<ReviewDetailPage />} />
+            </Route>
+            <Route element={<ProtectedRoute requireAdmin />}>
+              <Route path="/admin/campaigns" element={<AdminCampaignsPage />} />
+            </Route>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/notifications" element={<NotificationsPage />} />
             </Route>
             <Route element={<ProtectedRoute requireCreator />}>
               <Route path="/dashboard" element={<DashboardPage />} />

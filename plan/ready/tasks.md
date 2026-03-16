@@ -99,7 +99,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; page renders two sections without runtime errors
   - **Brief ref**: Client pages — AdminCampaignsPage
 
-- [ ] TASK-08: Create NotificationsPage
+- [x] TASK-08: Create NotificationsPage
   - **Goal**: Implement the `/notifications` page listing all notifications with per-item mark-as-read
   - **Details**:
     - Create `packages/client/src/pages/NotificationsPage.tsx`

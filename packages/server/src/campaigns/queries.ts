@@ -959,6 +959,18 @@ export interface AuditLogEntry {
   payload: Record<string, unknown>
 }
 
+export async function markNotificationRead(
+  pool: Pool,
+  id: string,
+  userId: string
+): Promise<boolean> {
+  const result = await pool.query(
+    `UPDATE notifications SET read = true WHERE id = $1 AND user_id = $2`,
+    [id, userId]
+  )
+  return (result.rowCount ?? 0) > 0
+}
+
 export async function insertAuditLog(pool: Pool, entry: AuditLogEntry): Promise<void> {
   await pool.query(
     `INSERT INTO audit_log (event_type, campaign_id, milestone_id, actor_id, payload)

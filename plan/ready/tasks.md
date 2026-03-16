@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Server — markNotificationRead query + PATCH /:id/read endpoint
+- [x] TASK-01: Server — markNotificationRead query + PATCH /:id/read endpoint
   - **Goal**: Add the server-side notification read endpoint and its backing query
   - **Details**:
     - In `packages/server/src/campaigns/queries.ts`, add `markNotificationRead(pool: Pool, id: string, userId: string): Promise<void>` — runs `UPDATE notifications SET read = true WHERE id = $1 AND user_id = $2`

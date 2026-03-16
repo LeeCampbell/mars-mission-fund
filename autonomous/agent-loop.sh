@@ -145,6 +145,8 @@ determine_state() {
 
   if [ -d "plan/done" ]; then
     echo "done"
+  elif [ -f "plan/.plan-archived" ]; then
+    echo "await-ci"
   elif [ -f "plan/ready/tasks.md" ]; then
     if grep -q '^\- \[ \]' "plan/ready/tasks.md"; then
       echo "execute-tasks"
@@ -169,17 +171,6 @@ set_state() {
 
 clear_state() {
   rm -f plan/.state
-}
-
-archive_plan() {
-  # Remove plan files from the branch — they're preserved in git history.
-  if git ls-files --error-unmatch plan/ &>/dev/null; then
-    git rm -r plan/
-    git commit -m "chore: remove plan files after PR merged"
-    git push origin "$BRANCH" --force-with-lease
-  fi
-  # Clean up any untracked plan files left on disk
-  rm -rf plan/
 }
 
 # Resolve PR number from plan file or by querying upstream.
@@ -378,7 +369,18 @@ Branch: ${BRANCH}"
   await-ci)
     set_state "await-ci"
 
-    PR_NUMBER=$(cat plan/.pr-number)
+    # Read PR number — prefer .pr-number, fall back to .plan-archived (phase 2)
+    if [ -f "plan/.pr-number" ]; then
+      PR_NUMBER=$(cat plan/.pr-number)
+    elif [ -f "plan/.plan-archived" ]; then
+      PR_NUMBER=$(cat plan/.plan-archived)
+    else
+      PR_NUMBER=$(resolve_pr_number)
+    fi
+    if [ -z "$PR_NUMBER" ]; then
+      echo "!!! No PR number found — cannot monitor CI"
+      exit 2
+    fi
     echo ">>> Monitoring CI for PR #${PR_NUMBER}"
 
     CI_STATUS=$(poll_ci_status "$PR_NUMBER")
@@ -390,13 +392,29 @@ Branch: ${BRANCH}"
         exit 1
         ;;
       passing)
+        if [ ! -f "plan/.plan-archived" ]; then
+          # Phase 1: archive plan files, push, wait for 2nd CI
+          echo ">>> CI passed — removing plan files before merge"
+          if git ls-files --error-unmatch plan/ &>/dev/null 2>&1; then
+            git rm -r plan/
+            git commit -m "chore: remove plan files after CI passed"
+            git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE"
+          fi
+          mkdir -p plan
+          echo "$PR_NUMBER" > plan/.plan-archived
+          clear_state
+          echo ">>> Plan archived, waiting for CI to re-run"
+          exit 1
+        fi
+
+        # Phase 2: CI green on clean branch — merge
         echo ">>> CI passed! Merging PR #${PR_NUMBER}"
         GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr merge "$PR_NUMBER" \
           --repo "$UPSTREAM_REPO" --squash 2>&1 | tee -a "$LOG_FILE" || {
           echo "!!! Merge failed for PR #${PR_NUMBER}"
           exit 2
         }
-        archive_plan
+        rm -rf plan/
         echo ">>> Issue #${ISSUE_NUMBER} complete — PR merged"
         exit 0
         ;;

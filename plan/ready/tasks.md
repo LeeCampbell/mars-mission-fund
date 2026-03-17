@@ -84,7 +84,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/pages/AdminCampaignsPage.test.tsx` — all tests pass; `npx tsc -b --noEmit` clean
   - **Brief ref**: Frontend — pages (AdminCampaignsPage); Cancellation Approval section
 
-- [ ] TASK-08: Header.tsx — role-based nav links + NotificationBell
+- [x] TASK-08: Header.tsx — role-based nav links + NotificationBell
   - **Goal**: Add reviewer/admin nav links and the `NotificationBell` to `Header.tsx` (desktop + mobile)
   - **Details**:
     1. Add `isReviewer` check (`user?.role === 'Reviewer'`); when true add "Review" NavLink (`/review`) in desktop nav and mobile menu

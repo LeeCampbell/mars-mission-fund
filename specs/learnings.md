@@ -106,6 +106,16 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 - Demo accounts use known passwords (e.g. `password123`) stored as bcrypt hashes in seed SQL.
 - These are workshop-only; never use known seed passwords in a production system.
 
+## Issue #115: E2E DB state persists between run-e2e.sh invocations
+
+- `dbmate down` in the run-e2e.sh cleanup rolls back only the MOST RECENTLY applied migration, not all migrations. Data changes (e.g. claimed campaigns) persist across separate `./scripts/run-e2e.sh` invocations.
+- Resolution: run `dbmate drop && dbmate create` before running the full E2E suite if you suspect dirty DB state from a previous session. Within a single `run-e2e.sh` call, tests share the same DB state — tests that mutate data (e.g. claim a campaign) affect later tests in the same run.
+
+## Issue #115: E2E notification mock callCount ordering
+
+- The NotificationBell fetches `/v1/notifications` immediately after login (on the home page). If you mock notifications with a `callCount` counter, the first call is consumed by the bell, not the page you navigate to.
+- Resolution: use a flag that flips after the relevant mutation endpoint is called, rather than a call counter.
+
 ## Issue #111: Playwright browser binary missing in workspace environment
 
 - If `npm run test:e2e` fails with "Executable doesn't exist" after a Playwright version bump, run `npx playwright install chromium` to download the new browser binaries.

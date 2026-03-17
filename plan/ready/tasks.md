@@ -59,7 +59,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/pages/ReviewDetailPage.test.tsx` — all tests pass
   - **Brief ref**: Frontend — pages (ReviewDetailPage)
 
-- [ ] TASK-06: NotificationsPage + tests
+- [x] TASK-06: NotificationsPage + tests
   - **Goal**: Create the notifications page with mark-as-read functionality
   - **Details**:
     1. Create `packages/client/src/pages/NotificationsPage.tsx`: authenticated; uses `useNotifications()`; renders a list with type badge, title, message, created date; unread rows visually distinguished (e.g. `font-semibold` or bg tint); "Mark as read" button per row calling `useMutation` → `markNotificationAsRead(id)`, on success `invalidateQueries(['notifications'])`; empty state "No notifications."

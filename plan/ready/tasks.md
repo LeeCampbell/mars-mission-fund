@@ -37,7 +37,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes
   - **Brief ref**: Frontend — hooks
 
-- [ ] TASK-04: NotificationBell component + tests
+- [x] TASK-04: NotificationBell component + tests
   - **Goal**: Create the `NotificationBell` component and its component tests
   - **Details**:
     1. Create `packages/client/src/components/NotificationBell.tsx`: authenticated-only, uses `useNotifications()`, renders a `<button>` with inline SVG bell icon, absolute-positioned red badge with unread count (hidden when 0), clicking navigates to `/notifications` via `useNavigate`

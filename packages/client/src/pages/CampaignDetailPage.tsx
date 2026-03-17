@@ -12,7 +12,7 @@ import { CampaignUpdatesSection } from '../components/campaigns/CampaignUpdatesS
 import { TeamSection } from '../components/campaigns/TeamSection'
 import { ReviewActionsPanel } from '../components/campaigns/ReviewActionsPanel'
 import { useAuthContext } from '../context/AuthContext'
-import { postCampaignUpdate, submitMilestoneEvidence } from '../api/campaigns'
+import { postCampaignUpdate, submitMilestoneEvidence, approveCancellation } from '../api/campaigns'
 import type { CampaignStatus, Milestone } from '@mmf/shared'
 
 type BadgeVariant = 'funded' | 'active' | 'new'
@@ -227,6 +227,52 @@ const milestoneTitleStyle: React.CSSProperties = {
   fontWeight: 600,
   color: 'var(--color-text-primary)',
   margin: '0 0 var(--space-1)',
+}
+
+const cancellationPanelStyle: React.CSSProperties = {
+  border: '1px solid var(--color-border-subtle)',
+  borderRadius: 'var(--radius-card)',
+  padding: 'var(--space-6)',
+  background: 'var(--color-bg-card)',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 'var(--space-4)',
+}
+
+const cancellationDateStyle: React.CSSProperties = {
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-body-size)',
+  color: 'var(--color-text-secondary)',
+  margin: 0,
+}
+
+function ApproveCancellationPanel({
+  campaignId,
+  requestedAt,
+}: {
+  campaignId: string
+  requestedAt: Date
+}) {
+  const queryClient = useQueryClient()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: () => approveCancellation(campaignId),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['campaign', campaignId] })
+    },
+  })
+
+  return (
+    <div style={cancellationPanelStyle} aria-label="Approve Cancellation">
+      <h2 style={creatorPanelHeadingStyle}>Approve Cancellation</h2>
+      <p style={cancellationDateStyle}>
+        Cancellation requested on {requestedAt.toLocaleDateString()}
+      </p>
+      <Button variant="primary" onClick={() => mutate()} disabled={isPending || isSuccess}>
+        {isPending ? 'Approving…' : isSuccess ? 'Approved' : 'Approve Cancellation'}
+      </Button>
+    </div>
+  )
 }
 
 function PostUpdatePanel({ campaignId }: { campaignId: string }) {
@@ -498,6 +544,15 @@ export function CampaignDetailPage() {
               {user?.id === campaign.creatorId && campaign.status === 'Settlement' && (
                 <div style={sectionSpacingStyle}>
                   <SubmitEvidencePanel campaignId={campaign.id} milestones={campaign.milestones} />
+                </div>
+              )}
+
+              {user?.role === 'Administrator' && campaign.cancellationRequestedAt != null && (
+                <div style={sectionSpacingStyle}>
+                  <ApproveCancellationPanel
+                    campaignId={campaign.id}
+                    requestedAt={campaign.cancellationRequestedAt}
+                  />
                 </div>
               )}
             </div>

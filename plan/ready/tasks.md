@@ -70,7 +70,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/pages/NotificationsPage.test.tsx` — all tests pass
   - **Brief ref**: Frontend — pages (NotificationsPage)
 
-- [ ] TASK-07: AdminCampaignsPage + CampaignDetailPage cancellation panel + tests
+- [x] TASK-07: AdminCampaignsPage + CampaignDetailPage cancellation panel + tests
   - **Goal**: Create the admin campaigns page (milestone verification only) and add the cancellation approval panel to `CampaignDetailPage`
   - **Details**:
     1. Create `packages/client/src/pages/AdminCampaignsPage.tsx`: protected `requireAdmin`; fetches Settlement campaigns via `fetchCampaignsByStatus('Settlement')`; for each campaign shows title, link to `/campaigns/:id`, list of milestones with `status === 'Submitted'`; per submitted milestone: evidence description, evidence URL, Verify button (`useMutation` → `verifyMilestone`), Return-with-feedback form (textarea + Return button, `useMutation` → `returnMilestone(campaignId, milestoneId, feedback)`); on success `invalidateQueries(['admin-settlement-campaigns'])`; loading/error states

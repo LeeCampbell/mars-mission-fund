@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Backend — shared schema + server queries + PATCH notification endpoint
+- [x] TASK-01: Backend — shared schema + server queries + PATCH notification endpoint
   - **Goal**: Add `cancellationRequestedAt` to the shared Zod schema, expose it in the `getCampaignById` SQL, add `markNotificationAsRead` DB query, and wire up `PATCH /v1/notifications/:id/read`
   - **Details**:
     1. In `packages/shared/src/campaign.ts`, add `cancellationRequestedAt: z.coerce.date().nullable().optional()` to `CampaignDetailSchema`

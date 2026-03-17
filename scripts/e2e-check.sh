@@ -7,8 +7,8 @@ set -euo pipefail
 cleanup() {
   echo ""
   echo "Tearing down…"
-  kill $(jobs -p) 2>/dev/null || true
-  wait 2>/dev/null || true
+  [ -n "$SERVER_PID" ] && kill "$SERVER_PID" 2>/dev/null || true
+  wait "$SERVER_PID" 2>/dev/null || true
   docker compose -f docker-compose.dev.yml down
   echo "Done."
 }
@@ -39,8 +39,11 @@ docker run --rm --network host \
 # JWT secret for local E2E testing
 export JWT_SECRET="local-dev-jwt-secret"
 
-# Start the backend dev server in the background
-npm run dev:server &
+# Start server directly (not via npm) so kill sends SIGTERM to the node
+# process, triggering graceful shutdown and DB pool cleanup.
+SERVER_PID=""
+npx tsx packages/server/src/index.ts &
+SERVER_PID=$!
 
 # Wait for backend to accept connections
 echo "Waiting for backend…"

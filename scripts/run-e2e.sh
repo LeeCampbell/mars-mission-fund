@@ -26,7 +26,9 @@ trap cleanup EXIT
 echo ">>> Migrating database..."
 dbmate -d packages/server/db/migrations -s packages/server/db/schema.sql up
 
-npm run dev:server &
+# Start server directly (not via npm) so kill sends SIGTERM to the node
+# process, triggering graceful shutdown and DB pool cleanup.
+npx tsx packages/server/src/index.ts &
 SERVER_PID=$!
 
 echo ">>> Waiting for backend..."

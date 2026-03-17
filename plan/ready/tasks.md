@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/shared` and `npx tsc --noEmit -p packages/server/tsconfig.json` pass with no errors
   - **Brief ref**: Backend — new endpoint; Backend — schema extension
 
-- [ ] TASK-02: Client API layer — update notifications.ts and campaigns.ts
+- [x] TASK-02: Client API layer — update notifications.ts and campaigns.ts
   - **Goal**: Wire up all new client-side API calls and remove the duplicate `Notification` inline interface
   - **Details**:
     1. In `packages/client/src/api/notifications.ts`: import `Notification` from `@mmf/shared`; remove the local inline `Notification` interface; add `markNotificationAsRead(id: string): Promise<void>` calling `PATCH /v1/notifications/:id/read`

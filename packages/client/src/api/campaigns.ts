@@ -2,6 +2,7 @@ import { CampaignSummarySchema, CampaignDetailSchema } from '@mmf/shared'
 import type {
   CampaignSummary,
   CampaignDetail,
+  CampaignStatus,
   Milestone,
   StretchGoal,
   TeamMember,
@@ -25,6 +26,7 @@ function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
 export type {
   CampaignSummary,
   CampaignDetail,
+  CampaignStatus,
   Milestone,
   StretchGoal,
   TeamMember,
@@ -150,4 +152,38 @@ export async function submitMilestoneEvidence(
     body: JSON.stringify(data),
   })
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function verifyMilestone(campaignId: string, milestoneId: string): Promise<void> {
+  const response = await authedFetch(
+    `/v1/campaigns/${campaignId}/milestones/${milestoneId}/verify`,
+    { method: 'POST' }
+  )
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function returnMilestone(
+  campaignId: string,
+  milestoneId: string,
+  feedback: string
+): Promise<void> {
+  const response = await authedFetch(
+    `/v1/campaigns/${campaignId}/milestones/${milestoneId}/return`,
+    { method: 'POST', body: JSON.stringify({ feedback }) }
+  )
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function approveCancellation(campaignId: string): Promise<void> {
+  const response = await authedFetch(`/v1/campaigns/${campaignId}/approve-cancel`, {
+    method: 'POST',
+  })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function fetchCampaignsByStatus(status: CampaignStatus): Promise<CampaignSummary[]> {
+  const response = await authedFetch(`/v1/campaigns?status=${encodeURIComponent(status)}`)
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const json = await response.json()
+  return (json.data as unknown[]).map((item) => CampaignSummarySchema.parse(item))
 }

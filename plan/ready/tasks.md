@@ -33,7 +33,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes; route is visible in the file
   - **Brief ref**: Server → step 3
 
-- [ ] TASK-04: Add client API functions
+- [x] TASK-04: Add client API functions
   - **Goal**: Give the React layer typed wrappers for the new and existing endpoints
   - **Details**:
     - In `packages/client/src/api/notifications.ts`: add `markNotificationRead(id: string)` → `PATCH /v1/notifications/${id}/read`

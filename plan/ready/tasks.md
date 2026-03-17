@@ -131,7 +131,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; `npx tsc -b --noEmit` passes; `npm run lint` passes
   - **Brief ref**: Routing & Navigation section
 
-- [ ] TASK-10: Write E2E tests
+- [x] TASK-10: Write E2E tests
   - **Goal**: Create Playwright E2E tests covering the reviewer, admin, and notification flows
   - **Details**: Create or update files in `e2e/`. Follow patterns in existing tests (`e2e/auth.spec.ts`, `e2e/campaigns.spec.ts`, `e2e/review-pipeline.spec.ts`). Use Playwright Test API.
     - **Update `e2e/review-pipeline.spec.ts`**: Replace all `/review-queue` URL references with `/review`; update any step that previously expected redirect to `/campaigns/:id` after claim to now expect `/review/:id`

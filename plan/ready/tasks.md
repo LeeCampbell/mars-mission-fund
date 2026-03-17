@@ -62,7 +62,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/pages/ReviewDetailPage.test.tsx` passes; `npx tsc -b --noEmit` passes
   - **Brief ref**: Client Pages & Components → step 5
 
-- [ ] TASK-06: Create AdminActionsPanel
+- [x] TASK-06: Create AdminActionsPanel
   - **Goal**: Admin-only panel on campaign detail showing milestone evidence review and cancellation approval
   - **Details**:
     - Create `packages/client/src/components/campaigns/AdminActionsPanel.tsx`

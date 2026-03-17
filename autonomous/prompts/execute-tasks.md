@@ -73,6 +73,11 @@ To run a specific test file:
 ./scripts/run-e2e.sh e2e/auth.spec.ts
 ```
 
+**Important**: Set `timeout: 600000` on the Bash tool call (10 minutes). If the
+timeout is too short, Claude Code will auto-background the command and you will
+not be able to read the output. Do NOT pipe the output through `tail` — read the
+full output directly so you can see all test results.
+
 ### Step 4: Verify
 
 Run `./scripts/ci-check.sh` before committing — this includes type-checking, linting, **Prettier formatting**, and tests. Every check must pass.

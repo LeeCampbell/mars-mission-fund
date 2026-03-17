@@ -12,7 +12,13 @@ cleanup() {
   [ -n "$SERVER_PID" ] && kill "$SERVER_PID" 2>/dev/null || true
   wait "$SERVER_PID" 2>/dev/null || true
   echo ">>> Tearing down database..."
-  dbmate -d packages/server/db/migrations -s packages/server/db/schema.sql down
+  if timeout 30 dbmate -d packages/server/db/migrations -s packages/server/db/schema.sql down 2>&1; then
+    echo ">>> dbmate down succeeded."
+  else
+    echo ">>> dbmate down failed or timed out — dropping database to ensure clean state"
+    dbmate -d packages/server/db/migrations -s packages/server/db/schema.sql drop 2>/dev/null || true
+    dbmate -d packages/server/db/migrations -s packages/server/db/schema.sql create 2>/dev/null || true
+  fi
   echo ">>> E2E teardown complete."
 }
 trap cleanup EXIT

@@ -97,7 +97,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; inspect Header renders in test or build
   - **Brief ref**: Frontend — Header.tsx
 
-- [ ] TASK-09: App.tsx routing + ReviewQueuePage post-claim nav
+- [x] TASK-09: App.tsx routing + ReviewQueuePage post-claim nav
   - **Goal**: Rename `/review-queue` to `/review`, add all new routes, and fix post-claim navigation
   - **Details**:
     1. In `packages/client/src/App.tsx`: rename `/review-queue` → `/review` for `ReviewQueuePage`; add reviewer-protected route `/review/:id` → `ReviewDetailPage`; add admin-protected route `/admin/campaigns` → `AdminCampaignsPage`; add authenticated route `/notifications` → `NotificationsPage`; import all new pages

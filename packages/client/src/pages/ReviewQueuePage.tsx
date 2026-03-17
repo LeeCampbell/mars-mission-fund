@@ -112,7 +112,7 @@ function CampaignRow({ campaign }: { campaign: CampaignSummary }) {
     mutationFn: () => claimCampaign(campaign.id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['review-queue'] })
-      void navigate(`/campaigns/${campaign.id}`)
+      void navigate(`/review/${campaign.id}`)
     },
     onError: () => {
       setClaimError('Failed to claim campaign. Please try again.')

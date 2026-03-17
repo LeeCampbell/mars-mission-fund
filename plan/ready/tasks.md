@@ -80,7 +80,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/components/campaigns/AdminActionsPanel.test.tsx` passes; `npx tsc -b --noEmit` passes
   - **Brief ref**: Client Pages & Components → step 6
 
-- [ ] TASK-07: Create NotificationBell
+- [x] TASK-07: Create NotificationBell
   - **Goal**: Header bell icon with unread count badge, navigates to `/notifications` on click
   - **Details**:
     - Create `packages/client/src/components/NotificationBell.tsx`

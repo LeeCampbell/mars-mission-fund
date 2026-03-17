@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; functions are exported and importable
   - **Brief ref**: Client API section
 
-- [ ] TASK-05: Create ReviewDetailPage
+- [x] TASK-05: Create ReviewDetailPage
   - **Goal**: Reviewer-scoped campaign detail page at `/review/:id` with approve/reject panel
   - **Details**:
     - Create `packages/client/src/pages/ReviewDetailPage.tsx`

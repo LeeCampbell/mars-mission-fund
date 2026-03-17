@@ -14,7 +14,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes; grep confirms new columns and function in the file
   - **Brief ref**: Server → step 1
 
-- [ ] TASK-02: Update shared CampaignDetailSchema
+- [x] TASK-02: Update shared CampaignDetailSchema
   - **Goal**: Add `cancellationRequestedAt` to the shared campaign schema so client and server share the type
   - **Details**: In `CampaignDetailSchema`, add `cancellationRequestedAt: z.coerce.date().nullable().optional()`. `MilestoneSchema` already has evidence fields as optional — confirm they are present and add them if missing.
   - **Files**: `packages/shared/src/campaign.ts`

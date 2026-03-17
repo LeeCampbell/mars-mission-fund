@@ -95,6 +95,7 @@ export const CampaignDetailSchema = CampaignSummarySchema.extend({
   updatedAt: z.coerce.date(),
   creatorId: z.string().uuid().nullable(),
   reviewerId: z.string().uuid().nullable(),
+  cancellationRequestedAt: z.coerce.date().nullable().optional(),
   milestones: z.array(MilestoneSchema),
   stretchGoals: z.array(StretchGoalSchema),
   teamMembers: z.array(TeamMemberSchema),

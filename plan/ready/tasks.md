@@ -96,7 +96,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/components/NotificationBell.test.tsx` passes; `npx tsc -b --noEmit` passes
   - **Brief ref**: Client Pages & Components → step 7
 
-- [ ] TASK-08: Create NotificationsPage
+- [x] TASK-08: Create NotificationsPage
   - **Goal**: `/notifications` page listing all notifications with per-item mark-as-read
   - **Details**:
     - Create `packages/client/src/pages/NotificationsPage.tsx`

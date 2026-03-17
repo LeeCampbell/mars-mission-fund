@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router'
 import { Logo } from './ui/Logo'
-import { Badge } from './ui/Badge'
 import { useAuthContext } from '../context/AuthContext'
 import { useLogout } from '../hooks/useAuth'
+import { NotificationBell } from './NotificationBell'
 
 const headerStyle: React.CSSProperties = {
   position: 'sticky',
@@ -246,6 +246,34 @@ export function Header() {
             )}
             {isAuthenticated && (
               <>
+                {user?.role === 'Reviewer' && (
+                  <li>
+                    <NavLink
+                      to="/review"
+                      className="mmf-nav-link"
+                      style={({ isActive }) => ({
+                        ...navLinkBase,
+                        ...(isActive ? navLinkActiveStyle : {}),
+                      })}
+                    >
+                      Review
+                    </NavLink>
+                  </li>
+                )}
+                {isAdmin && (
+                  <li>
+                    <NavLink
+                      to="/admin/users"
+                      className="mmf-nav-link"
+                      style={({ isActive }) => ({
+                        ...navLinkBase,
+                        ...(isActive ? navLinkActiveStyle : {}),
+                      })}
+                    >
+                      Admin
+                    </NavLink>
+                  </li>
+                )}
                 <li>
                   <NavLink
                     to="/profile"
@@ -258,11 +286,9 @@ export function Header() {
                     {user?.displayName ?? 'Profile'}
                   </NavLink>
                 </li>
-                {isAdmin && (
-                  <li>
-                    <Badge variant="accent">Admin</Badge>
-                  </li>
-                )}
+                <li>
+                  <NotificationBell />
+                </li>
                 <li>
                   <button
                     className="mmf-nav-link"
@@ -328,6 +354,36 @@ export function Header() {
           )}
           {isAuthenticated && (
             <>
+              {user?.role === 'Reviewer' && (
+                <li>
+                  <NavLink
+                    to="/review"
+                    className="mmf-mobile-nav-link"
+                    style={({ isActive }) => ({
+                      ...mobileNavLinkBase,
+                      ...(isActive ? mobileNavLinkActiveStyle : {}),
+                    })}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Review
+                  </NavLink>
+                </li>
+              )}
+              {isAdmin && (
+                <li>
+                  <NavLink
+                    to="/admin/users"
+                    className="mmf-mobile-nav-link"
+                    style={({ isActive }) => ({
+                      ...mobileNavLinkBase,
+                      ...(isActive ? mobileNavLinkActiveStyle : {}),
+                    })}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Admin
+                  </NavLink>
+                </li>
+              )}
               <li>
                 <NavLink
                   to="/profile"
@@ -341,16 +397,6 @@ export function Header() {
                   {user?.displayName ?? 'Profile'}
                 </NavLink>
               </li>
-              {isAdmin && (
-                <li
-                  style={{
-                    padding: '12px 0',
-                    borderBottom: '1px solid var(--color-border-subtle)',
-                  }}
-                >
-                  <Badge variant="accent">Admin</Badge>
-                </li>
-              )}
               <li>
                 <button
                   className="mmf-mobile-nav-link"

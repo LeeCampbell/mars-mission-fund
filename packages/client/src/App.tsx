@@ -29,6 +29,12 @@ const AdminUsersPage = React.lazy(() =>
 const ReviewQueuePage = React.lazy(() =>
   import('./pages/ReviewQueuePage').then((m) => ({ default: m.ReviewQueuePage }))
 )
+const ReviewDetailPage = React.lazy(() =>
+  import('./pages/ReviewDetailPage').then((m) => ({ default: m.ReviewDetailPage }))
+)
+const NotificationsPage = React.lazy(() =>
+  import('./pages/NotificationsPage').then((m) => ({ default: m.NotificationsPage }))
+)
 const DashboardPage = React.lazy(() =>
   import('./pages/DashboardPage').then((m) => ({ default: m.DashboardPage }))
 )
@@ -58,8 +64,12 @@ export default function App() {
             <Route element={<ProtectedRoute requireAdmin />}>
               <Route path="/admin/users" element={<AdminUsersPage />} />
             </Route>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/notifications" element={<NotificationsPage />} />
+            </Route>
             <Route element={<ProtectedRoute requireReviewer />}>
-              <Route path="/review-queue" element={<ReviewQueuePage />} />
+              <Route path="/review" element={<ReviewQueuePage />} />
+              <Route path="/review/:id" element={<ReviewDetailPage />} />
             </Route>
             <Route element={<ProtectedRoute requireCreator />}>
               <Route path="/dashboard" element={<DashboardPage />} />

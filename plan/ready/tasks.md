@@ -114,7 +114,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/pages/NotificationsPage.test.tsx` passes; `npx tsc -b --noEmit` passes
   - **Brief ref**: Client Pages & Components → step 8
 
-- [ ] TASK-09: Wire up routes, navigation, and page integrations
+- [x] TASK-09: Wire up routes, navigation, and page integrations
   - **Goal**: Connect all new pages/components into the app shell; update existing pages
   - **Details**:
     - **`App.tsx`**:

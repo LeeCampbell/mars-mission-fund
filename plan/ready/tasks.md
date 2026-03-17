@@ -21,7 +21,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/shared` passes; `npx tsc -b --noEmit` passes
   - **Brief ref**: Server → step 2
 
-- [ ] TASK-03: Add PATCH /v1/notifications/:id/read endpoint
+- [x] TASK-03: Add PATCH /v1/notifications/:id/read endpoint
   - **Goal**: Expose the mark-as-read action via REST so the client can call it
   - **Details**:
     - Import and call `markNotificationRead` (from TASK-01) inside the handler

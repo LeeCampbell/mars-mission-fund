@@ -29,7 +29,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; no TypeScript errors in client
   - **Brief ref**: Frontend — API layer; fetchCampaigns API
 
-- [ ] TASK-03: Client hook — useNotifications with 30-second polling
+- [x] TASK-03: Client hook — useNotifications with 30-second polling
   - **Goal**: Create a TanStack Query hook wrapping `fetchNotifications` with a 30-second polling interval
   - **Details**: Create `packages/client/src/hooks/useNotifications.ts` exporting `useNotifications()` that uses `useQuery` with `queryKey: ['notifications']`, `queryFn: fetchNotifications`, `refetchInterval: 30_000`
   - **Files**:

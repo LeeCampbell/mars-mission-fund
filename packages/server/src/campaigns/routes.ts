@@ -425,7 +425,7 @@ export function createCampaignRouter(pool: Pool): Router {
 
       const result = await launchCampaign(pool, parsed.data.id)
 
-      writeAuditEvent(pool, {
+      await writeAuditEvent(pool, {
         action: 'campaign.launch',
         actorId: user.id,
         actorType: 'Creator',
@@ -704,7 +704,7 @@ export function createCampaignRouter(pool: Pool): Router {
 
       const result = await postCampaignUpdate(pool, parsed.data.id, bodyParsed.data.body)
 
-      writeAuditEvent(pool, {
+      await writeAuditEvent(pool, {
         action: 'campaign.update_posted',
         actorId: user.id,
         actorType: 'Creator',
@@ -756,7 +756,7 @@ export function createCampaignRouter(pool: Pool): Router {
         campaign.currentAmountUsd < campaign.minFundingTargetUsd
       ) {
         await enforceDeadline(pool, parsed.data.id)
-        writeAuditEvent(pool, {
+        await writeAuditEvent(pool, {
           action: 'campaign.deadline_expired',
           actorId: user.id,
           resourceType: 'campaign',
@@ -785,7 +785,7 @@ export function createCampaignRouter(pool: Pool): Router {
       )
 
       if (oldStatus === 'Live' && result.status === 'Funded') {
-        writeAuditEvent(pool, {
+        await writeAuditEvent(pool, {
           action: 'campaign.status_changed',
           actorId: user.id,
           resourceType: 'campaign',
@@ -796,7 +796,7 @@ export function createCampaignRouter(pool: Pool): Router {
         })
       }
 
-      writeAuditEvent(pool, {
+      await writeAuditEvent(pool, {
         action: 'campaign.contribution_received',
         actorId: user.id,
         resourceType: 'campaign',
@@ -883,7 +883,7 @@ export function createCampaignRouter(pool: Pool): Router {
       if (campaign.contributorCount === 0) {
         // Branch A: no contributors — cancel immediately
         await cancelCampaign(pool, parsed.data.id)
-        writeAuditEvent(pool, {
+        await writeAuditEvent(pool, {
           action: 'campaign.cancelled',
           actorId: user.id,
           actorType: 'Creator',
@@ -895,7 +895,7 @@ export function createCampaignRouter(pool: Pool): Router {
       } else {
         // Branch B: has contributors — request cancellation
         await requestCancellation(pool, parsed.data.id)
-        writeAuditEvent(pool, {
+        await writeAuditEvent(pool, {
           action: 'campaign.cancellation_requested',
           actorId: user.id,
           actorType: 'Creator',
@@ -936,7 +936,7 @@ export function createCampaignRouter(pool: Pool): Router {
 
       await approveCancellation(pool, parsed.data.id)
 
-      writeAuditEvent(pool, {
+      await writeAuditEvent(pool, {
         action: 'campaign.cancellation_approved',
         actorId: user.id,
         actorType: 'Administrator',
@@ -981,7 +981,7 @@ export function createCampaignRouter(pool: Pool): Router {
       if (campaign.currentAmountUsd < campaign.minFundingTargetUsd) {
         // Branch A: underfunded → fail the campaign
         await enforceDeadline(pool, parsed.data.id)
-        writeAuditEvent(pool, {
+        await writeAuditEvent(pool, {
           action: 'campaign.deadline_expired',
           actorId: user.id,
           actorType: 'Administrator',

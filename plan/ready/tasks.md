@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Update server campaign queries
+- [x] TASK-01: Update server campaign queries
   - **Goal**: Expose missing DB columns and add `markNotificationRead` query
   - **Details**:
     - In `getCampaignById` SELECT: add `cancellation_requested_at AS "cancellationRequestedAt"` to the campaign columns

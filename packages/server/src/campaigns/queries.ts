@@ -165,7 +165,8 @@ export async function getCampaignById(pool: Pool, id: string): Promise<CampaignD
       launched_at AS "launchedAt",
       updated_at AS "updatedAt",
       creator_id AS "creatorId",
-      reviewer_id AS "reviewerId"
+      reviewer_id AS "reviewerId",
+      cancellation_requested_at AS "cancellationRequestedAt"
     FROM campaigns
     WHERE id = $1
   `
@@ -185,7 +186,10 @@ export async function getCampaignById(pool: Pool, id: string): Promise<CampaignD
       funding_pct AS "fundingPercentage",
       verification_criteria AS "verificationCriteria",
       status,
-      sort_order AS "sortOrder"
+      sort_order AS "sortOrder",
+      evidence_description AS "evidenceDescription",
+      evidence_url AS "evidenceUrl",
+      evidence_submitted_at AS "evidenceSubmittedAt"
     FROM campaign_milestones
     WHERE campaign_id = $1
     ORDER BY sort_order`,
@@ -726,6 +730,18 @@ export async function getNotificationsForUser(
   `
   const result = await pool.query<NotificationRow>(sql, [userId])
   return result.rows
+}
+
+export async function markNotificationRead(
+  pool: Pool,
+  id: string,
+  userId: string
+): Promise<{ id: string } | null> {
+  const result = await pool.query<{ id: string }>(
+    `UPDATE notifications SET read = true WHERE id = $1 AND user_id = $2 RETURNING id`,
+    [id, userId]
+  )
+  return result.rows[0] ?? null
 }
 
 export async function getCampaignState(pool: Pool, id: string): Promise<CampaignStateRow | null> {

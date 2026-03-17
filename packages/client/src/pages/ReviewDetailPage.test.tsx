@@ -152,7 +152,7 @@ describe('ReviewDetailPage', () => {
 
     const backLink = screen.getByRole('link', { name: 'Back to Review Queue' })
     expect(backLink).toBeInTheDocument()
-    expect(backLink).toHaveAttribute('href', '/review')
+    expect(backLink).toHaveAttribute('href', '/review-queue')
   })
 
   it('renders ReviewActionsPanel for the assigned reviewer', () => {

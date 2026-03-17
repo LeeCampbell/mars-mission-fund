@@ -365,7 +365,7 @@ export function Header() {
                 {isReviewer && (
                   <li>
                     <NavLink
-                      to="/review"
+                      to="/review-queue"
                       className="mmf-nav-link"
                       style={({ isActive }) => ({
                         ...navLinkBase,
@@ -478,7 +478,7 @@ export function Header() {
               {isReviewer && (
                 <li>
                   <NavLink
-                    to="/review"
+                    to="/review-queue"
                     className="mmf-mobile-nav-link"
                     style={({ isActive }) => ({
                       ...mobileNavLinkBase,

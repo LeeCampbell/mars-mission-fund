@@ -68,7 +68,7 @@ export default function App() {
               <Route path="/admin/users" element={<AdminUsersPage />} />
             </Route>
             <Route element={<ProtectedRoute requireReviewer />}>
-              <Route path="/review" element={<ReviewQueuePage />} />
+              <Route path="/review-queue" element={<ReviewQueuePage />} />
               <Route path="/review/:id" element={<ReviewDetailPage />} />
             </Route>
             <Route element={<ProtectedRoute requireAdmin />}>

@@ -161,7 +161,7 @@ export function ReviewDetailPage() {
   return (
     <div style={pageStyle}>
       <div style={contentStyle}>
-        <Link to="/review" style={backLinkStyle} aria-label="Back to Review Queue">
+        <Link to="/review-queue" style={backLinkStyle} aria-label="Back to Review Queue">
           ← Back to Review Queue
         </Link>
 

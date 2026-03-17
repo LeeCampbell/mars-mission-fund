@@ -48,7 +48,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/components/NotificationBell.test.tsx` — all tests pass
   - **Brief ref**: Frontend — components
 
-- [ ] TASK-05: ReviewDetailPage + tests
+- [x] TASK-05: ReviewDetailPage + tests
   - **Goal**: Create the reviewer campaign detail page that shows full proposal content plus `ReviewActionsPanel`
   - **Details**:
     1. Create `packages/client/src/pages/ReviewDetailPage.tsx`: protected `requireReviewer`; uses `useParams` for campaign ID; fetches via `useCampaign(id)`; renders full proposal (description, team, milestones read-only, stretch goals, alignment statement); renders `ReviewActionsPanel`; renders loading/error states consistent with other pages

@@ -233,6 +233,7 @@ while read -r num; do
 done <<< "$SORTED_ISSUES"
 
 # ── Process each issue ───────────────────────────────────────
+CONSECUTIVE_FAILURES=0
 while read -r ISSUE_NUMBER; do
   ISSUE_TITLE=$(echo "$ISSUES_JSON" | jq -r ".[] | select(.number == ${ISSUE_NUMBER}) | .title")
 
@@ -258,16 +259,6 @@ while read -r ISSUE_NUMBER; do
     continue
   fi
 
-  # Linear chaining: each issue branches off the previous issue's branch.
-  # This prevents merge conflicts between sequential PRs, since each PR
-  # includes all prior PRs' changes. The first issue branches from main.
-  if [ -n "${PREV_BRANCH:-}" ]; then
-    BASE_BRANCH="$PREV_BRANCH"
-    echo ">>> Chaining on previous branch: ${BASE_BRANCH}"
-  else
-    BASE_BRANCH="main"
-  fi
-
   # Compute branch name
   SLUG=$(echo "$ISSUE_TITLE" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]' '-' | sed 's/^-//;s/-$//' | head -c 40)
   BRANCH="feat/issue-${ISSUE_NUMBER}-${SLUG}"
@@ -278,8 +269,6 @@ while read -r ISSUE_NUMBER; do
   EXISTING_PR=$(gh pr list --repo "${UPSTREAM_REPO}" --head "${FORK_OWNER}:${BRANCH}" --state open --json url --jq '.[0].url // empty' 2>/dev/null || true)
   if [ -n "$EXISTING_PR" ]; then
     echo ">>> Skipping #${ISSUE_NUMBER} — PR already exists: ${EXISTING_PR}"
-    # Still record for linear chaining so the next issue branches from this one
-    PREV_BRANCH="$BRANCH"
     continue
   fi
 
@@ -287,12 +276,11 @@ while read -r ISSUE_NUMBER; do
   export MILESTONE_NUMBER
   export ISSUE_NUMBER
   export ISSUE_TITLE
-  export BASE_BRANCH
   export BRANCH
   RUN_ID=$(date +%Y%m%d-%H%M%S)
   export CONTAINER_NAME="agent-iss${ISSUE_NUMBER}-${RUN_ID}"
 
-  echo ">>> Launching container ${CONTAINER_NAME} for issue #${ISSUE_NUMBER} (base: ${BASE_BRANCH})"
+  echo ">>> Launching container ${CONTAINER_NAME} for issue #${ISSUE_NUMBER}"
 
   # Ensure log directory exists for this issue
   DOCKER_LOG_DIR="$REPO_ROOT/autonomous/logs/${ISSUE_NUMBER}"
@@ -302,19 +290,19 @@ while read -r ISSUE_NUMBER; do
   cd "$REPO_ROOT/autonomous"
   if docker compose up --build --abort-on-container-exit 2>&1 | tee "$DOCKER_LOG_FILE"; then
     echo ">>> Container completed successfully for issue #${ISSUE_NUMBER}"
-    # Record this branch for linear chaining — the next issue will branch from it.
-    PREV_BRANCH="$BRANCH"
-    # Wait for the merge commit to propagate before the next issue fetches the base branch.
+    CONSECUTIVE_FAILURES=0
+    # Wait for the merge commit to propagate before the next issue fetches main.
     echo ">>> Waiting for merge to propagate..."
     sleep 10
   else
     echo "!!! Container failed for issue #${ISSUE_NUMBER}"
     echo ">>> Docker logs saved to: ${DOCKER_LOG_FILE}"
     echo "$ISSUE_NUMBER" >> "$FAILED_FILE"
-    # Linear chain is broken — subsequent issues would branch from an unmerged base.
-    # Stop processing to avoid cascading failures.
-    echo "!!! Stopping milestone — linear chain broken by failed issue #${ISSUE_NUMBER}"
-    break
+    CONSECUTIVE_FAILURES=$((CONSECUTIVE_FAILURES + 1))
+    if [ "$CONSECUTIVE_FAILURES" -ge 2 ]; then
+      echo "!!! ${CONSECUTIVE_FAILURES} consecutive failures — likely systemic, stopping"
+      break
+    fi
   fi
 
 done <<< "$SORTED_ISSUES"

@@ -2,18 +2,15 @@
 set -euo pipefail
 
 # Process a single issue inside Docker.
-# Receives from environment: ISSUE_NUMBER, ISSUE_TITLE, BASE_BRANCH, MILESTONE_NUMBER
+# Receives from environment: ISSUE_NUMBER, ISSUE_TITLE, MILESTONE_NUMBER
 
 # ── Validate required env vars ──────────────────────────────
-for var in ISSUE_NUMBER ISSUE_TITLE BASE_BRANCH BRANCH FORK_URL UPSTREAM_REPO GH_TOKEN GH_TOKEN_UPSTREAM GIT_USER_NAME GIT_USER_EMAIL; do
+for var in ISSUE_NUMBER ISSUE_TITLE BRANCH FORK_URL UPSTREAM_REPO GH_TOKEN GH_TOKEN_UPSTREAM GIT_USER_NAME GIT_USER_EMAIL; do
   if [ -z "${!var:-}" ]; then
     echo "!!! Missing required env var: ${var}"
     exit 1
   fi
 done
-
-UPSTREAM_BASE_BRANCH="${BASE_BRANCH}"
-export UPSTREAM_BASE_BRANCH
 
 # ── Git identity ──────────────────────────────────────────────
 git config --global user.name  "${GIT_USER_NAME}"
@@ -56,27 +53,19 @@ fi
 git fetch upstream
 git fetch origin
 
-# ── Checkout feature branch from BASE_BRANCH ────────────────
+# ── Checkout feature branch from upstream/main ──────────────
 # BRANCH is passed from implement-milestone.sh to avoid drift
-
-# Determine the base ref to branch from
-if [ "$BASE_BRANCH" = "main" ]; then
-  BASE_REF="upstream/${BASE_BRANCH}"
-else
-  # For stacked PRs, the base is another feature branch on origin
-  BASE_REF="origin/${BASE_BRANCH}"
-fi
 
 if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
   git checkout "$BRANCH"
-  if ! git merge "$BASE_REF" --no-edit; then
-    echo "!!! Merge conflict with base branch ${BASE_BRANCH}"
+  if ! git merge upstream/main --no-edit; then
+    echo "!!! Merge conflict with upstream/main"
     echo "!!! Aborting merge — manual conflict resolution needed"
     git merge --abort
     exit 1
   fi
 else
-  git checkout -b "$BRANCH" "$BASE_REF"
+  git checkout -b "$BRANCH" upstream/main
 fi
 
 # ── Warm dependency cache ────────────────────────────────────

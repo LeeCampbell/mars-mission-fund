@@ -23,7 +23,6 @@ services:
       - MILESTONE_NUMBER=${MILESTONE_NUMBER}
       - ISSUE_NUMBER=${ISSUE_NUMBER}
       - ISSUE_TITLE=${ISSUE_TITLE}
-      - BASE_BRANCH=${BASE_BRANCH}
       - BRANCH=${BRANCH}
     volumes:
       - ./logs/${ISSUE_NUMBER:-default}/screenshots:/screenshots

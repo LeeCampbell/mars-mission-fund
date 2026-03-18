@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Agent loop state machine for a single GitHub issue.
-# Receives: ISSUE_NUMBER, ISSUE_TITLE, BRANCH, FORK_URL, UPSTREAM_REPO, UPSTREAM_BASE_BRANCH
+# Receives: ISSUE_NUMBER, ISSUE_TITLE, BRANCH, FORK_URL, UPSTREAM_REPO
 # Exit codes: 0 = issue complete (PR merged-ready), 1 = needs another iteration, 2 = stuck
 
 REPO_DIR="/workspace/repo"
@@ -10,6 +10,7 @@ PROMPTS_DIR="/usr/local/share/prompts"
 LOG_DIR="/workspace/logs"
 SCREENSHOT_DIR="/screenshots"
 MAX_REMEDIATION_ATTEMPTS=3
+BASE_BRANCH="main"
 
 mkdir -p "$LOG_DIR" "$SCREENSHOT_DIR"
 cd "$REPO_DIR"
@@ -17,7 +18,7 @@ cd "$REPO_DIR"
 TIMEOUT="${TIMEOUT_SECONDS:-1800}"
 
 # ── Validate required env vars ───────────────────────────────
-for var in ISSUE_NUMBER ISSUE_TITLE BRANCH FORK_URL UPSTREAM_REPO UPSTREAM_BASE_BRANCH; do
+for var in ISSUE_NUMBER ISSUE_TITLE BRANCH FORK_URL UPSTREAM_REPO; do
   if [ -z "${!var:-}" ]; then
     echo "!!! Missing required env var: ${var}"
     exit 2
@@ -29,6 +30,10 @@ if [ -z "$FORK_OWNER" ]; then
   echo "!!! Could not extract fork owner from FORK_URL: ${FORK_URL}"
   exit 2
 fi
+# All PRs target upstream/main
+PR_REPO="$UPSTREAM_REPO"
+PR_HEAD="${FORK_OWNER}:${BRANCH}"
+PR_GH_TOKEN="$GH_TOKEN_UPSTREAM"
 
 # ── Helpers ───────────────────────────────────────────────────
 
@@ -60,14 +65,57 @@ check_remediation_attempts() {
   echo ">>> ${description} — attempt $((attempts + 1))/${MAX_REMEDIATION_ATTEMPTS}"
 }
 
+# Push the feature branch to the fork. Logs and warns on failure.
+push_branch() {
+  if ! git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE"; then
+    echo "!!! Push failed — branch may have diverged"
+    return 1
+  fi
+}
+
+# Check if a PR has already been merged (e.g. by auto-merge).
+check_pr_merged() {
+  local pr_number="$1"
+  local state
+  state=$(GH_TOKEN="$PR_GH_TOKEN" gh pr view "$pr_number" \
+    --repo "$PR_REPO" --json state --jq '.state' 2>/dev/null || true)
+  [ "$state" = "MERGED" ]
+}
+
+# Create a draft PR targeting main on the upstream repo.
+# Writes plan/.pr-number on success. Returns PR number or empty string.
+create_draft_pr() {
+  local pr_url gh_stderr
+  gh_stderr=$(mktemp)
+  pr_url=$(GH_TOKEN="$PR_GH_TOKEN" gh pr create \
+    --repo "$PR_REPO" \
+    --base "$BASE_BRANCH" \
+    --head "$PR_HEAD" \
+    --title "feat: ${ISSUE_TITLE}" \
+    --body "Work in progress for #${ISSUE_NUMBER}" \
+    --draft 2>"$gh_stderr") || true
+
+  local pr_number
+  pr_number=$(echo "$pr_url" | grep -oE '/pull/[0-9]+' | grep -oE '[0-9]+' | tail -1 || true)
+
+  if [ -n "$pr_number" ]; then
+    echo "$pr_number" > plan/.pr-number
+    echo ">>> Draft PR #${pr_number} created on ${PR_REPO}" >&2
+  else
+    echo "!!! Draft PR creation failed: $(cat "$gh_stderr" 2>/dev/null) ${pr_url}" >&2
+  fi
+  rm -f "$gh_stderr"
+  echo "$pr_number"
+}
+
 # Classify CI status for a PR into: pending, passing, failing, or conflicting.
 poll_ci_status() {
   local pr_number="$1"
 
   # Check for merge conflicts first (separate from CI checks)
   local mergeable
-  mergeable=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr view "$pr_number" \
-    --repo "$UPSTREAM_REPO" --json mergeable --jq '.mergeable' 2>/dev/null) || true
+  mergeable=$(GH_TOKEN="$PR_GH_TOKEN" gh pr view "$pr_number" \
+    --repo "$PR_REPO" --json mergeable --jq '.mergeable' 2>/dev/null) || true
 
   if [ "$mergeable" = "CONFLICTING" ]; then
     echo "conflicting"
@@ -75,8 +123,8 @@ poll_ci_status() {
   fi
 
   local ci_raw
-  ci_raw=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr checks "$pr_number" \
-    --repo "$UPSTREAM_REPO" --json state --jq '.[].state' 2>&1) || true
+  ci_raw=$(GH_TOKEN="$PR_GH_TOKEN" gh pr checks "$pr_number" \
+    --repo "$PR_REPO" --json state --jq '.[].state' 2>&1) || true
 
   if echo "$ci_raw" | grep -qiE 'IN_PROGRESS|QUEUED|PENDING'; then
     echo "pending"
@@ -130,8 +178,8 @@ upload_screenshots() {
     comment_body="${comment_body}### ${fname}\n![${fname}](${raw_url})\n\n"
   done
 
-  echo -e "$comment_body" | GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr comment "$pr_number" \
-    --repo "$UPSTREAM_REPO" --body-file - || true
+  echo -e "$comment_body" | GH_TOKEN="$PR_GH_TOKEN" gh pr comment "$pr_number" \
+    --repo "$PR_REPO" --body-file - || true
 }
 
 # ── State detection ──────────────────────────────────────────
@@ -173,15 +221,15 @@ clear_state() {
   rm -f plan/.state
 }
 
-# Resolve PR number from plan file or by querying upstream.
+# Resolve PR number from plan file or by querying the PR repo.
 resolve_pr_number() {
   local pr_number=""
   if [ -f "plan/.pr-number" ]; then
     pr_number=$(cat plan/.pr-number)
   fi
   if [ -z "$pr_number" ]; then
-    pr_number=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr list --repo "$UPSTREAM_REPO" \
-      --head "${FORK_OWNER}:${BRANCH}" --json number --jq '.[0].number' 2>/dev/null || true)
+    pr_number=$(GH_TOKEN="$PR_GH_TOKEN" gh pr list --repo "$PR_REPO" \
+      --head "$PR_HEAD" --json number --jq '.[0].number' 2>/dev/null || true)
   fi
   echo "$pr_number"
 }
@@ -197,6 +245,7 @@ echo ">>> Log: ${LOG_FILE}"
 
 case "$STATE" in
 
+  # ── State: create-brief ──────────────────────────────────────
   create-brief)
     set_state "create-brief"
     mkdir -p plan/planning
@@ -221,6 +270,7 @@ Upstream repo: ${UPSTREAM_REPO}"
     exit 1
     ;;
 
+  # ── State: apply-review ──────────────────────────────────────
   apply-review)
     set_state "apply-review"
     run_claude -p "$(cat "${PROMPTS_DIR}/apply-review.md")"
@@ -236,6 +286,7 @@ Upstream repo: ${UPSTREAM_REPO}"
     exit 1
     ;;
 
+  # ── State: create-tasks ──────────────────────────────────────
   create-tasks)
     set_state "create-tasks"
     run_claude -p "$(cat "${PROMPTS_DIR}/create-tasks.md")"
@@ -252,25 +303,12 @@ Upstream repo: ${UPSTREAM_REPO}"
       git commit -m "chore: add plan for #${ISSUE_NUMBER}" || true
 
       # Push branch to fork so we can create a draft PR for visibility
-      git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE" || true
+      push_branch || true
 
       # Create draft PR (once — this state only runs once)
-      PR_URL=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr create \
-        --repo "$UPSTREAM_REPO" \
-        --base "$UPSTREAM_BASE_BRANCH" \
-        --head "${FORK_OWNER}:${BRANCH}" \
-        --title "feat: ${ISSUE_TITLE}" \
-        --body "Work in progress for #${ISSUE_NUMBER}" \
-        --draft 2>&1) || true
-
-      # Extract PR number from the URL (e.g. https://github.com/owner/repo/pull/123)
-      PR_NUMBER=$(echo "$PR_URL" | grep -oE '/pull/[0-9]+' | grep -oE '[0-9]+' | tail -1 || true)
-
-      if [ -n "$PR_NUMBER" ]; then
-        echo "$PR_NUMBER" > plan/.pr-number
-        echo ">>> Draft PR #${PR_NUMBER} created"
-      else
-        echo "!!! Draft PR creation failed (non-fatal): ${PR_URL}"
+      PR_NUMBER=$(create_draft_pr)
+      if [ -z "$PR_NUMBER" ]; then
+        echo "!!! Draft PR creation failed (non-fatal)"
       fi
     else
       echo "!!! No tasks produced"
@@ -280,6 +318,7 @@ Upstream repo: ${UPSTREAM_REPO}"
     exit 1
     ;;
 
+  # ── State: execute-tasks ─────────────────────────────────────
   execute-tasks)
     set_state "execute-tasks"
     # Count unchecked before
@@ -309,9 +348,7 @@ Upstream repo: ${UPSTREAM_REPO}"
     fi
 
     # Push progress — fail loudly so we know about conflicts
-    if ! git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE"; then
-      echo "!!! Push failed — branch may have diverged"
-    fi
+    push_branch || true
 
     clear_state
 
@@ -319,19 +356,22 @@ Upstream repo: ${UPSTREAM_REPO}"
     exit 1
     ;;
 
+  # ── State: finalize-pr ───────────────────────────────────────
   finalize-pr)
     set_state "finalize-pr"
 
     # Push the branch — fail loudly
-    if ! git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE"; then
-      echo "!!! Push failed — branch may have diverged"
-    fi
+    push_branch || true
 
     PR_NUMBER=$(resolve_pr_number)
     if [ -z "$PR_NUMBER" ]; then
-      echo "!!! No draft PR found — cannot finalize"
-      clear_state
-      exit 2
+      echo ">>> No draft PR found — creating one now"
+      PR_NUMBER=$(create_draft_pr)
+      if [ -z "$PR_NUMBER" ]; then
+        echo "!!! Failed to create PR in finalize-pr"
+        clear_state
+        exit 2
+      fi
     fi
 
     echo ">>> Finalizing PR #${PR_NUMBER}"
@@ -339,21 +379,21 @@ Upstream repo: ${UPSTREAM_REPO}"
     # Save fork token before overriding for PR operations
     GH_TOKEN_FORK="$GH_TOKEN"
 
-    # Claude will run `gh pr edit --repo UPSTREAM_REPO` which needs upstream token
-    export GH_TOKEN="$GH_TOKEN_UPSTREAM"
+    # Claude will run `gh pr edit` which needs the PR repo token
+    export GH_TOKEN="$PR_GH_TOKEN"
 
     run_claude \
       -p "$(cat "${PROMPTS_DIR}/finalize-pr.md")
 
 Issue number: #${ISSUE_NUMBER}
 Issue title: ${ISSUE_TITLE}
-Upstream repo: ${UPSTREAM_REPO}
+PR repo: ${PR_REPO}
 PR number: ${PR_NUMBER}
 Branch: ${BRANCH}"
 
     # Mark PR as ready for review (deterministic — not delegated to Claude)
-    GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr ready "$PR_NUMBER" \
-      --repo "$UPSTREAM_REPO" 2>&1 | tee -a "$LOG_FILE" || true
+    GH_TOKEN="$PR_GH_TOKEN" gh pr ready "$PR_NUMBER" \
+      --repo "$PR_REPO" 2>&1 | tee -a "$LOG_FILE" || true
     echo ">>> PR #${PR_NUMBER} marked ready for review"
 
     upload_screenshots "$PR_NUMBER" "$GH_TOKEN_FORK"
@@ -366,6 +406,7 @@ Branch: ${BRANCH}"
     exit 1  # iterate again into await-ci
     ;;
 
+  # ── State: await-ci ──────────────────────────────────────────
   await-ci)
     set_state "await-ci"
 
@@ -393,27 +434,46 @@ Branch: ${BRANCH}"
         ;;
       passing)
         if [ ! -f "plan/.plan-archived" ]; then
-          # Phase 1: archive plan files, push, wait for 2nd CI
+          # Phase 1: archive plan files, push, enable auto-merge, then exit.
+          # State is cleared so the next iteration re-derives via determine_state.
+          # With .plan-archived present and plan files removed from git, the
+          # heuristic lands back in await-ci for Phase 2.
           echo ">>> CI passed — removing plan files before merge"
           if git ls-files --error-unmatch plan/ &>/dev/null 2>&1; then
-            git rm -r plan/
+            git rm -r plan/ || true
             git commit -m "chore: remove plan files after CI passed"
-            git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE"
           fi
           mkdir -p plan
           echo "$PR_NUMBER" > plan/.plan-archived
           clear_state
-          echo ">>> Plan archived, waiting for CI to re-run"
+          if push_branch; then
+            GH_TOKEN="$PR_GH_TOKEN" gh pr merge "$PR_NUMBER" \
+              --repo "$PR_REPO" --squash --auto 2>&1 | tee -a "$LOG_FILE" || true
+            echo ">>> Auto-merge enabled, GitHub will merge when CI passes"
+          else
+            echo ">>> Push failed — skipping auto-merge, will retry next iteration"
+          fi
           exit 1
         fi
 
-        # Phase 2: CI green on clean branch — merge
+        # Phase 2: CI green on clean branch — merge (fallback if auto-merge didn't fire)
+        if check_pr_merged "$PR_NUMBER"; then
+          rm -rf plan/
+          echo ">>> Issue #${ISSUE_NUMBER} complete — PR already merged (auto-merge)"
+          exit 0
+        fi
         echo ">>> CI passed! Merging PR #${PR_NUMBER}"
-        GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr merge "$PR_NUMBER" \
-          --repo "$UPSTREAM_REPO" --squash 2>&1 | tee -a "$LOG_FILE" || {
+        if ! GH_TOKEN="$PR_GH_TOKEN" gh pr merge "$PR_NUMBER" \
+          --repo "$PR_REPO" --squash 2>&1 | tee -a "$LOG_FILE"; then
+          # Merge failed — but auto-merge may have raced us. Re-check before giving up.
+          if check_pr_merged "$PR_NUMBER"; then
+            rm -rf plan/
+            echo ">>> Issue #${ISSUE_NUMBER} complete — PR already merged (auto-merge)"
+            exit 0
+          fi
           echo "!!! Merge failed for PR #${PR_NUMBER}"
           exit 2
-        }
+        fi
         rm -rf plan/
         echo ">>> Issue #${ISSUE_NUMBER} complete — PR merged"
         exit 0
@@ -421,7 +481,7 @@ Branch: ${BRANCH}"
       conflicting)
         check_remediation_attempts "Merge conflict remediation failed"
 
-        git fetch origin "$UPSTREAM_BASE_BRANCH" 2>&1 | tee -a "$LOG_FILE" || true
+        git fetch upstream "$BASE_BRANCH" 2>&1 | tee -a "$LOG_FILE" || true
 
         REMEDIATE_PROMPT=$(cat "${PROMPTS_DIR}/remediate-ci.md")
         run_claude \
@@ -430,12 +490,12 @@ Branch: ${BRANCH}"
 PR number: #${PR_NUMBER}
 Issue number: #${ISSUE_NUMBER}
 Branch: ${BRANCH}
-Base branch: ${UPSTREAM_BASE_BRANCH}
+Base branch: ${BASE_BRANCH}
 
 Failure type: MERGE_CONFLICT
-The PR has merge conflicts with the base branch (${UPSTREAM_BASE_BRANCH}). The base branch has already been fetched. Rebase onto origin/${UPSTREAM_BASE_BRANCH} and resolve all conflicts."
+The PR has merge conflicts with the base branch (${BASE_BRANCH}). The base branch has already been fetched. Rebase onto upstream/${BASE_BRANCH} and resolve all conflicts."
 
-        git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE" || true
+        push_branch || true
 
         clear_state
         echo ">>> Conflict resolution pushed, will re-check after cooldown"
@@ -445,15 +505,15 @@ The PR has merge conflicts with the base branch (${UPSTREAM_BASE_BRANCH}). The b
         check_remediation_attempts "CI remediation failed"
 
         # Get the failed run ID
-        RUN_ID=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh pr checks "$PR_NUMBER" \
-          --repo "$UPSTREAM_REPO" --json state,link \
+        RUN_ID=$(GH_TOKEN="$PR_GH_TOKEN" gh pr checks "$PR_NUMBER" \
+          --repo "$PR_REPO" --json state,link \
           --jq '.[] | select(.state == "FAILURE") | .link' \
           | head -1 | grep -oE '[0-9]+$') || true
 
         FAILED_LOG=""
         if [ -n "$RUN_ID" ]; then
-          FAILED_LOG=$(GH_TOKEN="$GH_TOKEN_UPSTREAM" gh run view "$RUN_ID" \
-            --repo "$UPSTREAM_REPO" --log-failed 2>&1 | tail -200) || true
+          FAILED_LOG=$(GH_TOKEN="$PR_GH_TOKEN" gh run view "$RUN_ID" \
+            --repo "$PR_REPO" --log-failed 2>&1 | tail -200) || true
         fi
 
         REMEDIATE_PROMPT=$(cat "${PROMPTS_DIR}/remediate-ci.md")
@@ -470,7 +530,7 @@ CI failure logs:
 ${FAILED_LOG}
 \`\`\`"
 
-        git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE" || true
+        push_branch || true
 
         clear_state
         echo ">>> Remediation pushed, will re-check CI after cooldown"
@@ -479,6 +539,7 @@ ${FAILED_LOG}
     esac
     ;;
 
+  # ── State: done ──────────────────────────────────────────────
   done)
     echo ">>> Issue #${ISSUE_NUMBER} already completed"
     exit 0

@@ -7,7 +7,7 @@ A draft PR already exists. The branch has already been pushed. Your only job is 
 ## Input
 
 - `ISSUE_NUMBER`: The GitHub issue this work addresses
-- `UPSTREAM_REPO`: The upstream repository
+- `PR_REPO`: The repository where the PR lives
 - `PR_NUMBER`: The existing draft PR number
 - `BRANCH`: The current feature branch name
 - `plan/ready/brief.md`: The implementation brief
@@ -54,7 +54,7 @@ Closes #<ISSUE_NUMBER>
 Update the existing draft PR with the proper title and description:
 
 ```sh
-gh pr edit <PR_NUMBER> --repo ${UPSTREAM_REPO} \
+gh pr edit <PR_NUMBER> --repo ${PR_REPO} \
   --title "feat: <brief title from issue>" \
   --body "<PR description>"
 ```

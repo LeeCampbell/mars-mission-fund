@@ -122,5 +122,8 @@ test.describe('Admin cancellation approval', () => {
 
     // Should show success feedback
     await expect(adminPanel.getByText('Cancellation approved.')).toBeVisible()
+
+    // Unregister routes to avoid errors from in-flight requests after the test ends
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
   })
 })

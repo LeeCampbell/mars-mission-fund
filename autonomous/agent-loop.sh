@@ -14,6 +14,7 @@ BASE_BRANCH="main"
 
 mkdir -p "$LOG_DIR" "$SCREENSHOT_DIR"
 cd "$REPO_DIR"
+mkdir -p plan/ready plan/planning
 
 TIMEOUT="${TIMEOUT_SECONDS:-1800}"
 
@@ -322,7 +323,6 @@ case "$STATE" in
   # ── State: create-brief ──────────────────────────────────────
   create-brief)
     set_state "create-brief"
-    mkdir -p plan/ready plan/planning
     run_claude \
       -p "$(cat "${PROMPTS_DIR}/create-brief.md")
 
@@ -369,7 +369,6 @@ Upstream repo: ${UPSTREAM_REPO}"
 
     # Ensure brief is in the ready location (may have been detected in planning/)
     if [ ! -f "plan/ready/brief.md" ] && [ -f "plan/planning/brief.md" ]; then
-      mkdir -p plan/ready
       cp plan/planning/brief.md plan/ready/brief.md
       echo ">>> Promoted planning brief to ready"
     fi

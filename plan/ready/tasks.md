@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; all new functions exported
   - **Brief ref**: §2 Client API layer
 
-- [ ] TASK-04: Update App.tsx routing
+- [x] TASK-04: Update App.tsx routing
   - **Goal**: Wire all new and renamed routes into the router
   - **Details**: In `packages/client/src/App.tsx`: (1) Rename the existing `/review-queue` route to `/review` (keep `ReviewQueuePage` component unchanged for now). (2) Add a lazy-loaded `ReviewDetailPage` under a `ProtectedRoute` requiring Reviewer role at `/review/:id`. (3) Add a lazy-loaded `NotificationsPage` under `ProtectedRoute` (any auth) at `/notifications`. (4) Add a lazy-loaded `AdminMilestoneVerificationPage` under `ProtectedRoute` requiring Admin role at `/admin/milestones`. (5) Add a lazy-loaded `AdminCancellationApprovalPage` under `ProtectedRoute` requiring Admin role at `/admin/cancellations`. Use `React.lazy(() => import('./pages/PageName'))` with a `<Suspense>` fallback consistent with other routes.
   - **Files**: `packages/client/src/App.tsx`

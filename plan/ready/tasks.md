@@ -60,7 +60,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; page renders at `/admin/milestones`
   - **Brief ref**: §4 AdminMilestoneVerificationPage
 
-- [ ] TASK-09: Create AdminCancellationApprovalPage
+- [x] TASK-09: Create AdminCancellationApprovalPage
   - **Goal**: Build the admin page for approving pending cancellation requests
   - **Details**: Create `packages/client/src/pages/AdminCancellationApprovalPage.tsx`. Fetch with `useQuery(['admin', 'pending-cancellations'], fetchCampaignsWithPendingCancellations)`. Display a table with columns: campaign title, creator, requested date, and an Approve button. Approve action calls `approveCancellation(campaignId)` via `useMutation`, then refetch. Handle loading and empty states. Use semantic tokens consistent with other admin pages.
   - **Files**: `packages/client/src/pages/AdminCancellationApprovalPage.tsx`

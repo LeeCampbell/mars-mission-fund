@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; navigate target reads `/review/${id}` in the source
   - **Brief ref**: §6 ReviewQueuePage tweak
 
-- [ ] TASK-06: Create ReviewDetailPage
+- [x] TASK-06: Create ReviewDetailPage
   - **Goal**: Build the reviewer's campaign detail page with approve/reject actions
   - **Details**: Create `packages/client/src/pages/ReviewDetailPage.tsx`. Use `useParams` to get `id`. Fetch campaign with `useQuery(['campaign', id], () => fetchCampaign(id))`. Render the full campaign proposal (title, summary, description, milestones, team, stretch goals) reusing existing campaign detail sub-components (`MilestonesSection`, `TeamSection`, etc. — check what `CampaignDetailPage` uses and mirror it). Embed the existing `ReviewActionsPanel` component. Omit funding progress bar and contributor widget. Show a loading skeleton and error state. Pattern mirrors `CampaignDetailPage` layout.
   - **Files**: `packages/client/src/pages/ReviewDetailPage.tsx`

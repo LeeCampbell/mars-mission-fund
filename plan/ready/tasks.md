@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; no TS errors for missing page modules (pages created in subsequent tasks)
   - **Brief ref**: §3 Routing
 
-- [ ] TASK-05: Update ReviewQueuePage post-claim navigation
+- [x] TASK-05: Update ReviewQueuePage post-claim navigation
   - **Goal**: After claiming a campaign, navigate to the review detail page instead of the public campaign page
   - **Details**: In `packages/client/src/pages/ReviewQueuePage.tsx`, find the `onSuccess` callback in `CampaignRow` (or wherever `useClaimCampaign` / claim mutation resolves) and change the navigate call from `/campaigns/${campaign.id}` to `/review/${campaign.id}`.
   - **Files**: `packages/client/src/pages/ReviewQueuePage.tsx`

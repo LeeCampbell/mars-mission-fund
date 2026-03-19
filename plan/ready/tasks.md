@@ -53,7 +53,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; page renders at `/notifications`
   - **Brief ref**: §4 NotificationsPage
 
-- [ ] TASK-08: Create AdminMilestoneVerificationPage
+- [x] TASK-08: Create AdminMilestoneVerificationPage
   - **Goal**: Build the admin page for verifying or returning submitted milestone evidence
   - **Details**: Create `packages/client/src/pages/AdminMilestoneVerificationPage.tsx`. Fetch with `useQuery(['admin', 'pending-milestones'], fetchCampaignsWithPendingMilestones)`. Display a table with columns: campaign title, milestone title, evidence URL, submitted date, and action buttons. Verify action: show an inline notes text input; on submit call `verifyMilestone(campaignId, milestoneId, notes)` via `useMutation`, then refetch. Return action: show an inline feedback text input; on submit call `returnMilestone(campaignId, milestoneId, feedback)` via `useMutation`, then refetch. Handle loading and empty states. Note: the server returns campaigns with pending milestones — you may need to display each pending milestone as a separate row, so map over the campaigns and their milestones filtered to `status === 'Submitted'`.
   - **Files**: `packages/client/src/pages/AdminMilestoneVerificationPage.tsx`

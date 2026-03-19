@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Add server queries for notifications and admin campaign lists
+- [x] TASK-01: Add server queries for notifications and admin campaign lists
   - **Goal**: Add the three new DB query functions needed by the new server routes
   - **Details**: In `packages/server/src/campaigns/queries.ts` add: (1) `markNotificationRead(pool, notificationId, userId)` — UPDATE notifications SET read = true WHERE id = $1 AND user_id = $2; (2) `getCampaignsWithPendingMilestones(pool)` — JOIN campaigns with campaign_milestones WHERE campaign_milestones.status = 'Submitted', deduplicated by campaign id, returning CampaignSummary[]; (3) `getCampaignsWithPendingCancellations(pool)` — SELECT campaigns WHERE cancellation_requested_at IS NOT NULL AND status = 'Live', returning CampaignSummary[].
   - **Files**: `packages/server/src/campaigns/queries.ts`

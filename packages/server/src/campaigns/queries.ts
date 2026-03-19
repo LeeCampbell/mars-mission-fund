@@ -972,3 +972,63 @@ export async function insertAuditLog(pool: Pool, entry: AuditLogEntry): Promise<
     ]
   )
 }
+
+export async function markNotificationRead(
+  pool: Pool,
+  notificationId: string,
+  userId: string
+): Promise<void> {
+  await pool.query(`UPDATE notifications SET read = true WHERE id = $1 AND user_id = $2`, [
+    notificationId,
+    userId,
+  ])
+}
+
+export async function getCampaignsWithPendingMilestones(pool: Pool): Promise<CampaignSummary[]> {
+  const sql = `
+    SELECT DISTINCT ON (c.id)
+      c.id,
+      c.title,
+      c.summary,
+      c.status,
+      c.category,
+      c.hero_image_url AS "heroImageUrl",
+      c.min_funding_target_usd AS "goalAmount",
+      c.current_amount_usd AS "raisedAmount",
+      c.contributor_count AS "contributorCount",
+      c.deadline,
+      c.created_at AS "createdAt",
+      c.created_by AS "createdBy"
+    FROM campaigns c
+    INNER JOIN campaign_milestones m ON m.campaign_id = c.id
+    WHERE m.status = 'Submitted'
+    ORDER BY c.id, c.created_at DESC
+  `
+  const result = await pool.query<CampaignSummary>(sql)
+  return result.rows
+}
+
+export async function getCampaignsWithPendingCancellations(
+  pool: Pool
+): Promise<CampaignSummary[]> {
+  const sql = `
+    SELECT
+      id,
+      title,
+      summary,
+      status,
+      category,
+      hero_image_url AS "heroImageUrl",
+      min_funding_target_usd AS "goalAmount",
+      current_amount_usd AS "raisedAmount",
+      contributor_count AS "contributorCount",
+      deadline,
+      created_at AS "createdAt",
+      created_by AS "createdBy"
+    FROM campaigns
+    WHERE cancellation_requested_at IS NOT NULL AND status = 'Live'
+    ORDER BY created_at DESC
+  `
+  const result = await pool.query<CampaignSummary>(sql)
+  return result.rows
+}

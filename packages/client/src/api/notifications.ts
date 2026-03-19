@@ -27,3 +27,8 @@ export async function fetchNotifications(): Promise<Notification[]> {
   const json = await response.json()
   return (json as { data: Notification[] }).data
 }
+
+export async function markNotificationRead(id: string): Promise<void> {
+  const response = await authedFetch(`/v1/notifications/${id}/read`, { method: 'PATCH' })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}

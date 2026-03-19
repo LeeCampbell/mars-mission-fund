@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes; routes mounted at correct paths
   - **Brief ref**: §1 Server changes — routes; §2 dedicated admin endpoints
 
-- [ ] TASK-03: Extend client API modules
+- [x] TASK-03: Extend client API modules
   - **Goal**: Add all new API call functions to the client
   - **Details**: (1) In `packages/client/src/api/notifications.ts` add `markNotificationRead(id: string): Promise<void>` — PATCH /v1/notifications/:id/read. (2) In `packages/client/src/api/campaigns.ts` add: `verifyMilestone(id, mid, notes)` — POST /v1/campaigns/:id/milestones/:mid/verify; `returnMilestone(id, mid, feedback)` — POST /v1/campaigns/:id/milestones/:mid/return; `approveCancellation(id)` — POST /v1/campaigns/:id/approve-cancellation; `fetchCampaignsWithPendingMilestones()` — GET /v1/admin/campaigns/pending-milestones; `fetchCampaignsWithPendingCancellations()` — GET /v1/admin/campaigns/pending-cancellations. All return typed promises consistent with existing patterns in the file.
   - **Files**: `packages/client/src/api/notifications.ts`, `packages/client/src/api/campaigns.ts`

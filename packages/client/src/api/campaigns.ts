@@ -151,3 +151,40 @@ export async function submitMilestoneEvidence(
   })
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
 }
+
+export async function verifyMilestone(id: string, mid: string, notes: string): Promise<void> {
+  const response = await authedFetch(`/v1/campaigns/${id}/milestones/${mid}/verify`, {
+    method: 'POST',
+    body: JSON.stringify({ notes }),
+  })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function returnMilestone(id: string, mid: string, feedback: string): Promise<void> {
+  const response = await authedFetch(`/v1/campaigns/${id}/milestones/${mid}/return`, {
+    method: 'POST',
+    body: JSON.stringify({ feedback }),
+  })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function approveCancellation(id: string): Promise<void> {
+  const response = await authedFetch(`/v1/campaigns/${id}/approve-cancellation`, {
+    method: 'POST',
+  })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
+export async function fetchCampaignsWithPendingMilestones(): Promise<CampaignSummary[]> {
+  const response = await authedFetch('/v1/admin/campaigns/pending-milestones')
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const json = await response.json()
+  return (json.data as unknown[]).map((item) => CampaignSummarySchema.parse(item))
+}
+
+export async function fetchCampaignsWithPendingCancellations(): Promise<CampaignSummary[]> {
+  const response = await authedFetch('/v1/admin/campaigns/pending-cancellations')
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  const json = await response.json()
+  return (json.data as unknown[]).map((item) => CampaignSummarySchema.parse(item))
+}

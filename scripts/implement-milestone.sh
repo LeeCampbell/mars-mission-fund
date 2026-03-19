@@ -266,10 +266,17 @@ while read -r ISSUE_NUMBER; do
 
   # Check if a PR already exists for this branch (restart-safe)
   FORK_OWNER=$(echo "$FORK_URL" | sed 's|github.com/||;s|/.*||')
-  EXISTING_PR=$(gh pr list --repo "${UPSTREAM_REPO}" --head "${FORK_OWNER}:${BRANCH}" --state open --json url --jq '.[0].url // empty' 2>/dev/null || true)
-  if [ -n "$EXISTING_PR" ]; then
-    echo ">>> Skipping #${ISSUE_NUMBER} — PR already exists: ${EXISTING_PR}"
-    continue
+  EXISTING_PR_JSON=$(gh pr list --repo "${UPSTREAM_REPO}" --head "${FORK_OWNER}:${BRANCH}" --state open --json url,isDraft --jq '.[0] // empty' 2>/dev/null || true)
+  if [ -n "$EXISTING_PR_JSON" ]; then
+    EXISTING_PR_URL=$(echo "$EXISTING_PR_JSON" | jq -r '.url // empty')
+    EXISTING_PR_DRAFT=$(echo "$EXISTING_PR_JSON" | jq -r '.isDraft // false')
+    if [ "$EXISTING_PR_DRAFT" = "true" ]; then
+      echo ">>> Resuming #${ISSUE_NUMBER} — draft PR needs more work: ${EXISTING_PR_URL}"
+      # Fall through to launch the container, which will resume from the branch
+    else
+      echo ">>> Skipping #${ISSUE_NUMBER} — ready PR already exists: ${EXISTING_PR_URL}"
+      continue
+    fi
   fi
 
   # Export env vars for Docker

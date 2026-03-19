@@ -53,18 +53,36 @@ Brief: plan/ready/brief.md
 - **Verification**: Every task must have a concrete verification step (build, visual check, test)
 - **No gaps**: The complete checklist should fully implement the brief — nothing missing
 - **Human-only actions**: Do NOT create tasks for closing issues, closing milestones, or merging PRs. These are handled by humans outside the agent workflow. If the issue's only deliverables are human actions, create a single task that comments on the issue listing the actions the human needs to perform.
-- **E2E tests**: If the brief's Verification section includes E2E flows, include a dedicated E2E test task near the end of the checklist (before any final cleanup task). Template:
+- **E2E tests — co-locate with feature tasks**: Do NOT create a single "Write E2E tests" task. Instead, when a task implements a user-facing feature, that same task MUST include writing the E2E test for that feature.
+
+  For each feature task that has a user-visible surface:
+  - Add an E2E sub-step in the task's **Details** section
+  - The **Verify** step MUST include: `./scripts/run-e2e.sh e2e/<feature>.spec.ts` (single file, NOT the full suite)
+  - The **Files** list MUST include the E2E spec file
+
+  Example:
 
   ```text
-  - [ ] TASK-NN: Write E2E tests
-    - **Goal**: Create Playwright E2E tests covering the user flows described in the brief
-    - **Details**: Create or update files in `e2e/`. Follow patterns in existing tests (`e2e/auth.spec.ts`, `e2e/campaigns.spec.ts`). Use Playwright Test API. Tests must pass against the running local stack.
-    - **Files**: `e2e/<feature>.spec.ts`
-    - **Verify**: Run `npm run test:e2e` — all tests pass (existing + new)
+  - [ ] TASK-06: Create ReviewDetailPage with E2E coverage
+    - **Goal**: Implement the review detail page and verify it with E2E tests
+    - **Details**: Build the page component, add routes, then write Playwright E2E tests following patterns in `e2e/auth.spec.ts`
+    - **Files**: `src/pages/ReviewDetailPage.tsx`, `e2e/reviewer.spec.ts`
+    - **Verify**: `./scripts/ci-check.sh` passes AND `./scripts/run-e2e.sh e2e/reviewer.spec.ts` passes
+    - **Brief ref**: Reviewer queue section
+  ```
+
+  After ALL feature tasks are complete, add a final regression task:
+
+  ```text
+  - [ ] TASK-LAST: Full E2E regression and CI verification
+    - **Goal**: Run the complete E2E suite and CI checks to verify nothing is broken
+    - **Details**: No new code — just run the full test suite as a final gate
+    - **Files**: (none)
+    - **Verify**: `./scripts/run-e2e.sh` (all tests) AND `./scripts/ci-check.sh`
     - **Brief ref**: Verification section
   ```
 
-  For backend-only issues with no UI flows, omit this task.
+  For backend-only issues with no UI flows, omit E2E tasks entirely.
 
 ## Output Format
 

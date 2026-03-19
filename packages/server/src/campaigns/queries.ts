@@ -1008,9 +1008,7 @@ export async function getCampaignsWithPendingMilestones(pool: Pool): Promise<Cam
   return result.rows
 }
 
-export async function getCampaignsWithPendingCancellations(
-  pool: Pool
-): Promise<CampaignSummary[]> {
+export async function getCampaignsWithPendingCancellations(pool: Pool): Promise<CampaignSummary[]> {
   const sql = `
     SELECT
       id,

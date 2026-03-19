@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes with no new errors
   - **Brief ref**: §1 Server changes — queries
 
-- [ ] TASK-02: Add server routes for notification read and admin campaign endpoints
+- [x] TASK-02: Add server routes for notification read and admin campaign endpoints
   - **Goal**: Expose the new queries via HTTP endpoints
   - **Details**: (1) In `packages/server/src/notifications/routes.ts` add `PATCH /:id/read` — calls `markNotificationRead(pool, req.params.id, user.id)`, requires `authenticate` middleware, returns 204. (2) In `packages/server/src/campaigns/routes.ts` add `GET /admin/campaigns/pending-milestones` and `GET /admin/campaigns/pending-cancellations` — both require `authenticate` + `requireRole('Administrator')` middleware and call the corresponding new query functions, returning JSON arrays.
   - **Files**: `packages/server/src/notifications/routes.ts`, `packages/server/src/campaigns/routes.ts`

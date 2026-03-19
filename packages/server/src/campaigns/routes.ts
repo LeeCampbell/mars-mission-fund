@@ -43,6 +43,8 @@ import {
   returnMilestone,
   cancelSettlement,
   insertAuditLog,
+  getCampaignsWithPendingMilestones,
+  getCampaignsWithPendingCancellations,
 } from './queries.js'
 import { authenticate } from '../middleware/authenticate.js'
 import { requireRole } from '../middleware/requireRole.js'
@@ -1351,6 +1353,36 @@ export function createCampaignRouter(pool: Pool): Router {
         res.json({
           data: { id: parsedParams.data.mid, status: 'Returned' },
         })
+      } catch (err) {
+        next(err)
+      }
+    }
+  )
+
+  // GET /admin/campaigns/pending-milestones — Administrator only
+  router.get(
+    '/admin/campaigns/pending-milestones',
+    authenticate,
+    requireRole('Administrator'),
+    async (_req, res, next) => {
+      try {
+        const campaigns = await getCampaignsWithPendingMilestones(pool)
+        res.json({ data: campaigns })
+      } catch (err) {
+        next(err)
+      }
+    }
+  )
+
+  // GET /admin/campaigns/pending-cancellations — Administrator only
+  router.get(
+    '/admin/campaigns/pending-cancellations',
+    authenticate,
+    requireRole('Administrator'),
+    async (_req, res, next) => {
+      try {
+        const campaigns = await getCampaignsWithPendingCancellations(pool)
+        res.json({ data: campaigns })
       } catch (err) {
         next(err)
       }

@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; page renders in browser at `/review/:id`
   - **Brief ref**: §4 ReviewDetailPage
 
-- [ ] TASK-07: Create NotificationsPage
+- [x] TASK-07: Create NotificationsPage
   - **Goal**: Build the notifications list page with mark-as-read functionality
   - **Details**: Create `packages/client/src/pages/NotificationsPage.tsx`. Fetch with `useQuery(['notifications'], fetchNotifications)`. List notifications newest-first showing title, message, relative timestamp, and read/unread indicator. Unread items have a "Mark as read" button that calls `useMutation` → `markNotificationRead(id)` then invalidates `['notifications']`. Add a "Mark all as read" header button that iterates unread items and fires mutations for each. Empty state: "No notifications yet." Use semantic color tokens consistent with existing pages.
   - **Files**: `packages/client/src/pages/NotificationsPage.tsx`

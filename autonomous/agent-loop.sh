@@ -206,6 +206,10 @@ upload_screenshots() {
 # ── State detection ──────────────────────────────────────────
 # Uses plan/.state lock file as the primary indicator when present,
 # falling back to filesystem inference for recovery.
+#
+# State graph (each state → next on success):
+#   create-brief → create-tasks → execute-tasks → finalize-pr → await-ci → done
+#   create-brief → apply-review → create-tasks  (if review needed)
 determine_state() {
   if [ -f "plan/.state" ]; then
     cat "plan/.state"
@@ -226,6 +230,15 @@ determine_state() {
     fi
   elif [ -f "plan/ready/brief.md" ]; then
     echo "create-tasks"
+  elif [ -f "plan/planning/brief.md" ]; then
+    # Brief exists in planning — check if it needs review or can be promoted
+    if [ -f "plan/planning/brief-review.md" ]; then
+      echo "apply-review"
+    else
+      # No review comments → brief is implicitly approved but wasn't moved.
+      # Promote it and advance to create-tasks.
+      echo "create-tasks"
+    fi
   elif [ -f "plan/planning/brief-review.md" ]; then
     echo "apply-review"
   else
@@ -240,6 +253,43 @@ set_state() {
 
 clear_state() {
   rm -f plan/.state
+}
+
+# Guard against any state looping without forward progress.
+# Tracks consecutive entries into the same state. Resets when state changes.
+# Planning states (create-brief, apply-review, create-tasks) get 3 attempts.
+# Execution states (execute-tasks) use their own stuck detection.
+# Polling states (await-ci) get a generous limit.
+check_state_repeat() {
+  local state="$1"
+  local count_file="plan/.state-repeat-count"
+  local last_file="plan/.last-state"
+  local max_repeats
+
+  case "$state" in
+    execute-tasks) return ;;  # has its own stuck detection
+    await-ci)      max_repeats=20 ;;
+    *)             max_repeats=3 ;;
+  esac
+
+  local last_state
+  last_state=$(cat "$last_file" 2>/dev/null || echo "")
+
+  if [ "$state" = "$last_state" ]; then
+    local count
+    count=$(cat "$count_file" 2>/dev/null || echo 0)
+    count=$((count + 1))
+    echo "$count" > "$count_file"
+
+    if [ "$count" -ge "$max_repeats" ]; then
+      echo "!!! State '${state}' repeated ${count} times without progress — stuck"
+      rm -f "$count_file" "$last_file"
+      exit 2
+    fi
+  else
+    echo "$state" > "$last_file"
+    echo "1" > "$count_file"
+  fi
 }
 
 # Resolve PR number from plan file or by querying the PR repo.
@@ -264,12 +314,15 @@ LOG_FILE="${LOG_DIR}/issue-${ISSUE_NUMBER}-${STATE}-${TIMESTAMP}.log"
 echo ">>> State: ${STATE} for issue #${ISSUE_NUMBER}"
 echo ">>> Log: ${LOG_FILE}"
 
+# Detect state-level loops (guards against FSM gaps)
+check_state_repeat "$STATE"
+
 case "$STATE" in
 
   # ── State: create-brief ──────────────────────────────────────
   create-brief)
     set_state "create-brief"
-    mkdir -p plan/planning
+    mkdir -p plan/ready plan/planning
     run_claude \
       -p "$(cat "${PROMPTS_DIR}/create-brief.md")
 
@@ -277,11 +330,14 @@ Issue number: #${ISSUE_NUMBER}
 Issue title: ${ISSUE_TITLE}
 Upstream repo: ${UPSTREAM_REPO}"
 
+    # If Claude wrote to planning but failed to move to ready, promote it
+    if [ ! -f "plan/ready/brief.md" ] && [ -f "plan/planning/brief.md" ]; then
+      cp plan/planning/brief.md plan/ready/brief.md
+      echo ">>> Promoted planning brief to ready (Claude failed to move it)"
+    fi
+
     if [ -f "plan/ready/brief.md" ]; then
       echo ">>> Brief approved, ready for task creation"
-      clear_state
-    elif [ -f "plan/planning/brief.md" ]; then
-      echo ">>> Brief written, needs review"
       clear_state
     else
       echo "!!! No brief produced"
@@ -310,6 +366,14 @@ Upstream repo: ${UPSTREAM_REPO}"
   # ── State: create-tasks ──────────────────────────────────────
   create-tasks)
     set_state "create-tasks"
+
+    # Ensure brief is in the ready location (may have been detected in planning/)
+    if [ ! -f "plan/ready/brief.md" ] && [ -f "plan/planning/brief.md" ]; then
+      mkdir -p plan/ready
+      cp plan/planning/brief.md plan/ready/brief.md
+      echo ">>> Promoted planning brief to ready"
+    fi
+
     run_claude -p "$(cat "${PROMPTS_DIR}/create-tasks.md")"
 
     if [ -f "plan/ready/tasks.md" ]; then

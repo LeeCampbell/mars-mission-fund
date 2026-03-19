@@ -38,14 +38,35 @@ PR_GH_TOKEN="$GH_TOKEN_UPSTREAM"
 # ── Helpers ───────────────────────────────────────────────────
 
 # Run Claude with standard flags. Caller supplies extra args (e.g. --output-format).
+# Retries up to 3 times on transient API errors with exponential backoff.
 # Usage: run_claude [extra-flags...] -p "prompt text"
 run_claude() {
-  timeout "$TIMEOUT" claude \
-    --dangerously-skip-permissions \
-    --print \
-    --verbose \
-    "$@" \
-    2>&1 | tee "$LOG_FILE" || true
+  local max_api_retries=3
+  local attempt=0
+  local backoff=60
+
+  while [ "$attempt" -lt "$max_api_retries" ]; do
+    timeout "$TIMEOUT" claude \
+      --dangerously-skip-permissions \
+      --print \
+      --verbose \
+      "$@" \
+      2>&1 | tee "$LOG_FILE" || true
+
+    # Check for transient API errors in the output
+    if grep -qiE 'API Error|ECONNREFUSED|ECONNRESET|ETIMEDOUT|503 Service|502 Bad Gateway|rate limit' "$LOG_FILE" 2>/dev/null; then
+      attempt=$((attempt + 1))
+      if [ "$attempt" -ge "$max_api_retries" ]; then
+        echo "!!! API error persists after ${max_api_retries} retries"
+        return
+      fi
+      echo ">>> Transient API error detected — retry ${attempt}/${max_api_retries} after ${backoff}s..."
+      sleep "$backoff"
+      backoff=$((backoff * 2))
+    else
+      return
+    fi
+  done
 }
 
 # Increment the remediation attempt counter and exit 2 (stuck) if exhausted.
@@ -342,10 +363,25 @@ Upstream repo: ${UPSTREAM_REPO}"
 
     # Stuck detection — no progress and tasks remain
     if [ "$BEFORE" -eq "$AFTER" ]; then
-      echo "!!! No progress made — agent may be stuck"
+      STUCK_FILE="plan/.stuck-count"
+      STUCK_COUNT=$(cat "$STUCK_FILE" 2>/dev/null || echo 0)
+      MAX_STUCK_RETRIES=3
+
+      if [ "$STUCK_COUNT" -ge "$MAX_STUCK_RETRIES" ]; then
+        echo "!!! No progress after ${MAX_STUCK_RETRIES} retries — agent is stuck"
+        rm -f "$STUCK_FILE"
+        clear_state
+        exit 2
+      fi
+
+      echo $((STUCK_COUNT + 1)) > "$STUCK_FILE"
+      echo "!!! No progress made — retry $((STUCK_COUNT + 1))/${MAX_STUCK_RETRIES}"
       clear_state
-      exit 2
+      exit 1
     fi
+
+    # Progress was made — reset stuck counter
+    rm -f plan/.stuck-count
 
     # Push progress — fail loudly so we know about conflicts
     push_branch || true

@@ -86,7 +86,7 @@ Do NOT cherry-pick individual checks (e.g. running only `tsc` or `eslint`). Alwa
 
 If any check fails, fix the issue and re-run until all pass.
 
-If the task created or modified files in `e2e/`, also run `./scripts/run-e2e.sh` to verify E2E tests pass.
+If the task's **Verify** step includes `run-e2e.sh`, run that exact command (which may specify a single file like `./scripts/run-e2e.sh e2e/feature.spec.ts`). Only run the full suite (`./scripts/run-e2e.sh` with no args) when the task explicitly calls for it.
 
 **Visual verification**: If the task involves UI changes:
 

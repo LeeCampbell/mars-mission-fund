@@ -57,6 +57,7 @@ git fetch origin
 # BRANCH is passed from implement-milestone.sh to avoid drift
 
 if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
+  # Local branch exists (e.g. from a previous iteration in this container)
   git checkout "$BRANCH"
   if ! git merge upstream/main --no-edit; then
     echo "!!! Merge conflict with upstream/main"
@@ -64,7 +65,18 @@ if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
     git merge --abort
     exit 1
   fi
+elif git show-ref --verify --quiet "refs/remotes/origin/${BRANCH}"; then
+  # Branch exists on fork remote — resume prior work
+  echo ">>> Resuming from existing remote branch: origin/${BRANCH}"
+  git checkout -b "$BRANCH" "origin/${BRANCH}"
+  if ! git merge upstream/main --no-edit; then
+    echo "!!! Merge conflict with upstream/main"
+    echo "!!! Aborting merge — manual conflict resolution needed"
+    git merge --abort
+    exit 1
+  fi
 else
+  # Fresh branch from upstream/main
   git checkout -b "$BRANCH" upstream/main
 fi
 

@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router'
+import { useQuery } from '@tanstack/react-query'
 import { Logo } from './ui/Logo'
 import { Badge } from './ui/Badge'
 import { useAuthContext } from '../context/AuthContext'
 import { useLogout } from '../hooks/useAuth'
+import { fetchNotifications } from '../api/notifications'
 
 const headerStyle: React.CSSProperties = {
   position: 'sticky',
@@ -186,6 +188,68 @@ function ensureHeaderStyle() {
   document.head.appendChild(el)
 }
 
+const bellLinkStyle: React.CSSProperties = {
+  position: 'relative',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  textDecoration: 'none',
+  color: 'var(--color-text-secondary)',
+  fontSize: '20px',
+  lineHeight: 1,
+  padding: '4px',
+  transition: 'color var(--motion-hover)',
+}
+
+const badgeStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: '-4px',
+  right: '-6px',
+  minWidth: '16px',
+  height: '16px',
+  padding: '0 4px',
+  borderRadius: '8px',
+  background: 'var(--color-status-error)',
+  color: 'var(--color-text-on-accent)',
+  fontSize: '10px',
+  fontWeight: 700,
+  lineHeight: '16px',
+  textAlign: 'center',
+}
+
+function NotificationBell() {
+  const { data } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: fetchNotifications,
+    refetchInterval: 30000,
+  })
+  const unreadCount = data?.filter((n) => !n.read).length ?? 0
+
+  return (
+    <Link
+      to="/notifications"
+      style={bellLinkStyle}
+      aria-label={`Notifications (${unreadCount} unread)`}
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+      </svg>
+      {unreadCount > 0 && <span style={badgeStyle}>{unreadCount}</span>}
+    </Link>
+  )
+}
+
 const navLinks = [
   { to: '/', label: 'Home', end: true },
   { to: '/about', label: 'About', end: false },
@@ -200,6 +264,7 @@ export function Header() {
   const { mutate: logoutMutate } = useLogout()
 
   const isAdmin = user?.role === 'Administrator' || user?.role === 'SuperAdministrator'
+  const isReviewer = user?.role === 'Reviewer'
 
   return (
     <header style={headerStyle}>
@@ -246,6 +311,48 @@ export function Header() {
             )}
             {isAuthenticated && (
               <>
+                {isReviewer && (
+                  <li>
+                    <NavLink
+                      to="/review"
+                      className="mmf-nav-link"
+                      style={({ isActive }) => ({
+                        ...navLinkBase,
+                        ...(isActive ? navLinkActiveStyle : {}),
+                      })}
+                    >
+                      Review Queue
+                    </NavLink>
+                  </li>
+                )}
+                {isAdmin && (
+                  <>
+                    <li>
+                      <NavLink
+                        to="/admin/milestones"
+                        className="mmf-nav-link"
+                        style={({ isActive }) => ({
+                          ...navLinkBase,
+                          ...(isActive ? navLinkActiveStyle : {}),
+                        })}
+                      >
+                        Milestones
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/admin/cancellations"
+                        className="mmf-nav-link"
+                        style={({ isActive }) => ({
+                          ...navLinkBase,
+                          ...(isActive ? navLinkActiveStyle : {}),
+                        })}
+                      >
+                        Cancellations
+                      </NavLink>
+                    </li>
+                  </>
+                )}
                 <li>
                   <NavLink
                     to="/profile"
@@ -263,6 +370,9 @@ export function Header() {
                     <Badge variant="accent">Admin</Badge>
                   </li>
                 )}
+                <li>
+                  <NotificationBell />
+                </li>
                 <li>
                   <button
                     className="mmf-nav-link"
@@ -328,6 +438,51 @@ export function Header() {
           )}
           {isAuthenticated && (
             <>
+              {isReviewer && (
+                <li>
+                  <NavLink
+                    to="/review"
+                    className="mmf-mobile-nav-link"
+                    style={({ isActive }) => ({
+                      ...mobileNavLinkBase,
+                      ...(isActive ? mobileNavLinkActiveStyle : {}),
+                    })}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Review Queue
+                  </NavLink>
+                </li>
+              )}
+              {isAdmin && (
+                <>
+                  <li>
+                    <NavLink
+                      to="/admin/milestones"
+                      className="mmf-mobile-nav-link"
+                      style={({ isActive }) => ({
+                        ...mobileNavLinkBase,
+                        ...(isActive ? mobileNavLinkActiveStyle : {}),
+                      })}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      Milestones
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/admin/cancellations"
+                      className="mmf-mobile-nav-link"
+                      style={({ isActive }) => ({
+                        ...mobileNavLinkBase,
+                        ...(isActive ? mobileNavLinkActiveStyle : {}),
+                      })}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      Cancellations
+                    </NavLink>
+                  </li>
+                </>
+              )}
               <li>
                 <NavLink
                   to="/profile"
@@ -351,6 +506,14 @@ export function Header() {
                   <Badge variant="accent">Admin</Badge>
                 </li>
               )}
+              <li
+                style={{
+                  padding: '12px 0',
+                  borderBottom: '1px solid var(--color-border-subtle)',
+                }}
+              >
+                <NotificationBell />
+              </li>
               <li>
                 <button
                   className="mmf-mobile-nav-link"

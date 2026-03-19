@@ -67,7 +67,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; page renders at `/admin/cancellations`
   - **Brief ref**: §4 AdminCancellationApprovalPage
 
-- [ ] TASK-10: Enhance Header with notification bell and role-based nav links
+- [x] TASK-10: Enhance Header with notification bell and role-based nav links
   - **Goal**: Show contextual nav links and a live notification bell to authenticated users
   - **Details**: Modify `packages/client/src/components/Header.tsx`: (1) Add `isReviewer` detection: `user?.role === 'Reviewer'`. (2) Render "Review Queue" nav link → `/review` when `isReviewer`. (3) Render "Milestones" → `/admin/milestones` and "Cancellations" → `/admin/cancellations` nav links when `isAdmin`. (4) Add a `NotificationBell` inline sub-component: fetches notifications with `useQuery(['notifications'], fetchNotifications, { refetchInterval: 30000 })`; shows a bell icon (unicode 🔔 or inline SVG) with a badge displaying the unread count; the bell is a `<Link to="/notifications">` with `aria-label="Notifications (N unread)"`; badge uses `--color-status-error` background and `--color-text-on-accent` text; no badge rendered when count is 0. Apply all new links and bell to both desktop and mobile nav sections.
   - **Files**: `packages/client/src/components/Header.tsx`

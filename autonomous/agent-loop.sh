@@ -23,6 +23,20 @@ mkdir -p plan/ready plan/planning
 # within a single invocation, not across invocations.
 rm -f plan/.state
 
+# Detect stale plan files from a previous issue's squash merge.
+# When auto-merge races the plan-file cleanup commit, plan/ files (including
+# .pr-number) get baked into upstream/main. New issues inherit them.
+# Fix: if plan/.pr-number exists but references a different issue, nuke plan/.
+if [ -f "plan/.pr-number" ] && [ -n "${ISSUE_NUMBER:-}" ]; then
+  if [ -f "plan/ready/brief.md" ]; then
+    if ! grep -q "#${ISSUE_NUMBER}" "plan/ready/brief.md" 2>/dev/null; then
+      echo ">>> Stale plan files detected (from a previous issue) — cleaning up"
+      rm -rf plan/
+      mkdir -p plan/ready plan/planning
+    fi
+  fi
+fi
+
 TIMEOUT="${TIMEOUT_SECONDS:-1800}"
 
 # ── Validate required env vars ───────────────────────────────
@@ -539,19 +553,30 @@ PR repo: ${PR_REPO}
 PR number: ${PR_NUMBER}
 Branch: ${BRANCH}"
 
+    upload_screenshots "$PR_NUMBER" "$GH_TOKEN_FORK"
+
+    # Remove plan files from git BEFORE marking ready. This prevents them
+    # from being included in the squash merge if auto-merge fires quickly.
+    # Keep .pr-number and .finalized as local-only (untracked) state.
+    if git ls-files --error-unmatch plan/ &>/dev/null 2>&1; then
+      git rm -r plan/ || true
+      git commit -m "chore: remove plan files before PR ready" || true
+      push_branch || echo "!!! Push failed after plan cleanup"
+    fi
+
+    # Recreate local-only state files (not tracked by git)
+    mkdir -p plan
+    echo "$PR_NUMBER" > plan/.pr-number
+    touch plan/.finalized
+
     # Mark PR as ready for review (deterministic — not delegated to Claude)
     GH_TOKEN="$PR_GH_TOKEN" gh pr ready "$PR_NUMBER" \
       --repo "$PR_REPO" 2>&1 | tee -a "$LOG_FILE" || true
     echo ">>> PR #${PR_NUMBER} marked ready for review"
 
-    upload_screenshots "$PR_NUMBER" "$GH_TOKEN_FORK"
-
     # Restore fork token so subsequent states use the correct token
     export GH_TOKEN="$GH_TOKEN_FORK"
 
-    # Persist PR number for await-ci state (do NOT archive plan yet — needed for remediation)
-    echo "$PR_NUMBER" > plan/.pr-number
-    touch plan/.finalized
     clear_state
     echo ">>> PR #${PR_NUMBER} finalized for issue #${ISSUE_NUMBER}, transitioning to await-ci"
     exit 1  # iterate again into await-ci
@@ -585,29 +610,25 @@ Branch: ${BRANCH}"
         ;;
       passing)
         if [ ! -f "plan/.plan-archived" ]; then
-          # Phase 1: archive plan files, push, enable auto-merge, then exit.
-          # State is cleared so the next iteration re-derives via determine_state.
-          # With .plan-archived present and plan files removed from git, the
-          # heuristic lands back in await-ci for Phase 2.
-          echo ">>> CI passed — removing plan files before merge"
+          # Safety net: remove any plan files that survived to git (e.g., from
+          # CI remediation re-adding them). finalize-pr already cleaned them,
+          # but this catches stragglers.
           if git ls-files --error-unmatch plan/ &>/dev/null 2>&1; then
+            echo ">>> Removing residual plan files from git"
             git rm -r plan/ || true
-            git commit -m "chore: remove plan files after CI passed" || true
+            git commit -m "chore: remove plan files before merge" || true
+            push_branch || echo "!!! Push failed after plan cleanup"
           fi
           mkdir -p plan
           echo "$PR_NUMBER" > plan/.plan-archived
           clear_state
-          if push_branch; then
-            GH_TOKEN="$PR_GH_TOKEN" gh pr merge "$PR_NUMBER" \
-              --repo "$PR_REPO" --squash --auto 2>&1 | tee -a "$LOG_FILE" || true
-            echo ">>> Auto-merge enabled, GitHub will merge when CI passes"
-          else
-            echo ">>> Push failed — skipping auto-merge, will retry next iteration"
-          fi
+          GH_TOKEN="$PR_GH_TOKEN" gh pr merge "$PR_NUMBER" \
+            --repo "$PR_REPO" --squash --auto 2>&1 | tee -a "$LOG_FILE" || true
+          echo ">>> Auto-merge enabled, GitHub will merge when CI passes"
           exit 1
         fi
 
-        # Phase 2: CI green on clean branch — merge (fallback if auto-merge didn't fire)
+        # Phase 2: CI green — merge (fallback if auto-merge didn't fire)
         if check_pr_merged "$PR_NUMBER"; then
           rm -rf plan/
           echo ">>> Issue #${ISSUE_NUMBER} complete — PR already merged (auto-merge)"

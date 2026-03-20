@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Backend — expose missing campaign fields and update shared schema
+- [x] TASK-01: Backend — expose missing campaign fields and update shared schema
   - **Goal**: Make `cancellationRequestedAt` available in the campaign detail API and expose milestone evidence columns so the frontend can display them.
   - **Details**:
     1. In `packages/shared/src/campaign.ts`, add `cancellationRequestedAt: z.coerce.date().nullable()` to `CampaignDetailSchema`.

@@ -30,7 +30,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes; `npm run lint` passes.
   - **Brief ref**: "Backend: PATCH /v1/notifications/:id/read" section
 
-- [ ] TASK-03: Frontend — notifications API client and NotificationsPage
+- [x] TASK-03: Frontend — notifications API client and NotificationsPage
   - **Goal**: Create the notification API client functions and the `/notifications` page listing all notifications with per-item mark-as-read.
   - **Details**:
     1. Create `packages/client/src/api/notifications.ts` with:

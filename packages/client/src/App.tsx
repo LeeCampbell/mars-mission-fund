@@ -38,6 +38,9 @@ const CampaignFormPage = React.lazy(() =>
 const CampaignEditPage = React.lazy(() =>
   import('./pages/CampaignEditPage').then((m) => ({ default: m.CampaignEditPage }))
 )
+const NotificationsPage = React.lazy(() =>
+  import('./pages/NotificationsPage').then((m) => ({ default: m.NotificationsPage }))
+)
 
 export default function App() {
   return (
@@ -54,6 +57,7 @@ export default function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
             </Route>
             <Route element={<ProtectedRoute requireAdmin />}>
               <Route path="/admin/users" element={<AdminUsersPage />} />

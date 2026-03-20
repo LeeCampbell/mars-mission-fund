@@ -148,7 +148,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes AND `./scripts/run-e2e.sh e2e/reviewer.spec.ts` passes.
   - **Brief ref**: "Frontend: ReviewDetailPage" and "Frontend: Header update" sections
 
-- [ ] TASK-07: Full E2E regression and CI verification
+- [x] TASK-07: Full E2E regression and CI verification
   - **Goal**: Run the complete E2E suite and CI checks to confirm nothing is broken end-to-end.
   - **Details**: No new code. Run the full test suite as a final gate. Fix any failures found before marking complete.
   - **Files**: (none)

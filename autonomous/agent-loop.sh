@@ -94,12 +94,29 @@ check_remediation_attempts() {
   echo ">>> ${description} — attempt $((attempts + 1))/${MAX_REMEDIATION_ATTEMPTS}"
 }
 
-# Push the feature branch to the fork. Logs and warns on failure.
-push_branch() {
-  if ! git push origin "$BRANCH" --force-with-lease 2>&1 | tee -a "$LOG_FILE"; then
-    echo "!!! Push failed — branch may have diverged"
-    return 1
+# Commit any uncommitted changes (safety net — Claude should commit, but if
+# it timed out or crashed mid-task, we capture partial work).
+safety_commit() {
+  local msg="${1:-chore: save progress for #${ISSUE_NUMBER}}"
+  if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
+    echo ">>> Safety commit: uncommitted changes detected"
+    git add -A
+    git commit -m "$msg" || true
   fi
+}
+
+# Push the feature branch to the fork. Logs and warns on failure.
+# Returns 0 on success, 1 on failure. Always logs outcome to stdout.
+push_branch() {
+  local push_output
+  push_output=$(git push origin "$BRANCH" --force-with-lease 2>&1) || {
+    echo "!!! Push FAILED:"
+    echo "$push_output"
+    echo "$push_output" >> "$LOG_FILE"
+    return 1
+  }
+  echo ">>> Push OK"
+  echo "$push_output" >> "$LOG_FILE"
 }
 
 # Check if a PR has already been merged (e.g. by auto-merge).
@@ -113,6 +130,7 @@ check_pr_merged() {
 
 # Create a draft PR targeting main on the upstream repo.
 # Writes plan/.pr-number on success. Returns PR number or empty string.
+# Logs outcome to BOTH stdout and stderr so docker-compose captures it.
 create_draft_pr() {
   local pr_url gh_stderr
   gh_stderr=$(mktemp)
@@ -129,11 +147,24 @@ create_draft_pr() {
 
   if [ -n "$pr_number" ]; then
     echo "$pr_number" > plan/.pr-number
-    echo ">>> Draft PR #${pr_number} created on ${PR_REPO}" >&2
+    echo ">>> Draft PR #${pr_number} created on ${PR_REPO}"
   else
-    echo "!!! Draft PR creation failed: $(cat "$gh_stderr" 2>/dev/null) ${pr_url}" >&2
+    local stderr_msg
+    stderr_msg=$(cat "$gh_stderr" 2>/dev/null || true)
+    echo "!!! Draft PR creation FAILED: ${stderr_msg} ${pr_url}"
   fi
   rm -f "$gh_stderr"
+  echo "$pr_number"
+}
+
+# Ensure a draft PR exists. Creates one if missing. Prints PR number.
+ensure_draft_pr() {
+  local pr_number
+  pr_number=$(resolve_pr_number)
+  if [ -z "$pr_number" ]; then
+    echo ">>> No PR found — creating draft PR"
+    pr_number=$(create_draft_pr)
+  fi
   echo "$pr_number"
 }
 
@@ -389,18 +420,20 @@ Upstream repo: ${UPSTREAM_REPO}"
       # leave us stuck in create-tasks.
       clear_state
 
-      # Commit plan files so they're included in the push
+      # Side-effects (commit/push/PR) are non-critical — protect from set -e.
+      # A failure here means no draft PR yet, but execute-tasks will retry.
+      set +e
       git add plan/
-      git commit -m "chore: add plan for #${ISSUE_NUMBER}" || true
-
-      # Push branch to fork so we can create a draft PR for visibility
-      push_branch || true
-
-      # Create draft PR (once — this state only runs once)
-      PR_NUMBER=$(create_draft_pr)
-      if [ -z "$PR_NUMBER" ]; then
-        echo "!!! Draft PR creation failed (non-fatal)"
+      git commit -m "chore: add plan for #${ISSUE_NUMBER}"
+      if push_branch; then
+        PR_NUMBER=$(create_draft_pr)
+        if [ -z "$PR_NUMBER" ]; then
+          echo "!!! Draft PR creation failed (will retry in execute-tasks)"
+        fi
+      else
+        echo "!!! Push failed (will retry in execute-tasks)"
       fi
+      set -e
     else
       echo "!!! No tasks produced"
       clear_state
@@ -453,8 +486,16 @@ Upstream repo: ${UPSTREAM_REPO}"
     # Progress was made — reset stuck counter
     rm -f plan/.stuck-count
 
-    # Push progress — fail loudly so we know about conflicts
-    push_branch || true
+    # Commit any uncommitted changes (Claude should commit, but this catches
+    # timeouts or partial completions)
+    safety_commit "chore: save progress on #${ISSUE_NUMBER}"
+
+    # Push progress and ensure draft PR exists for visibility
+    set +e
+    if push_branch; then
+      ensure_draft_pr > /dev/null
+    fi
+    set -e
 
     clear_state
 
@@ -466,8 +507,9 @@ Upstream repo: ${UPSTREAM_REPO}"
   finalize-pr)
     set_state "finalize-pr"
 
-    # Push the branch — fail loudly
-    push_branch || true
+    # Commit any leftover changes and push
+    safety_commit "chore: save progress on #${ISSUE_NUMBER}"
+    push_branch || echo "!!! Push failed in finalize-pr — will retry after PR creation"
 
     PR_NUMBER=$(resolve_pr_number)
     if [ -z "$PR_NUMBER" ]; then
@@ -503,6 +545,9 @@ Branch: ${BRANCH}"
     echo ">>> PR #${PR_NUMBER} marked ready for review"
 
     upload_screenshots "$PR_NUMBER" "$GH_TOKEN_FORK"
+
+    # Restore fork token so subsequent states use the correct token
+    export GH_TOKEN="$GH_TOKEN_FORK"
 
     # Persist PR number for await-ci state (do NOT archive plan yet — needed for remediation)
     echo "$PR_NUMBER" > plan/.pr-number
@@ -547,7 +592,7 @@ Branch: ${BRANCH}"
           echo ">>> CI passed — removing plan files before merge"
           if git ls-files --error-unmatch plan/ &>/dev/null 2>&1; then
             git rm -r plan/ || true
-            git commit -m "chore: remove plan files after CI passed"
+            git commit -m "chore: remove plan files after CI passed" || true
           fi
           mkdir -p plan
           echo "$PR_NUMBER" > plan/.plan-archived
@@ -601,7 +646,8 @@ Base branch: ${BASE_BRANCH}
 Failure type: MERGE_CONFLICT
 The PR has merge conflicts with the base branch (${BASE_BRANCH}). The base branch has already been fetched. Rebase onto upstream/${BASE_BRANCH} and resolve all conflicts."
 
-        push_branch || true
+        safety_commit "fix: resolve merge conflicts for #${ISSUE_NUMBER}"
+        push_branch || echo "!!! Push failed after conflict resolution"
 
         clear_state
         echo ">>> Conflict resolution pushed, will re-check after cooldown"
@@ -636,7 +682,8 @@ CI failure logs:
 ${FAILED_LOG}
 \`\`\`"
 
-        push_branch || true
+        safety_commit "fix: CI remediation for #${ISSUE_NUMBER}"
+        push_branch || echo "!!! Push failed after CI remediation"
 
         clear_state
         echo ">>> Remediation pushed, will re-check CI after cooldown"

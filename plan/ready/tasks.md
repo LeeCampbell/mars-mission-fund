@@ -112,7 +112,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes; `npm run build` passes; `npm run lint` passes.
   - **Brief ref**: "Frontend: AdminActionsPanel component" and "Frontend: CampaignDetailPage update" sections
 
-- [ ] TASK-06: Frontend — ReviewDetailPage, route updates, and E2E reviewer flow test
+- [x] TASK-06: Frontend — ReviewDetailPage, route updates, and E2E reviewer flow test
   - **Goal**: Build the `/review/:id` page for reviewers, register routes, update ReviewQueuePage navigation, and write the E2E test for the claim → review detail → approve flow.
   - **Details**:
     1. Create `packages/client/src/pages/ReviewDetailPage.tsx`:

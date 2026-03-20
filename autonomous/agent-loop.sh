@@ -16,6 +16,13 @@ mkdir -p "$LOG_DIR" "$SCREENSHOT_DIR"
 cd "$REPO_DIR"
 mkdir -p plan/ready plan/planning
 
+# Clear any stale .state lock from a previous crashed invocation.
+# With set -e, a crash between set_state and clear_state leaves .state
+# on disk, locking determine_state to the crashed state forever.
+# The filesystem heuristic is authoritative — .state is only useful
+# within a single invocation, not across invocations.
+rm -f plan/.state
+
 TIMEOUT="${TIMEOUT_SECONDS:-1800}"
 
 # ── Validate required env vars ───────────────────────────────

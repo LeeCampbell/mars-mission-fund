@@ -6,6 +6,7 @@
       "Bash(grep:*)",
       "Bash(find:*)",
       "Bash(head:*)",
+      "Bash(sed:*)",
       "Bash(tail:*)",
       "Bash(wc:*)",
       "Bash(sort:*)",

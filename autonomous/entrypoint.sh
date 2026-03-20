@@ -125,8 +125,10 @@ while [ "$iteration" -lt "$max_iterations" ]; do
   if [ "$exit_code" -eq 0 ]; then
     echo ">>> Issue #${ISSUE_NUMBER} completed successfully"
     break
+  elif [ "$exit_code" -eq 1 ]; then
+    echo ">>> agent-loop exited 1 (iterate again)"
   elif [ "$exit_code" -eq 2 ]; then
-    echo "!!! Issue #${ISSUE_NUMBER} — agent stuck, exiting"
+    echo "!!! Issue #${ISSUE_NUMBER} — agent stuck (exit 2), exiting"
     LAST_LOG=$(ls -t "/workspace/logs/issue-${ISSUE_NUMBER}-"* 2>/dev/null | head -1)
     STUCK_STATE=$(basename "${LAST_LOG:-unknown}" | sed 's/issue-[0-9]*-//;s/-[0-9]*\.log//')
     GH_TOKEN="${GH_TOKEN_UPSTREAM}" gh issue comment "${ISSUE_NUMBER}" \
@@ -134,6 +136,9 @@ while [ "$iteration" -lt "$max_iterations" ]; do
       --body "Agent stuck at stage \`${STUCK_STATE}\` after ${iteration} iterations. Manual intervention needed." \
       2>/dev/null || echo "!!! Failed to comment on issue"
     exit 1
+  else
+    echo "!!! agent-loop crashed with unexpected exit code ${exit_code} (likely set -e)"
+    echo "!!! Treating as iterate-again, but this indicates a bug in agent-loop.sh"
   fi
 
   # Cooldown between iterations

@@ -66,13 +66,13 @@ run_claude() {
       attempt=$((attempt + 1))
       if [ "$attempt" -ge "$max_api_retries" ]; then
         echo "!!! API error persists after ${max_api_retries} retries"
-        return
+        return 0
       fi
       echo ">>> Transient API error detected — retry ${attempt}/${max_api_retries} after ${backoff}s..."
       sleep "$backoff"
       backoff=$((backoff * 2))
     else
-      return
+      return 0
     fi
   done
 }

@@ -18,7 +18,7 @@ test.describe('Reviewer flow', () => {
     await login(page, 'reviewer@example.com', 'reviewer-demo-pass')
     await expect(page).toHaveURL('/')
 
-    await page.goto('/review-queue')
+    await page.goto('/review')
     await expect(page.getByRole('heading', { name: 'Review Queue' })).toBeVisible()
     await expect(page.getByText(SUBMITTED_CAMPAIGN_TITLE)).toBeVisible()
   })
@@ -27,14 +27,14 @@ test.describe('Reviewer flow', () => {
     await login(page, 'reviewer@example.com', 'reviewer-demo-pass')
     await expect(page).toHaveURL('/')
 
-    await page.goto('/review-queue')
+    await page.goto('/review')
     await expect(page.getByText(SUBMITTED_CAMPAIGN_TITLE)).toBeVisible()
 
     // Click the Claim button for the submitted campaign
     await page.getByRole('button', { name: `Claim campaign: ${SUBMITTED_CAMPAIGN_TITLE}` }).click()
 
-    // Should redirect to campaign detail page
-    await expect(page).toHaveURL(`/campaigns/${SUBMITTED_CAMPAIGN_ID}`)
+    // Should redirect to review detail page
+    await expect(page).toHaveURL(`/review/${SUBMITTED_CAMPAIGN_ID}`)
 
     // Status should now show Under Review
     await expect(page.getByText('Under Review')).toBeVisible()
@@ -94,12 +94,12 @@ test.describe('Route protection', () => {
     await login(page, 'backer@example.com', 'backer-demo-pass')
     await expect(page).toHaveURL('/')
 
-    await page.goto('/review-queue')
-    await expect(page).not.toHaveURL('/review-queue')
+    await page.goto('/review')
+    await expect(page).not.toHaveURL('/review')
   })
 
   test('unauthenticated user is redirected to login from review queue', async ({ page }) => {
-    await page.goto('/review-queue')
+    await page.goto('/review')
     await expect(page).toHaveURL('/login')
   })
 })

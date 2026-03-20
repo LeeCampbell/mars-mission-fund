@@ -106,6 +106,12 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 - Demo accounts use known passwords (e.g. `password123`) stored as bcrypt hashes in seed SQL.
 - These are workshop-only; never use known seed passwords in a production system.
 
+## Issue #115: dbmate `--no-dump-schema` is a global flag, not a subcommand flag
+
+- `--no-dump-schema` must come BEFORE the subcommand: `dbmate --no-dump-schema ... down`, not `dbmate ... down --no-dump-schema`.
+- Placing it after `down` causes exit code 2 ("flag provided but not defined"), which makes the teardown loop fail immediately on every invocation.
+- Also: `dbmate down` exits with code 2 (not 0) when there are no migrations to roll back ("Error: can't rollback: no migrations have been applied"). Use `|| true` in the loop and rely on checking for "Rolled back:" in output to detect completion.
+
 ## Issue #111: Playwright browser binary missing in workspace environment
 
 - If `npm run test:e2e` fails with "Executable doesn't exist" after a Playwright version bump, run `npx playwright install chromium` to download the new browser binaries.

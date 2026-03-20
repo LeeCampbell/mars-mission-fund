@@ -51,7 +51,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` passes; navigate to `/notifications` in the running app and confirm the page loads without errors.
   - **Brief ref**: "Frontend: Notification API client" and "Frontend: NotificationsPage" sections
 
-- [ ] TASK-04: Frontend — NotificationBell component and Header updates
+- [x] TASK-04: Frontend — NotificationBell component and Header updates
   - **Goal**: Add a notification bell with unread-count badge to the Header, plus the Reviewer "Review" nav link and update `/review-queue` references to `/review`.
   - **Details**:
     1. Create `packages/client/src/components/NotificationBell.tsx`:

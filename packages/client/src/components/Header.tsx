@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router'
 import { Logo } from './ui/Logo'
 import { Badge } from './ui/Badge'
+import { NotificationBell } from './NotificationBell'
 import { useAuthContext } from '../context/AuthContext'
 import { useLogout } from '../hooks/useAuth'
 
@@ -200,6 +201,7 @@ export function Header() {
   const { mutate: logoutMutate } = useLogout()
 
   const isAdmin = user?.role === 'Administrator' || user?.role === 'SuperAdministrator'
+  const isReviewer = user?.role === 'Reviewer'
 
   return (
     <header style={headerStyle}>
@@ -246,6 +248,20 @@ export function Header() {
             )}
             {isAuthenticated && (
               <>
+                {isReviewer && (
+                  <li>
+                    <NavLink
+                      to="/review"
+                      className="mmf-nav-link"
+                      style={({ isActive }) => ({
+                        ...navLinkBase,
+                        ...(isActive ? navLinkActiveStyle : {}),
+                      })}
+                    >
+                      Review
+                    </NavLink>
+                  </li>
+                )}
                 <li>
                   <NavLink
                     to="/profile"
@@ -263,6 +279,9 @@ export function Header() {
                     <Badge variant="accent">Admin</Badge>
                   </li>
                 )}
+                <li>
+                  <NotificationBell />
+                </li>
                 <li>
                   <button
                     className="mmf-nav-link"
@@ -328,6 +347,21 @@ export function Header() {
           )}
           {isAuthenticated && (
             <>
+              {isReviewer && (
+                <li>
+                  <NavLink
+                    to="/review"
+                    className="mmf-mobile-nav-link"
+                    style={({ isActive }) => ({
+                      ...mobileNavLinkBase,
+                      ...(isActive ? mobileNavLinkActiveStyle : {}),
+                    })}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Review
+                  </NavLink>
+                </li>
+              )}
               <li>
                 <NavLink
                   to="/profile"

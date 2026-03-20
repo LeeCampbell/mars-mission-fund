@@ -12,13 +12,17 @@ cleanup() {
   [ -n "$SERVER_PID" ] && kill "$SERVER_PID" 2>/dev/null || true
   wait "$SERVER_PID" 2>/dev/null || true
   echo ">>> Tearing down database..."
-  if timeout 30 dbmate -d packages/server/db/migrations -s packages/server/db/schema.sql down 2>&1; then
-    echo ">>> dbmate down succeeded."
-  else
-    echo ">>> dbmate down failed or timed out — dropping database to ensure clean state"
-    dbmate -d packages/server/db/migrations -s packages/server/db/schema.sql drop 2>/dev/null || true
-    dbmate -d packages/server/db/migrations -s packages/server/db/schema.sql create 2>/dev/null || true
-  fi
+  # dbmate down rolls back one migration at a time; loop until all are rolled back
+  # --no-dump-schema is a global flag and must come before the subcommand
+  while true; do
+    output=$(timeout 30 dbmate --no-dump-schema -d packages/server/db/migrations -s packages/server/db/schema.sql down 2>&1) || true
+    echo "$output"
+    # Stop when there is nothing left to roll back
+    if ! echo "$output" | grep -q "Rolled back:"; then
+      break
+    fi
+  done
+  echo ">>> dbmate down succeeded."
   echo ">>> E2E teardown complete."
 }
 trap cleanup EXIT

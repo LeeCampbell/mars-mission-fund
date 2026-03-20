@@ -56,6 +56,7 @@ const mockCampaign: CampaignDetail = {
   updatedAt: new Date('2024-01-01'),
   creatorId: 'u1',
   reviewerId: null,
+  cancellationRequestedAt: null,
   milestones: [
     {
       id: 'm1',

@@ -29,6 +29,7 @@ const mockCampaign: CampaignDetail = {
   updates: [],
   creatorId: null,
   reviewerId: null,
+  cancellationRequestedAt: null,
 }
 
 describe('FundingProgressSection', () => {

@@ -711,6 +711,17 @@ export interface NotificationRow {
   createdAt: Date
 }
 
+export async function markNotificationRead(
+  pool: Pool,
+  notificationId: string,
+  userId: string
+): Promise<void> {
+  await pool.query(`UPDATE notifications SET read = true WHERE id = $1 AND user_id = $2`, [
+    notificationId,
+    userId,
+  ])
+}
+
 export async function getNotificationsForUser(
   pool: Pool,
   userId: string

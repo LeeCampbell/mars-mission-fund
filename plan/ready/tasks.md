@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/shared && npx tsc -b --noEmit && npx tsc --noEmit -p packages/server/tsconfig.json` passes with no errors.
   - **Brief ref**: "Backend: Expose missing campaign detail fields" section
 
-- [ ] TASK-02: Backend — `markNotificationRead` query and `PATCH /v1/notifications/:id/read` route
+- [x] TASK-02: Backend — `markNotificationRead` query and `PATCH /v1/notifications/:id/read` route
   - **Goal**: Add a backend endpoint that marks a single notification as read for the authenticated user.
   - **Details**:
     1. In `packages/server/src/campaigns/queries.ts`, add `markNotificationRead(pool, notificationId, userId)` — executes `UPDATE notifications SET read = true WHERE id = $1 AND user_id = $2`.

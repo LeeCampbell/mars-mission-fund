@@ -11,6 +11,7 @@ import { StretchGoalsSection } from '../components/campaigns/StretchGoalsSection
 import { CampaignUpdatesSection } from '../components/campaigns/CampaignUpdatesSection'
 import { TeamSection } from '../components/campaigns/TeamSection'
 import { ReviewActionsPanel } from '../components/campaigns/ReviewActionsPanel'
+import { AdminActionsPanel } from '../components/campaigns/AdminActionsPanel'
 import { useAuthContext } from '../context/AuthContext'
 import { postCampaignUpdate, submitMilestoneEvidence } from '../api/campaigns'
 import type { CampaignStatus, Milestone } from '@mmf/shared'
@@ -487,6 +488,12 @@ export function CampaignDetailPage() {
               <div style={sectionSpacingStyle}>
                 <ReviewActionsPanel campaign={campaign} user={user} />
               </div>
+
+              {(user?.role === 'Administrator' || user?.role === 'SuperAdministrator') && (
+                <div style={sectionSpacingStyle}>
+                  <AdminActionsPanel campaign={campaign} user={user} />
+                </div>
+              )}
 
               {user?.id === campaign.creatorId &&
                 (campaign.status === 'Live' || campaign.status === 'Funded') && (

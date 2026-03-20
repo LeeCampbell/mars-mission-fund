@@ -78,7 +78,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes; `npm run build` passes.
   - **Brief ref**: "Frontend: NotificationBell component" and "Frontend: Header update" sections
 
-- [ ] TASK-05: Frontend — admin API functions, AdminActionsPanel component, and CampaignDetailPage integration
+- [x] TASK-05: Frontend — admin API functions, AdminActionsPanel component, and CampaignDetailPage integration
   - **Goal**: Add admin campaign action API helpers, build the `AdminActionsPanel` with milestone verification and cancellation approval sub-sections, and embed it in `CampaignDetailPage`.
   - **Details**:
     1. In `packages/client/src/api/campaigns.ts`, add:

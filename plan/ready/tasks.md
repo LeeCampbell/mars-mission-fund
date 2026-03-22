@@ -46,7 +46,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Both new ADR filenames appear in README; `npm run lint:md` passes; no .md file under specs/ is missing from the index
   - **Brief ref**: Step 3 — README index update
 
-- [ ] TASK-07: Verify specs/learnings.md and run final CI check
+- [x] TASK-07: Verify specs/learnings.md and run final CI check
   - **Goal**: Confirm learnings.md already covers the two known gotchas and ensure all markdown lint and build checks pass
   - **Details**: Read `specs/learnings.md`. Confirm that both the `dbmate --no-dump-schema` flag ordering issue (issue #115) and the Playwright browser binary issue (issue #111) are already present — do NOT duplicate them. If either is missing, add a concise entry. Then run `npm run lint:md` and `npm run build` to confirm the full documentation set passes CI. Also verify `git diff --name-only` shows only `specs/` and `plan/` files (no code changes).
   - **Files**: `specs/learnings.md` (only if an entry is missing)

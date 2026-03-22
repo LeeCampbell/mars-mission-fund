@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists, follows ADR template, covers all five sections; `npm run lint:md` passes
   - **Brief ref**: Step 1 — New ADRs (ADR-0003)
 
-- [ ] TASK-03: Update specs/tech/audit.md with demo scope note
+- [x] TASK-03: Update specs/tech/audit.md with demo scope note
   - **Goal**: Clarify which audit features are production requirements not implemented in the demo
   - **Details**: Read `specs/tech/audit.md`. Locate or add a "Local demo scope" / "Demo simplification" section. Add a note referencing ADR-0002 clarifying that hash chains, tamper detection, retention enforcement, and anomaly detection described in the spec are production requirements not implemented in the demo. The note should name the three tables actually in use.
   - **Files**: `specs/tech/audit.md`

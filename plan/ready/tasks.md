@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Both files reference ADR-0003 and describe their respective stub; `npm run lint:md` passes
   - **Brief ref**: Step 2 — Spec updates (payments.md, kyc.md)
 
-- [ ] TASK-06: Update specs/README.md index and verify completeness
+- [x] TASK-06: Update specs/README.md index and verify completeness
   - **Goal**: Add ADR-0002 and ADR-0003 to the README Tooling table and confirm every .md under specs/ is indexed
   - **Details**: Read `specs/README.md`. (1) Update the File System Layout listing under `adrs/` to include `0002-audit-log-demo-simplification.md` and `0003-stubbed-integrations.md`. (2) Update the `adrs/` row description to mention individual ADRs are listed in the directory. (3) Glob all `.md` files under `specs/` and cross-check that every file appears somewhere in `specs/README.md`; add any missing entries.
   - **Files**: `specs/README.md`

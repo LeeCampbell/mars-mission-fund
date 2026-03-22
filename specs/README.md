@@ -106,7 +106,7 @@ These are not numbered specs and do not participate in the L1–L4 dependency hi
 
 | Document            | Purpose                                                                 |
 | ------------------- | ----------------------------------------------------------------------- |
-| `adrs/`             | Architecture Decision Records capturing technology and structural choices. |
+| `adrs/`             | Architecture Decision Records capturing technology and structural choices. ADR-0001: npm workspaces monorepo; ADR-0002: audit log demo simplification; ADR-0003: stubbed integrations. |
 | `tooling/github.md` | CLI reference for managing GitHub milestones, issues, and PRs via `gh`. |
 | `learnings.md`      | Accumulated gotchas, environment quirks, and workarounds discovered during implementation; updated by agents at milestone close. |
 
@@ -173,7 +173,9 @@ Some concerns span multiple specs. When working in these areas, read all referen
 specs/
 ├── README.md                          ← You are here
 ├── adrs/
-│   └── 0001-npm-workspaces-monorepo.md  ← ADR-0001
+│   ├── 0001-npm-workspaces-monorepo.md          ← ADR-0001
+│   ├── 0002-audit-log-demo-simplification.md    ← ADR-0002
+│   └── 0003-stubbed-integrations.md             ← ADR-0003
 ├── learnings.md                       ← Accumulated implementation gotchas
 ├── product-vision-and-mission.md      ← L1
 ├── standards/

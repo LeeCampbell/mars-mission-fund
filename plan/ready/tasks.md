@@ -37,7 +37,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File updated (or confirmed already current); `npm run lint:md` passes on it
   - **Brief ref**: Scope — Verify specs/learnings.md; Approach — check for uncaptured Campaign Lifecycle patterns
 
-- [ ] TASK-05: Full CI verification
+- [x] TASK-05: Full CI verification
   - **Goal**: Confirm all CI gates pass cleanly on the current branch state after all spec updates
   - **Details**: Run `./scripts/ci-check.sh` and confirm every check passes — specifically markdownlint (`npm run lint:md`), TypeScript compilation, ESLint, Prettier, build, and unit tests with coverage. Fix any lint or formatting issues surfaced by the run.
   - **Files**: (none — no new code; only fix issues surfaced by CI)

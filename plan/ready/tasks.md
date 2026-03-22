@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Create ADR-0002 (audit log demo simplification)
+- [x] TASK-01: Create ADR-0002 (audit log demo simplification)
   - **Goal**: Document the three-table audit pattern and how it differs from the production event-sourcing spec
   - **Details**: Create `specs/adrs/0002-audit-log-demo-simplification.md` following the ADR-0001 structure (Status / Date / Deciders / Context / Decision / Rationale / Alternatives considered / Consequences). Cover: (1) Context — L3-006 describes production-grade immutable event stream with hash chains, tamper detection, retention tiers, anomaly detection; demo needs auditable trail without infrastructure burden. (2) Decision — three-table approach: `audit_log` (legacy JSONB append-only for settlement/milestone events), `campaign_audit_events` (structured events with previous/new state for workflow transitions), `audit_events` (spec-aligned table for campaign lifecycle events). (3) Rationale — tables added incrementally during milestone; demo value comes from event visibility, not hash-chain integrity. (4) What production requires: hash chaining (SHA-256), batch tamper verification, hot/warm/cold retention tiers, anomaly-detection rules, audit-access logging.
   - **Files**: `specs/adrs/0002-audit-log-demo-simplification.md`

@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Add DB migration seeding lifecycle test campaigns
+- [x] TASK-01: Add DB migration seeding lifecycle test campaigns
   - **Goal**: Insert the five campaigns (plus required milestones, team members, one contribution row, and one notification row) into the database so subsequent tasks and tests have deterministic data.
   - **Details**:
     - Create `packages/server/db/migrations/20260322000001_seed_lifecycle_test_campaigns.sql`

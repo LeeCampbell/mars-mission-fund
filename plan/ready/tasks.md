@@ -24,7 +24,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Run `./scripts/run-local.sh` (or manually apply migrations with dbmate) and confirm the five campaigns appear in the DB; no migration errors.
   - **Brief ref**: "Seeded test data" section
 
-- [ ] TASK-02: Add `cancelCampaign` API wrapper and Cancel button on DashboardPage
+- [x] TASK-02: Add `cancelCampaign` API wrapper and Cancel button on DashboardPage
   - **Goal**: Expose the existing `POST /v1/campaigns/:id/cancel` backend route to the frontend so test 6 can trigger a cancellation via the UI.
   - **Details**:
     - In `packages/client/src/api/campaigns.ts`, add `export async function cancelCampaign(id: string)` that calls `POST /v1/campaigns/${id}/cancel` — follow the exact pattern of `launchCampaign` (or the nearest equivalent POST-with-no-body helper already in that file).

@@ -175,6 +175,11 @@ export async function returnMilestone(
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
 }
 
+export async function cancelCampaign(id: string): Promise<void> {
+  const response = await authedFetch(`/v1/campaigns/${id}/cancel`, { method: 'POST' })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+}
+
 export async function approveCancel(id: string): Promise<void> {
   const response = await authedFetch(`/v1/campaigns/${id}/approve-cancel`, { method: 'POST' })
   if (!response.ok) throw new Error(`HTTP ${response.status}`)

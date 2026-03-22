@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File exists, follows ADR template, covers all five sections; `npm run lint:md` passes
   - **Brief ref**: Step 1 — New ADRs (ADR-0002)
 
-- [ ] TASK-02: Create ADR-0003 (stubbed integrations)
+- [x] TASK-02: Create ADR-0003 (stubbed integrations)
   - **Goal**: Document the KYC and payment stubs and what production integration would require
   - **Details**: Create `specs/adrs/0003-stubbed-integrations.md` following the ADR-0001 structure. Cover: (1) Context — L4-004 (Payments) and L4-005 (KYC) describe production Stripe and third-party KYC integrations. (2) Decision — both stubbed for demo: KYC is `const kycVerified = true` in `packages/server/src/campaigns/queries.ts` submitCampaign; Payments are `console.log('[STUB] ...')` at fund disbursement (milestone verification), refund (settlement cancellation), and admin notification (evidence submission). (3) Rationale — PCI DSS scope, Stripe API keys, and KYC provider onboarding are out of scope for local workshop demo. (4) What production requires: Stripe Connect integration, escrow account management, KYC document upload and provider API calls, webhook handling.
   - **Files**: `specs/adrs/0003-stubbed-integrations.md`

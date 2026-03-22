@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: File contains reference to ADR-0002 and lists unimplemented features; `npm run lint:md` passes
   - **Brief ref**: Step 2 — Spec updates (audit.md)
 
-- [ ] TASK-04: Update specs/domain/campaign.md with demo scope notes and Glossary
+- [x] TASK-04: Update specs/domain/campaign.md with demo scope notes and Glossary
   - **Goal**: Mark unimplemented sections as out-of-scope for demo and add milestone vocabulary glossary
   - **Details**: Read `specs/domain/campaign.md`. (1) Add "Local demo scope" callout notes to: §6.3 (appeal process), §7.4 (deadline extension requests), §7.5 (milestone change requests), and near AC-CAMP-023 (KYC revocation handling). (2) Add a new Glossary section (§12, after existing §11 Interface Contracts, before the Change Log) with definitions for: **Review Queue**, **Settlement**, **Stretch Goal**, **Milestone Evidence**, **Cancellation Workflow**, **Deadline Enforcement** — use exact definitions from the brief.
   - **Files**: `specs/domain/campaign.md`

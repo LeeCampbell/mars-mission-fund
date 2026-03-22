@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Both files are non-empty, structurally complete, and `npm run lint:md` passes on them
   - **Brief ref**: Scope — ADR-0002 and ADR-0003 deliverables; Verification — ADR completeness
 
-- [ ] TASK-02: Verify demo-scope callouts in audit.md, campaign.md, payments.md, and kyc.md
+- [x] TASK-02: Verify demo-scope callouts in audit.md, campaign.md, payments.md, and kyc.md
   - **Goal**: Confirm all four spec files contain the required demo-scope callouts referencing the correct ADRs
   - **Details**: Read each of the four files and check:
     - `specs/tech/audit.md` — demo-scope note with three-table detail and reference to ADR-0002

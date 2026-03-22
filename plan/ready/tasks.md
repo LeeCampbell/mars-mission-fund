@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Verify ADR-0002 and ADR-0003 completeness
+- [x] TASK-01: Verify ADR-0002 and ADR-0003 completeness
   - **Goal**: Confirm both ADR files cover all required sections and content per the brief
   - **Details**: Read `specs/adrs/0002-audit-log-demo-simplification.md` and verify it covers: three-table divergence, context, decision, rationale, alternatives considered, production requirements, and consequences. Read `specs/adrs/0003-stubbed-integrations.md` and verify it covers: KYC stub location, all three payment stub locations, context, decision, rationale, alternatives, production requirements, and consequences. Fix any missing sections or thin content.
   - **Files**: `specs/adrs/0002-audit-log-demo-simplification.md`, `specs/adrs/0003-stubbed-integrations.md`

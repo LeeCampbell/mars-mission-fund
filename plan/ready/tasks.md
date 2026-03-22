@@ -30,7 +30,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All `.md` files under `specs/` appear in the README tree; `npm run lint:md` passes
   - **Brief ref**: Scope — Update specs/README.md; Verification — Spec completeness
 
-- [ ] TASK-04: Verify and update specs/learnings.md
+- [x] TASK-04: Verify and update specs/learnings.md
   - **Goal**: Ensure `specs/learnings.md` captures all patterns from the Campaign Lifecycle milestone not yet documented
   - **Details**: Read `specs/learnings.md` and review the git log for Campaign Lifecycle milestone commits. Check whether any new server, auth, CQRS, or hexagonal-architecture patterns that emerged during the milestone are absent. Look for patterns around: CQRS event sourcing for campaigns, repository pattern usage, JWT role-based access, dbmate migration patterns, audit table design decisions, or stub/demo-scope boundary patterns. Add any missing entries following the existing style.
   - **Files**: `specs/learnings.md`

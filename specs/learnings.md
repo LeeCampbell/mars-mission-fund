@@ -106,6 +106,29 @@ Tips and gotchas discovered by previous agents. Read this before starting work.
 - Demo accounts use known passwords (e.g. `password123`) stored as bcrypt hashes in seed SQL.
 - These are workshop-only; never use known seed passwords in a production system.
 
+## Campaign Lifecycle Patterns
+
+### Three active audit write paths (demo artifact)
+
+- The Campaign Lifecycle milestone produced three separate audit tables through parallel PR development: `campaign_audit_events` (written by `createAuditEvent` in `queries.ts`), `audit_events` (written by `writeAuditEvent` in `audit.ts`), and `audit_log` (written by `insertAuditLog` in `queries.ts`).
+- A fourth table `campaign_audit_log` exists from the earliest migration but is no longer written to.
+- This three-table divergence is intentional for the demo scope and is documented in ADR-0002. New code should use `writeAuditEvent` (→ `audit_events`) for consistency.
+
+### `writeAuditEvent` is best-effort (errors swallowed)
+
+- `writeAuditEvent` is `async` and should be `await`ed so the DB write completes before the response is sent.
+- Errors inside the helper are caught and logged to stderr but not re-thrown, so an audit failure never fails the HTTP response. This makes audit writes non-fatal to the request lifecycle.
+
+### `requireRole` accepts a single Role or an array
+
+- `requireRole('Reviewer')` and `requireRole(['Reviewer', 'Admin'])` both work — the middleware normalises the argument to an array internally.
+- Use the array form when a route should be accessible by more than one role.
+
+### Migration version collision from parallel branches
+
+- dbmate migrations use a timestamp-based prefix (e.g. `20260311000003`). When two branches create migrations with the same prefix number, they collide on merge.
+- Resolution: renumber the PR branch migrations to the next available sequence before merging (e.g. bump `000003` → `000009`). This has happened multiple times during the Campaign Lifecycle milestone.
+
 ## Issue #115: dbmate `--no-dump-schema` is a global flag, not a subcommand flag
 
 - `--no-dump-schema` must come BEFORE the subcommand: `dbmate --no-dump-schema ... down`, not `dbmate ... down --no-dump-schema`.

@@ -23,7 +23,7 @@ Brief: plan/ready/brief.md
   - **Verify**: All callouts and glossary entries present; `npm run lint:md` passes on all four files
   - **Brief ref**: Scope — demo-scope callouts, stub details, §12 Glossary
 
-- [ ] TASK-03: Verify specs/README.md index is complete
+- [x] TASK-03: Verify specs/README.md index is complete
   - **Goal**: Confirm the README Tooling table and File System Layout tree reference all three ADR files and every `.md` file under `specs/` has an entry
   - **Details**: Read `specs/README.md`. Check the Tooling table names ADR-0002 and ADR-0003. Check the File System Layout tree lists all three ADR files (`0001-*`, `0002-*`, `0003-*`). Then run `find specs/ -name "*.md" | sort` (via Bash) and compare the output against the tree in the README — every file must appear. Add any missing entries.
   - **Files**: `specs/README.md`

@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Four demo-scope callouts present, §12 Glossary section exists with all six terms; `npm run lint:md` passes
   - **Brief ref**: Step 2 — Spec updates (campaign.md)
 
-- [ ] TASK-05: Update specs/domain/payments.md and specs/domain/kyc.md with demo scope notes
+- [x] TASK-05: Update specs/domain/payments.md and specs/domain/kyc.md with demo scope notes
   - **Goal**: Confirm stub behaviour in the payments and KYC domain specs, referencing ADR-0003
   - **Details**: Read both `specs/domain/payments.md` and `specs/domain/kyc.md`. For each file, add or update the existing "Local demo scope" note to reference ADR-0003 and explicitly confirm the stub behaviour (Payments: console.log stubs; KYC: always-verified stub). Keep changes minimal — update existing sections rather than duplicating content.
   - **Files**: `specs/domain/payments.md`, `specs/domain/kyc.md`

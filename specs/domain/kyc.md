@@ -12,6 +12,8 @@
 ## 1. Purpose
 
 > **Local demo scope**: The KYC verification status lifecycle and its gating effect on Creator role features are **real** — the local demo enforces KYC status checks. The actual KYC provider is **stubbed** (no real document verification). Sanctions screening, manual review workflows, document storage encryption, re-verification triggers, and jurisdictional requirements are theatre. The local demo auto-approves KYC submissions.
+>
+> The demo stub is a single line in `packages/server/src/campaigns/queries.ts` (`submitCampaign`): `const kycVerified = true`. No KYC provider API keys, document upload flows, or webhook callbacks are required. See [ADR-0003](../adrs/0003-stubbed-integrations.md) for the full rationale and what a production integration would require.
 
 This spec governs identity verification for Mars Mission Fund: KYC document upload, automated verification checks, sanctions screening, manual review workflows, verification status lifecycle, re-verification triggers, jurisdictional requirements, and data retention rules specific to identity documents.
 

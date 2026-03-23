@@ -45,6 +45,10 @@
       "Bash(prettier:*)",
       "Bash(tsc:*)",
       "Bash(./scripts/*)",
+      "Bash(kill:*)",
+      "Bash(sleep:*)",
+      "Bash(lsof:*)",
+      "Bash(curl:*)",
       "mcp__playwright__*"
     ],
     "deny": ["Bash(git branch -D:*)", "Bash(gh pr merge:*)"]

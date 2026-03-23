@@ -14,12 +14,24 @@ cleanup() {
   echo ">>> Tearing down database..."
   # dbmate down rolls back one migration at a time; loop until all are rolled back
   # --no-dump-schema is a global flag and must come before the subcommand
+  local max_errors=3
+  local consecutive_errors=0
   while true; do
     output=$(timeout 30 dbmate --no-dump-schema -d packages/server/db/migrations -s packages/server/db/schema.sql down 2>&1) || true
     echo "$output"
     # Stop when there is nothing left to roll back
     if ! echo "$output" | grep -q "Rolled back:"; then
       break
+    fi
+    # Stop if the same migration keeps failing (FK constraint errors, etc.)
+    if echo "$output" | grep -qi "Error:"; then
+      consecutive_errors=$((consecutive_errors + 1))
+      if [ "$consecutive_errors" -ge "$max_errors" ]; then
+        echo ">>> WARNING: $consecutive_errors consecutive rollback errors; stopping teardown loop."
+        break
+      fi
+    else
+      consecutive_errors=0
     fi
   done
   echo ">>> dbmate down succeeded."

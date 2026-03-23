@@ -35,7 +35,7 @@
     "pino-pretty": "^13",
     "supertest": "^7",
     "tsx": "^4",
-    "typescript": "^5",
+    "typescript": "^5.7.2",
     "vitest": "^3"
   }
 }

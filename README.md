@@ -40,7 +40,7 @@ Each spec includes a "Local demo scope" note identifying what matters for the wo
 | ![Database](https://img.shields.io/badge/Database-0E2040?style=flat-square) | PostgreSQL 16.11 (Aurora in production, Docker locally) |
 | ![Arch](https://img.shields.io/badge/Architecture-0E2040?style=flat-square) | Hexagonal (Ports and Adapters), CQRS / Event Sourcing   |
 | ![Testing](https://img.shields.io/badge/Testing-0E2040?style=flat-square)   | Vitest, Playwright, Testing Library, SuperTest          |
-| ![Auth](https://img.shields.io/badge/Auth-0E2040?style=flat-square)         | Clerk                                                   |
+| ![Auth](https://img.shields.io/badge/Auth-0E2040?style=flat-square)         | JWT + bcrypt (Clerk planned for production — stubbed locally) |
 | ![Payments](https://img.shields.io/badge/Payments-0E2040?style=flat-square) | Stripe (stubbed locally)                                |
 
 For the full technology inventory, see [specs/tech/tech-stack.md](./specs/tech/tech-stack.md).
@@ -61,7 +61,8 @@ For the full technology inventory, see [specs/tech/tech-stack.md](./specs/tech/t
 ```bash
 git clone https://github.com/LeeCampbell/mars-mission-fund.git
 cd mars-mission-fund
-./scripts/run-local.sh
+./scripts/run-local.sh      # Docker Postgres + local dev servers (requires Node + Docker)
+./scripts/run-docker.sh     # Entirely in Docker (only requires Docker)
 ```
 
 > **Note:** External services (Stripe, Clerk, Veriff, AWS SES) are stubbed or mocked for local development.

@@ -1,4 +1,7 @@
 import { Pool } from 'pg'
+import pino from 'pino'
+
+const logger = pino({ name: 'audit' })
 
 export interface AuditEventInput {
   action: string
@@ -41,6 +44,6 @@ export async function writeAuditEvent(pool: Pool, event: AuditEventInput): Promi
       ]
     )
   } catch (err) {
-    console.error('[audit] Failed to write audit event:', err)
+    logger.error({ err }, 'Failed to write audit event')
   }
 }

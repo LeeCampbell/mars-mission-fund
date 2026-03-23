@@ -6,6 +6,7 @@ import {
   submitCampaignForReview,
   launchCampaign,
   resubmitCampaign,
+  cancelCampaign,
 } from '../api/campaigns'
 import { Badge } from '../components/ui/Badge'
 import type { CampaignSummary } from '../api/campaigns'
@@ -212,9 +213,22 @@ function CampaignRow({ campaign }: { campaign: CampaignSummary }) {
     },
   })
 
+  const { mutate: doCancel, isPending: isCancelling } = useMutation({
+    mutationFn: () => cancelCampaign(campaign.id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['my-campaigns'] })
+    },
+  })
+
   function handleDelete() {
     if (window.confirm(`Are you sure you want to delete "${campaign.title}"?`)) {
       doDelete()
+    }
+  }
+
+  function handleCancel() {
+    if (window.confirm('Are you sure you want to request cancellation?')) {
+      doCancel()
     }
   }
 
@@ -268,9 +282,19 @@ function CampaignRow({ campaign }: { campaign: CampaignSummary }) {
           </>
         )}
         {(status === 'Live' || status === 'Funded') && (
-          <Link to={`/campaigns/${campaign.id}`} style={linkButtonStyle}>
-            View
-          </Link>
+          <>
+            <Link to={`/campaigns/${campaign.id}`} style={linkButtonStyle}>
+              View
+            </Link>
+            <button
+              style={dangerButtonStyle}
+              disabled={isCancelling}
+              onClick={handleCancel}
+              aria-label={`Cancel ${campaign.title}`}
+            >
+              {isCancelling ? 'Cancelling…' : 'Cancel'}
+            </button>
+          </>
         )}
         {status === 'Rejected' && (
           <button

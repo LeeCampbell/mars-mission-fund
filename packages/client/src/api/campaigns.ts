@@ -33,9 +33,6 @@ export type {
   UpdateCampaignRequest,
 }
 
-// Backward-compat alias — components will be updated in TASK-05
-export type Campaign = CampaignDetail
-
 export async function fetchCampaigns(): Promise<CampaignSummary[]> {
   const response = await fetch('/v1/campaigns')
   if (!response.ok) throw new Error(`HTTP ${response.status}`)

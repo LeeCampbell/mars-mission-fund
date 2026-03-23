@@ -12,6 +12,8 @@
 ## 1. Purpose
 
 > **Local demo scope**: The audit event schema, event categories, logging trigger rules, and the PostgreSQL event store integration are **real** — audit events are written as part of the CQRS/Event Sourcing pattern in the local demo. Tamper detection (hash chains), tiered storage, anomaly detection, regulatory reporting processes, and the access grant workflow are theatre. The local demo writes audit events to PostgreSQL with no archival or detection pipeline.
+>
+> The demo uses three audit tables added incrementally during the Campaign Lifecycle milestone: `audit_log` (legacy JSONB append-only, used for settlement and milestone events), `campaign_audit_events` (structured events with previous/new state, used for workflow transitions), and `audit_events` (spec-aligned table matching L3-006 schema, used for campaign lifecycle events). Hash chaining (SHA-256), batch tamper verification, hot/warm/cold retention tier enforcement, and anomaly-detection rules are production requirements not implemented in the demo. See [ADR-0002](../adrs/0002-audit-log-demo-simplification.md) for the full architectural decision record.
 
 This spec governs the audit logging architecture for Mars Mission Fund: what gets logged, how audit events are structured, how they are stored immutably, who can access them, how long they are retained, and how they support regulatory compliance and anomaly detection.
 

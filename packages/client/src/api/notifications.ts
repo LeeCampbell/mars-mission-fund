@@ -1,19 +1,8 @@
 import { NotificationSchema } from '@mmf/shared'
 import type { Notification } from '@mmf/shared'
+import { authedFetch } from './client'
 
 export type { Notification }
-
-function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
-  const token = localStorage.getItem('token')
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    ...(init.headers as Record<string, string>),
-  }
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`
-  }
-  return fetch(path, { ...init, headers })
-}
 
 export async function fetchNotifications(): Promise<Notification[]> {
   const response = await authedFetch('/v1/notifications')

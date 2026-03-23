@@ -1,19 +1,8 @@
 import { UserSchema } from '@mmf/shared'
 import type { User } from '@mmf/shared'
+import { authedFetch } from './client'
 
 export type { User }
-
-function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
-  const token = localStorage.getItem('token')
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    ...(init.headers as Record<string, string>),
-  }
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`
-  }
-  return fetch(path, { ...init, headers })
-}
 
 export async function loginUser(
   email: string,

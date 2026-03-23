@@ -23,7 +23,7 @@ function randomHex(bytes: number): string {
   return randomBytes(bytes).toString('hex')
 }
 
-export interface AuditEventInput {
+export interface CampaignAuditEventInput {
   campaignId: string
   actorId: string
   eventType: string
@@ -668,7 +668,7 @@ export async function resubmitCampaign(
   return result.rows[0] ?? null
 }
 
-export async function createAuditEvent(pool: Pool, event: AuditEventInput): Promise<void> {
+export async function createAuditEvent(pool: Pool, event: CampaignAuditEventInput): Promise<void> {
   const sql = `
     INSERT INTO campaign_audit_events (campaign_id, event_type, actor_id, previous_state, new_state, metadata)
     VALUES ($1, $2, $3, $4, $5, $6)

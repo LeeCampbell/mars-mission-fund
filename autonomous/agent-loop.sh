@@ -273,11 +273,11 @@ determine_state() {
     echo "done"
   elif [ -f "plan/.plan-archived" ]; then
     echo "await-ci"
+  elif [ -f "plan/.finalized" ]; then
+    echo "await-ci"
   elif [ -f "plan/ready/tasks.md" ]; then
     if grep -q '^\- \[ \]' "plan/ready/tasks.md"; then
       echo "execute-tasks"
-    elif [ -f "plan/.finalized" ]; then
-      echo "await-ci"
     else
       echo "finalize-pr"
     fi
@@ -437,7 +437,7 @@ Upstream repo: ${UPSTREAM_REPO}"
       # Side-effects (commit/push/PR) are non-critical — protect from set -e.
       # A failure here means no draft PR yet, but execute-tasks will retry.
       set +e
-      git add plan/
+      git add plan/ready/ plan/planning/
       git commit -m "chore: add plan for #${ISSUE_NUMBER}"
       if push_branch; then
         PR_NUMBER=$(create_draft_pr)

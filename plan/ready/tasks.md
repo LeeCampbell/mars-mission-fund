@@ -14,7 +14,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds with no TypeScript errors; `npm run lint && npm run format:check` pass
   - **Brief ref**: Approach section — Desktop nav and Mobile nav replacements
 
-- [ ] TASK-02: Add Admin link visibility unit tests in Header.test.tsx
+- [x] TASK-02: Add Admin link visibility unit tests in Header.test.tsx
   - **Goal**: Add a `describe` block covering Admin link visibility for all relevant roles and unauthenticated state
   - **Details**:
     - Mirror the existing "Dashboard link visibility" describe block pattern

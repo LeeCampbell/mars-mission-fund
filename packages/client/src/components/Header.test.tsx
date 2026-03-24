@@ -113,3 +113,83 @@ describe('Header — Dashboard link visibility', () => {
     expect(links.length).toBe(2)
   })
 })
+
+describe('Header — Admin link visibility', () => {
+  it('shows Admin link for Administrator role (desktop)', () => {
+    vi.mocked(useAuthContext).mockReturnValue({
+      isAuthenticated: true,
+      user: makeUser('Administrator'),
+      token: 'token',
+      login: vi.fn(),
+      logout: vi.fn(),
+    })
+
+    renderHeader()
+
+    const links = screen.getAllByRole('link', { name: 'Admin' })
+    expect(links.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('shows Admin link for SuperAdministrator role (desktop)', () => {
+    vi.mocked(useAuthContext).mockReturnValue({
+      isAuthenticated: true,
+      user: makeUser('SuperAdministrator'),
+      token: 'token',
+      login: vi.fn(),
+      logout: vi.fn(),
+    })
+
+    renderHeader()
+
+    const links = screen.getAllByRole('link', { name: 'Admin' })
+    expect(links.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('hides Admin link for Backer role', () => {
+    vi.mocked(useAuthContext).mockReturnValue({
+      isAuthenticated: true,
+      user: makeUser('Backer'),
+      token: 'token',
+      login: vi.fn(),
+      logout: vi.fn(),
+    })
+
+    renderHeader()
+
+    expect(screen.queryByRole('link', { name: 'Admin' })).not.toBeInTheDocument()
+  })
+
+  it('hides Admin link when unauthenticated', () => {
+    vi.mocked(useAuthContext).mockReturnValue({
+      isAuthenticated: false,
+      user: null,
+      token: null,
+      login: vi.fn(),
+      logout: vi.fn(),
+    })
+
+    renderHeader()
+
+    expect(screen.queryByRole('link', { name: 'Admin' })).not.toBeInTheDocument()
+  })
+
+  it('shows Admin link in mobile nav for Administrator role', () => {
+    vi.mocked(useAuthContext).mockReturnValue({
+      isAuthenticated: true,
+      user: makeUser('Administrator'),
+      token: 'token',
+      login: vi.fn(),
+      logout: vi.fn(),
+    })
+
+    const { container } = renderHeader()
+
+    // Hamburger button has display:none via inline style in jsdom — query directly
+    const hamburger = container.querySelector('[aria-label="Toggle navigation"]') as HTMLElement
+    fireEvent.click(hamburger)
+
+    // Both desktop and mobile Admin links are now rendered
+    const links = screen.getAllByRole('link', { name: 'Admin' })
+    expect(links.length).toBe(2)
+  })
+})

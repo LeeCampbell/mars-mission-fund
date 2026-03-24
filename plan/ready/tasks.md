@@ -24,7 +24,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/components/Header.test.tsx` — all existing and new tests pass; `npm run test:coverage` meets 80% threshold
   - **Brief ref**: Files to Create/Modify — Header.test.tsx; Verification section
 
-- [ ] TASK-03: Full CI verification
+- [x] TASK-03: Full CI verification
   - **Goal**: Confirm the complete CI pipeline passes with no regressions
   - **Details**: No new code — run the full CI check suite as a final gate
   - **Files**: (none)

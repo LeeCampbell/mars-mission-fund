@@ -114,6 +114,109 @@ describe('Header — Dashboard link visibility', () => {
   })
 })
 
+describe('Header — Notifications link visibility', () => {
+  it('shows Notifications link for authenticated Backer', () => {
+    vi.mocked(useAuthContext).mockReturnValue({
+      isAuthenticated: true,
+      user: makeUser('Backer'),
+      token: 'token',
+      login: vi.fn(),
+      logout: vi.fn(),
+    })
+
+    const { container } = renderHeader()
+    const hamburger = container.querySelector('[aria-label="Toggle navigation"]') as HTMLElement
+    fireEvent.click(hamburger)
+
+    expect(screen.getByRole('link', { name: 'Notifications' })).toBeInTheDocument()
+  })
+
+  it('shows Notifications link for authenticated Creator', () => {
+    vi.mocked(useAuthContext).mockReturnValue({
+      isAuthenticated: true,
+      user: makeUser('Creator'),
+      token: 'token',
+      login: vi.fn(),
+      logout: vi.fn(),
+    })
+
+    const { container } = renderHeader()
+    const hamburger = container.querySelector('[aria-label="Toggle navigation"]') as HTMLElement
+    fireEvent.click(hamburger)
+
+    const links = screen.getAllByRole('link', { name: 'Notifications' })
+    expect(links.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('shows Notifications link for authenticated Reviewer', () => {
+    vi.mocked(useAuthContext).mockReturnValue({
+      isAuthenticated: true,
+      user: makeUser('Reviewer'),
+      token: 'token',
+      login: vi.fn(),
+      logout: vi.fn(),
+    })
+
+    const { container } = renderHeader()
+    const hamburger = container.querySelector('[aria-label="Toggle navigation"]') as HTMLElement
+    fireEvent.click(hamburger)
+
+    expect(screen.getByRole('link', { name: 'Notifications' })).toBeInTheDocument()
+  })
+
+  it('shows Notifications link for authenticated Administrator', () => {
+    vi.mocked(useAuthContext).mockReturnValue({
+      isAuthenticated: true,
+      user: makeUser('Administrator'),
+      token: 'token',
+      login: vi.fn(),
+      logout: vi.fn(),
+    })
+
+    const { container } = renderHeader()
+    const hamburger = container.querySelector('[aria-label="Toggle navigation"]') as HTMLElement
+    fireEvent.click(hamburger)
+
+    const links = screen.getAllByRole('link', { name: 'Notifications' })
+    expect(links.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('hides Notifications link when unauthenticated', () => {
+    vi.mocked(useAuthContext).mockReturnValue({
+      isAuthenticated: false,
+      user: null,
+      token: null,
+      login: vi.fn(),
+      logout: vi.fn(),
+    })
+
+    const { container } = renderHeader()
+    const hamburger = container.querySelector('[aria-label="Toggle navigation"]') as HTMLElement
+    fireEvent.click(hamburger)
+
+    expect(screen.queryByRole('link', { name: 'Notifications' })).not.toBeInTheDocument()
+  })
+
+  it('clicking Notifications link closes the mobile nav', () => {
+    vi.mocked(useAuthContext).mockReturnValue({
+      isAuthenticated: true,
+      user: makeUser('Backer'),
+      token: 'token',
+      login: vi.fn(),
+      logout: vi.fn(),
+    })
+
+    const { container } = renderHeader()
+    const hamburger = container.querySelector('[aria-label="Toggle navigation"]') as HTMLElement
+    fireEvent.click(hamburger)
+
+    const link = screen.getByRole('link', { name: 'Notifications' })
+    fireEvent.click(link)
+
+    expect(screen.queryByRole('link', { name: 'Notifications' })).not.toBeInTheDocument()
+  })
+})
+
 describe('Header — Admin link visibility', () => {
   it('shows Admin link for Administrator role (desktop)', () => {
     vi.mocked(useAuthContext).mockReturnValue({

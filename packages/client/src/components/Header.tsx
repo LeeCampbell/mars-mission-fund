@@ -413,6 +413,19 @@ export function Header() {
                   {user?.displayName ?? 'Profile'}
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  to="/notifications"
+                  className="mmf-mobile-nav-link"
+                  style={({ isActive }) => ({
+                    ...mobileNavLinkBase,
+                    ...(isActive ? mobileNavLinkActiveStyle : {}),
+                  })}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Notifications
+                </NavLink>
+              </li>
               {isAdmin && (
                 <li
                   style={{

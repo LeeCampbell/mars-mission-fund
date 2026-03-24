@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Add Notifications NavLink to mobile nav and unit tests with E2E coverage
+- [x] TASK-01: Add Notifications NavLink to mobile nav and unit tests with E2E coverage
   - **Goal**: Add a "Notifications" NavLink inside the mobile nav authenticated block, write unit tests for visibility/close behaviour, and add an E2E flow verifying the link on a mobile viewport
   - **Details**:
     1. In `packages/client/src/components/Header.tsx`, locate the `{isAuthenticated && (<>…</>)}` block. After the Profile link and before the Admin link, insert a new `<li>` with a `NavLink` to `/notifications` following the exact styling pattern of the Dashboard link (copy `className`, `style` prop with `mobileNavLinkBase`/`mobileNavLinkActiveStyle`, and `onClick={() => setMobileOpen(false)}`).

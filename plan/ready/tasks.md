@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Replace decorative Admin badge with NavLink in Header.tsx
+- [x] TASK-01: Replace decorative Admin badge with NavLink in Header.tsx
   - **Goal**: Convert the non-interactive Admin badge in both desktop and mobile nav into a `NavLink` navigating to `/admin/users`
   - **Details**:
     - In `Header.tsx`, locate the desktop nav block (around line 292) where `isAdmin` renders a `<Badge variant="accent">Admin</Badge>` inside a `<li>` and replace it with a `<NavLink to="/admin/users" className="mmf-nav-link" style={({ isActive }) => ({ ...navLinkBase, ...(isActive ? navLinkActiveStyle : {}) })}>Admin</NavLink>`

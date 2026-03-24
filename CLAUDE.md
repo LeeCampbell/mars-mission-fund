@@ -100,7 +100,6 @@ All implementation must align with the layered spec system in `specs/`. Read `sp
 ## Git Conventions
 
 - Never commit directly to `main` (pre-push hook enforces this)
-- Branch naming: `feat/`, `fix/`, `chore/` prefixes
 - Git hooks installed via `npm prepare`
 
 ## Environment Variables

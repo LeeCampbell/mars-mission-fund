@@ -29,7 +29,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/components/Header.test.tsx` passes; `npm run test:coverage` stays above 80%; `npm run build` succeeds; `./scripts/run-e2e.sh e2e/creator-dashboard.spec.ts` passes
   - **Brief ref**: Full brief (Header.tsx modification + test coverage + visual/E2E verification)
 
-- [ ] TASK-02: Full CI and E2E regression
+- [x] TASK-02: Full CI and E2E regression
   - **Goal**: Confirm the complete suite passes after the feature is in place
   - **Details**: No new code — run the full test suite and CI checks as a final gate
   - **Files**: (none)

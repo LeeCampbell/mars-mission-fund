@@ -202,6 +202,7 @@ export function Header() {
 
   const isAdmin = user?.role === 'Administrator' || user?.role === 'SuperAdministrator'
   const isReviewer = user?.role === 'Reviewer'
+  const isCreator = user?.role === 'Creator'
 
   return (
     <header style={headerStyle}>
@@ -259,6 +260,20 @@ export function Header() {
                       })}
                     >
                       Review
+                    </NavLink>
+                  </li>
+                )}
+                {isCreator && (
+                  <li>
+                    <NavLink
+                      to="/dashboard"
+                      className="mmf-nav-link"
+                      style={({ isActive }) => ({
+                        ...navLinkBase,
+                        ...(isActive ? navLinkActiveStyle : {}),
+                      })}
+                    >
+                      Dashboard
                     </NavLink>
                   </li>
                 )}
@@ -359,6 +374,21 @@ export function Header() {
                     onClick={() => setMobileOpen(false)}
                   >
                     Review
+                  </NavLink>
+                </li>
+              )}
+              {isCreator && (
+                <li>
+                  <NavLink
+                    to="/dashboard"
+                    className="mmf-mobile-nav-link"
+                    style={({ isActive }) => ({
+                      ...mobileNavLinkBase,
+                      ...(isActive ? mobileNavLinkActiveStyle : {}),
+                    })}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Dashboard
                   </NavLink>
                 </li>
               )}

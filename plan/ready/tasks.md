@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Add Creator Dashboard NavLink to Header (desktop + mobile) with E2E coverage
+- [x] TASK-01: Add Creator Dashboard NavLink to Header (desktop + mobile) with E2E coverage
   - **Goal**: Add the `isCreator` flag and conditional Dashboard NavLink to both desktop and mobile nav in `Header.tsx`, write unit tests in `Header.test.tsx`, and add an E2E test verifying the link for a Creator user
   - **Details**:
     1. Read `packages/client/src/components/Header.tsx` to locate the `isAdmin`/`isReviewer` declarations and the existing reviewer nav blocks

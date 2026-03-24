@@ -29,7 +29,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/components/Header.test.tsx` all pass AND `./scripts/run-e2e.sh e2e/mobile-nav.spec.ts` passes
   - **Brief ref**: Scope, Approach, Files to Create/Modify, Verification
 
-- [ ] TASK-02: Full E2E regression and CI verification
+- [x] TASK-02: Full E2E regression and CI verification
   - **Goal**: Run the complete E2E suite and CI checks to confirm nothing is broken
   - **Details**: No new code — run the full test suite as a final gate
   - **Files**: (none)

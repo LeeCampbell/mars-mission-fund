@@ -58,6 +58,7 @@ const mockCampaignRow = {
   maxFundingCapUsd: 1000000,
   launchedAt: new Date('2024-01-20T00:00:00.000Z'),
   updatedAt: new Date('2024-01-20T10:00:00.000Z'),
+  risk_disclosures: ['habitat pressure loss'],
 }
 
 // CampaignRow shapes for new endpoint tests

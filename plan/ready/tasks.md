@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Fix server query — add risk_disclosures to getCampaignById SELECT
+- [x] TASK-01: Fix server query — add risk_disclosures to getCampaignById SELECT
   - **Goal**: Ensure the server returns `riskDisclosures` when fetching a campaign by ID
   - **Details**: In `getCampaignById` SQL SELECT, add `risk_disclosures AS "riskDisclosures"` to the column list alongside the other aliased columns (~line 169). Also update `mockCampaignRow` in `campaigns.test.ts` (~line 62) to include `risk_disclosures: ['habitat pressure loss']` so existing tests remain accurate.
   - **Files**: `packages/server/src/campaigns/queries.ts`, `packages/server/src/__tests__/campaigns.test.ts`

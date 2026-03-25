@@ -9,6 +9,7 @@ import {
 } from '../api/campaigns'
 import { CampaignCategorySchema } from '@mmf/shared'
 import type { CampaignCategory, CampaignDetail, CreateCampaignRequest } from '@mmf/shared'
+import { DatePickerInput } from '../components/ui/DatePickerInput'
 
 export interface CampaignFormPageProps {
   campaignId?: string
@@ -979,6 +980,29 @@ function StepFunding({
   state: FormState
   dispatch: React.Dispatch<FormAction>
 }) {
+  const [deadlineError, setDeadlineError] = useState('')
+
+  const minDate = (() => {
+    const d = new Date()
+    d.setDate(d.getDate() + 7)
+    return d.toISOString().split('T')[0]
+  })()
+
+  const maxDate = (() => {
+    const d = new Date()
+    d.setFullYear(d.getFullYear() + 1)
+    return d.toISOString().split('T')[0]
+  })()
+
+  function handleDeadlineChange(value: string) {
+    dispatch({ type: 'SET', field: 'deadline', value })
+    if (value && (value < minDate || value > maxDate)) {
+      setDeadlineError('Deadline must be between 7 days and 1 year from today')
+    } else {
+      setDeadlineError('')
+    }
+  }
+
   return (
     <div>
       <h1 style={headingStyle}>Step 3: Funding Goals</h1>
@@ -1026,26 +1050,16 @@ function StepFunding({
         />
       </div>
       <div style={fieldGroupStyle}>
-        <label htmlFor="deadline" style={labelStyle}>
-          Campaign Deadline
-        </label>
-        <input
+        <DatePickerInput
           id="deadline"
-          type="date"
-          style={inputStyle}
+          label="Campaign Deadline"
           value={state.deadline}
-          onChange={(e) => dispatch({ type: 'SET', field: 'deadline', value: e.target.value })}
+          onChange={handleDeadlineChange}
+          min={minDate}
+          max={maxDate}
+          helperText="Must be 1 week to 1 year from today"
+          error={deadlineError}
         />
-        <span
-          style={{
-            ...labelStyle,
-            fontWeight: 400,
-            color: 'var(--color-text-secondary)',
-            marginTop: 'var(--space-1)',
-          }}
-        >
-          Must be 1 week to 1 year from today
-        </span>
       </div>
     </div>
   )
@@ -1058,6 +1072,17 @@ function StepMilestones({
   state: FormState
   dispatch: React.Dispatch<FormAction>
 }) {
+  const [milestoneDateErrors, setMilestoneDateErrors] = useState<Record<number, string>>({})
+
+  function handleMilestoneDateChange(index: number, value: string) {
+    dispatch({ type: 'UPDATE_MILESTONE', index, field: 'targetDate', value })
+    if (value && isNaN(new Date(value).getTime())) {
+      setMilestoneDateErrors((prev) => ({ ...prev, [index]: 'Please enter a valid date' }))
+    } else {
+      setMilestoneDateErrors((prev) => ({ ...prev, [index]: '' }))
+    }
+  }
+
   const total = state.milestones
     .filter((m) => m.title.trim())
     .reduce((sum, m) => sum + (parseFloat(m.fundingPercentage) || 0), 0)
@@ -1171,22 +1196,12 @@ function StepMilestones({
               />
             </div>
             <div style={{ ...fieldGroupStyle, flex: '1' }}>
-              <label htmlFor={`ms-date-${i}`} style={labelStyle}>
-                Target Date
-              </label>
-              <input
+              <DatePickerInput
                 id={`ms-date-${i}`}
-                type="date"
-                style={inputStyle}
+                label="Target Date"
                 value={milestone.targetDate}
-                onChange={(e) =>
-                  dispatch({
-                    type: 'UPDATE_MILESTONE',
-                    index: i,
-                    field: 'targetDate',
-                    value: e.target.value,
-                  })
-                }
+                onChange={(value) => handleMilestoneDateChange(i, value)}
+                error={milestoneDateErrors[i] ?? ''}
               />
             </div>
           </div>

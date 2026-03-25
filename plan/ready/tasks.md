@@ -32,7 +32,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run lint:md` passes; read the updated file and confirm: (a) trigger uses file-path check, not "If the task involves UI changes"; (b) backend startup with polling is described; (c) missing screenshots are treated as incomplete, not skippable
   - **Brief ref**: `execute-tasks.md` change section
 
-- [ ] TASK-03: Final lint and manual review
+- [x] TASK-03: Final lint and manual review
   - **Goal**: Confirm both prompt files pass markdown lint and the updated instructions behave correctly end-to-end on a hypothetical frontend issue
   - **Details**: Run `npm run lint:md` across the whole repo. Then do a manual read-through of both modified files and verify: (1) `create-tasks.md` — a frontend issue (files under `packages/client/src/`) would now produce a dedicated screenshot task as the penultimate task; (2) `execute-tasks.md` — the visual verification step is triggered by file path, attempts backend startup on failure, and treats missing screenshots as incomplete. No code changes expected; fix any lint issues found.
   - **Files**: (none expected — lint fixes only if needed)

@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Fix borderBottom shorthand conflict in Header.tsx
+- [x] TASK-01: Fix borderBottom shorthand conflict in Header.tsx
   - **Goal**: Eliminate the React warning by replacing `borderBottomColor` with the full `borderBottom` shorthand in `navLinkActiveStyle`
   - **Details**:
     1. Open `packages/client/src/components/Header.tsx`

@@ -62,7 +62,7 @@ const navLinkBase: React.CSSProperties = {
 
 const navLinkActiveStyle: React.CSSProperties = {
   color: 'var(--color-text-accent)',
-  borderBottomColor: 'var(--color-border-accent)',
+  borderBottom: '2px solid var(--color-border-accent)',
 }
 
 const skipLinkStyle: React.CSSProperties = {

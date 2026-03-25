@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Add `formatReviewDate` helper and apply it to the Deadline ReviewRow
+- [x] TASK-01: Add `formatReviewDate` helper and apply it to the Deadline ReviewRow
   - **Goal**: Format the deadline ISO string as `Dec 27, 2026` on the Step 7 review screen instead of the raw `2026-12-27` string
   - **Details**:
     1. Open `packages/client/src/pages/CampaignFormPage.tsx` and locate the `StepReview` component (around line 1425)

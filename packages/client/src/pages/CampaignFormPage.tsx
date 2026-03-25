@@ -1339,6 +1339,16 @@ function StepMedia({
   )
 }
 
+function formatReviewDate(value: string | undefined): string {
+  if (!value) return '—'
+  const [year, month, day] = value.split('-').map(Number)
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(year, month - 1, day))
+}
+
 function StepReview({
   state,
   campaignId,
@@ -1422,7 +1432,7 @@ function StepReview({
               state.maxFundingCapUsd ? `$${parseInt(state.maxFundingCapUsd).toLocaleString()}` : '—'
             }
           />
-          <ReviewRow label="Deadline" value={state.deadline || '—'} />
+          <ReviewRow label="Deadline" value={formatReviewDate(state.deadline)} />
         </dl>
       </section>
 

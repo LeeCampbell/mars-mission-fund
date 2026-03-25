@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Add visual screenshot task guideline to create-tasks.md
+- [x] TASK-01: Add visual screenshot task guideline to create-tasks.md
   - **Goal**: Ensure the task planner always generates a dedicated "Visual verification screenshots" task for any issue that touches `packages/client/src/`
   - **Details**: In `autonomous/prompts/create-tasks.md`, after the existing "E2E tests — co-locate with feature tasks" guideline block (including the `For backend-only issues…` closing line), add a new subsection titled "Visual screenshot task for frontend issues". The subsection must:
     1. State the trigger condition: when the brief's **Files to Create/Modify** table contains any path starting with `packages/client/src/`

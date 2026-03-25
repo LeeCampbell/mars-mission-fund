@@ -39,7 +39,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/pages/CampaignFormPage.test.tsx` — all existing tests pass, both new tests pass
   - **Brief ref**: Approach §6; Verification §Tests
 
-- [ ] TASK-04: Full CI verification
+- [x] TASK-04: Full CI verification
   - **Goal**: Confirm all checks pass and the existing E2E campaign-lifecycle test continues to pass
   - **Details**: No new code — run the full CI check suite and the existing E2E test that exercises the dialog (`creator submits a draft campaign` in `campaign-lifecycle.spec.ts`)
   - **Files**: (none)

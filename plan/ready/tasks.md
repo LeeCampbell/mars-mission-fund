@@ -21,7 +21,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run lint:md` passes; read the updated file and confirm the new subsection appears after the E2E guideline block with correct trigger condition and task template
   - **Brief ref**: `create-tasks.md` change section
 
-- [ ] TASK-02: Strengthen visual verification step in execute-tasks.md
+- [x] TASK-02: Strengthen visual verification step in execute-tasks.md
   - **Goal**: Replace the ambiguous, skippable visual verification block in `execute-tasks.md` with a file-path-triggered, backend-startup-aware, non-skippable step
   - **Details**: Replace the current Step 4 "Visual verification" block (lines 91–100, from `**Visual verification**: If the task involves UI changes:` through `- Stop the dev server: kill the background process`) with a new version that:
     1. **Trigger condition** (file-path-based, not subjective): applies when the current task's **Files** list includes any path under `packages/client/src/`

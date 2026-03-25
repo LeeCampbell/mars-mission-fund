@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: Have a documented list of failing test names and their root causes mapped to risk numbers
   - **Brief ref**: Implementation steps §1; Known risks §1–6
 
-- [ ] TASK-02: Fix seed data migration issues
+- [x] TASK-02: Fix seed data migration issues
   - **Goal**: Ensure the five seeded campaigns have valid data for all frontend guards and backend checks
   - **Details**: Read `packages/server/db/migrations/20260322000001_seed_lifecycle_test_campaigns.sql` in full. Check whether: (a) any campaign has `risk_disclosures = '{}'` and the frontend or backend rejects that, (b) single-milestone campaigns 0014–0016 at 50% cause render errors, (c) the notification row for campaign 0014 has `read = false`. If fixes are needed, create a **new** migration (e.g. `20260325000001_fix_lifecycle_seed_data.sql`) — never edit the existing one. The new migration must be additive-only (`UPDATE` statements or `INSERT … ON CONFLICT DO UPDATE`). After writing the migration, verify it applies cleanly with `dbmate up` inside docker.
   - **Files**: `packages/server/db/migrations/20260325000001_fix_lifecycle_seed_data.sql` (create only if fixes are needed)

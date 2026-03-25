@@ -65,6 +65,7 @@ const mockCampaign: CampaignDetail = {
   creatorId: null,
   reviewerId: null,
   cancellationRequestedAt: null,
+  riskDisclosures: [],
 }
 
 vi.mock('../hooks/useCampaign', () => ({

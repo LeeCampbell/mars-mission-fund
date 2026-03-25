@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build -w @mmf/shared` succeeds; `npx tsc -b --noEmit` passes
   - **Brief ref**: Shared schema fix (section 2)
 
-- [ ] TASK-03: Fix client reducer INIT case and update test fixtures
+- [x] TASK-03: Fix client reducer INIT case and update test fixtures
   - **Goal**: Seed `riskDisclosures` from campaign data in the INIT reducer so Step 5 pre-populates saved risks; add a test that verifies Step 5 loads the fixture values
   - **Details**: In `CampaignFormPage.tsx` INIT reducer case (~line 194), change `riskDisclosures: ['']` to `riskDisclosures: c.riskDisclosures?.length ? c.riskDisclosures : ['']`. In `CampaignFormPage.test.tsx`, add `riskDisclosures: ['Habitat pressure failure', 'Dust storm damage']` to `mockCampaign`, then add a test case that renders with `campaignId`, advances to Step 5, and asserts both risk text values are visible in the form.
   - **Files**: `packages/client/src/pages/CampaignFormPage.tsx`, `packages/client/src/pages/CampaignFormPage.test.tsx`

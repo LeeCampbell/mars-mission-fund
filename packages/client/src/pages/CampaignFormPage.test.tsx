@@ -90,6 +90,7 @@ const mockCampaign: CampaignDetail = {
     },
   ],
   updates: [],
+  riskDisclosures: ['Habitat pressure failure', 'Dust storm damage'],
 }
 
 describe('CampaignFormPage', () => {
@@ -201,6 +202,55 @@ describe('CampaignFormPage', () => {
         'Milestone funding percentages must sum to 100%'
       )
     })
+  })
+
+  it('pre-populates Step 5 risk disclosures from existing campaign data', async () => {
+    vi.mocked(fetchCampaign).mockResolvedValue(mockCampaign)
+
+    renderPage({ campaignId: 'c1' })
+
+    // Wait for data to load and form to initialise
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Mars Habitat Alpha')).toBeInTheDocument()
+    })
+
+    // Step 1: fill required fields and advance
+    fireEvent.change(screen.getByLabelText('Title *'), {
+      target: { value: 'Mars Habitat Alpha' },
+    })
+    fireEvent.change(screen.getByLabelText('Category *'), {
+      target: { value: 'Habitats & Construction' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 2: team member already filled from mock; advance
+    await waitFor(() => {
+      expect(screen.getByText('Step 2: Team Members')).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 3: fill minimum funding target and advance
+    await waitFor(() => {
+      expect(screen.getByText('Step 3: Funding Goals')).toBeInTheDocument()
+    })
+    fireEvent.change(screen.getByLabelText('Minimum Funding Target (USD) *'), {
+      target: { value: '5000000' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 4: milestones from mock sum to 100; advance
+    await waitFor(() => {
+      expect(screen.getByText('Step 4: Milestones')).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 5: risk disclosures should be pre-populated
+    await waitFor(() => {
+      expect(screen.getByText('Step 5: Risk Disclosures')).toBeInTheDocument()
+    })
+
+    expect(screen.getByDisplayValue('Habitat pressure failure')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('Dust storm damage')).toBeInTheDocument()
   })
 
   it('initialises form from existing campaign data in edit mode', async () => {

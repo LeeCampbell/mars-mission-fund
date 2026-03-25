@@ -191,7 +191,7 @@ function reducer(state: FormState, action: FormAction): FormState {
                   sortOrder: 1,
                 },
               ],
-        riskDisclosures: [''],
+        riskDisclosures: c.riskDisclosures?.length ? c.riskDisclosures : [''],
         heroImageUrl: c.heroImageUrl ?? '',
       }
     }

@@ -166,7 +166,8 @@ export async function getCampaignById(pool: Pool, id: string): Promise<CampaignD
       updated_at AS "updatedAt",
       creator_id AS "creatorId",
       reviewer_id AS "reviewerId",
-      cancellation_requested_at AS "cancellationRequestedAt"
+      cancellation_requested_at AS "cancellationRequestedAt",
+      risk_disclosures AS "riskDisclosures"
     FROM campaigns
     WHERE id = $1
   `

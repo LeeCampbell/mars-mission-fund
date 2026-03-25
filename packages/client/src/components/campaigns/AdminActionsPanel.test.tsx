@@ -68,6 +68,7 @@ const baseCampaign: CampaignDetail = {
   createdBy: 'creator-1',
   reviewerId: null,
   cancellationRequestedAt: null,
+  riskDisclosures: [],
   launchedAt: new Date(),
   updatedAt: new Date(),
   maxFundingCapUsd: 200000,

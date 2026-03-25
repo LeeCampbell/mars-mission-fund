@@ -22,7 +22,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds with no TypeScript errors; `npm run test:coverage` passes; `./scripts/run-e2e.sh e2e/campaigns.spec.ts` (or the new spec file) passes and the deadline renders as `Dec 27, 2026` on Step 7
   - **Brief ref**: Approach section, Files to Create/Modify section
 
-- [ ] TASK-02: Full E2E regression and CI verification
+- [x] TASK-02: Full E2E regression and CI verification
   - **Goal**: Run the complete E2E suite and CI checks to verify nothing is broken
   - **Details**: No new code — just run the full test suite as a final gate
   - **Files**: (none)

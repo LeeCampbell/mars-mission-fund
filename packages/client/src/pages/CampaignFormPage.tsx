@@ -486,6 +486,23 @@ const dialogStyle: React.CSSProperties = {
   maxWidth: '480px',
   width: '100%',
   fontFamily: 'var(--font-body)',
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
+}
+
+const dialogConfirmButtonStyle: React.CSSProperties = {
+  background: 'var(--color-action-primary)',
+  color: 'var(--color-action-primary-text)',
+  border: 'none',
+  borderRadius: 'var(--radius-sm)',
+  padding: 'var(--space-2) var(--space-5)',
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-body-size)',
+  fontWeight: 600,
+  cursor: 'pointer',
 }
 
 const loadingStyle: React.CSSProperties = {
@@ -512,6 +529,7 @@ export function CampaignFormPage({ campaignId }: CampaignFormPageProps) {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const dialogRef = useRef<HTMLDialogElement>(null)
+  const submitTriggerRef = useRef<HTMLButtonElement>(null)
   const initializedRef = useRef(false)
 
   const [state, dispatch] = useReducer(reducer, undefined, initState)
@@ -669,6 +687,7 @@ export function CampaignFormPage({ campaignId }: CampaignFormPageProps) {
             state={state}
             campaignId={campaignId}
             onOpenDialog={() => dialogRef.current?.showModal()}
+            triggerRef={submitTriggerRef}
           />
         )}
 
@@ -712,8 +731,14 @@ export function CampaignFormPage({ campaignId }: CampaignFormPageProps) {
       </div>
 
       {/* Submit confirmation dialog */}
-      <dialog ref={dialogRef} style={dialogStyle}>
+      <dialog
+        ref={dialogRef}
+        style={dialogStyle}
+        aria-labelledby="submit-dialog-title"
+        onClose={() => submitTriggerRef.current?.focus()}
+      >
         <h2
+          id="submit-dialog-title"
           style={{
             fontFamily: 'var(--font-heading)',
             fontSize: 'var(--type-heading-3-size)',
@@ -748,7 +773,11 @@ export function CampaignFormPage({ campaignId }: CampaignFormPageProps) {
           >
             Cancel
           </button>
-          <button style={primaryButtonStyle} onClick={() => doSubmit()} disabled={isSubmitting}>
+          <button
+            style={dialogConfirmButtonStyle}
+            onClick={() => doSubmit()}
+            disabled={isSubmitting}
+          >
             {isSubmitting ? 'Submitting…' : 'Confirm Submission'}
           </button>
         </div>
@@ -1299,10 +1328,12 @@ function StepReview({
   state,
   campaignId,
   onOpenDialog,
+  triggerRef,
 }: {
   state: FormState
   campaignId: string | undefined
   onOpenDialog: () => void
+  triggerRef?: React.RefObject<HTMLButtonElement | null>
 }) {
   return (
     <div>
@@ -1433,6 +1464,7 @@ function StepReview({
           </p>
         )}
         <button
+          ref={triggerRef}
           style={{
             ...primaryButtonStyle,
             opacity: campaignId ? 1 : 0.5,

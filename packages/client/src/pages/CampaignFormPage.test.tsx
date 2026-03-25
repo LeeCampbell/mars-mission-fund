@@ -96,6 +96,17 @@ const mockCampaign: CampaignDetail = {
 describe('CampaignFormPage', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    HTMLDialogElement.prototype.showModal = vi.fn().mockImplementation(function (
+      this: HTMLDialogElement
+    ) {
+      this.setAttribute('open', '')
+    })
+    HTMLDialogElement.prototype.close = vi.fn().mockImplementation(function (
+      this: HTMLDialogElement
+    ) {
+      this.removeAttribute('open')
+      this.dispatchEvent(new Event('close'))
+    })
   })
 
   it('renders step 1 with title and category fields', () => {
@@ -263,5 +274,77 @@ describe('CampaignFormPage', () => {
     })
 
     expect(fetchCampaign).toHaveBeenCalledWith('c1')
+  })
+
+  it('dialog has an accessible name via aria-labelledby pointing to the heading', () => {
+    renderPage()
+
+    // Query the dialog element directly (implicit role='dialog' is only exposed
+    // when the dialog is open; attribute checks don't require it to be open)
+    const dialog = document.querySelector('dialog')
+    expect(dialog).not.toBeNull()
+    expect(dialog).toHaveAttribute('aria-labelledby', 'submit-dialog-title')
+    const heading = document.getElementById('submit-dialog-title')
+    expect(heading).not.toBeNull()
+    expect(heading).toHaveTextContent('Submit for Review')
+  })
+
+  it('returns focus to the trigger button after the dialog closes', async () => {
+    vi.mocked(fetchCampaign).mockResolvedValue(mockCampaign)
+    renderPage({ campaignId: 'c1' })
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Mars Habitat Alpha')).toBeInTheDocument()
+    })
+
+    // Step 1: advance with pre-populated data
+    fireEvent.change(screen.getByLabelText('Title *'), {
+      target: { value: 'Mars Habitat Alpha' },
+    })
+    fireEvent.change(screen.getByLabelText('Category *'), {
+      target: { value: 'Habitats & Construction' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 2: advance (team member from mock)
+    await waitFor(() => screen.getByText('Step 2: Team Members'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 3: fill funding target and advance
+    await waitFor(() => screen.getByText('Step 3: Funding Goals'))
+    fireEvent.change(screen.getByLabelText('Minimum Funding Target (USD) *'), {
+      target: { value: '5000000' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 4: milestones from mock sum to 100; advance
+    await waitFor(() => screen.getByText('Step 4: Milestones'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 5: advance (risk disclosures from mock)
+    await waitFor(() => screen.getByText('Step 5: Risk Disclosures'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 6: advance (no required fields)
+    await waitFor(() => screen.getByText('Step 6: Media'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 7: Review & Submit
+    await waitFor(() => screen.getByText('Step 7: Review & Submit'))
+
+    const triggerButton = screen.getByRole('button', { name: 'Submit campaign for review' })
+
+    // Open the dialog
+    fireEvent.click(triggerButton)
+    expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalledOnce()
+
+    // Close the dialog via Cancel button
+    const cancelButton = screen.getByRole('button', { name: 'Cancel' })
+    fireEvent.click(cancelButton)
+
+    // Focus should return to the trigger button
+    await waitFor(() => {
+      expect(document.activeElement).toBe(triggerButton)
+    })
   })
 })

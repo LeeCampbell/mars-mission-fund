@@ -28,7 +28,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` and `npx tsc -b --noEmit` pass with no type errors; "Confirm Submission" button is visually orange; focus returns to trigger after cancel/escape
   - **Brief ref**: Approach §4, §5; Files table
 
-- [ ] TASK-03: Update unit tests — accessible name and focus-return behaviour
+- [x] TASK-03: Update unit tests — accessible name and focus-return behaviour
   - **Goal**: Add unit tests covering dialog accessible name and focus return to trigger on close
   - **Details**:
     1. Read `CampaignFormPage.test.tsx` first to understand the existing `showModal` mock pattern

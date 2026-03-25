@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Baseline E2E run and failure audit
+- [x] TASK-01: Baseline E2E run and failure audit
   - **Goal**: Establish which of the 7 lifecycle tests fail and map each failure to its known risk
   - **Details**: Run `./scripts/e2e-check-docker.sh` and capture output. Read `e2e/campaign-lifecycle.spec.ts` in full. Cross-reference every failure against the 6 known risks in the brief: (1) missing risk disclosures, (2) single-milestone 50% campaigns, (3) React Query cache invalidation, (4) `window.confirm` dialog handling, (5) AdminActionsPanel `Submitted` guard, (6) notification `read = false`. Produce a concise list of failures → root causes before touching any production code.
   - **Files**: (read-only audit — no code changes)

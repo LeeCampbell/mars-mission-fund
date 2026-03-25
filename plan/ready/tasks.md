@@ -38,7 +38,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes with no regressions and coverage ≥ 80%
   - **Brief ref**: Backend section, Verification section
 
-- [ ] TASK-03: Update frontend API layer and `useCampaigns` hook
+- [x] TASK-03: Update frontend API layer and `useCampaigns` hook
   - **Goal**: Thread `CampaignFilterParams` from the hook through to the API call
   - **Details**:
     - In `packages/client/src/api/campaigns.ts`:

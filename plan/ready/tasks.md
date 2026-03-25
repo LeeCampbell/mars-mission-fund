@@ -18,7 +18,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `./scripts/ci-check.sh` exits 0
   - **Brief ref**: Verification section — CI checks
 
-- [ ] TASK-03: Run full E2E suite including lifecycle tests
+- [x] TASK-03: Run full E2E suite including lifecycle tests
   - **Goal**: Verify all seven campaign-lifecycle tests pass against the full Docker stack
   - **Details**: Run `./scripts/e2e-check-docker.sh`. This starts a Dockerised Postgres, runs all migrations (including the seed migration), starts the backend + frontend, and executes all Playwright specs. All seven tests in `e2e/campaign-lifecycle.spec.ts` must pass:
     1. `creator submits a draft campaign`

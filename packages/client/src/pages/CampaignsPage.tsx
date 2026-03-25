@@ -1,5 +1,8 @@
+import { useSearchParams } from 'react-router'
 import { useCampaigns } from '../hooks/useCampaigns'
+import type { CampaignFilterParams } from '../api/campaigns'
 import { CampaignCard } from '../components/campaigns/CampaignCard'
+import { CampaignFilters } from '../components/campaigns/CampaignFilters'
 
 const pageStyle: React.CSSProperties = {
   maxWidth: '1280px',
@@ -36,6 +39,13 @@ const statusStyle: React.CSSProperties = {
   textAlign: 'center',
 }
 
+const resultCountStyle: React.CSSProperties = {
+  fontFamily: 'var(--type-body)',
+  fontSize: '14px',
+  color: 'var(--color-text-secondary)',
+  marginBottom: '16px',
+}
+
 const cssOverrides = `
   .mmf-campaigns-grid {
     grid-template-columns: 1fr;
@@ -61,19 +71,40 @@ function ensureCampaignsStyle() {
   document.head.appendChild(el)
 }
 
+function filtersFromParams(params: URLSearchParams): CampaignFilterParams {
+  const search = params.get('search') || undefined
+  const cats = params.get('categories')
+  const categories = cats ? cats.split(',').filter(Boolean) : undefined
+  return {
+    search,
+    categories: categories && categories.length > 0 ? categories : undefined,
+  }
+}
+
 export function CampaignsPage() {
   ensureCampaignsStyle()
-  const { data: campaigns, isLoading, isError } = useCampaigns()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const filters = filtersFromParams(searchParams)
+  const { data: campaigns, isLoading, isError } = useCampaigns(filters)
+
+  function handleFiltersChange(f: CampaignFilterParams) {
+    const next = new URLSearchParams()
+    if (f.search) next.set('search', f.search)
+    if (f.categories && f.categories.length > 0) next.set('categories', f.categories.join(','))
+    setSearchParams(next, { replace: true })
+  }
 
   return (
     <section style={pageStyle}>
       <h1 style={headingStyle}>Explore Missions</h1>
       <p style={subheadingStyle}>Support the missions driving humanity toward Mars.</p>
 
+      <CampaignFilters filters={filters} onFiltersChange={handleFiltersChange} />
+
       {isLoading && (
-        <div role="status" aria-busy="true" style={statusStyle}>
-          Loading missions…
-        </div>
+        <p style={resultCountStyle} aria-live="polite">
+          Loading…
+        </p>
       )}
 
       {isError && (
@@ -83,11 +114,16 @@ export function CampaignsPage() {
       )}
 
       {campaigns && (
-        <div className="mmf-campaigns-grid" style={gridStyle} aria-label="Campaign listings">
-          {campaigns.map((campaign) => (
-            <CampaignCard key={campaign.id} campaign={campaign} />
-          ))}
-        </div>
+        <>
+          <p style={resultCountStyle} aria-live="polite">
+            {campaigns.length} mission{campaigns.length !== 1 ? 's' : ''} found
+          </p>
+          <div className="mmf-campaigns-grid" style={gridStyle} aria-label="Campaign listings">
+            {campaigns.map((campaign) => (
+              <CampaignCard key={campaign.id} campaign={campaign} />
+            ))}
+          </div>
+        </>
       )}
     </section>
   )

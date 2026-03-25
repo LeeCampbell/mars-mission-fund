@@ -22,8 +22,18 @@ export type {
   UpdateCampaignRequest,
 }
 
-export async function fetchCampaigns(): Promise<CampaignSummary[]> {
-  const response = await fetch('/v1/campaigns')
+export interface CampaignFilterParams {
+  search?: string
+  categories?: string[]
+}
+
+export async function fetchCampaigns(filters?: CampaignFilterParams): Promise<CampaignSummary[]> {
+  const params = new URLSearchParams()
+  if (filters?.search) params.set('search', filters.search)
+  if (filters?.categories && filters.categories.length > 0)
+    params.set('categories', filters.categories.join(','))
+  const qs = params.toString()
+  const response = await fetch(qs ? `/v1/campaigns?${qs}` : '/v1/campaigns')
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
   const json = await response.json()
   return (json.data as unknown[]).map((item) => CampaignSummarySchema.parse(item))

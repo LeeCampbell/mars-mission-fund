@@ -112,6 +112,18 @@ export async function listCampaigns(
     conditions.push(`category = $${params.length}`)
   }
 
+  if (filters.categories !== undefined && filters.categories.length > 0) {
+    params.push(filters.categories)
+    conditions.push(`category = ANY($${params.length})`)
+  }
+
+  if (filters.search !== undefined) {
+    const term = `%${filters.search}%`
+    params.push(term)
+    const idx = params.length
+    conditions.push(`(title ILIKE $${idx} OR summary ILIKE $${idx})`)
+  }
+
   if (creatorId !== undefined) {
     params.push(creatorId)
     conditions.push(`creator_id = $${params.length}`)

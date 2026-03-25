@@ -53,3 +53,85 @@ test.describe('Campaign detail', () => {
     await expect(page.getByText('Failed to load campaign')).toBeVisible()
   })
 })
+
+test.describe('Campaign filters', () => {
+  test('full list shown with no filter params in URL on initial visit', async ({ page }) => {
+    await page.goto('/campaigns')
+    await expect(page.getByLabel('Campaign listings')).toBeVisible()
+    expect(page.url()).not.toContain('search=')
+    expect(page.url()).not.toContain('categories=')
+  })
+
+  test('search narrows the list and count reflects results', async ({ page }) => {
+    await page.goto('/campaigns')
+    const searchInput = page.getByLabel('Search campaigns')
+    await expect(searchInput).toBeVisible()
+
+    // Type the exact title of campaign 1 to get exactly 1 result
+    await searchInput.fill(SEEDED_CAMPAIGN_TITLE)
+    // Wait for debounce (300 ms) plus network round-trip
+    await page.waitForTimeout(600)
+
+    await expect(page.getByText('1 mission found')).toBeVisible()
+    await expect(page.getByText(SEEDED_CAMPAIGN_TITLE)).toBeVisible()
+  })
+
+  test('clicking a category pill narrows the list and sets URL param', async ({ page }) => {
+    await page.goto('/campaigns')
+    // Wait for initial list to load
+    await expect(page.getByLabel('Campaign listings')).toBeVisible()
+
+    // Click the Propulsion category pill
+    const propulsionPill = page.getByRole('button', { name: 'Propulsion' })
+    await propulsionPill.click()
+
+    // URL should contain categories=Propulsion
+    await page.waitForFunction(() => window.location.search.includes('categories='))
+    expect(page.url()).toContain('categories=Propulsion')
+
+    // Campaign 1 is in Propulsion; it should be visible
+    await expect(page.getByText(SEEDED_CAMPAIGN_TITLE)).toBeVisible()
+  })
+
+  test('clear filters restores full list and removes URL params', async ({ page }) => {
+    // Start with an active search filter
+    await page.goto('/campaigns?search=' + encodeURIComponent(SEEDED_CAMPAIGN_TITLE))
+    await expect(page.getByText('1 mission found')).toBeVisible()
+
+    // Click "Clear filters"
+    const clearBtn = page.getByRole('button', { name: 'Clear filters' })
+    await expect(clearBtn).toBeVisible()
+    await clearBtn.click()
+
+    // URL should have no filter params
+    await page.waitForFunction(
+      () =>
+        !window.location.search.includes('search=') &&
+        !window.location.search.includes('categories=')
+    )
+    expect(page.url()).not.toContain('search=')
+    expect(page.url()).not.toContain('categories=')
+
+    // Full list should be restored
+    await expect(page.getByLabel('Campaign listings')).toBeVisible()
+  })
+
+  test('filter state is restored from URL after navigating to detail and pressing back', async ({
+    page,
+  }) => {
+    // Navigate to campaigns page with a search filter applied
+    await page.goto('/campaigns?search=' + encodeURIComponent(SEEDED_CAMPAIGN_TITLE))
+    await expect(page.getByText('1 mission found')).toBeVisible()
+
+    // Click on the campaign card link (only 1 result visible after filtering)
+    await page.getByLabel('Campaign listings').getByRole('link').first().click()
+    await expect(page).toHaveURL(new RegExp(`/campaigns/${SEEDED_CAMPAIGN_ID}`))
+
+    // Press browser back
+    await page.goBack()
+
+    // Filter state should be restored from URL
+    expect(page.url()).toContain('search=')
+    await expect(page.getByText('1 mission found')).toBeVisible()
+  })
+})

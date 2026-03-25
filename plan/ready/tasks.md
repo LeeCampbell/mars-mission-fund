@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Extend backend `ListQuerySchema` and update `listCampaigns()` SQL
+- [x] TASK-01: Extend backend `ListQuerySchema` and update `listCampaigns()` SQL
   - **Goal**: Add `search` and `categories` filter support to the backend campaign list endpoint
   - **Details**:
     - In `packages/server/src/campaigns/types.ts`, extend `ListQuerySchema` with:

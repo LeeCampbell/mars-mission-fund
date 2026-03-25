@@ -15,7 +15,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run build` succeeds; `npm run lint` passes; visually confirm dialog is centred with backdrop when opened in browser
   - **Brief ref**: Approach §1, §2, §3; Files table
 
-- [ ] TASK-02: Fix "Confirm Submission" button colour and implement focus return
+- [x] TASK-02: Fix "Confirm Submission" button colour and implement focus return
   - **Goal**: Apply correct primary action token to the confirm button and return focus to the trigger button on dialog close
   - **Details**:
     1. In `CampaignFormPage.tsx`, create a new `dialogConfirmButtonStyle` constant using `--color-action-primary` (background) and `--color-action-primary-text` (text) with the same radius/padding/font props as the brief — do NOT change the shared `primaryButtonStyle`

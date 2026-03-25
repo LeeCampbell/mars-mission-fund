@@ -15,6 +15,26 @@ function getFutureDate(monthsAhead: number): string {
   return date.toISOString().split('T')[0]
 }
 
+test.describe('Header Dashboard link', () => {
+  test('Creator sees Dashboard link in header nav and can navigate to /dashboard', async ({
+    page,
+  }) => {
+    await login(page, 'creator@example.com', 'creator-demo-pass')
+
+    await expect(page.getByRole('link', { name: 'Dashboard' }).first()).toBeVisible()
+
+    await page.getByRole('link', { name: 'Dashboard' }).first().click()
+
+    await expect(page).toHaveURL('/dashboard')
+  })
+
+  test('Backer does not see Dashboard link in header nav', async ({ page }) => {
+    await login(page, 'backer@example.com', 'backer-demo-pass')
+
+    await expect(page.getByRole('link', { name: 'Dashboard' })).not.toBeVisible()
+  })
+})
+
 test.describe('Creator dashboard', () => {
   test('dashboard shows heading and New Campaign link', async ({ page }) => {
     await login(page, 'creator@example.com', 'creator-demo-pass')

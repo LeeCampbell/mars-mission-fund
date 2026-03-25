@@ -247,6 +247,10 @@ All review actions are audit-logged per [Audit](L3-006): reviewer identity, acti
 
 ### 6.3 Appeal Process
 
+> **Local demo scope**: The appeal process is **not implemented** in the demo. Rejected campaigns
+> may be revised and resubmitted (Draft → Submitted), but there is no appeal workflow, alternate
+> reviewer assignment, or appeal audit trail. See [ADR-0002](../adrs/0002-audit-log-demo-simplification.md).
+
 - A creator may appeal a rejection by submitting an appeal request to the Admin role.
 - The appeal is reviewed by a different reviewer than the original.
 - Appeal outcomes: overturn (proposal moves to Approved) or uphold (rejection stands).
@@ -290,6 +294,10 @@ All review actions are audit-logged per [Audit](L3-006): reviewer identity, acti
 
 #### Deadline Extensions
 
+> **Local demo scope**: Deadline extension requests are **not implemented** in the demo. Campaigns
+> transition automatically at deadline but there is no UI or API for requesting or approving
+> extensions, and no contributor notification flow for approved extensions.
+
 - Creators may request a deadline extension while the campaign is Live.
 - Extensions require Admin approval.
 - Maximum single extension: 30 days.
@@ -309,6 +317,10 @@ All review actions are audit-logged per [Audit](L3-006): reviewer identity, acti
 - Creators may NOT modify the minimum funding target or maximum funding cap after going live.
 
 #### Milestone Change Requests
+
+> **Local demo scope**: Milestone change requests are **not implemented** in the demo. Milestone
+> plans are fixed after submission. There is no UI or API for requesting, approving, or
+> audit-logging milestone amendments, and no contributor notification flow for approved changes.
 
 - Creators may request changes to milestones after going live (e.g., adjusting dates, refining verification criteria, rebalancing funding percentages).
 - Milestone changes require Admin approval.
@@ -472,11 +484,31 @@ Campaign enforces permissions based on the authenticated user's role.
 - If a creator's KYC status is revoked while a campaign is **Live**: the campaign is suspended (no new contributions accepted), the creator and Admin are notified, and the Admin determines next steps (cancel with refunds, or allow the creator to re-verify within 14 days). If re-verification is not completed within 14 days, the campaign is cancelled and all contributions are refunded via [Payments](L4-004).
 - If a creator's KYC status is revoked during **Settlement**: disbursements are paused, Admin is notified, and no further milestone payments are released until re-verification is complete. Funds already disbursed are not clawed back.
 
+> **Local demo scope**: KYC revocation handling (AC-CAMP-023 through AC-CAMP-025) is **not
+> implemented** in the demo. The KYC check at submission is stubbed (`const kycVerified = true`).
+> There is no runtime KYC status monitoring, no Suspended-state trigger on revocation, and no
+> 14-day re-verification window. See [ADR-0003](../adrs/0003-stubbed-integrations.md).
+
 **AC-CAMP-023**: Given a live campaign, when the creator's KYC status is revoked, then the campaign transitions to "Suspended", no new contributions are accepted, and the creator and Admin are notified.
 
 **AC-CAMP-024**: Given a suspended campaign, when the creator completes KYC re-verification within 14 days, then the Admin may restore the campaign to its previous state (Live or Funded).
 
 **AC-CAMP-025**: Given a suspended campaign, when 14 days elapse without KYC re-verification, then the campaign is cancelled and all contributions are refunded via the payments system.
+
+---
+
+## 12. Glossary
+
+Domain vocabulary introduced during the Campaign Lifecycle milestone.
+
+| Term | Definition |
+| ---- | ---------- |
+| **Review Queue** | FIFO set of Submitted campaigns available for Reviewers to claim. Reviewers self-assign (pull model) — campaigns are not assigned by admins unless escalated past the 5-day SLA. |
+| **Settlement** | Post-deadline fund disbursement workflow. Triggered when a Funded campaign passes its deadline. Admin verifies each milestone and releases escrowed funds in staged tranches per the milestone plan. |
+| **Stretch Goal** | An optional funding tier above the minimum target that unlocks additional deliverables when crossed. Stretch goals are visible on the campaign page once the minimum target is reached and activate automatically as each threshold is met. |
+| **Milestone Evidence** | Documentation submitted by a Creator to prove a milestone is complete (documents, images, links, reports). Reviewed by an Admin before funds for that milestone are released. Evidence submissions are timestamped and immutable once submitted. |
+| **Cancellation Workflow** | Immediate cancellation if no contributions have been made. Admin approval required if contributions exist, to trigger refunds via the payments system. Admin-only during Settlement; remaining undisbursed funds are refunded. |
+| **Deadline Enforcement** | Automatic system transition from Live to Funded (minimum met) or Failed (minimum not met) when the campaign deadline passes. Triggered lazily on next contribution attempt or explicitly by a scheduled check. |
 
 ---
 

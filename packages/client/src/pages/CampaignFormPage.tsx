@@ -9,6 +9,7 @@ import {
 } from '../api/campaigns'
 import { CampaignCategorySchema } from '@mmf/shared'
 import type { CampaignCategory, CampaignDetail, CreateCampaignRequest } from '@mmf/shared'
+import { DatePickerInput } from '../components/ui/DatePickerInput'
 
 export interface CampaignFormPageProps {
   campaignId?: string
@@ -191,7 +192,7 @@ function reducer(state: FormState, action: FormAction): FormState {
                   sortOrder: 1,
                 },
               ],
-        riskDisclosures: [''],
+        riskDisclosures: c.riskDisclosures?.length ? c.riskDisclosures : [''],
         heroImageUrl: c.heroImageUrl ?? '',
       }
     }
@@ -486,6 +487,23 @@ const dialogStyle: React.CSSProperties = {
   maxWidth: '480px',
   width: '100%',
   fontFamily: 'var(--font-body)',
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
+}
+
+const dialogConfirmButtonStyle: React.CSSProperties = {
+  background: 'var(--color-action-primary)',
+  color: 'var(--color-action-primary-text)',
+  border: 'none',
+  borderRadius: 'var(--radius-sm)',
+  padding: 'var(--space-2) var(--space-5)',
+  fontFamily: 'var(--font-body)',
+  fontSize: 'var(--type-body-size)',
+  fontWeight: 600,
+  cursor: 'pointer',
 }
 
 const loadingStyle: React.CSSProperties = {
@@ -512,6 +530,7 @@ export function CampaignFormPage({ campaignId }: CampaignFormPageProps) {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const dialogRef = useRef<HTMLDialogElement>(null)
+  const submitTriggerRef = useRef<HTMLButtonElement>(null)
   const initializedRef = useRef(false)
 
   const [state, dispatch] = useReducer(reducer, undefined, initState)
@@ -669,6 +688,7 @@ export function CampaignFormPage({ campaignId }: CampaignFormPageProps) {
             state={state}
             campaignId={campaignId}
             onOpenDialog={() => dialogRef.current?.showModal()}
+            triggerRef={submitTriggerRef}
           />
         )}
 
@@ -712,8 +732,14 @@ export function CampaignFormPage({ campaignId }: CampaignFormPageProps) {
       </div>
 
       {/* Submit confirmation dialog */}
-      <dialog ref={dialogRef} style={dialogStyle}>
+      <dialog
+        ref={dialogRef}
+        style={dialogStyle}
+        aria-labelledby="submit-dialog-title"
+        onClose={() => submitTriggerRef.current?.focus()}
+      >
         <h2
+          id="submit-dialog-title"
           style={{
             fontFamily: 'var(--font-heading)',
             fontSize: 'var(--type-heading-3-size)',
@@ -748,7 +774,11 @@ export function CampaignFormPage({ campaignId }: CampaignFormPageProps) {
           >
             Cancel
           </button>
-          <button style={primaryButtonStyle} onClick={() => doSubmit()} disabled={isSubmitting}>
+          <button
+            style={dialogConfirmButtonStyle}
+            onClick={() => doSubmit()}
+            disabled={isSubmitting}
+          >
             {isSubmitting ? 'Submitting…' : 'Confirm Submission'}
           </button>
         </div>
@@ -950,6 +980,29 @@ function StepFunding({
   state: FormState
   dispatch: React.Dispatch<FormAction>
 }) {
+  const [deadlineError, setDeadlineError] = useState('')
+
+  const minDate = (() => {
+    const d = new Date()
+    d.setDate(d.getDate() + 7)
+    return d.toISOString().split('T')[0]
+  })()
+
+  const maxDate = (() => {
+    const d = new Date()
+    d.setFullYear(d.getFullYear() + 1)
+    return d.toISOString().split('T')[0]
+  })()
+
+  function handleDeadlineChange(value: string) {
+    dispatch({ type: 'SET', field: 'deadline', value })
+    if (value && (value < minDate || value > maxDate)) {
+      setDeadlineError('Deadline must be between 7 days and 1 year from today')
+    } else {
+      setDeadlineError('')
+    }
+  }
+
   return (
     <div>
       <h1 style={headingStyle}>Step 3: Funding Goals</h1>
@@ -997,26 +1050,16 @@ function StepFunding({
         />
       </div>
       <div style={fieldGroupStyle}>
-        <label htmlFor="deadline" style={labelStyle}>
-          Campaign Deadline
-        </label>
-        <input
+        <DatePickerInput
           id="deadline"
-          type="date"
-          style={inputStyle}
+          label="Campaign Deadline"
           value={state.deadline}
-          onChange={(e) => dispatch({ type: 'SET', field: 'deadline', value: e.target.value })}
+          onChange={handleDeadlineChange}
+          min={minDate}
+          max={maxDate}
+          helperText="Must be 1 week to 1 year from today"
+          error={deadlineError}
         />
-        <span
-          style={{
-            ...labelStyle,
-            fontWeight: 400,
-            color: 'var(--color-text-secondary)',
-            marginTop: 'var(--space-1)',
-          }}
-        >
-          Must be 1 week to 1 year from today
-        </span>
       </div>
     </div>
   )
@@ -1029,6 +1072,17 @@ function StepMilestones({
   state: FormState
   dispatch: React.Dispatch<FormAction>
 }) {
+  const [milestoneDateErrors, setMilestoneDateErrors] = useState<Record<number, string>>({})
+
+  function handleMilestoneDateChange(index: number, value: string) {
+    dispatch({ type: 'UPDATE_MILESTONE', index, field: 'targetDate', value })
+    if (value && isNaN(new Date(value).getTime())) {
+      setMilestoneDateErrors((prev) => ({ ...prev, [index]: 'Please enter a valid date' }))
+    } else {
+      setMilestoneDateErrors((prev) => ({ ...prev, [index]: '' }))
+    }
+  }
+
   const total = state.milestones
     .filter((m) => m.title.trim())
     .reduce((sum, m) => sum + (parseFloat(m.fundingPercentage) || 0), 0)
@@ -1142,22 +1196,12 @@ function StepMilestones({
               />
             </div>
             <div style={{ ...fieldGroupStyle, flex: '1' }}>
-              <label htmlFor={`ms-date-${i}`} style={labelStyle}>
-                Target Date
-              </label>
-              <input
+              <DatePickerInput
                 id={`ms-date-${i}`}
-                type="date"
-                style={inputStyle}
+                label="Target Date"
                 value={milestone.targetDate}
-                onChange={(e) =>
-                  dispatch({
-                    type: 'UPDATE_MILESTONE',
-                    index: i,
-                    field: 'targetDate',
-                    value: e.target.value,
-                  })
-                }
+                onChange={(value) => handleMilestoneDateChange(i, value)}
+                error={milestoneDateErrors[i] ?? ''}
               />
             </div>
           </div>
@@ -1295,14 +1339,26 @@ function StepMedia({
   )
 }
 
+function formatReviewDate(value: string | undefined): string {
+  if (!value) return '—'
+  const [year, month, day] = value.split('-').map(Number)
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(year, month - 1, day))
+}
+
 function StepReview({
   state,
   campaignId,
   onOpenDialog,
+  triggerRef,
 }: {
   state: FormState
   campaignId: string | undefined
   onOpenDialog: () => void
+  triggerRef?: React.RefObject<HTMLButtonElement | null>
 }) {
   return (
     <div>
@@ -1376,7 +1432,7 @@ function StepReview({
               state.maxFundingCapUsd ? `$${parseInt(state.maxFundingCapUsd).toLocaleString()}` : '—'
             }
           />
-          <ReviewRow label="Deadline" value={state.deadline || '—'} />
+          <ReviewRow label="Deadline" value={formatReviewDate(state.deadline)} />
         </dl>
       </section>
 
@@ -1433,6 +1489,7 @@ function StepReview({
           </p>
         )}
         <button
+          ref={triggerRef}
           style={{
             ...primaryButtonStyle,
             opacity: campaignId ? 1 : 0.5,

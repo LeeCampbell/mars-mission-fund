@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router'
 import { Logo } from './ui/Logo'
-import { Badge } from './ui/Badge'
 import { NotificationBell } from './NotificationBell'
 import { useAuthContext } from '../context/AuthContext'
 import { useLogout } from '../hooks/useAuth'
@@ -63,7 +62,7 @@ const navLinkBase: React.CSSProperties = {
 
 const navLinkActiveStyle: React.CSSProperties = {
   color: 'var(--color-text-accent)',
-  borderBottomColor: 'var(--color-border-accent)',
+  borderBottom: '2px solid var(--color-border-accent)',
 }
 
 const skipLinkStyle: React.CSSProperties = {
@@ -202,6 +201,7 @@ export function Header() {
 
   const isAdmin = user?.role === 'Administrator' || user?.role === 'SuperAdministrator'
   const isReviewer = user?.role === 'Reviewer'
+  const isCreator = user?.role === 'Creator'
 
   return (
     <header style={headerStyle}>
@@ -262,6 +262,20 @@ export function Header() {
                     </NavLink>
                   </li>
                 )}
+                {isCreator && (
+                  <li>
+                    <NavLink
+                      to="/dashboard"
+                      className="mmf-nav-link"
+                      style={({ isActive }) => ({
+                        ...navLinkBase,
+                        ...(isActive ? navLinkActiveStyle : {}),
+                      })}
+                    >
+                      Dashboard
+                    </NavLink>
+                  </li>
+                )}
                 <li>
                   <NavLink
                     to="/profile"
@@ -276,7 +290,16 @@ export function Header() {
                 </li>
                 {isAdmin && (
                   <li>
-                    <Badge variant="accent">Admin</Badge>
+                    <NavLink
+                      to="/admin/users"
+                      className="mmf-nav-link"
+                      style={({ isActive }) => ({
+                        ...navLinkBase,
+                        ...(isActive ? navLinkActiveStyle : {}),
+                      })}
+                    >
+                      Admin
+                    </NavLink>
                   </li>
                 )}
                 <li>
@@ -362,6 +385,21 @@ export function Header() {
                   </NavLink>
                 </li>
               )}
+              {isCreator && (
+                <li>
+                  <NavLink
+                    to="/dashboard"
+                    className="mmf-mobile-nav-link"
+                    style={({ isActive }) => ({
+                      ...mobileNavLinkBase,
+                      ...(isActive ? mobileNavLinkActiveStyle : {}),
+                    })}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Dashboard
+                  </NavLink>
+                </li>
+              )}
               <li>
                 <NavLink
                   to="/profile"
@@ -375,6 +413,19 @@ export function Header() {
                   {user?.displayName ?? 'Profile'}
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  to="/notifications"
+                  className="mmf-mobile-nav-link"
+                  style={({ isActive }) => ({
+                    ...mobileNavLinkBase,
+                    ...(isActive ? mobileNavLinkActiveStyle : {}),
+                  })}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Notifications
+                </NavLink>
+              </li>
               {isAdmin && (
                 <li
                   style={{
@@ -382,7 +433,17 @@ export function Header() {
                     borderBottom: '1px solid var(--color-border-subtle)',
                   }}
                 >
-                  <Badge variant="accent">Admin</Badge>
+                  <NavLink
+                    to="/admin/users"
+                    className="mmf-mobile-nav-link"
+                    style={({ isActive }) => ({
+                      ...mobileNavLinkBase,
+                      ...(isActive ? mobileNavLinkActiveStyle : {}),
+                    })}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Admin
+                  </NavLink>
                 </li>
               )}
               <li>

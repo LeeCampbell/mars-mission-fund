@@ -88,16 +88,15 @@ If any check fails, fix the issue and re-run until all pass.
 
 If the task's **Verify** step includes `run-e2e.sh`, run that exact command (which may specify a single file like `./scripts/run-e2e.sh e2e/feature.spec.ts`). Only run the full suite (`./scripts/run-e2e.sh` with no args) when the task explicitly calls for it.
 
-**Visual verification**: If the task involves UI changes:
+**Visual verification**: Applies when the current task's **Files** list includes any path under `packages/client/src/`. This step is **non-optional** — the task is not considered complete unless at least one screenshot file exists at `/screenshots/ISSUE-{issueId}-TASK-{NN}.png`. Missing screenshots must be treated as an incomplete verification step (fix and retry, do not skip).
 
 1. Health-check the backend: `curl -sf http://localhost:3001/health`
-1. If the health check **fails**, skip visual verification and note "Visual verification skipped — backend not running" in your report. Do NOT treat this as a critical error.
-1. If the health check **passes**:
-   - Start the dev server: `npm run dev &`
-   - Use Playwright MCP to navigate to `http://localhost:5173`
-   - Verify the expected content renders correctly
-   - Take screenshots of relevant changes: save to `/screenshots/ISSUE-{issueId}-TASK-{NN}.png`
-   - Stop the dev server: kill the background process
+1. If the health check **fails**, start the backend: `npm run dev:server &`, then poll `curl -sf http://localhost:3001/health` every 3 seconds for up to 30 seconds. If the backend is still not responding after 30 s, note the failure but continue — Vite dev server may still render static UI without the backend.
+1. Start the dev server: `npm run dev &`
+1. Use Playwright MCP to navigate to `http://localhost:5173`
+1. Verify the expected content renders correctly
+1. Take screenshots of relevant changes: save to `/screenshots/ISSUE-{issueId}-TASK-{NN}.png`
+1. Stop the dev server: kill the background process
 
 ### Step 5: Mark Done
 

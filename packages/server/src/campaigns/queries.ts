@@ -23,7 +23,7 @@ function randomHex(bytes: number): string {
   return randomBytes(bytes).toString('hex')
 }
 
-export interface AuditEventInput {
+export interface CampaignAuditEventInput {
   campaignId: string
   actorId: string
   eventType: string
@@ -112,6 +112,18 @@ export async function listCampaigns(
     conditions.push(`category = $${params.length}`)
   }
 
+  if (filters.categories !== undefined && filters.categories.length > 0) {
+    params.push(filters.categories)
+    conditions.push(`category = ANY($${params.length})`)
+  }
+
+  if (filters.search !== undefined) {
+    const term = `%${filters.search}%`
+    params.push(term)
+    const idx = params.length
+    conditions.push(`(title ILIKE $${idx} OR summary ILIKE $${idx})`)
+  }
+
   if (creatorId !== undefined) {
     params.push(creatorId)
     conditions.push(`creator_id = $${params.length}`)
@@ -166,7 +178,8 @@ export async function getCampaignById(pool: Pool, id: string): Promise<CampaignD
       updated_at AS "updatedAt",
       creator_id AS "creatorId",
       reviewer_id AS "reviewerId",
-      cancellation_requested_at AS "cancellationRequestedAt"
+      cancellation_requested_at AS "cancellationRequestedAt",
+      risk_disclosures AS "riskDisclosures"
     FROM campaigns
     WHERE id = $1
   `
@@ -668,7 +681,7 @@ export async function resubmitCampaign(
   return result.rows[0] ?? null
 }
 
-export async function createAuditEvent(pool: Pool, event: AuditEventInput): Promise<void> {
+export async function createAuditEvent(pool: Pool, event: CampaignAuditEventInput): Promise<void> {
   const sql = `
     INSERT INTO campaign_audit_events (campaign_id, event_type, actor_id, previous_state, new_state, metadata)
     VALUES ($1, $2, $3, $4, $5, $6)

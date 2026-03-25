@@ -12,6 +12,8 @@
 ## 1. Purpose
 
 > **Local demo scope**: The payment gateway abstraction layer, contribution state machine, and escrow ledger design are **real** — they demonstrate the architectural pattern in the local demo. The actual payment gateway is **stubbed** (no real money moves). Multi-approval disbursement workflow, daily reconciliation, and refund processing are theatre. The local demo simulates payment success/failure without a live gateway.
+>
+> The demo stub replaces live gateway calls with `console.log('[STUB] ...')` log lines at three points: fund disbursement (milestone verification), refund processing (settlement cancellation), and admin notification (evidence submission). No Stripe API keys, escrow accounts, or webhook handling are required. See [ADR-0003](../adrs/0003-stubbed-integrations.md) for the full rationale and what a production integration would require.
 
 This spec governs all payment processing within Mars Mission Fund: how money enters the platform (contributions), how it is held (escrow), how it is released (milestone disbursement), and how it is returned (refunds).
 

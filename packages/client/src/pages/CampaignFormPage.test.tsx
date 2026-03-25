@@ -90,11 +90,23 @@ const mockCampaign: CampaignDetail = {
     },
   ],
   updates: [],
+  riskDisclosures: ['Habitat pressure failure', 'Dust storm damage'],
 }
 
 describe('CampaignFormPage', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    HTMLDialogElement.prototype.showModal = vi.fn().mockImplementation(function (
+      this: HTMLDialogElement
+    ) {
+      this.setAttribute('open', '')
+    })
+    HTMLDialogElement.prototype.close = vi.fn().mockImplementation(function (
+      this: HTMLDialogElement
+    ) {
+      this.removeAttribute('open')
+      this.dispatchEvent(new Event('close'))
+    })
   })
 
   it('renders step 1 with title and category fields', () => {
@@ -203,6 +215,55 @@ describe('CampaignFormPage', () => {
     })
   })
 
+  it('pre-populates Step 5 risk disclosures from existing campaign data', async () => {
+    vi.mocked(fetchCampaign).mockResolvedValue(mockCampaign)
+
+    renderPage({ campaignId: 'c1' })
+
+    // Wait for data to load and form to initialise
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Mars Habitat Alpha')).toBeInTheDocument()
+    })
+
+    // Step 1: fill required fields and advance
+    fireEvent.change(screen.getByLabelText('Title *'), {
+      target: { value: 'Mars Habitat Alpha' },
+    })
+    fireEvent.change(screen.getByLabelText('Category *'), {
+      target: { value: 'Habitats & Construction' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 2: team member already filled from mock; advance
+    await waitFor(() => {
+      expect(screen.getByText('Step 2: Team Members')).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 3: fill minimum funding target and advance
+    await waitFor(() => {
+      expect(screen.getByText('Step 3: Funding Goals')).toBeInTheDocument()
+    })
+    fireEvent.change(screen.getByLabelText('Minimum Funding Target (USD) *'), {
+      target: { value: '5000000' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 4: milestones from mock sum to 100; advance
+    await waitFor(() => {
+      expect(screen.getByText('Step 4: Milestones')).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 5: risk disclosures should be pre-populated
+    await waitFor(() => {
+      expect(screen.getByText('Step 5: Risk Disclosures')).toBeInTheDocument()
+    })
+
+    expect(screen.getByDisplayValue('Habitat pressure failure')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('Dust storm damage')).toBeInTheDocument()
+  })
+
   it('initialises form from existing campaign data in edit mode', async () => {
     vi.mocked(fetchCampaign).mockResolvedValue(mockCampaign)
 
@@ -213,5 +274,125 @@ describe('CampaignFormPage', () => {
     })
 
     expect(fetchCampaign).toHaveBeenCalledWith('c1')
+  })
+
+  it('dialog has an accessible name via aria-labelledby pointing to the heading', () => {
+    renderPage()
+
+    // Query the dialog element directly (implicit role='dialog' is only exposed
+    // when the dialog is open; attribute checks don't require it to be open)
+    const dialog = document.querySelector('dialog')
+    expect(dialog).not.toBeNull()
+    expect(dialog).toHaveAttribute('aria-labelledby', 'submit-dialog-title')
+    const heading = document.getElementById('submit-dialog-title')
+    expect(heading).not.toBeNull()
+    expect(heading).toHaveTextContent('Submit for Review')
+  })
+
+  it('returns focus to the trigger button after the dialog closes', async () => {
+    vi.mocked(fetchCampaign).mockResolvedValue(mockCampaign)
+    renderPage({ campaignId: 'c1' })
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Mars Habitat Alpha')).toBeInTheDocument()
+    })
+
+    // Step 1: advance with pre-populated data
+    fireEvent.change(screen.getByLabelText('Title *'), {
+      target: { value: 'Mars Habitat Alpha' },
+    })
+    fireEvent.change(screen.getByLabelText('Category *'), {
+      target: { value: 'Habitats & Construction' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 2: advance (team member from mock)
+    await waitFor(() => screen.getByText('Step 2: Team Members'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 3: fill funding target and advance
+    await waitFor(() => screen.getByText('Step 3: Funding Goals'))
+    fireEvent.change(screen.getByLabelText('Minimum Funding Target (USD) *'), {
+      target: { value: '5000000' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 4: milestones from mock sum to 100; advance
+    await waitFor(() => screen.getByText('Step 4: Milestones'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 5: advance (risk disclosures from mock)
+    await waitFor(() => screen.getByText('Step 5: Risk Disclosures'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 6: advance (no required fields)
+    await waitFor(() => screen.getByText('Step 6: Media'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 7: Review & Submit
+    await waitFor(() => screen.getByText('Step 7: Review & Submit'))
+
+    const triggerButton = screen.getByRole('button', { name: 'Submit campaign for review' })
+
+    // Open the dialog
+    fireEvent.click(triggerButton)
+    expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalledOnce()
+
+    // Close the dialog via Cancel button
+    const cancelButton = screen.getByRole('button', { name: 'Cancel' })
+    fireEvent.click(cancelButton)
+
+    // Focus should return to the trigger button
+    await waitFor(() => {
+      expect(document.activeElement).toBe(triggerButton)
+    })
+  })
+
+  it('shows formatted deadline on Step 7 review screen', async () => {
+    const campaignWithDeadline: CampaignDetail = {
+      ...mockCampaign,
+      deadline: new Date('2026-12-27'),
+    }
+    vi.mocked(fetchCampaign).mockResolvedValue(campaignWithDeadline)
+    renderPage({ campaignId: 'c1' })
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Mars Habitat Alpha')).toBeInTheDocument()
+    })
+
+    // Step 1: advance
+    fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'Mars Habitat Alpha' } })
+    fireEvent.change(screen.getByLabelText('Category *'), {
+      target: { value: 'Habitats & Construction' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 2: advance
+    await waitFor(() => screen.getByText('Step 2: Team Members'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 3: fill funding target and advance
+    await waitFor(() => screen.getByText('Step 3: Funding Goals'))
+    fireEvent.change(screen.getByLabelText('Minimum Funding Target (USD) *'), {
+      target: { value: '5000000' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 4: advance
+    await waitFor(() => screen.getByText('Step 4: Milestones'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 5: advance
+    await waitFor(() => screen.getByText('Step 5: Risk Disclosures'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 6: advance
+    await waitFor(() => screen.getByText('Step 6: Media'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 7: verify formatted deadline
+    await waitFor(() => screen.getByText('Step 7: Review & Submit'))
+    expect(screen.getByText('Dec 27, 2026')).toBeInTheDocument()
+    expect(screen.queryByText('2026-12-27')).not.toBeInTheDocument()
   })
 })

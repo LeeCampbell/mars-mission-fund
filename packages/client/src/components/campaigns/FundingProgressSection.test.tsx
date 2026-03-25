@@ -30,6 +30,7 @@ const mockCampaign: CampaignDetail = {
   creatorId: null,
   reviewerId: null,
   cancellationRequestedAt: null,
+  riskDisclosures: [],
 }
 
 describe('FundingProgressSection', () => {

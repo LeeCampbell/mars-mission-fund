@@ -3,11 +3,11 @@
 ## The challenge
 
 Add a *Trending Missions* section to the Explore page.
-It should show the 3 campaigns that have received the most new contributions in the last 7 days, displayed as a horizontal row above the main campaign grid.
+It should show the 3 most popular live campaigns by contributor count, displayed as a horizontal row above the main campaign grid.
 
 ## What you are building
 
-- **Database**: a new query against the `contributions` table, filtered to the last 7 days, grouped by campaign, ordered by count descending, limited to 3
+- **Database**: a new query against the `campaigns` table, filtered to `Live` status, ordered by `contributor_count` descending, limited to 3
 - **Server**: a new API endpoint `GET /v1/campaigns/trending` that returns the top 3 as campaign summaries
 - **Shared types**: a type for the trending response (or reuse `CampaignSummary`)
 - **Client API**: a new fetch function in `packages/client/src/api/campaigns.ts`
@@ -20,7 +20,7 @@ Adding a feature that spans the full stack in an unfamiliar codebase requires:
 
 - Finding where the Explore page lives and how it currently fetches data
 - Understanding the server's route structure and query conventions
-- Writing a correct SQL aggregate query with a date filter
+- Understanding the database schema to find the right columns for ranking
 - Adding shared types that both server and client agree on
 - Following the existing client API pattern so the new function fits consistently
 - Placing the UI section correctly using existing component primitives
@@ -31,7 +31,7 @@ Estimated time without AI assistance: **3–6 hours** (mostly spent reading and 
 
 ```text
 Add a "Trending Missions" section to the Explore page.
-It should show the 3 campaigns with the most new contributions in the last 7 days.
+It should show the 3 most popular live campaigns by contributor count.
 Display them in a horizontal row above the main campaign grid.
 Add a GET /v1/campaigns/trending endpoint on the server.
 Follow the existing patterns for routes, queries, shared types, and client API functions.

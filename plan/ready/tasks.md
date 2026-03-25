@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Create `DatePickerInput` component with unit tests
+- [x] TASK-01: Create `DatePickerInput` component with unit tests
   - **Goal**: Build the reusable `DatePickerInput` UI primitive and verify it with unit tests
   - **Details**:
     - Create `packages/client/src/components/ui/DatePickerInput.tsx` implementing the props interface from the brief

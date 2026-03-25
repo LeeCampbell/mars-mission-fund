@@ -28,7 +28,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/components/ui/DatePickerInput.test.tsx` passes with all tests green
   - **Brief ref**: Component: `DatePickerInput` section
 
-- [ ] TASK-02: Integrate `DatePickerInput` into `CampaignFormPage` (Step 3 & Step 4) with E2E coverage
+- [x] TASK-02: Integrate `DatePickerInput` into `CampaignFormPage` (Step 3 & Step 4) with E2E coverage
   - **Goal**: Replace both native `<input type="date">` usages in `CampaignFormPage` with `DatePickerInput`, add inline validation, and verify via E2E tests
   - **Details**:
     - Open `packages/client/src/pages/CampaignFormPage.tsx` and locate `StepFunding` (~line 1028) and `StepMilestones` (~line 1173)

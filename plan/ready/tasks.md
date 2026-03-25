@@ -80,7 +80,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx vitest run packages/client/src/components/campaigns/CampaignFilters.test.tsx` passes; `npx tsc -b --noEmit` passes
   - **Brief ref**: Frontend section
 
-- [ ] TASK-05: Integrate filters into `CampaignsPage` with URL state and E2E coverage
+- [x] TASK-05: Integrate filters into `CampaignsPage` with URL state and E2E coverage
   - **Goal**: Wire `CampaignFilters` into the Explore Missions page with URL-synced state and result count; verify with E2E tests
   - **Details**:
     - In `packages/client/src/pages/CampaignsPage.tsx`:

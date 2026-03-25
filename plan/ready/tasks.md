@@ -56,7 +56,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `./scripts/ci-check.sh` passes AND `./scripts/run-e2e.sh e2e/campaign-date-picker.spec.ts` passes
   - **Brief ref**: Integration in `CampaignFormPage` section + E2E section
 
-- [ ] TASK-03: Full E2E regression and CI verification
+- [x] TASK-03: Full E2E regression and CI verification
   - **Goal**: Run the complete test suite and CI checks to confirm nothing is broken
   - **Details**: No new code — run the full suite as a final gate
   - **Files**: (none)

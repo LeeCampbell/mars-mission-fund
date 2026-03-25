@@ -25,7 +25,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes including the new Step 5 population test; `npx tsc -b --noEmit` passes
   - **Brief ref**: Client reducer fix (section 3) and Test fixtures (section 4)
 
-- [ ] TASK-04: Full CI verification
+- [x] TASK-04: Full CI verification
   - **Goal**: Confirm all checks pass end-to-end after the three-layer fix
   - **Details**: No new code — run the full CI check suite as a final gate.
   - **Files**: (none)

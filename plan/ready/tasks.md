@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Rebase feature branch onto main
+- [x] TASK-01: Rebase feature branch onto main
   - **Goal**: Bring the feature branch up to date with main (commits #196–#202) so CI does not diverge
   - **Details**: Run `git fetch origin` then `git rebase origin/main`. Resolve any conflicts that arise — the only files touched by this branch are `e2e/campaign-lifecycle.spec.ts` and `packages/server/db/migrations/20260322000001_seed_lifecycle_test_campaigns.sql`, so conflicts should be minimal or absent. After the rebase, confirm both files are present and intact.
   - **Files**: *(no file changes — rebase only)*

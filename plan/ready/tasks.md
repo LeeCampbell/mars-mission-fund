@@ -56,7 +56,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc -b --noEmit` passes; existing campaign-related unit tests still pass
   - **Brief ref**: Frontend section
 
-- [ ] TASK-04: Create `CampaignFilters` component with unit tests
+- [x] TASK-04: Create `CampaignFilters` component with unit tests
   - **Goal**: Implement the search input, category multi-select pills, and clear-filters control; cover with unit tests
   - **Details**:
     - Create `packages/client/src/components/campaigns/CampaignFilters.tsx`:

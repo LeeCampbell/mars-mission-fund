@@ -347,4 +347,52 @@ describe('CampaignFormPage', () => {
       expect(document.activeElement).toBe(triggerButton)
     })
   })
+
+  it('shows formatted deadline on Step 7 review screen', async () => {
+    const campaignWithDeadline: CampaignDetail = {
+      ...mockCampaign,
+      deadline: new Date('2026-12-27'),
+    }
+    vi.mocked(fetchCampaign).mockResolvedValue(campaignWithDeadline)
+    renderPage({ campaignId: 'c1' })
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Mars Habitat Alpha')).toBeInTheDocument()
+    })
+
+    // Step 1: advance
+    fireEvent.change(screen.getByLabelText('Title *'), { target: { value: 'Mars Habitat Alpha' } })
+    fireEvent.change(screen.getByLabelText('Category *'), {
+      target: { value: 'Habitats & Construction' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 2: advance
+    await waitFor(() => screen.getByText('Step 2: Team Members'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 3: fill funding target and advance
+    await waitFor(() => screen.getByText('Step 3: Funding Goals'))
+    fireEvent.change(screen.getByLabelText('Minimum Funding Target (USD) *'), {
+      target: { value: '5000000' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 4: advance
+    await waitFor(() => screen.getByText('Step 4: Milestones'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 5: advance
+    await waitFor(() => screen.getByText('Step 5: Risk Disclosures'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 6: advance
+    await waitFor(() => screen.getByText('Step 6: Media'))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+
+    // Step 7: verify formatted deadline
+    await waitFor(() => screen.getByText('Step 7: Review & Submit'))
+    expect(screen.getByText('Dec 27, 2026')).toBeInTheDocument()
+    expect(screen.queryByText('2026-12-27')).not.toBeInTheDocument()
+  })
 })

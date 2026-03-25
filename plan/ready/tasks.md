@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `git log --oneline origin/main..HEAD` shows only the two branch commits; `git status` is clean
   - **Brief ref**: "What remains" section
 
-- [ ] TASK-02: Run CI checks
+- [x] TASK-02: Run CI checks
   - **Goal**: Confirm type-check, lint, format, build, and unit tests all pass on the rebased branch
   - **Details**: Run `./scripts/ci-check.sh`. Fix any failures introduced by the rebase (e.g., import conflicts, type errors). Do NOT modify `e2e/campaign-lifecycle.spec.ts` or the seed migration unless a CI tool flags them directly.
   - **Files**: *(fix only if CI fails)*

@@ -4,7 +4,7 @@ Brief: plan/ready/brief.md
 
 ## Checklist
 
-- [ ] TASK-01: Fix dialog CSS — positioning, backdrop, and box shadow
+- [x] TASK-01: Fix dialog CSS — positioning, backdrop, and box shadow
   - **Goal**: Centre the dialog in the viewport, add a semi-transparent backdrop, and add a visible box shadow
   - **Details**:
     1. In `packages/client/src/index.css`, add `dialog::backdrop { background: var(--color-bg-overlay); }` rule

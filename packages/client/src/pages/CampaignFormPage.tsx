@@ -486,6 +486,11 @@ const dialogStyle: React.CSSProperties = {
   maxWidth: '480px',
   width: '100%',
   fontFamily: 'var(--font-body)',
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
 }
 
 const loadingStyle: React.CSSProperties = {
@@ -712,8 +717,9 @@ export function CampaignFormPage({ campaignId }: CampaignFormPageProps) {
       </div>
 
       {/* Submit confirmation dialog */}
-      <dialog ref={dialogRef} style={dialogStyle}>
+      <dialog ref={dialogRef} style={dialogStyle} aria-labelledby="submit-dialog-title">
         <h2
+          id="submit-dialog-title"
           style={{
             fontFamily: 'var(--font-heading)',
             fontSize: 'var(--type-heading-3-size)',

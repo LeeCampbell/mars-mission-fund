@@ -84,6 +84,17 @@ Brief: plan/ready/brief.md
 
   For backend-only issues with no UI flows, omit E2E tasks entirely.
 
+- **Visual screenshot task for frontend issues**: When the brief's **Files to Create/Modify** table contains any path starting with `packages/client/src/`, insert a dedicated task immediately before the final regression task:
+
+  ```text
+  - [ ] TASK-N: Visual verification screenshots
+    - **Goal**: Capture before/after screenshots of every changed UI state
+    - **Details**: Start the dev server and backend if needed, use Playwright MCP to navigate to each affected page/state, take screenshots saved to `/screenshots/ISSUE-{issueId}-TASK-{NN}.png`
+    - **Files**: (none — screenshots only)
+    - **Verify**: At least one `.png` exists in `/screenshots/` matching `ISSUE-{issueId}-*`
+    - **Brief ref**: Verification section
+  ```
+
 ## Output Format
 
 ```text

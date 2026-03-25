@@ -11,7 +11,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npm run test:coverage` passes (server tests); `npx tsc --noEmit -p packages/server/tsconfig.json` passes
   - **Brief ref**: Server query fix (section 1) and Server test mock (section 5)
 
-- [ ] TASK-02: Fix shared schema — add riskDisclosures to CampaignDetailSchema
+- [x] TASK-02: Fix shared schema — add riskDisclosures to CampaignDetailSchema
   - **Goal**: Ensure `CampaignDetailSchema` includes `riskDisclosures` so the field is not stripped during client-side parsing and the `CampaignDetail` TypeScript type is correct
   - **Details**: In `CampaignDetailSchema` (~line 88–103), add `riskDisclosures: z.array(z.string()).default([])` to the field list.
   - **Files**: `packages/shared/src/campaign.ts`

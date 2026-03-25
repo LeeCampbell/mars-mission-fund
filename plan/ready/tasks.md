@@ -103,7 +103,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `./scripts/ci-check.sh` passes AND `./scripts/run-e2e.sh e2e/campaigns.spec.ts` passes
   - **Brief ref**: Frontend section, Verification section (E2E flows)
 
-- [ ] TASK-06: Full E2E regression and CI verification
+- [x] TASK-06: Full E2E regression and CI verification
   - **Goal**: Run the complete test suite as a final gate to confirm nothing is broken
   - **Details**: No new code — run the full suite and fix any regressions surfaced
   - **Files**: (none)

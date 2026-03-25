@@ -212,6 +212,64 @@ describe('Campaign Routes', () => {
       expect(res.body.error).toHaveProperty('correlation_id')
       expect(res.body.error).toHaveProperty('message')
     })
+
+    it('returns 200 with matching campaigns when search param is provided', async () => {
+      const matchingCampaign = { ...mockCampaignSummary, title: 'Mars Propulsion Lab' }
+      mockQuery.mockResolvedValueOnce({ rows: [matchingCampaign], rowCount: 1 })
+
+      const res = await request(app).get('/v1/campaigns?search=Propulsion')
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toHaveLength(1)
+      expect(res.body.data[0].title).toBe('Mars Propulsion Lab')
+    })
+
+    it('returns 200 with campaigns filtered by single category', async () => {
+      const propulsionCampaign = { ...mockCampaignSummary, category: 'Propulsion' }
+      mockQuery.mockResolvedValueOnce({ rows: [propulsionCampaign], rowCount: 1 })
+
+      const res = await request(app).get('/v1/campaigns?categories=Propulsion')
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toHaveLength(1)
+      expect(res.body.data[0].category).toBe('Propulsion')
+    })
+
+    it('returns 200 with campaigns filtered by multiple categories', async () => {
+      const propulsionCampaign = { ...mockCampaignSummary, category: 'Propulsion' }
+      const roboticsCampaign = {
+        ...mockCampaignSummary,
+        id: 'b2b2b2b2-e5f6-7890-abcd-ef1234567890',
+        category: 'Robotics & Automation',
+      }
+      mockQuery.mockResolvedValueOnce({ rows: [propulsionCampaign, roboticsCampaign], rowCount: 2 })
+
+      const res = await request(app).get(
+        '/v1/campaigns?categories=Propulsion,Robotics+%26+Automation'
+      )
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toHaveLength(2)
+    })
+
+    it('returns 200 with intersection when both search and categories are provided', async () => {
+      const matchingCampaign = { ...mockCampaignSummary, category: 'Propulsion' }
+      mockQuery.mockResolvedValueOnce({ rows: [matchingCampaign], rowCount: 1 })
+
+      const res = await request(app).get('/v1/campaigns?search=Mars&categories=Propulsion')
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toHaveLength(1)
+    })
+
+    it('returns 200 with empty array when filters match no campaigns', async () => {
+      mockQuery.mockResolvedValueOnce({ rows: [], rowCount: 0 })
+
+      const res = await request(app).get('/v1/campaigns?search=nonexistentterm12345')
+
+      expect(res.status).toBe(200)
+      expect(res.body.data).toEqual([])
+    })
   })
 
   describe('GET /v1/campaigns/:id', () => {

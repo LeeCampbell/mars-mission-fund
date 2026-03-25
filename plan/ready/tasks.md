@@ -23,7 +23,7 @@ Brief: plan/ready/brief.md
   - **Verify**: `npx tsc --noEmit -p packages/server/tsconfig.json` passes with no errors
   - **Brief ref**: Backend section
 
-- [ ] TASK-02: Add backend unit tests for search and category filter combinations
+- [x] TASK-02: Add backend unit tests for search and category filter combinations
   - **Goal**: Verify all new filter combinations work correctly at the query layer
   - **Details**:
     - In `packages/server/src/__tests__/campaigns.test.ts`, add test cases for:

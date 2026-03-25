@@ -42,10 +42,7 @@ export const ListQuerySchema = z.object({
   status: CampaignStatusSchema.optional(),
   category: CampaignCategorySchema.optional(),
   categories: z
-    .preprocess(
-      (v) => (typeof v === 'string' ? v.split(',') : v),
-      z.array(CampaignCategorySchema)
-    )
+    .preprocess((v) => (typeof v === 'string' ? v.split(',') : v), z.array(CampaignCategorySchema))
     .optional(),
   search: z.string().max(200).optional(),
   createdBy: z.literal('me').optional(),

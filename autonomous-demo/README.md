@@ -278,6 +278,7 @@ autonomous-demo/
 ├── entrypoint.sh        # use mounted repo, install deps, migrate DB, run the loop, serve
 ├── demo-loop.sh         # Pillars 02/03/04: the state machine + guardrails
 ├── nginx.conf           # web service: serve client build + proxy /v1 to backend
+├── mcp.json             # demo MCP config: Playwright --output-dir /screenshots
 ├── prompts/             # one prompt per state
 ├── PROMPT.md            # ← YOUR feature request (the only input)
 ├── .env.example         # credentials + guardrail config

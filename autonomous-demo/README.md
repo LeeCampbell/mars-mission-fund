@@ -69,6 +69,21 @@ open screenshots/          # visual proof the feature works (macOS)
 less logs/changes.diff     # the full diff the agent produced
 ```
 
+### Browse the app it built
+
+When the run finishes, the agent builds the production client and the **`web`**
+service (nginx) serves it, reverse-proxying `/v1` to the backend. The run prints:
+
+```text
+  Browse the app the agent just built:
+    → http://localhost:8080
+```
+
+Open that URL to click through the actual feature in a browser — the built site,
+not a dev server. The container stays up serving it until you press Ctrl-C. This
+is on by default; set `SERVE_AFTER=false` (and add `--abort-on-container-exit`)
+if you'd rather the run just exit. Change the port with `WEB_PORT` in `.env`.
+
 ### Watch it work in your editor
 
 Because the repo is bind-mounted, the agent's edits land in your real working
@@ -252,9 +267,10 @@ autonomous-demo/
 autonomous-demo/
 ├── README.md            # this file
 ├── Dockerfile           # Pillar 01: Claude Code + Playwright MCP + dbmate + repo deps
-├── docker-compose.yml   # Pillar 01: agent + Postgres, volume mounts
-├── entrypoint.sh        # use mounted repo, install deps, migrate DB, run the loop
+├── docker-compose.yml   # Pillar 01: agent + Postgres + nginx (web), volume mounts
+├── entrypoint.sh        # use mounted repo, install deps, migrate DB, run the loop, serve
 ├── demo-loop.sh         # Pillars 02/03/04: the state machine + guardrails
+├── nginx.conf           # web service: serve client build + proxy /v1 to backend
 ├── prompts/             # one prompt per state
 ├── PROMPT.md            # ← YOUR feature request (the only input)
 ├── .env.example         # credentials + guardrail config

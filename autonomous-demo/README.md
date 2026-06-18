@@ -57,9 +57,13 @@ cp .env.example .env
 # 2. Edit the feature request (an example is already provided)
 #    open PROMPT.md and describe what you want built
 
-# 3. Run it — build the image, start Postgres, run the agent loop
-docker compose up --build
+# 3. Run it — picks a free web port (8080+), builds, runs the loop, then serves
+./run.sh
 ```
+
+> `./run.sh` finds the first free port from 8080 up and passes it to compose, so
+> the browse step never fails on a taken port. Plain `docker compose up --build`
+> also works (it uses `WEB_PORT`, default 8080).
 
 Then watch the loop work. When it finishes, inspect the results:
 
@@ -80,9 +84,11 @@ service (nginx) serves it, reverse-proxying `/v1` to the backend. The run prints
 ```
 
 Open that URL to click through the actual feature in a browser — the built site,
-not a dev server. The container stays up serving it until you press Ctrl-C. This
-is on by default; set `SERVE_AFTER=false` (and add `--abort-on-container-exit`)
-if you'd rather the run just exit. Change the port with `WEB_PORT` in `.env`.
+not a dev server. `./run.sh` auto-selects a free port starting at 8080, and the
+printed URL always reflects the actual port. The container stays up serving it
+until you press Ctrl-C. This is on by default; set `SERVE_AFTER=false` (and add
+`--abort-on-container-exit`) if you'd rather the run just exit. Set a different
+starting port with `WEB_PORT` in `.env`.
 
 ### Watch it work in your editor
 
@@ -266,6 +272,7 @@ autonomous-demo/
 ```text
 autonomous-demo/
 ├── README.md            # this file
+├── run.sh               # launcher: pick a free web port, then docker compose up
 ├── Dockerfile           # Pillar 01: Claude Code + Playwright MCP + dbmate + repo deps
 ├── docker-compose.yml   # Pillar 01: agent + Postgres + nginx (web), volume mounts
 ├── entrypoint.sh        # use mounted repo, install deps, migrate DB, run the loop, serve

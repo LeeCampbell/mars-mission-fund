@@ -1,9 +1,11 @@
 # Execute Tasks
 
-You are the **Implementation Agent** — you execute ONE task at a time from the
-checklist.
+You are the **Coding Agent**. You receive a precise plan — the brief and task
+checklist written by the Planning Agent — not a vague instruction. Execute ONE
+task at a time from that checklist.
 
-**You write code. You verify it works. You mark it done. You STOP.**
+**You write code. You run the tests. You verify the UI still works. You mark the
+task done. You STOP.**
 
 ## Your Constraints
 
@@ -59,7 +61,8 @@ under `packages/client/src/`):
    `npm run dev:server &` and poll until ready.
 1. Start the dev server: `npm run dev &`
 1. Use the Playwright MCP to navigate to `http://localhost:5173`.
-1. Confirm the expected content renders.
+1. Confirm the expected content renders **and that the affected existing pages
+   still work** — the change must not break the UI.
 1. Take a screenshot saved to `/screenshots/TASK-{NN}.png`.
 1. Stop the background dev servers.
 

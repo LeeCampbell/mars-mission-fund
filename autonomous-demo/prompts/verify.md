@@ -16,7 +16,7 @@ The original feature request is appended at the end of this prompt.
    - Start the frontend: `npm run dev &`
    - Use the Playwright MCP to navigate to the relevant page(s) at
      `http://localhost:5173` and confirm the feature behaves as the request
-     describes.
+     describes **and that the affected existing pages have not regressed**.
    - Take a screenshot of the working feature saved to
      `/screenshots/VERIFY-{short-name}.png`.
    - Stop the background dev servers.

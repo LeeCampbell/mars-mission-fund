@@ -1,13 +1,13 @@
 # Feature Request
 
-> This is the brief the autonomous agent will build. Replace everything below
-> with your own feature when you want — but keep it concrete: say what the user
-> should be able to do, where it lives in the app, and how to tell it works.
+> This is the request the **Planning Agent** turns into a structured plan, which
+> the **Coding Agent** then executes step by step (see the README's "Plan-First
+> Orchestration"). Replace it with your own — keep it concrete: what the user
+> should be able to do, where it lives, and how to tell it works.
 >
-> The example below is **Exercise 03 — Trending Missions**. It is a good demo
-> because it spans the full stack (database → server → shared types → client →
-> UI → tests), so the planner produces a multi-step `tasks.md` the loop then
-> executes one task at a time.
+> The default below is **Exercise 03 — Trending Missions**: a full-stack feature
+> that spans database → server → shared types → client → UI → tests, so the
+> planner produces a multi-step `tasks.md` the loop executes one task at a time.
 
 ## Trending Missions
 
@@ -39,18 +39,30 @@ the main campaign grid.
 - The change spans server, shared, and client packages.
 
 <!--
-Other ready-made exercises you can paste here instead:
+Other ready-made options — paste one in place of the section above:
 
-  • Exercise 01 — Refactor-Rename:
-    Rename the domain term "Campaign" to "Proposal" across the entire codebase
-    (TypeScript types, SQL tables/columns, API routes, React components, and the
-    spec at specs/domain/campaign.md). Write a proper SQL migration respecting FK
-    constraints. Done when ci-check passes and GET /v1/proposals returns data.
+  • SMALL VISUAL (fast, ~1-2 tasks, produces a UI screenshot):
+    Add an always-visible site footer to the web app. Create a `Footer`
+    component under packages/client/src/ (existing patterns + Tailwind design
+    tokens) showing the tagline "Every dollar moves the launch window closer"
+    and "© 2026 Mars Mission Fund", mounted at the bottom of the app layout so
+    it appears on every page. No backend/DB/deps, no E2E — a screenshot is the
+    verification. Done when ci-check passes and the footer is visible at
+    http://localhost:5173.
 
-  • Exercise 02 — Cross-Cutting Concern (Observability):
-    Add structured HTTP request logging to the server. Every request logs method,
-    path, status code, response time (ms), and correlation ID as JSON using the
-    existing pino logger. The middleware must sit AFTER the correlationId
-    middleware in app.ts. Add tests asserting the log fields. (Backend-only — no
-    screenshots needed.)
+  • UPGRADE / MIGRATION (best for showing Plan-First Orchestration — breaking
+    changes, affected files, migration steps, verification criteria):
+    Migrate the domain term "Campaign" to "Proposal" across the entire codebase
+    — TypeScript types, SQL tables/columns, API routes (/v1/campaigns ->
+    /v1/proposals), React components, and the spec at specs/domain/campaign.md.
+    Write a proper SQL migration respecting FK constraints. Done when ci-check
+    passes, the E2E/UI still works, and GET /v1/proposals returns the data.
+    (This is workshop Exercise 01 — see ../01-exercise-rename.md.)
+
+  • CROSS-CUTTING / BACKEND-ONLY (no screenshots):
+    Add structured HTTP request logging to the server. Every request logs
+    method, path, status code, response time (ms), and correlation ID as JSON
+    using the existing pino logger. The middleware must sit AFTER the
+    correlationId middleware in app.ts. Add tests asserting the log fields.
+    (Workshop Exercise 02 — see ../02-exercise-olly.md.)
 -->

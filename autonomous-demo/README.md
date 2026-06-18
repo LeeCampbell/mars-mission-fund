@@ -170,6 +170,21 @@ Each state hands Claude a focused prompt from `prompts/`:
 | `verify` | `prompts/verify.md` | Prove the feature works, capture screenshots |
 | (CI repair) | `prompts/remediate.md` | Fix a failing `ci-check.sh` |
 
+### Plan-First Orchestration (two agents)
+
+The loop deliberately splits into a **Planning Agent** and a **Coding Agent**
+that run as *separate* Claude invocations with separate context — the executor
+sees only the written plan (`brief.md` + `tasks.md`), never the planning
+conversation. The plan is an explicit, reviewable artifact, not a vague
+instruction.
+
+| Aspect | Planning Agent (`create-brief` → `create-tasks`) | Coding Agent (`execute-tasks` → `verify`) |
+| ------ | ------------------------------------------------ | ----------------------------------------- |
+| Input | the request in `PROMPT.md` | the plan (`brief.md` + `tasks.md`) |
+| Produces | a structured plan: breaking changes, affected files, migration steps, and verification criteria (which tests must pass) | working code, committed step by step |
+| In Docker | writes no code | executes each step and runs the tests |
+| Playwright | — | verifies the UI hasn't broken |
+
 Claude runs with `--dangerously-skip-permissions` (safe — it is sandboxed in the
 container) and the Playwright MCP server for browser-driven verification.
 

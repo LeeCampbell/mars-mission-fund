@@ -30,6 +30,16 @@ npm run dev                     # Frontend dev server only (port 5173)
 npm run dev:server              # Backend dev server only (port 3001)
 ```
 
+### Dev Container (recommended on Windows)
+
+A VS Code Dev Container provides a full Linux dev environment via Docker Desktop + WSL2.
+
+1. Open the repo in VS Code → Command Palette → **"Dev Containers: Reopen in Container"**
+1. PostgreSQL starts automatically as a sidecar; migrations run on each container start
+1. Use `npm run dev` and `npm run dev:server` directly — no `run-local.sh` needed
+1. `scripts/ci-check.sh` and `npm run test:e2e` work as-is inside the container
+1. Debug PostgreSQL with `psql -h db -U mmf -d mmf`
+
 ### CI Checks (run before pushing)
 
 ```bash
